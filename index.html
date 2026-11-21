@@ -28,6 +28,51 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
+    <!-- OneSignal Web Push Integration -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+
+      OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.init({
+          appId: "19f76037-4f5a-41b4-ada5-20e0abb2b1a7",
+          serviceWorkerParam: { scope: "/Carmela.store/" },
+          serviceWorkerPath: "/Carmela.store/sw.js",
+          allowLocalhostAsSecureOrigin: true,
+          notifyButton: {
+            enable: true,
+            position: "bottom-left",
+            prenotify: true,
+            showCredit: false,
+            text: {
+              "tip.state.unsubscribed": "اشترك في إشعارات عروض كارامل",
+              "tip.state.subscribed": "أنت مشترك في إشعارات كارامل",
+              "tip.state.blocked": "الإشعارات محظورة من المتصفح",
+              "message.prenotify": "اضغط للاشتراك وتصلك أحدث العروض والمنتجات",
+              "message.action.subscribed": "شكراً لاشتراكك في إشعارات متجر كارامل!",
+              "message.action.resubscribed": "تم إعادة تفعيل الإشعارات بنجاح",
+              "message.action.unsubscribed": "لن تصلك إشعارات بعد الآن",
+              "dialog.main.title": "إشعارات متجر كارامل",
+              "dialog.main.button.subscribe": "تفعيل الإشعارات",
+              "dialog.main.button.unsubscribe": "إلغاء الاشتراك",
+              "dialog.blocked.title": "السماح بالإشعارات",
+              "dialog.blocked.message": "افتح إعدادات المتصفح أو الموقع واسمح بالإشعارات لتصلك العروض."
+            }
+          }
+        });
+      });
+
+      window.enableCaramelPush = async function() {
+        window.OneSignalDeferred.push(async function(OneSignal) {
+          if (OneSignal.Notifications.permission) {
+            alert("الإشعارات مفعلة بالفعل على جهازك!");
+            return;
+          }
+          await OneSignal.Notifications.requestPermission();
+        });
+      };
+    </script>
+
     <style>
         :root {
             --caramel: #c89666;
@@ -1812,9 +1857,9 @@
             { id: "hm-14", title: "منشر خير هوم فولاذ مقاوم للصدأ", desc: "هيكل قوي مقاوم للصدأ يتحمل الغسيل اليومي ويطوى بسهولة عند عدم الحاجة.", price: 950, category: "home", img: "Kit/compressed_1794957390685.webp" },
             { id: "hm-15", title: "منشر دهب", desc: "منشر عملي ومتين سهل الطي والتخزين للاستخدام اليومي في البيت.", price: 365, category: "home", img: "Kit/compressed_1794957389681.webp" },
             { id: "hm-16", title: "منشر خير هوم مقاوم للصدأ", desc: "مساحة نشر واسعة وخامة مقاومة للصدأ لراحة بال تدوم طويلاً.", price: 1200, category: "home", img: "Kit/compressed_1794957390318.webp" },
-           { id: "htm-10", title: "فرشة استحمام بيد خشب (ألياف طبيعية)", desc: "فرشاة بألياف طبيعية ويد خشب طويلة حوالي 36 سم قابلة للفك لتنظيف الجسم والظهر وإزالة الجلد الميت والمساج.", price: 70, category: "perfume", img: "Htm/compressed_1795258200283.webp" },
-{ id: "htm-11", title: "مخمرية / بدي باتر مود Mood للجسم", desc: "لوشن ومخمرية وبدي باتر مود معطرة ومرطبة للجسم بروائح متنوعة لتنعيم وترطيب البشرة.", price: 120, category: "perfume", img: "Htm/compressed_1795258200488.webp" },
-{ id: "htm-12", title: "عطر مس جريس من عساف Miss Gris by ASSAF", desc: "عطر مس جريس من عساف بطابع أنثوي فخم وثبات مميز للإطلالات اليومية والمناسبات.", price: 230, category: "perfume", img: "Htm/compressed_1795258200681.webp" },
+            { id: "htm-10", title: "فرشة استحمام بيد خشب (ألياف طبيعية)", desc: "فرشاة بألياف طبيعية ويد خشب طويلة حوالي 36 سم قابلة للفك لتنظيف الجسم والظهر وإزالة الجلد الميت والمساج.", price: 70, category: "perfume", img: "Htm/compressed_1795258200283.webp" },
+            { id: "htm-11", title: "مخمرية / بدي باتر مود Mood للجسم", desc: "لوشن ومخمرية وبدي باتر مود معطرة ومرطبة للجسم بروائح متنوعة لتنعيم وترطيب البشرة.", price: 120, category: "perfume", img: "Htm/compressed_1795258200488.webp" },
+            { id: "htm-12", title: "عطر مس جريس من عساف Miss Gris by ASSAF", desc: "عطر مس جريس من عساف بطابع أنثوي فخم وثبات مميز للإطلالات اليومية والمناسبات.", price: 230, category: "perfume", img: "Htm/compressed_1795258200681.webp" },
             { id: "hm-17", title: "منشر حائط حبل استانلس", desc: "وفّر مساحة البلكونة أو الحمام بحبال متينة تثبّت على الحائط بسهولة.", price: 530, category: "home", img: "Kit/compressed_1794957391622.webp" },
             { id: "hm-18", title: "رف زاوية للحمام / المطبخ", desc: "استغل زوايا الحمام أو المطبخ بذكاء ورتّب الشامبوهات والأدوات حواليك.", price: 330, category: "home", img: "Kit/compressed_1794957392279.webp" },
             { id: "hm-19", title: "شماعة أمريكانا ملابس وجزامة 4 دور", desc: "رتّب الجزم والملابس والشنط في وحدة واحدة توفر المساحة وتجمّل المكان.", price: 285, category: "home", img: "Kit/compressed_1794957391035.webp" },
@@ -2732,6 +2777,20 @@
         renderSmartRecommendations();
         updateCartUI();
         updateSearchCancelButton();
+
+        // توجيه تلقائي إذا فُتح رابط إشعار يحتوي على ?section= مثل ?section=perfume أو ?section=care
+        (function handlePushSectionParam() {
+            try {
+                const params = new URLSearchParams(window.location.search);
+                let targetSection = params.get("section");
+                if (!targetSection) return;
+                if (targetSection === "care") targetSection = "perfume";
+                if (CATEGORY_NAMES[targetSection]) {
+                    const circleEl = document.querySelector(`[data-cat="${targetSection}"]`);
+                    filterByCategory(targetSection, circleEl || null, true);
+                }
+            } catch (e) {}
+        })();
     </script>
 </body>
 </html>
