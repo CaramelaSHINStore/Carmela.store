@@ -1,4 +1,6 @@
-const CACHE_NAME = "caramel-store-v2026-11-21";
+importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
+
+const CACHE_NAME = "caramel-store-v2026-11-22";
 
 const CORE_ASSETS = [
   "./",
