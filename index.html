@@ -34,10 +34,11 @@
       window.OneSignalDeferred = window.OneSignalDeferred || [];
 
       OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.Debug.setLogLevel("verbose");
         await OneSignal.init({
           appId: "19f76037-4f5a-41b4-ada5-20e0abb2b1a7",
           serviceWorkerParam: { scope: "/Carmela.store/" },
-          serviceWorkerPath: "/Carmela.store/sw.js",
+          serviceWorkerPath: "/Carmela.store/OneSignalSDKWorker.js",
           allowLocalhostAsSecureOrigin: true,
           notifyButton: {
             enable: true,
@@ -1720,114 +1721,6 @@
             }
         }
 
-        (function initAutoPageSwitchRefresh() {
-            const RELOAD_GUARD_KEY = "caramel_auto_reload_ts_v1";
-            let swRegistration = null;
-            let didReload = false;
-            let lastAwayTime = 0;
-
-            function canSafelyReloadNow() {
-                if (didReload) return false;
-                try {
-                    const lastTs = Number(sessionStorage.getItem(RELOAD_GUARD_KEY) || "0");
-                    if (Date.now() - lastTs < 2500) return false;
-                    sessionStorage.setItem(RELOAD_GUARD_KEY, String(Date.now()));
-                } catch (e) {}
-                didReload = true;
-                return true;
-            }
-
-            function triggerCleanPageReload() {
-                if (!canSafelyReloadNow()) return;
-                window.location.reload();
-            }
-
-            function activateWaitingWorker(reg) {
-                if (reg && reg.waiting) {
-                    reg.waiting.postMessage({ type: "SKIP_WAITING" });
-                }
-            }
-
-            async function checkRemoteUpdatesAndRefresh(forceReloadOnReturn = false) {
-                if (swRegistration) {
-                    swRegistration.update().catch(() => {});
-                    activateWaitingWorker(swRegistration);
-                }
-
-                try {
-                    const resp = await fetch(`./index.html?ts=${Date.now()}`, {
-                        cache: "no-store",
-                        headers: { "Cache-Control": "no-cache" }
-                    });
-                    if (resp && resp.ok) {
-                        const freshHtml = await resp.text();
-                        const currentMarker = document.documentElement.outerHTML.length;
-                        if (Math.abs(freshHtml.length - currentMarker) > 40 && forceReloadOnReturn) {
-                            triggerCleanPageReload();
-                            return;
-                        }
-                    }
-                } catch (e) {}
-
-                if (forceReloadOnReturn) {
-                    triggerCleanPageReload();
-                }
-            }
-
-            if ("serviceWorker" in navigator) {
-                window.addEventListener("load", async () => {
-                    try {
-                        const reg = await navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" });
-                        swRegistration = reg;
-
-                        activateWaitingWorker(reg);
-                        reg.update().catch(() => {});
-                        setInterval(() => {
-                            reg.update().catch(() => {});
-                            activateWaitingWorker(reg);
-                        }, 60000);
-
-                        reg.addEventListener("updatefound", () => {
-                            const newWorker = reg.installing;
-                            if (!newWorker) return;
-                            newWorker.addEventListener("statechange", () => {
-                                if (newWorker.state === "installed") {
-                                    activateWaitingWorker(reg);
-                                }
-                            });
-                        });
-
-                        navigator.serviceWorker.addEventListener("controllerchange", () => {
-                            triggerCleanPageReload();
-                        });
-                    } catch (e) {}
-                });
-            }
-
-            document.addEventListener("visibilitychange", () => {
-                if (document.visibilityState === "hidden") {
-                    lastAwayTime = Date.now();
-                } else if (document.visibilityState === "visible") {
-                    const awayMs = lastAwayTime ? (Date.now() - lastAwayTime) : 4000;
-                    if (awayMs >= 1200) {
-                        checkRemoteUpdatesAndRefresh(true);
-                    }
-                }
-            });
-
-            window.addEventListener("pageshow", event => {
-                if (event.persisted) {
-                    triggerCleanPageReload();
-                } else {
-                    checkRemoteUpdatesAndRefresh(false);
-                }
-            });
-
-            window.addEventListener("focus", () => {
-                checkRemoteUpdatesAndRefresh(false);
-            });
-        })();
-
         const CATEGORY_NAMES = {
             all: "كل المنتجات",
             home: "مستلزمات المنزل",
@@ -2778,7 +2671,6 @@
         updateCartUI();
         updateSearchCancelButton();
 
-        // توجيه تلقائي إذا فُتح رابط إشعار يحتوي على ?section= مثل ?section=perfume أو ?section=care
         (function handlePushSectionParam() {
             try {
                 const params = new URLSearchParams(window.location.search);
