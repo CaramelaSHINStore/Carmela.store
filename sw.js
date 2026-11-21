@@ -60,7 +60,7 @@ self.addEventListener("fetch", event => {
 
   if (isHtmlOrSw) {
     event.respondWith(
-      fetch(new Request(request, { cache: "no-store" }))
+      fetch(request, { cache: "no-store" })
         .then(networkResponse => {
           if (networkResponse && networkResponse.ok && request.mode === "navigate") {
             const copy = networkResponse.clone();
@@ -74,7 +74,7 @@ self.addEventListener("fetch", event => {
   }
 
   event.respondWith(
-    fetch(new Request(request, { cache: "no-store" }))
+    fetch(request, { cache: "no-store" })
       .then(networkResponse => {
         if (networkResponse && networkResponse.ok) {
           const copy = networkResponse.clone();
