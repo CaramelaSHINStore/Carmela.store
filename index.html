@@ -1107,10 +1107,25 @@
             font-size: 0.82rem;
             font-weight: 900;
             line-height: 1.35;
+            transition: opacity 0.35s ease, transform 0.35s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
         }
 
         .floating-notification-pill.visible {
             display: inline-flex;
+        }
+
+        .floating-notification-pill.subscribed-success {
+            background: linear-gradient(135deg, #22c55e, #15803d);
+            color: #ffffff;
+            border-color: #86efac;
+            box-shadow: 0 10px 24px rgba(21, 128, 61, 0.38);
+            transform: scale(1.03);
+        }
+
+        .floating-notification-pill.hiding-smooth {
+            opacity: 0;
+            transform: translateY(10px) scale(0.92);
+            pointer-events: none;
         }
 
         .floating-notification-pill svg {
@@ -1119,7 +1134,7 @@
             flex: 0 0 19px;
             fill: none;
             stroke: currentColor;
-            stroke-width: 2;
+            stroke-width: 2.2;
             stroke-linecap: round;
             stroke-linejoin: round;
         }
@@ -1643,12 +1658,14 @@
         <span class="cart-badge-count" id="floatingCartCount"></span>
     </button>
 
-    <button type="button" class="floating-notification-pill visible" id="caramelPushBtn"
+    <button type="button" class="floating-notification-pill" id="caramelPushBtn"
         onclick="enableCaramelPush()" aria-label="تفعيل إشعارات متجر كارامل">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
-            <path d="M10 21h4"></path>
-        </svg>
+        <span id="caramelPushIcon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+                <path d="M10 21h4"></path>
+            </svg>
+        </span>
         <span id="caramelPushBtnText">فعّل إشعارات العروض</span>
     </button>
 
@@ -2835,15 +2852,100 @@
         window.OneSignalDeferred = window.OneSignalDeferred || [];
         window.OneSignalCaramel = null;
 
+        const CARAMEL_PUSH_SUBSCRIBED_KEY = "caramel_push_subscribed_v1";
+        let caramelPushHideTimer = null;
+
+        function setCaramelPushButtonDefault() {
+            const button = document.getElementById("caramelPushBtn");
+            const iconEl = document.getElementById("caramelPushIcon");
+            const label = document.getElementById("caramelPushBtnText");
+            if (!button || !label) return;
+
+            clearTimeout(caramelPushHideTimer);
+            button.disabled = false;
+            button.classList.remove("subscribed-success", "hiding-smooth");
+            button.classList.add("visible");
+
+            if (iconEl) {
+                iconEl.innerHTML = `
+                    <svg viewBox="0 0 24 24">
+                        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+                        <path d="M10 21h4"></path>
+                    </svg>
+                `;
+            }
+            label.textContent = "فعّل إشعارات العروض";
+        }
+
+        function hideCaramelPushButtonImmediately() {
+            const button = document.getElementById("caramelPushBtn");
+            if (!button) return;
+            clearTimeout(caramelPushHideTimer);
+            button.classList.remove("visible", "subscribed-success", "hiding-smooth");
+        }
+
+        function showGreenCheckAndHidePushBtn(delayBeforeHideMs = 1800) {
+            const button = document.getElementById("caramelPushBtn");
+            const iconEl = document.getElementById("caramelPushIcon");
+            const label = document.getElementById("caramelPushBtnText");
+            if (!button || !label) return;
+
+            try {
+                localStorage.setItem(CARAMEL_PUSH_SUBSCRIBED_KEY, "true");
+            } catch (e) {}
+
+            button.disabled = true;
+            button.classList.add("visible");
+            button.classList.remove("hiding-smooth");
+            button.classList.add("subscribed-success");
+
+            if (iconEl) {
+                iconEl.innerHTML = `
+                    <svg viewBox="0 0 24 24">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                `;
+            }
+            label.textContent = "إشعارات العروض مفعّلة ✓";
+
+            clearTimeout(caramelPushHideTimer);
+            caramelPushHideTimer = setTimeout(() => {
+                button.classList.add("hiding-smooth");
+                setTimeout(() => {
+                    hideCaramelPushButtonImmediately();
+                }, 360);
+            }, delayBeforeHideMs);
+        }
+
+        (function initCaramelPushButtonState() {
+            let savedSubscribed = false;
+            try {
+                savedSubscribed = localStorage.getItem(CARAMEL_PUSH_SUBSCRIBED_KEY) === "true";
+            } catch (e) {}
+
+            const browserGranted = typeof Notification !== "undefined" && Notification.permission === "granted";
+            const browserDenied = typeof Notification !== "undefined" && Notification.permission === "denied";
+
+            if (browserDenied) {
+                setCaramelPushButtonDefault();
+                const label = document.getElementById("caramelPushBtnText");
+                if (label) label.textContent = "إشعارات المتجر محظورة";
+                return;
+            }
+
+            if (savedSubscribed || browserGranted) {
+                hideCaramelPushButtonImmediately();
+            } else {
+                setCaramelPushButtonDefault();
+            }
+        })();
+
         function updateCaramelPushButton(OneSignal) {
             const button = document.getElementById("caramelPushBtn");
             const label = document.getElementById("caramelPushBtnText");
             if (!button || !label) return;
 
-            button.classList.add("visible");
-
             if (!OneSignal) {
-                label.textContent = "فعّل إشعارات العروض";
                 return;
             }
 
@@ -2853,15 +2955,29 @@
                 const permission = OneSignal.Notifications && OneSignal.Notifications.permissionNative;
 
                 if (permission === "denied") {
+                    try {
+                        localStorage.removeItem(CARAMEL_PUSH_SUBSCRIBED_KEY);
+                    } catch (e) {}
+                    setCaramelPushButtonDefault();
                     label.textContent = "إشعارات المتجر محظورة";
                 } else if (optedIn && subId) {
-                    label.textContent = "إشعارات العروض مفعّلة ✓";
-                } else {
-                    label.textContent = "فعّل إشعارات العروض";
+                    const alreadyHid = !button.classList.contains("visible");
+                    if (!alreadyHid && !button.classList.contains("subscribed-success")) {
+                        showGreenCheckAndHidePushBtn(1600);
+                    } else if (!alreadyHid) {
+                        // يترك الأنيميشن الحالي يكمّل إخفاء الزر
+                    } else {
+                        try {
+                            localStorage.setItem(CARAMEL_PUSH_SUBSCRIBED_KEY, "true");
+                        } catch (e) {}
+                    }
+                } else if (permission === "default") {
+                    try {
+                        localStorage.removeItem(CARAMEL_PUSH_SUBSCRIBED_KEY);
+                    } catch (e) {}
+                    setCaramelPushButtonDefault();
                 }
-            } catch (e) {
-                label.textContent = "فعّل إشعارات العروض";
-            }
+            } catch (e) {}
         }
 
         window.enableCaramelPush = async function () {
@@ -2888,13 +3004,19 @@
 
                 setTimeout(() => {
                     const subId = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.id;
-                    if (subId) {
-                        showCaramelToast("تم تفعيل الإشعارات بنجاح! كود الاشتراك: " + subId.slice(0, 8));
+                    const optedIn = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.optedIn === true;
+                    const nativeGranted = typeof Notification !== "undefined" && Notification.permission === "granted";
+
+                    if (subId || (optedIn && nativeGranted)) {
+                        showCaramelToast("تم تفعيل الإشعارات بنجاح!" + (subId ? " كود الاشتراك: " + subId.slice(0, 8) : ""));
+                        showGreenCheckAndHidePushBtn(1800);
+                    } else if (nativeGranted) {
+                        showCaramelToast("تم السماح بالإشعارات، جاري إتمام الاشتراك...");
+                        showGreenCheckAndHidePushBtn(1800);
                     } else {
-                        showCaramelToast("تم السماح، انتظر قليلاً ثم حدّث صفحة OneSignal.");
+                        showCaramelToast("لم يتم تفعيل الإشعارات بعد، يمكنك المحاولة مرة أخرى.");
                     }
-                    updateCaramelPushButton(OneSignal);
-                }, 1500);
+                }, 1200);
             } catch (error) {
                 const msg = error && error.message ? error.message : String(error);
                 showCaramelToast("تفاصيل الخطأ: " + msg);
@@ -2914,8 +3036,14 @@
                 window.OneSignalCaramel = OneSignal;
 
                 if (OneSignal.User && OneSignal.User.PushSubscription && typeof OneSignal.User.PushSubscription.addEventListener === "function") {
-                    OneSignal.User.PushSubscription.addEventListener("change", function () {
-                        updateCaramelPushButton(OneSignal);
+                    OneSignal.User.PushSubscription.addEventListener("change", function (event) {
+                        const currentOptedIn = event && event.current ? event.current.optedIn === true : false;
+                        const currentId = event && event.current ? event.current.id : null;
+                        if (currentOptedIn && currentId) {
+                            showGreenCheckAndHidePushBtn(1800);
+                        } else {
+                            updateCaramelPushButton(OneSignal);
+                        }
                     });
                 }
 
