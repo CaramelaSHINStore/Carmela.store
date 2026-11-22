@@ -1706,7 +1706,7 @@
             clearTimeout(toastTimer);
             toastTimer = setTimeout(() => {
                 toastEl.classList.remove("show");
-            }, 3000);
+            }, 3500);
         }
 
         function setInstallButtonsVisible(show) {
@@ -2865,44 +2865,39 @@
         }
 
         window.enableCaramelPush = async function () {
-            let OneSignal = window.OneSignalCaramel;
-
-            if (!OneSignal && "Notification" in window) {
-                const perm = await Notification.requestPermission();
-                if (perm !== "granted") {
-                    showCaramelToast("لم يتم منح إذن الإشعارات بعد.");
-                    return;
-                }
-                showCaramelToast("تم السماح، جاري ربط الاشتراك بـ OneSignal...");
-                await new Promise(r => setTimeout(r, 1500));
-                OneSignal = window.OneSignalCaramel;
-            }
+            const OneSignal = window.OneSignalCaramel;
 
             if (!OneSignal) {
-                showCaramelToast("جرّب الضغط على الزر مرة أخرى بعد ثانية.");
+                showCaramelToast("مكتبة OneSignal لسه بتجهز.. انتظر ثانية وجرّب تاني.");
                 return;
             }
 
             try {
-                if (OneSignal.Notifications.permissionNative === "denied") {
+                if (OneSignal.Notifications && OneSignal.Notifications.permissionNative === "denied") {
                     showCaramelToast("الإشعارات محظورة من إعدادات المتصفح لموقع كارامل.");
                     return;
                 }
 
-                await OneSignal.Notifications.requestPermission();
-                await OneSignal.User.PushSubscription.optIn();
+                if (OneSignal.Notifications && typeof OneSignal.Notifications.requestPermission === "function") {
+                    await OneSignal.Notifications.requestPermission();
+                }
+
+                if (OneSignal.User && OneSignal.User.PushSubscription && typeof OneSignal.User.PushSubscription.optIn === "function") {
+                    await OneSignal.User.PushSubscription.optIn();
+                }
 
                 setTimeout(() => {
                     const subId = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.id;
                     if (subId) {
-                        showCaramelToast("تم ربط جهازك بنجاح! كود الاشتراك: " + subId.slice(0, 8));
+                        showCaramelToast("تم تفعيل الإشعارات بنجاح! كود الاشتراك: " + subId.slice(0, 8));
                     } else {
                         showCaramelToast("تم السماح، انتظر قليلاً ثم حدّث صفحة OneSignal.");
                     }
                     updateCaramelPushButton(OneSignal);
                 }, 1500);
             } catch (error) {
-                showCaramelToast("خطأ OneSignal: " + (error && error.message ? error.message : String(error)));
+                const msg = error && error.message ? error.message : String(error);
+                showCaramelToast("تفاصيل الخطأ: " + msg);
             }
         };
 
@@ -2918,13 +2913,16 @@
 
                 window.OneSignalCaramel = OneSignal;
 
-                OneSignal.User.PushSubscription.addEventListener("change", function () {
-                    updateCaramelPushButton(OneSignal);
-                });
+                if (OneSignal.User && OneSignal.User.PushSubscription && typeof OneSignal.User.PushSubscription.addEventListener === "function") {
+                    OneSignal.User.PushSubscription.addEventListener("change", function () {
+                        updateCaramelPushButton(OneSignal);
+                    });
+                }
 
                 updateCaramelPushButton(OneSignal);
             } catch (error) {
-                showCaramelToast("فشل تهيئة OneSignal: " + (error && error.message ? error.message : String(error)));
+                const msg = error && error.message ? error.message : String(error);
+                showCaramelToast("سبب فشل التهيئة: " + msg);
             }
         });
     </script>
