@@ -9,20 +9,6 @@
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg">
 
-    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-    <script>
-        window.OneSignalDeferred = window.OneSignalDeferred || [];
-        OneSignalDeferred.push(async function(OneSignal) {
-            await OneSignal.init({
-                appId: "19f76037-4f5a-41b4-ada5-20e0abb2b1a7",
-                serviceWorkerPath: "OneSignalSDKWorker.js",
-                serviceWorkerParam: {
-                    scope: "/Carmela.store/"
-                }
-            });
-        });
-    </script>
-
     <meta property="og:site_name" content="متجر كارامل - Caramel Store">
     <meta property="og:locale" content="ar_AR">
     <meta property="og:title" content="متجر كارامل - Caramel Store">
@@ -1102,6 +1088,51 @@
             font-weight: 700;
         }
 
+        .floating-notification-pill {
+            position: fixed;
+            left: 16px;
+            bottom: 86px;
+            z-index: 149;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            max-width: min(270px, calc(100vw - 32px));
+            padding: 11px 15px;
+            border: 1px solid rgba(229, 190, 150, 0.8);
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--caramel-light), var(--caramel));
+            color: var(--espresso);
+            box-shadow: 0 8px 22px rgba(24, 21, 18, 0.24);
+            font-size: 0.82rem;
+            font-weight: 900;
+            line-height: 1.35;
+        }
+
+        .floating-notification-pill.visible {
+            display: inline-flex;
+        }
+
+        .floating-notification-pill svg {
+            width: 19px;
+            height: 19px;
+            flex: 0 0 19px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        @media (max-width: 420px) {
+            .floating-notification-pill {
+                bottom: 82px;
+                left: 12px;
+                padding: 9px 12px;
+                font-size: 0.75rem;
+            }
+        }
+
         .floating-cart-pill {
             position: fixed;
             bottom: 20px;
@@ -1160,6 +1191,32 @@
 
         .cart-badge-count.visible {
             display: inline-flex;
+        }
+
+        .caramel-toast {
+            position: fixed;
+            bottom: 148px;
+            left: 50%;
+            transform: translateX(-50%) translateY(12px);
+            z-index: 350;
+            background: var(--espresso);
+            color: var(--caramel-light);
+            border: 1px solid var(--caramel);
+            padding: 9px 16px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+            opacity: 0;
+            pointer-events: none;
+            max-width: min(90vw, 420px);
+            text-align: center;
+            transition: opacity 0.22s ease, transform 0.22s ease;
+        }
+
+        .caramel-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
         }
 
         .cart-backdrop {
@@ -1586,6 +1643,17 @@
         <span class="cart-badge-count" id="floatingCartCount"></span>
     </button>
 
+    <button type="button" class="floating-notification-pill" id="caramelPushBtn"
+        onclick="enableCaramelPush()" aria-label="تفعيل إشعارات متجر كارامل">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+            <path d="M10 21h4"></path>
+        </svg>
+        <span id="caramelPushBtnText">فعّل إشعارات العروض</span>
+    </button>
+
+    <div class="caramel-toast" id="caramelToast" role="status" aria-live="polite"></div>
+
     <div class="cart-backdrop" id="cartBackdrop" onclick="closeCart()"></div>
     <aside class="cart-drawer" id="cartDrawer" aria-label="سلة المشتريات">
         <div class="cart-header">
@@ -1628,6 +1696,18 @@
         const BATCH_SIZE = 12;
 
         let deferredInstallPrompt = null;
+        let toastTimer = null;
+
+        function showCaramelToast(message) {
+            const toastEl = document.getElementById("caramelToast");
+            if (!toastEl || !message) return;
+            toastEl.textContent = message;
+            toastEl.classList.add("show");
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toastEl.classList.remove("show");
+            }, 3200);
+        }
 
         function setInstallButtonsVisible(show) {
             const headerBtn = document.getElementById("headerInstallBtn");
@@ -1655,6 +1735,7 @@
         window.addEventListener("appinstalled", () => {
             deferredInstallPrompt = null;
             setInstallButtonsVisible(false);
+            showCaramelToast("تم تثبيت تطبيق متجر كارامل بنجاح!");
         });
 
         async function shareStoreApp() {
@@ -1685,7 +1766,7 @@
                     document.execCommand("copy");
                     document.body.removeChild(tempInput);
                 }
-                alert("تم نسخ رابط متجر كارامل! ابعته لأي حد عشان يفتحه ويحمله على موبايله.");
+                showCaramelToast("تم نسخ رابط متجر كارامل بنجاح!");
             } catch (e) {
                 const waShare = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
                 window.open(waShare, "_blank", "noopener,noreferrer");
@@ -1694,18 +1775,16 @@
 
         (function initAutoPageSwitchRefresh() {
             const RELOAD_GUARD_KEY = "caramel_auto_reload_ts_v1";
+            const INITIAL_HTML_LEN = document.documentElement.outerHTML.length;
             let swRegistration = null;
-            let didReload = false;
             let lastAwayTime = 0;
 
             function canSafelyReloadNow() {
-                if (didReload) return false;
                 try {
                     const lastTs = Number(sessionStorage.getItem(RELOAD_GUARD_KEY) || "0");
-                    if (Date.now() - lastTs < 2500) return false;
+                    if (Date.now() - lastTs < 6000) return false;
                     sessionStorage.setItem(RELOAD_GUARD_KEY, String(Date.now()));
                 } catch (e) {}
-                didReload = true;
                 return true;
             }
 
@@ -1720,7 +1799,7 @@
                 }
             }
 
-            async function checkRemoteUpdatesAndRefresh(forceReloadOnReturn = false) {
+            async function checkRemoteUpdatesIfChanged() {
                 if (swRegistration) {
                     swRegistration.update().catch(() => {});
                     activateWaitingWorker(swRegistration);
@@ -1733,17 +1812,11 @@
                     });
                     if (resp && resp.ok) {
                         const freshHtml = await resp.text();
-                        const currentMarker = document.documentElement.outerHTML.length;
-                        if (Math.abs(freshHtml.length - currentMarker) > 40 && forceReloadOnReturn) {
+                        if (Math.abs(freshHtml.length - INITIAL_HTML_LEN) > 120) {
                             triggerCleanPageReload();
-                            return;
                         }
                     }
                 } catch (e) {}
-
-                if (forceReloadOnReturn) {
-                    triggerCleanPageReload();
-                }
             }
 
             if ("serviceWorker" in navigator) {
@@ -1757,7 +1830,7 @@
                         setInterval(() => {
                             reg.update().catch(() => {});
                             activateWaitingWorker(reg);
-                        }, 60000);
+                        }, 120000);
 
                         reg.addEventListener("updatefound", () => {
                             const newWorker = reg.installing;
@@ -1780,9 +1853,9 @@
                 if (document.visibilityState === "hidden") {
                     lastAwayTime = Date.now();
                 } else if (document.visibilityState === "visible") {
-                    const awayMs = lastAwayTime ? (Date.now() - lastAwayTime) : 4000;
-                    if (awayMs >= 1200) {
-                        checkRemoteUpdatesAndRefresh(true);
+                    const awayMs = lastAwayTime ? (Date.now() - lastAwayTime) : 0;
+                    if (awayMs >= 15000) {
+                        checkRemoteUpdatesIfChanged();
                     }
                 }
             });
@@ -1790,13 +1863,7 @@
             window.addEventListener("pageshow", event => {
                 if (event.persisted) {
                     triggerCleanPageReload();
-                } else {
-                    checkRemoteUpdatesAndRefresh(false);
                 }
-            });
-
-            window.addEventListener("focus", () => {
-                checkRemoteUpdatesAndRefresh(false);
             });
         })();
 
@@ -1979,7 +2046,7 @@
         let renderedCount = 0;
         let feedCycle = 0;
         let cart = [];
-        let overlayPushedState = false;
+        let activeOverlayName = null;
         let interestData = {
             categories: {},
             keywords: {},
@@ -2168,14 +2235,18 @@
 
             if (!hasAnyInterest) return [];
 
-            const ranked = [...PRODUCTS].sort((a, b) => {
-                const aSeen = interestData.seenIds.includes(a.id) ? 1 : 0;
-                const bSeen = interestData.seenIds.includes(b.id) ? 1 : 0;
-                if (aSeen !== bSeen) return aSeen - bSeen;
-                return scoreProductForUser(b, 1) - scoreProductForUser(a, 1);
+            const scoredList = PRODUCTS.map(product => ({
+                product,
+                seenRank: interestData.seenIds.includes(product.id) ? 1 : 0,
+                score: scoreProductForUser(product, 1)
+            }));
+
+            scoredList.sort((a, b) => {
+                if (a.seenRank !== b.seenRank) return a.seenRank - b.seenRank;
+                return b.score - a.score;
             });
 
-            return ranked.slice(0, limit);
+            return scoredList.slice(0, limit).map(entry => entry.product);
         }
 
         function buildSpecialRequestCardHTML() {
@@ -2261,23 +2332,11 @@
         }
 
         function appendContinuationWave(category, rawQuery) {
-            const isSubCategory = category !== "all" && !rawQuery.trim();
-            const sourcePool = isSubCategory
-                ? PRODUCTS.filter(p => {
-                    const inSelectedCat = p.category === category || (Array.isArray(p.categories) && p.categories.includes(category));
-                    return !inSelectedCat;
-                })
-                : getFilteredProducts(category, rawQuery);
-
+            const sourcePool = getFilteredProducts(category, rawQuery);
             if (sourcePool.length === 0) return;
 
             feedCycle += 1;
-
-            if (isSubCategory && feedCycle === 1) {
-                currentFeedItems.push({ type: "divider", id: "cat-end-divider" });
-            }
-
-            const waveSorted = (category === "perfume" && !isSubCategory) ? [...sourcePool] : shuffleArray(sourcePool);
+            const waveSorted = category === "perfume" ? [...sourcePool] : shuffleArray(sourcePool);
             const waveItems = waveSorted.map(product => ({
                 type: "product",
                 product,
@@ -2304,14 +2363,6 @@
             if (!nextSlice.length) return;
 
             const htmlChunk = nextSlice.map(entry => {
-                if (entry.type === "divider") {
-                    return `
-                        <div style="grid-column: 1 / -1; margin: 14px 0 6px; padding: 12px 16px; border-radius: 16px; background: linear-gradient(135deg, #f6efe6, #fffdf9); border: 1.5px dashed var(--caramel); text-align: center;">
-                            <div style="font-size: 0.92rem; font-weight: 900; color: var(--espresso);">انتهت منتجات القسم — اكتشف باقي منتجات المتجر</div>
-                            <div style="font-size: 0.76rem; font-weight: 700; color: var(--text-muted); margin-top: 2px;">تشكيلة متنوعة من كل أقسام كارامل ستور</div>
-                        </div>
-                    `;
-                }
                 if (entry.type === "special") return buildSpecialRequestCardHTML();
                 return buildProductCardHTML(entry.product, false, entry.tag);
             }).join("");
@@ -2559,22 +2610,28 @@
 
         function pushOverlayHistoryState(overlayName) {
             try {
-                if (!overlayPushedState && window.history && typeof window.history.pushState === "function") {
+                if (!activeOverlayName && window.history && typeof window.history.pushState === "function") {
                     window.history.pushState({ caramelOverlay: overlayName }, "", window.location.href);
-                    overlayPushedState = true;
+                    activeOverlayName = overlayName;
                 }
             } catch (e) {}
         }
 
-        function popOverlayHistoryIfNeeded() {
-            if (overlayPushedState && window.history && typeof window.history.back === "function") {
-                overlayPushedState = false;
-                try {
-                    window.history.back();
-                } catch (e) {}
-            } else {
-                overlayPushedState = false;
+        function popOverlayHistoryIfNeeded(overlayName) {
+            if (activeOverlayName === overlayName) {
+                activeOverlayName = null;
+                if (window.history && typeof window.history.back === "function") {
+                    try {
+                        window.history.back();
+                    } catch (e) {}
+                }
             }
+        }
+
+        function syncBodyScrollLock() {
+            const cartOpen = document.getElementById("cartDrawer")?.classList.contains("open");
+            const imgOpen = document.getElementById("imageModal")?.classList.contains("open");
+            document.body.style.overflow = (cartOpen || imgOpen) ? "hidden" : "";
         }
 
         function openCart() {
@@ -2585,7 +2642,7 @@
             if (drawer) drawer.classList.add("open");
             const backdrop = document.getElementById("cartBackdrop");
             if (backdrop) backdrop.classList.add("open");
-            document.body.style.overflow = "hidden";
+            syncBodyScrollLock();
             if (!isAlreadyOpen) {
                 pushOverlayHistoryState("cart");
             }
@@ -2596,13 +2653,11 @@
             const backdrop = document.getElementById("cartBackdrop");
             if (drawer) drawer.classList.remove("open");
             if (backdrop) backdrop.classList.remove("open");
-            if (!document.getElementById("imageModal")?.classList.contains("open")) {
-                document.body.style.overflow = "";
-            }
+            syncBodyScrollLock();
             if (!fromPopState) {
-                popOverlayHistoryIfNeeded();
-            } else {
-                overlayPushedState = false;
+                popOverlayHistoryIfNeeded("cart");
+            } else if (activeOverlayName === "cart") {
+                activeOverlayName = null;
             }
         }
 
@@ -2615,7 +2670,7 @@
             const isAlreadyOpen = modal && modal.classList.contains("open");
             document.getElementById("modalImagePreview").src = src;
             if (modal) modal.classList.add("open");
-            document.body.style.overflow = "hidden";
+            syncBodyScrollLock();
             if (!isAlreadyOpen) {
                 pushOverlayHistoryState("image");
             }
@@ -2626,25 +2681,22 @@
             if (modal) modal.classList.remove("open");
             const img = document.getElementById("modalImagePreview");
             if (img) img.src = "";
-            if (!document.getElementById("cartDrawer")?.classList.contains("open")) {
-                document.body.style.overflow = "";
-            }
+            syncBodyScrollLock();
             if (!fromPopState) {
-                popOverlayHistoryIfNeeded();
-            } else {
-                overlayPushedState = false;
+                popOverlayHistoryIfNeeded("image");
+            } else if (activeOverlayName === "image") {
+                activeOverlayName = null;
             }
         }
 
         window.addEventListener("popstate", () => {
             const cartOpen = document.getElementById("cartDrawer")?.classList.contains("open");
             const imgOpen = document.getElementById("imageModal")?.classList.contains("open");
-            overlayPushedState = false;
-            if (cartOpen) {
-                closeCart(true);
-            }
+            activeOverlayName = null;
             if (imgOpen) {
                 closeImageModal(true);
+            } else if (cartOpen) {
+                closeCart(true);
             }
         });
 
@@ -2773,5 +2825,87 @@
         updateCartUI();
         updateSearchCancelButton();
     </script>
+
+    <!-- OneSignal Web Push v16 - Caramel Store -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+        window.OneSignalCaramel = null;
+
+        function updateCaramelPushButton(OneSignal) {
+            const button = document.getElementById("caramelPushBtn");
+            const label = document.getElementById("caramelPushBtnText");
+            if (!button || !label || !OneSignal) return;
+
+            const supported = OneSignal.Notifications.isPushSupported();
+            const optedIn = OneSignal.User.PushSubscription.optedIn === true;
+            const permission = OneSignal.Notifications.permissionNative;
+
+            if (!supported || optedIn) {
+                button.classList.remove("visible");
+                return;
+            }
+
+            label.textContent = permission === "denied"
+                ? "إشعارات المتجر محظورة"
+                : "فعّل إشعارات العروض";
+            button.classList.add("visible");
+        }
+
+        window.enableCaramelPush = function () {
+            const OneSignal = window.OneSignalCaramel;
+            if (!OneSignal) {
+                showCaramelToast("جاري تجهيز خدمة الإشعارات، جرّب بعد لحظات.");
+                return;
+            }
+
+            if (OneSignal.Notifications.permissionNative === "denied") {
+                showCaramelToast("الإشعارات محظورة من إعدادات المتصفح لموقع كارامل.");
+                return;
+            }
+
+            OneSignal.Notifications.requestPermission()
+                .then(async function (granted) {
+                    if (granted) {
+                        try {
+                            await OneSignal.User.PushSubscription.optIn();
+                            showCaramelToast("تم تفعيل إشعارات عروض متجر كارامل!");
+                        } catch (error) {
+                            console.error("Caramel push opt-in error:", error);
+                        }
+                    }
+                    window.setTimeout(function () {
+                        updateCaramelPushButton(OneSignal);
+                    }, 500);
+                })
+                .catch(function (error) {
+                    console.error("Caramel notification permission error:", error);
+                    showCaramelToast("تعذر تفعيل الإشعارات الآن، حاول مرة أخرى.");
+                });
+        };
+
+        OneSignalDeferred.push(async function (OneSignal) {
+            try {
+                await OneSignal.init({
+                    appId: "19f76037-4f5a-41b4-ada5-20e0abb2b1a7",
+                    serviceWorkerPath: "/Carmela.store/sw.js",
+                    serviceWorkerParam: {
+                        scope: "/Carmela.store/"
+                    }
+                });
+
+                window.OneSignalCaramel = OneSignal;
+
+                OneSignal.User.PushSubscription.addEventListener("change", function () {
+                    updateCaramelPushButton(OneSignal);
+                });
+
+                updateCaramelPushButton(OneSignal);
+            } catch (error) {
+                console.error("Caramel OneSignal initialization error:", error);
+            }
+        });
+    </script>
+
 </body>
 </html>
