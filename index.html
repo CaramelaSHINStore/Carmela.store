@@ -28,52 +28,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
-    <!-- OneSignal Web Push Integration -->
-    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-    <script>
-      window.OneSignalDeferred = window.OneSignalDeferred || [];
-
-      OneSignalDeferred.push(async function(OneSignal) {
-        await OneSignal.Debug.setLogLevel("verbose");
-        await OneSignal.init({
-          appId: "19f76037-4f5a-41b4-ada5-20e0abb2b1a7",
-          serviceWorkerParam: { scope: "/Carmela.store/" },
-          serviceWorkerPath: "/Carmela.store/OneSignalSDKWorker.js",
-          allowLocalhostAsSecureOrigin: true,
-          notifyButton: {
-            enable: true,
-            position: "bottom-left",
-            prenotify: true,
-            showCredit: false,
-            text: {
-              "tip.state.unsubscribed": "اشترك في إشعارات عروض كارامل",
-              "tip.state.subscribed": "أنت مشترك في إشعارات كارامل",
-              "tip.state.blocked": "الإشعارات محظورة من المتصفح",
-              "message.prenotify": "اضغط للاشتراك وتصلك أحدث العروض والمنتجات",
-              "message.action.subscribed": "شكراً لاشتراكك في إشعارات متجر كارامل!",
-              "message.action.resubscribed": "تم إعادة تفعيل الإشعارات بنجاح",
-              "message.action.unsubscribed": "لن تصلك إشعارات بعد الآن",
-              "dialog.main.title": "إشعارات متجر كارامل",
-              "dialog.main.button.subscribe": "تفعيل الإشعارات",
-              "dialog.main.button.unsubscribe": "إلغاء الاشتراك",
-              "dialog.blocked.title": "السماح بالإشعارات",
-              "dialog.blocked.message": "افتح إعدادات المتصفح أو الموقع واسمح بالإشعارات لتصلك العروض."
-            }
-          }
-        });
-      });
-
-      window.enableCaramelPush = async function() {
-        window.OneSignalDeferred.push(async function(OneSignal) {
-          if (OneSignal.Notifications.permission) {
-            alert("الإشعارات مفعلة بالفعل على جهازك!");
-            return;
-          }
-          await OneSignal.Notifications.requestPermission();
-        });
-      };
-    </script>
-
     <style>
         :root {
             --caramel: #c89666;
@@ -1721,6 +1675,114 @@
             }
         }
 
+        (function initAutoPageSwitchRefresh() {
+            const RELOAD_GUARD_KEY = "caramel_auto_reload_ts_v1";
+            let swRegistration = null;
+            let didReload = false;
+            let lastAwayTime = 0;
+
+            function canSafelyReloadNow() {
+                if (didReload) return false;
+                try {
+                    const lastTs = Number(sessionStorage.getItem(RELOAD_GUARD_KEY) || "0");
+                    if (Date.now() - lastTs < 2500) return false;
+                    sessionStorage.setItem(RELOAD_GUARD_KEY, String(Date.now()));
+                } catch (e) {}
+                didReload = true;
+                return true;
+            }
+
+            function triggerCleanPageReload() {
+                if (!canSafelyReloadNow()) return;
+                window.location.reload();
+            }
+
+            function activateWaitingWorker(reg) {
+                if (reg && reg.waiting) {
+                    reg.waiting.postMessage({ type: "SKIP_WAITING" });
+                }
+            }
+
+            async function checkRemoteUpdatesAndRefresh(forceReloadOnReturn = false) {
+                if (swRegistration) {
+                    swRegistration.update().catch(() => {});
+                    activateWaitingWorker(swRegistration);
+                }
+
+                try {
+                    const resp = await fetch(`./index.html?ts=${Date.now()}`, {
+                        cache: "no-store",
+                        headers: { "Cache-Control": "no-cache" }
+                    });
+                    if (resp && resp.ok) {
+                        const freshHtml = await resp.text();
+                        const currentMarker = document.documentElement.outerHTML.length;
+                        if (Math.abs(freshHtml.length - currentMarker) > 40 && forceReloadOnReturn) {
+                            triggerCleanPageReload();
+                            return;
+                        }
+                    }
+                } catch (e) {}
+
+                if (forceReloadOnReturn) {
+                    triggerCleanPageReload();
+                }
+            }
+
+            if ("serviceWorker" in navigator) {
+                window.addEventListener("load", async () => {
+                    try {
+                        const reg = await navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" });
+                        swRegistration = reg;
+
+                        activateWaitingWorker(reg);
+                        reg.update().catch(() => {});
+                        setInterval(() => {
+                            reg.update().catch(() => {});
+                            activateWaitingWorker(reg);
+                        }, 60000);
+
+                        reg.addEventListener("updatefound", () => {
+                            const newWorker = reg.installing;
+                            if (!newWorker) return;
+                            newWorker.addEventListener("statechange", () => {
+                                if (newWorker.state === "installed") {
+                                    activateWaitingWorker(reg);
+                                }
+                            });
+                        });
+
+                        navigator.serviceWorker.addEventListener("controllerchange", () => {
+                            triggerCleanPageReload();
+                        });
+                    } catch (e) {}
+                });
+            }
+
+            document.addEventListener("visibilitychange", () => {
+                if (document.visibilityState === "hidden") {
+                    lastAwayTime = Date.now();
+                } else if (document.visibilityState === "visible") {
+                    const awayMs = lastAwayTime ? (Date.now() - lastAwayTime) : 4000;
+                    if (awayMs >= 1200) {
+                        checkRemoteUpdatesAndRefresh(true);
+                    }
+                }
+            });
+
+            window.addEventListener("pageshow", event => {
+                if (event.persisted) {
+                    triggerCleanPageReload();
+                } else {
+                    checkRemoteUpdatesAndRefresh(false);
+                }
+            });
+
+            window.addEventListener("focus", () => {
+                checkRemoteUpdatesAndRefresh(false);
+            });
+        })();
+
         const CATEGORY_NAMES = {
             all: "كل المنتجات",
             home: "مستلزمات المنزل",
@@ -1796,6 +1858,8 @@
             { id: "hm-57", title: "مخرطة ملوخية استانلس", desc: "شفرة استانلس حادة ومريحة لفرم الملوخية والخضرة بسرعة وسلاسة.", price: 200, category: "home", img: "Kit/compressed_1795115046069.webp" },
             { id: "hm-58", title: "هراسة بطاطس يدوية", desc: "تهرس البطاطس المسلوقة بقوام ناعم وسريع بدون مجهود.", price: 25, category: "home", img: "Kit/compressed_1795115069644.webp" },
             { id: "hm-59", title: "زجاجة حراري شي إن (استانلس 304)", desc: "زجاجة حراري من شي إن متاحة بأشكالها، استانلس مختوم درجة 18/304، مانعة للتسريب وتحتفظ بالحرارة والبرودة لأكثر من 6 ساعات للمشروبات الساخنة والباردة.", price: 200, category: "home", img: "Clswmn/compressed_1795215870151.webp" },
+            { id: "hm-60", title: "مج حراري نقش ورد ذهبي", desc: "مج حراري فاخر بغطاء محكم ونقوش ورد ذهبية أنيقة، يحافظ على مشروبك ساخن أو بارد لأطول وقت في البيت أو الشغل، وهدية شيك وعملية في كل المناسبات.", price: 225, category: "home", categories: ["home", "gifts"], img: "Htm/compressed_1795308109261.webp" },
+            { id: "hm-61", title: "مج حراري كوفي COFFEE ألوان", desc: "مج حراري عملي بتصميم عصري وألوان شيك تناسب كل الأذواق، رفيقك المثالي للقهوة والمشروبات اليومية في أي مكان وهدية مميزة لمحبي القهوة.", price: 180, category: "home", categories: ["home", "gifts"], img: "Htm/compressed_1795308109497.webp" },
 
             { id: "libr-1", title: "قلم جاف سحري", desc: "كتابة سلسة وممتعة تناسب الملاحظات اليومية والاستخدام المدرسي.", price: 10, category: "school", img: "Libr/compressed_1795160031886.webp" },
             { id: "libr-2", title: "زمزمية مياه رياضية MOT", desc: "عملية وسهلة الحمل للتمارين والمدرسة والخروجات اليومية.", price: 140, category: "school", img: "Libr/compressed_1795160031599.webp" },
@@ -2162,7 +2226,7 @@
 
         function getFilteredProducts(category, rawQuery) {
             return PRODUCTS.filter(p => {
-                const catMatch = category === "all" || p.category === category;
+                const catMatch = category === "all" || p.category === category || (Array.isArray(p.categories) && p.categories.includes(category));
                 return catMatch && matchesSearchQuery(p, rawQuery);
             });
         }
@@ -2670,19 +2734,6 @@
         renderSmartRecommendations();
         updateCartUI();
         updateSearchCancelButton();
-
-        (function handlePushSectionParam() {
-            try {
-                const params = new URLSearchParams(window.location.search);
-                let targetSection = params.get("section");
-                if (!targetSection) return;
-                if (targetSection === "care") targetSection = "perfume";
-                if (CATEGORY_NAMES[targetSection]) {
-                    const circleEl = document.querySelector(`[data-cat="${targetSection}"]`);
-                    filterByCategory(targetSection, circleEl || null, true);
-                }
-            } catch (e) {}
-        })();
     </script>
 </body>
 </html>
