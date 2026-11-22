@@ -7,16 +7,16 @@
     <title>متجر كارامل - Caramel Store</title>
 
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/Caramelstoresuez/Carmelastore/refs/heads/main/compressed_1795355576678.jpeg">
 
     <meta property="og:site_name" content="متجر كارامل - Caramel Store">
     <meta property="og:locale" content="ar_AR">
     <meta property="og:title" content="متجر كارامل - Caramel Store">
     <meta property="og:description" content="كل حاجة تحتاجها عند كارامل بأرخص الأسعار والتوصيل لباب المنزل في أسرع وقت، وحتى لو المنتج مش موجود بنجيبهولك.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://caramelashinstore.github.io/Carmela.store/">
-    <meta property="og:image" content="https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg">
-    <meta property="og:image:secure_url" content="https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg">
+    <meta property="og:url" content="https://caramelstoresuez.github.io/Carmelastore/">
+    <meta property="og:image" content="https://raw.githubusercontent.com/Caramelstoresuez/Carmelastore/refs/heads/main/compressed_1795355576678.jpeg">
+    <meta property="og:image:secure_url" content="https://raw.githubusercontent.com/Caramelstoresuez/Carmelastore/refs/heads/main/compressed_1795355576678.jpeg">
     <meta property="og:image:type" content="image/jpeg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -24,8 +24,8 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="متجر كارامل - Caramel Store">
     <meta name="twitter:description" content="كل حاجة تحتاجها عند كارامل بأرخص الأسعار والتوصيل لباب المنزل في أسرع وقت، وحتى لو المنتج مش موجود بنجيبهولك.">
-    <meta name="twitter:image" content="https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg">
-    <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/Caramelstoresuez/Carmelastore/refs/heads/main/compressed_1795355576678.jpeg">
+    <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/Caramelstoresuez/Carmelastore/refs/heads/main/compressed_1795355576678.jpeg">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1530,7 +1530,7 @@
 
     <header>
         <button type="button" class="logo-pill" onclick="resetHomeFresh()" aria-label="العودة للصفحة الرئيسية">
-            <img src="https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg" alt="لوجو متجر كارامل" class="header-brand-img">
+            <img src="https://raw.githubusercontent.com/Caramelstoresuez/Carmelastore/refs/heads/main/compressed_1795355576678.jpeg" alt="لوجو متجر كارامل" class="header-brand-img">
             <div class="logo-text-group">
                 <div class="logo">CARAMEL</div>
                 <div class="logo-sub" id="headerBrandSub" data-en="CARAMEL STORE" data-ar="كارامل ستور">CARAMEL STORE</div>
@@ -1729,7 +1729,7 @@
 
     <script>
         const WHATSAPP_NUMBER = "201055436305";
-        const STORE_URL = "https://caramelashinstore.github.io/Carmela.store/";
+        const STORE_URL = "https://caramelstoresuez.github.io/Carmelastore/";
         const CART_STORAGE_KEY = "caramel_store_cart_v1";
         const INTEREST_STORAGE_KEY = "caramel_smart_interest_v1";
         const BATCH_SIZE = 12;
@@ -3001,11 +3001,13 @@
             const OneSignal = window.OneSignalCaramel;
 
             if (!OneSignal) {
+                showCaramelToast("جاري تجهيز خدمة الإشعارات، جرّب بعد ثوانٍ...");
                 return;
             }
 
             try {
                 if (OneSignal.Notifications && OneSignal.Notifications.permissionNative === "denied") {
+                    showCaramelToast("الإشعارات محظورة من إعدادات المتصفح، فعّلها من أذونات الموقع.");
                     return;
                 }
 
@@ -3024,9 +3026,13 @@
 
                     if (subId || (optedIn && nativeGranted) || nativeGranted) {
                         showGreenCircleAndHidePushBtn(1500);
+                    } else {
+                        showCaramelToast("لم يتم تفعيل الإشعارات بعد، تأكد من اختيار سماح.");
                     }
                 }, 1000);
-            } catch (error) {}
+            } catch (error) {
+                showCaramelToast("حدث خطأ أثناء تفعيل الإشعارات.");
+            }
         };
 
         OneSignalDeferred.push(async function (OneSignal) {
@@ -3035,7 +3041,7 @@
                     appId: "19f76037-4f5a-41b4-ada5-20e0abb2b1a7",
                     serviceWorkerPath: "OneSignalSDKWorker.js",
                     serviceWorkerParam: {
-                        scope: "./"
+                        scope: "/Carmelastore/"
                     }
                 });
 
