@@ -1706,7 +1706,7 @@
             clearTimeout(toastTimer);
             toastTimer = setTimeout(() => {
                 toastEl.classList.remove("show");
-            }, 3200);
+            }, 3000);
         }
 
         function setInstallButtonsVisible(show) {
@@ -2845,13 +2845,14 @@
             }
 
             try {
+                const subId = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.id;
                 const optedIn = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.optedIn === true;
                 const permission = OneSignal.Notifications && OneSignal.Notifications.permissionNative;
 
                 if (permission === "denied") {
                     label.textContent = "إشعارات المتجر محظورة";
-                } else if (optedIn) {
-                    label.textContent = "إشعارات العروض مفعّلة";
+                } else if (optedIn && subId) {
+                    label.textContent = "إشعارات العروض مفعّلة ✓";
                 } else {
                     label.textContent = "فعّل إشعارات العروض";
                 }
@@ -2860,21 +2861,10 @@
             }
         }
 
-        window.addEventListener("DOMContentLoaded", function () {
-            updateCaramelPushButton(window.OneSignalCaramel);
-        });
-
         window.enableCaramelPush = async function () {
-            updateCaramelPushButton(window.OneSignalCaramel);
             const OneSignal = window.OneSignalCaramel;
-
             if (!OneSignal) {
-                if ("Notification" in window) {
-                    const perm = await Notification.requestPermission();
-                    showCaramelToast(perm === "granted" ? "تم السماح بالإشعارات في المتصفح." : "لم يتم السماح بالإشعارات.");
-                } else {
-                    showCaramelToast("جاري تجهيز خدمة الإشعارات، جرّب مرة أخرى.");
-                }
+                showCaramelToast("مكتبة OneSignal لسه بتحمّل.. استنى ثانيتين وجرّب تاني.");
                 return;
             }
 
@@ -2884,20 +2874,20 @@
                     return;
                 }
 
-                const granted = await OneSignal.Notifications.requestPermission();
-                if (granted || Notification.permission === "granted") {
-                    await OneSignal.User.PushSubscription.optIn();
-                    showCaramelToast("تم تفعيل إشعارات عروض متجر كارامل!");
-                } else {
-                    showCaramelToast("لم يتم منح إذن الإشعارات بعد.");
-                }
-            } catch (error) {
-                console.error("Caramel push error:", error);
-                showCaramelToast("تنبيه: " + (error && error.message ? error.message : "تعذر التفعيل"));
-            } finally {
-                window.setTimeout(function () {
+                await OneSignal.Notifications.requestPermission();
+                await OneSignal.User.PushSubscription.optIn();
+
+                setTimeout(() => {
+                    const subId = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.id;
+                    if (subId) {
+                        showCaramelToast("تم ربط جهازك بنجاح! كود الاشتراك: " + subId.slice(0, 8));
+                    } else {
+                        showCaramelToast("تم السماح، استنى 5 ثواني واضغط الزر مرة تانية لتأكيد الربط.");
+                    }
                     updateCaramelPushButton(OneSignal);
-                }, 500);
+                }, 1500);
+            } catch (error) {
+                showCaramelToast("خطأ OneSignal: " + (error && error.message ? error.message : String(error)));
             }
         };
 
@@ -2905,7 +2895,7 @@
             try {
                 await OneSignal.init({
                     appId: "19f76037-4f5a-41b4-ada5-20e0abb2b1a7",
-                    serviceWorkerPath: "/Carmela.store/sw.js",
+                    serviceWorkerPath: "/Carmela.store/OneSignalSDKWorker.js",
                     serviceWorkerParam: {
                         scope: "/Carmela.store/"
                     }
@@ -2919,8 +2909,7 @@
 
                 updateCaramelPushButton(OneSignal);
             } catch (error) {
-                console.error("Caramel OneSignal initialization error:", error);
-                updateCaramelPushButton(null);
+                showCaramelToast("فشل تهيئة OneSignal: " + (error && error.message ? error.message : String(error)));
             }
         });
     </script>
