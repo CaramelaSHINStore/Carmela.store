@@ -1822,7 +1822,10 @@
             if ("serviceWorker" in navigator) {
                 window.addEventListener("load", async () => {
                     try {
-                        const reg = await navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" });
+                        const reg = await navigator.serviceWorker.register("./sw.js", {
+                            scope: "./",
+                            updateViaCache: "none"
+                        });
                         swRegistration = reg;
 
                         activateWaitingWorker(reg);
@@ -2827,7 +2830,7 @@
     </script>
 
     <!-- OneSignal Web Push v16 - Caramel Store -->
-    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" async></script>
     <script>
         window.OneSignalDeferred = window.OneSignalDeferred || [];
         window.OneSignalCaramel = null;
@@ -2862,9 +2865,21 @@
         }
 
         window.enableCaramelPush = async function () {
-            const OneSignal = window.OneSignalCaramel;
+            let OneSignal = window.OneSignalCaramel;
+
+            if (!OneSignal && "Notification" in window) {
+                const perm = await Notification.requestPermission();
+                if (perm !== "granted") {
+                    showCaramelToast("لم يتم منح إذن الإشعارات بعد.");
+                    return;
+                }
+                showCaramelToast("تم السماح، جاري ربط الاشتراك بـ OneSignal...");
+                await new Promise(r => setTimeout(r, 1500));
+                OneSignal = window.OneSignalCaramel;
+            }
+
             if (!OneSignal) {
-                showCaramelToast("مكتبة OneSignal لسه بتحمّل.. استنى ثانيتين وجرّب تاني.");
+                showCaramelToast("جرّب الضغط على الزر مرة أخرى بعد ثانية.");
                 return;
             }
 
@@ -2882,7 +2897,7 @@
                     if (subId) {
                         showCaramelToast("تم ربط جهازك بنجاح! كود الاشتراك: " + subId.slice(0, 8));
                     } else {
-                        showCaramelToast("تم السماح، استنى 5 ثواني واضغط الزر مرة تانية لتأكيد الربط.");
+                        showCaramelToast("تم السماح، انتظر قليلاً ثم حدّث صفحة OneSignal.");
                     }
                     updateCaramelPushButton(OneSignal);
                 }, 1500);
