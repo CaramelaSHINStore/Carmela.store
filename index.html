@@ -1643,7 +1643,7 @@
         <span class="cart-badge-count" id="floatingCartCount"></span>
     </button>
 
-    <button type="button" class="floating-notification-pill" id="caramelPushBtn"
+    <button type="button" class="floating-notification-pill visible" id="caramelPushBtn"
         onclick="enableCaramelPush()" aria-label="تفعيل إشعارات متجر كارامل">
         <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
@@ -2835,53 +2835,70 @@
         function updateCaramelPushButton(OneSignal) {
             const button = document.getElementById("caramelPushBtn");
             const label = document.getElementById("caramelPushBtnText");
-            if (!button || !label || !OneSignal) return;
+            if (!button || !label) return;
 
-            const supported = OneSignal.Notifications.isPushSupported();
-            const optedIn = OneSignal.User.PushSubscription.optedIn === true;
-            const permission = OneSignal.Notifications.permissionNative;
+            button.classList.add("visible");
 
-            if (!supported || optedIn) {
-                button.classList.remove("visible");
+            if (!OneSignal) {
+                label.textContent = "فعّل إشعارات العروض";
                 return;
             }
 
-            label.textContent = permission === "denied"
-                ? "إشعارات المتجر محظورة"
-                : "فعّل إشعارات العروض";
-            button.classList.add("visible");
+            try {
+                const optedIn = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.optedIn === true;
+                const permission = OneSignal.Notifications && OneSignal.Notifications.permissionNative;
+
+                if (permission === "denied") {
+                    label.textContent = "إشعارات المتجر محظورة";
+                } else if (optedIn) {
+                    label.textContent = "إشعارات العروض مفعّلة";
+                } else {
+                    label.textContent = "فعّل إشعارات العروض";
+                }
+            } catch (e) {
+                label.textContent = "فعّل إشعارات العروض";
+            }
         }
 
-        window.enableCaramelPush = function () {
+        window.addEventListener("DOMContentLoaded", function () {
+            updateCaramelPushButton(window.OneSignalCaramel);
+        });
+
+        window.enableCaramelPush = async function () {
+            updateCaramelPushButton(window.OneSignalCaramel);
             const OneSignal = window.OneSignalCaramel;
+
             if (!OneSignal) {
-                showCaramelToast("جاري تجهيز خدمة الإشعارات، جرّب بعد لحظات.");
+                if ("Notification" in window) {
+                    const perm = await Notification.requestPermission();
+                    showCaramelToast(perm === "granted" ? "تم السماح بالإشعارات في المتصفح." : "لم يتم السماح بالإشعارات.");
+                } else {
+                    showCaramelToast("جاري تجهيز خدمة الإشعارات، جرّب مرة أخرى.");
+                }
                 return;
             }
 
-            if (OneSignal.Notifications.permissionNative === "denied") {
-                showCaramelToast("الإشعارات محظورة من إعدادات المتصفح لموقع كارامل.");
-                return;
-            }
+            try {
+                if (OneSignal.Notifications.permissionNative === "denied") {
+                    showCaramelToast("الإشعارات محظورة من إعدادات المتصفح لموقع كارامل.");
+                    return;
+                }
 
-            OneSignal.Notifications.requestPermission()
-                .then(async function (granted) {
-                    if (granted) {
-                        try {
-                            await OneSignal.User.PushSubscription.optIn();
-                            showCaramelToast("تم تفعيل إشعارات عروض متجر كارامل!");
-                        } catch (error) {
-                            console.error("Caramel push opt-in error:", error);
-                        }
-                    }
-                    window.setTimeout(function () {
-                        updateCaramelPushButton(OneSignal);
-                    }, 500);
-                })
-                .catch(function (error) {
-                    console.error("Caramel notification permission error:", error);
-                    showCaramelToast("تعذر تفعيل الإشعارات الآن، حاول مرة أخرى.");
-                });
+                const granted = await OneSignal.Notifications.requestPermission();
+                if (granted || Notification.permission === "granted") {
+                    await OneSignal.User.PushSubscription.optIn();
+                    showCaramelToast("تم تفعيل إشعارات عروض متجر كارامل!");
+                } else {
+                    showCaramelToast("لم يتم منح إذن الإشعارات بعد.");
+                }
+            } catch (error) {
+                console.error("Caramel push error:", error);
+                showCaramelToast("تنبيه: " + (error && error.message ? error.message : "تعذر التفعيل"));
+            } finally {
+                window.setTimeout(function () {
+                    updateCaramelPushButton(OneSignal);
+                }, 500);
+            }
         };
 
         OneSignalDeferred.push(async function (OneSignal) {
@@ -2903,6 +2920,7 @@
                 updateCaramelPushButton(OneSignal);
             } catch (error) {
                 console.error("Caramel OneSignal initialization error:", error);
+                updateCaramelPushButton(null);
             }
         });
     </script>
