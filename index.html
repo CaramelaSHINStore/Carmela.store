@@ -1894,7 +1894,7 @@
             { id: "libr-28", title: "ألوان فلوماستر دومس DOMS Aqua 12 لون", desc: "12 لوناً زاهياً للرسم والتلوين والأنشطة المدرسية بوضوح جميل.", price: 50, category: "school", img: "Libr/compressed_1795160023862.webp" },
             { id: "libr-29", title: "زجاجة حراري شي إن (استانلس 304)", desc: "زجاجة حراري من شي إن متاحة بأشكالها، استانلس مختوم درجة 18/304، مانعة للتسريب وتحتفظ بالحرارة والبرودة لأكثر من 6 ساعات للمشروبات الساخنة والباردة.", price: 200, category: "school", img: "Clswmn/compressed_1795215870151.webp" },
             { id: "tafse-23", title: "رانر طاولة مكرمية هاند ميد 50×150 سم", desc: "شغل مكرمية يدوي أنيق بمقاس 50 سم في متر ونص مع شراشيب ناعمة، يدي السفرة أو الترابيزة لمسة دافئة وشيك جداً في بيتك.", price: 500, category: "tafse", img: "Htm/compressed_1795351999998.webp" },
-            
+
             { id: "tafse-1", title: "مكرمية حائط هاند ميد 1×2 متر", desc: "شغل يدوي مميز بمقاس 1×2 متر مع قطعتين رباط لتزيين الحوائط بلمسة دافئة.", price: 900, category: "tafse", img: "Tafse/IMG-20261117-WA0029.jpg" },
             { id: "tafse-2", title: "مكرمية ديكور هاند ميد 1×2 متر مع عصايا", desc: "مقاس 1×2 متر شغل يدوي متقن ومعاها قطعتين رباط وعصايا هدية لتعليق فخم.", price: 1550, category: "tafse", img: "Tafse/IMG-20261117-WA0027.jpg" },
             { id: "tafse-3", title: "مكرمية فاخرة هاند ميد 1×2 متر مع عصايا", desc: "قطعة ديكور يدوية بارزة بمقاس 1×2 متر ومعاها قطعتين رباط وعصايا هدية.", price: 1700, category: "tafse", img: "Tafse/IMG-20261117-WA0024.jpg" },
@@ -2247,11 +2247,23 @@
         }
 
         function appendContinuationWave(category, rawQuery) {
-            const sourcePool = getFilteredProducts(category, rawQuery);
+            const isSubCategory = category !== "all" && !rawQuery.trim();
+            const sourcePool = isSubCategory
+                ? PRODUCTS.filter(p => {
+                    const inSelectedCat = p.category === category || (Array.isArray(p.categories) && p.categories.includes(category));
+                    return !inSelectedCat;
+                })
+                : getFilteredProducts(category, rawQuery);
+
             if (sourcePool.length === 0) return;
 
             feedCycle += 1;
-            const waveSorted = category === "perfume" ? [...sourcePool] : shuffleArray(sourcePool);
+
+            if (isSubCategory && feedCycle === 1) {
+                currentFeedItems.push({ type: "divider", id: "cat-end-divider" });
+            }
+
+            const waveSorted = (category === "perfume" && !isSubCategory) ? [...sourcePool] : shuffleArray(sourcePool);
             const waveItems = waveSorted.map(product => ({
                 type: "product",
                 product,
@@ -2278,6 +2290,14 @@
             if (!nextSlice.length) return;
 
             const htmlChunk = nextSlice.map(entry => {
+                if (entry.type === "divider") {
+                    return `
+                        <div style="grid-column: 1 / -1; margin: 14px 0 6px; padding: 12px 16px; border-radius: 16px; background: linear-gradient(135deg, #f6efe6, #fffdf9); border: 1.5px dashed var(--caramel); text-align: center;">
+                            <div style="font-size: 0.92rem; font-weight: 900; color: var(--espresso);">انتهت منتجات القسم — اكتشف باقي منتجات المتجر</div>
+                            <div style="font-size: 0.76rem; font-weight: 700; color: var(--text-muted); margin-top: 2px;">تشكيلة متنوعة من كل أقسام كارامل ستور</div>
+                        </div>
+                    `;
+                }
                 if (entry.type === "special") return buildSpecialRequestCardHTML();
                 return buildProductCardHTML(entry.product, false, entry.tag);
             }).join("");
