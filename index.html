@@ -2827,96 +2827,61 @@
     </script>
 
     <!-- OneSignal Web Push v16 - Caramel Store -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
         window.OneSignalDeferred = window.OneSignalDeferred || [];
         window.OneSignalCaramel = null;
 
-        function showPushButtonFallback(text = "فعّل إشعارات العروض") {
-            const button = document.getElementById("caramelPushBtn");
-            const label = document.getElementById("caramelPushBtnText");
-            if (!button || !label) return;
-            label.textContent = text;
-            button.classList.add("visible");
-        }
-
         function updateCaramelPushButton(OneSignal) {
             const button = document.getElementById("caramelPushBtn");
             const label = document.getElementById("caramelPushBtnText");
-            if (!button || !label) return;
+            if (!button || !label || !OneSignal) return;
 
-            if (!OneSignal) {
-                showPushButtonFallback("فعّل إشعارات العروض");
+            const supported = OneSignal.Notifications.isPushSupported();
+            const optedIn = OneSignal.User.PushSubscription.optedIn === true;
+            const permission = OneSignal.Notifications.permissionNative;
+
+            if (!supported || optedIn) {
+                button.classList.remove("visible");
                 return;
             }
 
-            try {
-                const supported = OneSignal.Notifications.isPushSupported();
-                const optedIn = OneSignal.User.PushSubscription.optedIn === true;
-                const permission = OneSignal.Notifications.permissionNative;
-
-                if (!supported) {
-                    button.classList.remove("visible");
-                    return;
-                }
-
-                if (optedIn) {
-                    button.classList.remove("visible");
-                    return;
-                }
-
-                label.textContent = permission === "denied"
-                    ? "إشعارات المتجر محظورة"
-                    : "فعّل إشعارات العروض";
-                button.classList.add("visible");
-            } catch (e) {
-                showPushButtonFallback("فعّل إشعارات العروض");
-            }
+            label.textContent = permission === "denied"
+                ? "إشعارات المتجر محظورة"
+                : "فعّل إشعارات العروض";
+            button.classList.add("visible");
         }
 
-        window.addEventListener("DOMContentLoaded", function () {
-            showPushButtonFallback("فعّل إشعارات العروض");
-        });
-
-        window.enableCaramelPush = async function () {
+        window.enableCaramelPush = function () {
             const OneSignal = window.OneSignalCaramel;
+            if (!OneSignal) {
+                showCaramelToast("جاري تجهيز خدمة الإشعارات، جرّب بعد لحظات.");
+                return;
+            }
 
-            if (OneSignal && OneSignal.Notifications && OneSignal.Notifications.permissionNative === "denied") {
+            if (OneSignal.Notifications.permissionNative === "denied") {
                 showCaramelToast("الإشعارات محظورة من إعدادات المتصفح لموقع كارامل.");
                 return;
             }
 
-            if (OneSignal && OneSignal.Notifications && typeof OneSignal.Notifications.requestPermission === "function") {
-                try {
-                    const granted = await OneSignal.Notifications.requestPermission();
+            OneSignal.Notifications.requestPermission()
+                .then(async function (granted) {
                     if (granted) {
-                        await OneSignal.User.PushSubscription.optIn();
-                        showCaramelToast("تم تفعيل إشعارات عروض متجر كارامل!");
-                    } else {
-                        showCaramelToast("لم يتم منح إذن الإشعارات بعد.");
+                        try {
+                            await OneSignal.User.PushSubscription.optIn();
+                            showCaramelToast("تم تفعيل إشعارات عروض متجر كارامل!");
+                        } catch (error) {
+                            console.error("Caramel push opt-in error:", error);
+                        }
                     }
                     window.setTimeout(function () {
                         updateCaramelPushButton(OneSignal);
-                    }, 600);
-                    return;
-                } catch (error) {
-                    console.error("Caramel push error:", error);
-                    showCaramelToast("حصل خطأ أثناء التفعيل: " + (error && error.message ? error.message : "تحقق من sw.js"));
-                    return;
-                }
-            }
-
-            if ("Notification" in window) {
-                try {
-                    const perm = await Notification.requestPermission();
-                    if (perm === "granted") {
-                        showCaramelToast("تم السماح بالإشعارات، أعد تحميل الصفحة لإتمام الاشتراك.");
-                    } else {
-                        showCaramelToast("تم رفض إذن الإشعارات.");
-                    }
-                } catch (err) {
-                    showCaramelToast("تعذر طلب إذن الإشعارات.");
-                }
-            }
+                    }, 500);
+                })
+                .catch(function (error) {
+                    console.error("Caramel notification permission error:", error);
+                    showCaramelToast("تعذر تفعيل الإشعارات الآن، حاول مرة أخرى.");
+                });
         };
 
         OneSignalDeferred.push(async function (OneSignal) {
@@ -2926,8 +2891,7 @@
                     serviceWorkerPath: "/Carmela.store/sw.js",
                     serviceWorkerParam: {
                         scope: "/Carmela.store/"
-                    },
-                    allowLocalhostAsSecureOrigin: true
+                    }
                 });
 
                 window.OneSignalCaramel = OneSignal;
@@ -2938,13 +2902,10 @@
 
                 updateCaramelPushButton(OneSignal);
             } catch (error) {
-                console.error("Caramel OneSignal init error:", error);
-                showPushButtonFallback("فعّل إشعارات العروض");
-                showCaramelToast("تنبيه OneSignal: " + (error && error.message ? error.message : "راجع ملف sw.js"));
+                console.error("Caramel OneSignal initialization error:", error);
             }
         });
     </script>
-    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 
 </body>
 </html>
