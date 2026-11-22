@@ -1107,24 +1107,40 @@
             font-size: 0.82rem;
             font-weight: 900;
             line-height: 1.35;
-            transition: opacity 0.35s ease, transform 0.35s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+            transition: width 0.28s ease, height 0.28s ease, min-width 0.28s ease, padding 0.28s ease, border-radius 0.28s ease, opacity 0.35s ease, transform 0.35s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
         }
 
         .floating-notification-pill.visible {
             display: inline-flex;
         }
 
-        .floating-notification-pill.subscribed-success {
+        .floating-notification-pill.circle-check-only {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            padding: 0;
+            border-radius: 50%;
+            gap: 0;
             background: linear-gradient(135deg, #22c55e, #15803d);
             color: #ffffff;
             border-color: #86efac;
-            box-shadow: 0 10px 24px rgba(21, 128, 61, 0.38);
-            transform: scale(1.03);
+            box-shadow: 0 10px 24px rgba(21, 128, 61, 0.42);
+            transform: scale(1.06);
+        }
+
+        .floating-notification-pill.circle-check-only #caramelPushBtnText {
+            display: none;
+        }
+
+        .floating-notification-pill.circle-check-only #caramelPushIcon svg {
+            width: 22px;
+            height: 22px;
+            stroke-width: 2.6;
         }
 
         .floating-notification-pill.hiding-smooth {
             opacity: 0;
-            transform: translateY(10px) scale(0.92);
+            transform: translateY(10px) scale(0.88);
             pointer-events: none;
         }
 
@@ -1145,6 +1161,12 @@
                 left: 12px;
                 padding: 9px 12px;
                 font-size: 0.75rem;
+            }
+            .floating-notification-pill.circle-check-only {
+                width: 46px;
+                height: 46px;
+                min-width: 46px;
+                padding: 0;
             }
         }
 
@@ -2863,7 +2885,7 @@
 
             clearTimeout(caramelPushHideTimer);
             button.disabled = false;
-            button.classList.remove("subscribed-success", "hiding-smooth");
+            button.classList.remove("circle-check-only", "hiding-smooth");
             button.classList.add("visible");
 
             if (iconEl) {
@@ -2881,14 +2903,14 @@
             const button = document.getElementById("caramelPushBtn");
             if (!button) return;
             clearTimeout(caramelPushHideTimer);
-            button.classList.remove("visible", "subscribed-success", "hiding-smooth");
+            button.classList.remove("visible", "circle-check-only", "hiding-smooth");
         }
 
-        function showGreenCheckAndHidePushBtn(delayBeforeHideMs = 1800) {
+        function showGreenCircleAndHidePushBtn(delayBeforeHideMs = 1500) {
             const button = document.getElementById("caramelPushBtn");
             const iconEl = document.getElementById("caramelPushIcon");
             const label = document.getElementById("caramelPushBtnText");
-            if (!button || !label) return;
+            if (!button) return;
 
             try {
                 localStorage.setItem(CARAMEL_PUSH_SUBSCRIBED_KEY, "true");
@@ -2897,7 +2919,9 @@
             button.disabled = true;
             button.classList.add("visible");
             button.classList.remove("hiding-smooth");
-            button.classList.add("subscribed-success");
+            button.classList.add("circle-check-only");
+
+            if (label) label.textContent = "";
 
             if (iconEl) {
                 iconEl.innerHTML = `
@@ -2906,7 +2930,6 @@
                     </svg>
                 `;
             }
-            label.textContent = "إشعارات العروض مفعّلة ✓";
 
             clearTimeout(caramelPushHideTimer);
             caramelPushHideTimer = setTimeout(() => {
@@ -2943,11 +2966,7 @@
         function updateCaramelPushButton(OneSignal) {
             const button = document.getElementById("caramelPushBtn");
             const label = document.getElementById("caramelPushBtnText");
-            if (!button || !label) return;
-
-            if (!OneSignal) {
-                return;
-            }
+            if (!button || !OneSignal) return;
 
             try {
                 const subId = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.id;
@@ -2959,14 +2978,12 @@
                         localStorage.removeItem(CARAMEL_PUSH_SUBSCRIBED_KEY);
                     } catch (e) {}
                     setCaramelPushButtonDefault();
-                    label.textContent = "إشعارات المتجر محظورة";
+                    if (label) label.textContent = "إشعارات المتجر محظورة";
                 } else if (optedIn && subId) {
                     const alreadyHid = !button.classList.contains("visible");
-                    if (!alreadyHid && !button.classList.contains("subscribed-success")) {
-                        showGreenCheckAndHidePushBtn(1600);
-                    } else if (!alreadyHid) {
-                        // يترك الأنيميشن الحالي يكمّل إخفاء الزر
-                    } else {
+                    if (!alreadyHid && !button.classList.contains("circle-check-only")) {
+                        showGreenCircleAndHidePushBtn(1300);
+                    } else if (alreadyHid) {
                         try {
                             localStorage.setItem(CARAMEL_PUSH_SUBSCRIBED_KEY, "true");
                         } catch (e) {}
@@ -2984,13 +3001,11 @@
             const OneSignal = window.OneSignalCaramel;
 
             if (!OneSignal) {
-                showCaramelToast("مكتبة OneSignal لسه بتجهز.. انتظر ثانية وجرّب تاني.");
                 return;
             }
 
             try {
                 if (OneSignal.Notifications && OneSignal.Notifications.permissionNative === "denied") {
-                    showCaramelToast("الإشعارات محظورة من إعدادات المتصفح لموقع كارامل.");
                     return;
                 }
 
@@ -3007,20 +3022,11 @@
                     const optedIn = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.optedIn === true;
                     const nativeGranted = typeof Notification !== "undefined" && Notification.permission === "granted";
 
-                    if (subId || (optedIn && nativeGranted)) {
-                        showCaramelToast("تم تفعيل الإشعارات بنجاح!" + (subId ? " كود الاشتراك: " + subId.slice(0, 8) : ""));
-                        showGreenCheckAndHidePushBtn(1800);
-                    } else if (nativeGranted) {
-                        showCaramelToast("تم السماح بالإشعارات، جاري إتمام الاشتراك...");
-                        showGreenCheckAndHidePushBtn(1800);
-                    } else {
-                        showCaramelToast("لم يتم تفعيل الإشعارات بعد، يمكنك المحاولة مرة أخرى.");
+                    if (subId || (optedIn && nativeGranted) || nativeGranted) {
+                        showGreenCircleAndHidePushBtn(1500);
                     }
-                }, 1200);
-            } catch (error) {
-                const msg = error && error.message ? error.message : String(error);
-                showCaramelToast("تفاصيل الخطأ: " + msg);
-            }
+                }, 1000);
+            } catch (error) {}
         };
 
         OneSignalDeferred.push(async function (OneSignal) {
@@ -3040,7 +3046,7 @@
                         const currentOptedIn = event && event.current ? event.current.optedIn === true : false;
                         const currentId = event && event.current ? event.current.id : null;
                         if (currentOptedIn && currentId) {
-                            showGreenCheckAndHidePushBtn(1800);
+                            showGreenCircleAndHidePushBtn(1500);
                         } else {
                             updateCaramelPushButton(OneSignal);
                         }
@@ -3048,10 +3054,7 @@
                 }
 
                 updateCaramelPushButton(OneSignal);
-            } catch (error) {
-                const msg = error && error.message ? error.message : String(error);
-                showCaramelToast("سبب فشل التهيئة: " + msg);
-            }
+            } catch (error) {}
         });
     </script>
 
