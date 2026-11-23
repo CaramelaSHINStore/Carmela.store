@@ -553,7 +553,6 @@
             font-weight: 800;
         }
 
-        /* صف الأزرار في نفس السطر لتوفير المساحة الرأسية */
         .hero-actions {
             display: flex;
             flex-direction: row;
@@ -1722,7 +1721,7 @@
             clearTimeout(toastTimer);
             toastTimer = setTimeout(() => {
                 toastEl.classList.remove("show");
-            }, 3500);
+            }, 3800);
         }
 
         function setInstallButtonsVisible(show) {
@@ -2850,7 +2849,7 @@
         updateSearchCancelButton();
     </script>
 
-    <!-- OneSignal Web Push v16 + Notification Button Logic -->
+    <!-- OneSignal Web Push v16 + Direct Browser Permission Fallback -->
     <script>
         window.OneSignalDeferred = window.OneSignalDeferred || [];
     </script>
@@ -2910,29 +2909,38 @@
             }
         }
 
-        async function requestPushPermissionAndOptIn(osInstance) {
-            if (!("Notification" in window)) return false;
+        async function askNativePermissionFirst(osInstance) {
+            if (!window.isSecureContext) {
+                showCaramelToast("الإشعارات تتطلب رابط HTTPS أو localhost.");
+                return { ok: false, reason: "insecure" };
+            }
+
+            if (!("Notification" in window)) {
+                showCaramelToast("متصفحك الحالي لا يدعم إشعارات الويب.");
+                return { ok: false, reason: "unsupported" };
+            }
 
             let perm = Notification.permission;
+
+            if (perm === "denied") {
+                return { ok: false, reason: "denied" };
+            }
+
             if (perm === "default") {
-                if (osInstance && osInstance.Notifications && typeof osInstance.Notifications.requestPermission === "function") {
-                    try {
-                        await osInstance.Notifications.requestPermission();
-                    } catch (e) {}
-                }
-                if (Notification.permission === "default" && typeof Notification.requestPermission === "function") {
-                    try {
+                try {
+                    if (typeof Notification.requestPermission === "function") {
                         perm = await Notification.requestPermission();
-                    } catch (e) {
+                    } else if (osInstance && osInstance.Notifications && typeof osInstance.Notifications.requestPermission === "function") {
+                        await osInstance.Notifications.requestPermission();
                         perm = Notification.permission;
                     }
-                } else {
+                } catch (err) {
                     perm = Notification.permission;
                 }
             }
 
             if (perm !== "granted") {
-                return false;
+                return { ok: false, reason: perm };
             }
 
             if (osInstance && osInstance.User && osInstance.User.PushSubscription && typeof osInstance.User.PushSubscription.optIn === "function") {
@@ -2941,22 +2949,34 @@
                 } catch (e) {}
             }
 
-            return true;
+            return { ok: true, reason: "granted" };
         }
 
         async function handleEnableNotificationsClick() {
-            const osInstance = oneSignalInstance || window.OneSignal;
-            const granted = await requestPushPermissionAndOptIn(osInstance);
+            const btn = document.getElementById("enableNotificationsBtn");
+            const labelEl = document.getElementById("enableNotificationsLabel");
+            if (btn) btn.disabled = true;
+            if (labelEl) labelEl.textContent = "جاري التشغيل...";
 
-            if (granted && isNotificationsCurrentlyEnabled()) {
-                syncNotifyButtonVisibility(true);
-                showCaramelToast("تم تشغيل الإشعارات بنجاح!");
-            } else if (getBrowserNotificationPermission() === "denied") {
-                syncNotifyButtonVisibility(false);
-                showCaramelToast("الإشعارات مقفولة من المتصفح، فعّلها من إعدادات الموقع.");
-            } else {
-                syncNotifyButtonVisibility(false);
-                showCaramelToast("لم يتم تفعيل الإشعارات بعد.");
+            try {
+                const osInstance = oneSignalInstance || window.OneSignal;
+                const res = await askNativePermissionFirst(osInstance);
+
+                if (res.ok && isNotificationsCurrentlyEnabled()) {
+                    syncNotifyButtonVisibility(true);
+                    showCaramelToast("تم تشغيل الإشعارات بنجاح!");
+                } else if (res.reason === "denied" || getBrowserNotificationPermission() === "denied") {
+                    syncNotifyButtonVisibility(false);
+                    showCaramelToast("الإشعارات محظورة من المتصفح، افتح أذونات الموقع وفعّلها.");
+                } else if (res.reason !== "insecure" && res.reason !== "unsupported") {
+                    syncNotifyButtonVisibility(false);
+                    showCaramelToast("لم يتم السماح بالإشعارات؛ اضغط مرة أخرى للموافقة.");
+                }
+            } finally {
+                if (btn) btn.disabled = false;
+                if (!isNotificationsCurrentlyEnabled()) {
+                    syncNotifyButtonVisibility(false);
+                }
             }
         }
 
@@ -2966,8 +2986,13 @@
                 return;
             }
 
+            if (!window.isSecureContext || !("Notification" in window)) {
+                syncNotifyButtonVisibility(false);
+                return;
+            }
+
             const perm = getBrowserNotificationPermission();
-            if (perm === "denied" || perm === "unsupported") {
+            if (perm === "denied") {
                 syncNotifyButtonVisibility(false);
                 return;
             }
@@ -2996,8 +3021,8 @@
                 localStorage.setItem(AUTO_PUSH_ASKED_KEY, "true");
             } catch (e) {}
 
-            const ok = await requestPushPermissionAndOptIn(osInstance);
-            if (ok && isNotificationsCurrentlyEnabled()) {
+            const res = await askNativePermissionFirst(osInstance);
+            if (res.ok && isNotificationsCurrentlyEnabled()) {
                 syncNotifyButtonVisibility(true);
             }
         };
