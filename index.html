@@ -157,6 +157,17 @@
             }
         }
 
+        @keyframes modalPopIn {
+            0% {
+                opacity: 0;
+                transform: translateY(18px) scale(0.96);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
         header {
             background: rgba(24, 21, 18, 0.97);
             backdrop-filter: blur(14px);
@@ -1256,6 +1267,197 @@
             transform: translateX(-50%) translateY(0);
         }
 
+        /* نافذة اختيار المقاس والتفاصيل قبل الإضافة للسلة */
+        .option-modal-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 260;
+            background: rgba(16, 13, 10, 0.72);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .option-modal-backdrop.open {
+            display: flex;
+        }
+
+        .option-modal-card {
+            width: min(420px, 95vw);
+            background: #ffffff;
+            border-radius: 22px;
+            border: 1.5px solid var(--caramel);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+            overflow: hidden;
+            animation: modalPopIn 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .option-modal-header {
+            background: var(--espresso);
+            color: #ffffff;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(200, 150, 102, 0.3);
+        }
+
+        .option-modal-header h3 {
+            font-size: 0.96rem;
+            font-weight: 900;
+            color: var(--caramel-light);
+        }
+
+        .option-modal-close {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .option-modal-body {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: #faf7f2;
+        }
+
+        .option-modal-product {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #ffffff;
+            padding: 10px;
+            border-radius: 14px;
+            border: 1px solid var(--border-gold);
+        }
+
+        .option-modal-product img {
+            width: 64px;
+            height: 64px;
+            border-radius: 12px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .option-modal-product-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .option-modal-product-title {
+            font-size: 0.88rem;
+            font-weight: 900;
+            color: var(--text-main);
+            line-height: 1.35;
+        }
+
+        .option-modal-product-price {
+            font-size: 0.96rem;
+            font-weight: 900;
+            color: var(--caramel-dark);
+            margin-top: 2px;
+        }
+
+        .option-field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .option-field-label {
+            font-size: 0.8rem;
+            font-weight: 900;
+            color: var(--espresso-soft);
+        }
+
+        .option-pills-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+        }
+
+        .option-pill-btn {
+            padding: 6px 12px;
+            border-radius: 10px;
+            border: 1.5px solid var(--border-gold);
+            background: #ffffff;
+            color: var(--text-main);
+            font-size: 0.78rem;
+            font-weight: 800;
+            transition: all 0.18s ease;
+        }
+
+        .option-pill-btn.selected {
+            background: var(--espresso);
+            color: var(--caramel-light);
+            border-color: var(--caramel);
+            box-shadow: 0 4px 10px rgba(24, 21, 18, 0.18);
+        }
+
+        .option-modal-textarea {
+            width: 100%;
+            min-height: 68px;
+            resize: vertical;
+            padding: 9px 11px;
+            border-radius: 12px;
+            border: 1.5px solid var(--border-gold);
+            background: #ffffff;
+            color: var(--text-main);
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            outline: none;
+        }
+
+        .option-modal-textarea:focus {
+            border-color: var(--caramel-dark);
+        }
+
+        .option-modal-footer {
+            padding: 12px 16px;
+            background: #ffffff;
+            border-top: 1px solid rgba(28, 23, 20, 0.08);
+            display: flex;
+            gap: 8px;
+        }
+
+        .option-confirm-btn {
+            flex: 1;
+            padding: 10px 14px;
+            border-radius: 12px;
+            background: var(--espresso);
+            color: var(--caramel-light);
+            border: 1px solid var(--caramel);
+            font-size: 0.86rem;
+            font-weight: 900;
+            transition: background 0.2s ease;
+        }
+
+        .option-confirm-btn:hover {
+            background: var(--caramel-dark);
+            color: #ffffff;
+        }
+
+        .option-cancel-btn {
+            padding: 10px 14px;
+            border-radius: 12px;
+            background: #f3ede6;
+            color: var(--text-main);
+            font-size: 0.82rem;
+            font-weight: 800;
+        }
+
         .cart-backdrop {
             display: none;
             position: fixed;
@@ -1406,8 +1608,7 @@
         }
 
         .cart-option-select,
-        .cart-item-note-input,
-        .cart-order-notes-textarea {
+        .cart-item-note-input {
             font-family: 'Cairo', sans-serif;
             border: 1px solid var(--border-gold);
             border-radius: 10px;
@@ -1419,8 +1620,7 @@
         }
 
         .cart-option-select:focus,
-        .cart-item-note-input:focus,
-        .cart-order-notes-textarea:focus {
+        .cart-item-note-input:focus {
             border-color: var(--caramel-dark);
             background: #ffffff;
         }
@@ -1478,28 +1678,6 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
-        }
-
-        .cart-order-notes-box {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .cart-order-notes-label {
-            font-size: 0.76rem;
-            font-weight: 800;
-            color: var(--espresso-soft);
-        }
-
-        .cart-order-notes-textarea {
-            width: 100%;
-            min-height: 54px;
-            max-height: 110px;
-            resize: vertical;
-            padding: 7px 10px;
-            font-size: 0.78rem;
-            line-height: 1.4;
         }
 
         .cart-policy-note {
@@ -1761,6 +1939,44 @@
 
     <div class="caramel-toast" id="caramelToast" role="status" aria-live="polite"></div>
 
+    <!-- نافذة تحديد المقاس والتفاصيل قبل الإضافة للسلة -->
+    <div class="option-modal-backdrop" id="productOptionModal" onclick="closeProductOptionModal()">
+        <div class="option-modal-card" onclick="event.stopPropagation()">
+            <div class="option-modal-header">
+                <h3>اختيار تفاصيل المنتج</h3>
+                <button type="button" class="option-modal-close" onclick="closeProductOptionModal()" aria-label="إغلاق">&times;</button>
+            </div>
+            <div class="option-modal-body">
+                <div class="option-modal-product">
+                    <img id="optionModalImg" src="" alt="">
+                    <div class="option-modal-product-info">
+                        <div class="option-modal-product-title" id="optionModalTitle"></div>
+                        <div class="option-modal-product-price" id="optionModalPrice"></div>
+                    </div>
+                </div>
+
+                <div class="option-field-group" id="optionModalSizeGroup" style="display:none;">
+                    <label class="option-field-label">اختر المقاس:</label>
+                    <div class="option-pills-row" id="optionModalSizePills"></div>
+                </div>
+
+                <div class="option-field-group" id="optionModalColorGroup" style="display:none;">
+                    <label class="option-field-label">اختر اللون:</label>
+                    <div class="option-pills-row" id="optionModalColorPills"></div>
+                </div>
+
+                <div class="option-field-group">
+                    <label for="optionModalNoteInput" class="option-field-label">أضف تفاصيل إضافية (اختياري):</label>
+                    <textarea id="optionModalNoteInput" class="option-modal-textarea" placeholder="اكتب أي تفاصيل تحب تضيفها للقطعة دي (لون، مقاس خاص، اسم للطباعة...)"></textarea>
+                </div>
+            </div>
+            <div class="option-modal-footer">
+                <button type="button" class="option-confirm-btn" onclick="confirmAddProductWithOptions()">تأكيد وإضافة للسلة</button>
+                <button type="button" class="option-cancel-btn" onclick="closeProductOptionModal()">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
     <div class="cart-backdrop" id="cartBackdrop" onclick="closeCart()"></div>
     <aside class="cart-drawer" id="cartDrawer" aria-label="سلة المشتريات">
         <div class="cart-header">
@@ -1772,10 +1988,6 @@
         </div>
         <div class="cart-body" id="cartItemsContainer"></div>
         <div class="cart-footer">
-            <div class="cart-order-notes-box">
-                <label for="cartOrderNotesInput" class="cart-order-notes-label">تفاصيل أو ملاحظات إضافية للطلب (اختياري):</label>
-                <textarea id="cartOrderNotesInput" class="cart-order-notes-textarea" placeholder="اكتب أي تفاصيل تحب تضيفها أو تعدلها (لون معين، مقاس، عنوان التوصيل...)" oninput="saveCartOrderNotes(this.value)"></textarea>
-            </div>
             <div class="cart-policy-note">
                 الدفع عند الاستلام • استرجاع خلال أسبوع لو المنتج غير التفاصيل الموجودة.
             </div>
@@ -1803,13 +2015,16 @@
         const WHATSAPP_NUMBER = "201055436305";
         const STORE_URL = "https://caramelashinstore.github.io/Carmela.store/";
         const CART_STORAGE_KEY = "caramel_store_cart_v1";
-        const CART_ORDER_NOTES_KEY = "caramel_store_order_notes_v1";
         const INTEREST_STORAGE_KEY = "caramel_smart_interest_v1";
         const BATCH_SIZE = 12;
 
+        const DEFAULT_APPAREL_SIZES = ["S", "M", "L", "XL", "XXL"];
+
         const PRODUCT_VARIANTS = {
             "hm-22": { colors: ["بنفسجي", "باندا"] },
-            "wmn-2": { colors: ["أسود", "أبيض", "بيج", "كشمير", "نبيتي", "كحلي"] },
+            "wmn-1": { sizes: ["S", "M", "L", "XL", "XXL"] },
+            "wmn-2": { sizes: ["S", "M", "L", "XL", "XXL"], colors: ["أسود", "أبيض", "بيج", "كشمير", "نبيتي", "كحلي"] },
+            "wmn-3": { sizes: ["فري سايز (يلبس لحد 85 ك)"] },
             "hm-61": { colors: ["أسود", "بيج", "وردي", "أزرق"] },
             "htm-7": { colors: ["أسود", "بني داكن"] },
             "tafse-6": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
@@ -1829,6 +2044,13 @@
 
         let deferredInstallPrompt = null;
         let toastTimer = null;
+        let pendingOptionSelection = {
+            productId: null,
+            clickedBtnId: null,
+            selectedSize: "",
+            selectedColor: "",
+            currentPrice: 0
+        };
 
         function escapeHtmlAttr(str) {
             return String(str || "")
@@ -1838,27 +2060,37 @@
                 .replace(/>/g, "&gt;");
         }
 
+        function isApparelProduct(product) {
+            if (!product) return false;
+            if (PRODUCT_VARIANTS[product.id] && Array.isArray(PRODUCT_VARIANTS[product.id].sizes)) return true;
+            if (Array.isArray(product.sizes) && product.sizes.length) return true;
+            if (product.id === "htm-4") return false;
+            const apparelCats = ["women", "men", "kids"];
+            if (apparelCats.includes(product.category)) return true;
+            if (Array.isArray(product.categories) && product.categories.some(c => apparelCats.includes(c))) return true;
+            return false;
+        }
+
         function getProductVariantConfig(product) {
             if (!product) return null;
-            if (PRODUCT_VARIANTS[product.id]) return PRODUCT_VARIANTS[product.id];
+            const explicit = PRODUCT_VARIANTS[product.id] || {};
             const config = {};
-            if (Array.isArray(product.colors) && product.colors.length) config.colors = product.colors;
-            if (Array.isArray(product.sizes) && product.sizes.length) config.sizes = product.sizes;
-            return (config.colors || config.sizes) ? config : null;
-        }
 
-        function loadCartOrderNotes() {
-            try {
-                return localStorage.getItem(CART_ORDER_NOTES_KEY) || "";
-            } catch (e) {
-                return "";
+            if (Array.isArray(explicit.colors) && explicit.colors.length) {
+                config.colors = explicit.colors;
+            } else if (Array.isArray(product.colors) && product.colors.length) {
+                config.colors = product.colors;
             }
-        }
 
-        function saveCartOrderNotes(val) {
-            try {
-                localStorage.setItem(CART_ORDER_NOTES_KEY, val || "");
-            } catch (e) {}
+            if (Array.isArray(explicit.sizes) && explicit.sizes.length) {
+                config.sizes = explicit.sizes;
+            } else if (Array.isArray(product.sizes) && product.sizes.length) {
+                config.sizes = product.sizes;
+            } else if (isApparelProduct(product)) {
+                config.sizes = DEFAULT_APPAREL_SIZES;
+            }
+
+            return (config.colors || config.sizes) ? config : null;
         }
 
         function showCaramelToast(message) {
@@ -2451,7 +2683,7 @@
                             ${product.desc ? `<div class="product-desc">${escapeHtmlAttr(product.desc)}</div>` : ""}
                         </div>
                         <div class="card-btns">
-                            <button type="button" class="add-cart-btn" id="${btnId}" onclick="addToCart('${product.id}', '${btnId}')">
+                            <button type="button" class="add-cart-btn" id="${btnId}" onclick="openProductOptionModal('${product.id}', '${btnId}')">
                                 <span>+ أضف للمشتريات</span>
                             </button>
                             <a href="https://wa.me/${WHATSAPP_NUMBER}?text=${waText}" class="direct-wa-link" target="_blank" rel="noopener noreferrer" onclick="onDirectWhatsAppClick('${product.id}')">
@@ -2584,6 +2816,7 @@
         }
 
         function resetHomeFresh() {
+            closeProductOptionModal();
             closeCart();
             closeImageModal();
             resetFilters();
@@ -2638,33 +2871,137 @@
             pill.classList.add("pop");
         }
 
-        function addToCart(productId, clickedBtnId = null) {
+        /* نافذة اختيار المقاس والتفاصيل قبل الإضافة للسلة */
+        function openProductOptionModal(productId, clickedBtnId = null) {
+            const product = PRODUCTS.find(p => p.id === productId);
+            if (!product) return;
+
+            const variantCfg = getProductVariantConfig(product);
+            const firstSizeObj = variantCfg && Array.isArray(variantCfg.sizes) && variantCfg.sizes.length ? variantCfg.sizes[0] : null;
+            const defaultSize = firstSizeObj ? (typeof firstSizeObj === "string" ? firstSizeObj : firstSizeObj.label) : "";
+            const defaultColor = variantCfg && Array.isArray(variantCfg.colors) && variantCfg.colors.length ? variantCfg.colors[0] : "";
+            const initialPrice = (firstSizeObj && typeof firstSizeObj === "object" && firstSizeObj.price)
+                ? Number(firstSizeObj.price)
+                : (Number(product.price) || 0);
+
+            pendingOptionSelection = {
+                productId: product.id,
+                clickedBtnId,
+                selectedSize: defaultSize,
+                selectedColor: defaultColor,
+                currentPrice: initialPrice
+            };
+
+            document.getElementById("optionModalImg").src = product.img;
+            document.getElementById("optionModalImg").alt = product.title;
+            document.getElementById("optionModalTitle").textContent = product.title;
+            document.getElementById("optionModalPrice").textContent = `${initialPrice} جنيه`;
+            document.getElementById("optionModalNoteInput").value = "";
+
+            const sizeGroup = document.getElementById("optionModalSizeGroup");
+            const sizePills = document.getElementById("optionModalSizePills");
+            if (variantCfg && Array.isArray(variantCfg.sizes) && variantCfg.sizes.length) {
+                sizeGroup.style.display = "flex";
+                sizePills.innerHTML = variantCfg.sizes.map(s => {
+                    const lbl = typeof s === "string" ? s : s.label;
+                    const priceVal = (typeof s === "object" && s.price) ? Number(s.price) : (Number(product.price) || 0);
+                    const isSel = lbl === defaultSize;
+                    return `<button type="button" class="option-pill-btn ${isSel ? "selected" : ""}" onclick="selectModalSize('${escapeHtmlAttr(lbl)}', ${priceVal}, this)">${escapeHtmlAttr(lbl)}</button>`;
+                }).join("");
+            } else {
+                sizeGroup.style.display = "none";
+                sizePills.innerHTML = "";
+            }
+
+            const colorGroup = document.getElementById("optionModalColorGroup");
+            const colorPills = document.getElementById("optionModalColorPills");
+            if (variantCfg && Array.isArray(variantCfg.colors) && variantCfg.colors.length) {
+                colorGroup.style.display = "flex";
+                colorPills.innerHTML = variantCfg.colors.map(c => {
+                    const isSel = c === defaultColor;
+                    return `<button type="button" class="option-pill-btn ${isSel ? "selected" : ""}" onclick="selectModalColor('${escapeHtmlAttr(c)}', this)">${escapeHtmlAttr(c)}</button>`;
+                }).join("");
+            } else {
+                colorGroup.style.display = "none";
+                colorPills.innerHTML = "";
+            }
+
+            const modal = document.getElementById("productOptionModal");
+            if (modal) modal.classList.add("open");
+            syncBodyScrollLock();
+            pushOverlayHistoryState("options");
+        }
+
+        function selectModalSize(sizeLabel, priceVal, btnEl) {
+            pendingOptionSelection.selectedSize = sizeLabel;
+            pendingOptionSelection.currentPrice = Number(priceVal) || pendingOptionSelection.currentPrice;
+            document.getElementById("optionModalPrice").textContent = `${pendingOptionSelection.currentPrice} جنيه`;
+            document.querySelectorAll("#optionModalSizePills .option-pill-btn").forEach(b => b.classList.remove("selected"));
+            if (btnEl) btnEl.classList.add("selected");
+        }
+
+        function selectModalColor(colorLabel, btnEl) {
+            pendingOptionSelection.selectedColor = colorLabel;
+            document.querySelectorAll("#optionModalColorPills .option-pill-btn").forEach(b => b.classList.remove("selected"));
+            if (btnEl) btnEl.classList.add("selected");
+        }
+
+        function closeProductOptionModal(fromPopState = false) {
+            const modal = document.getElementById("productOptionModal");
+            if (modal) modal.classList.remove("open");
+            syncBodyScrollLock();
+            if (!fromPopState) {
+                popOverlayHistoryIfNeeded("options");
+            } else if (activeOverlayName === "options") {
+                activeOverlayName = null;
+            }
+        }
+
+        function confirmAddProductWithOptions() {
+            const { productId, clickedBtnId, selectedSize, selectedColor, currentPrice } = pendingOptionSelection;
+            if (!productId) return;
+            const noteText = (document.getElementById("optionModalNoteInput")?.value || "").trim();
+
+            closeProductOptionModal();
+            addToCartWithDetails(productId, {
+                selectedSize,
+                selectedColor,
+                itemNote: noteText,
+                price: currentPrice,
+                clickedBtnId
+            });
+        }
+
+        function addToCartWithDetails(productId, opts = {}) {
             const product = PRODUCTS.find(p => p.id === productId);
             if (!product) return;
 
             trackProductInterest(product, 4, true);
 
-            const variantCfg = getProductVariantConfig(product);
-            const defaultColor = variantCfg && variantCfg.colors ? variantCfg.colors[0] : "";
-            const defaultSizeObj = variantCfg && variantCfg.sizes ? variantCfg.sizes[0] : null;
-            const defaultSize = defaultSizeObj ? (typeof defaultSizeObj === "string" ? defaultSizeObj : defaultSizeObj.label) : "";
-            const initialPrice = (defaultSizeObj && typeof defaultSizeObj === "object" && defaultSizeObj.price)
-                ? Number(defaultSizeObj.price)
-                : (Number(product.price) || 0);
+            const selectedColor = opts.selectedColor || "";
+            const selectedSize = opts.selectedSize || "";
+            const itemNote = opts.itemNote || "";
+            const itemPrice = Number(opts.price) || Number(product.price) || 0;
 
-            const existing = cart.find(item => item.id === productId);
+            const existing = cart.find(item =>
+                item.id === productId &&
+                (item.selectedColor || "") === selectedColor &&
+                (item.selectedSize || "") === selectedSize &&
+                (item.itemNote || "").trim() === itemNote.trim()
+            );
+
             if (existing) {
                 existing.qty = (Number(existing.qty) || 1) + 1;
             } else {
                 cart.push({
                     id: product.id,
                     title: product.title,
-                    price: initialPrice,
+                    price: itemPrice,
                     img: product.img,
                     qty: 1,
-                    selectedColor: defaultColor,
-                    selectedSize: defaultSize,
-                    itemNote: ""
+                    selectedColor,
+                    selectedSize,
+                    itemNote
                 });
             }
 
@@ -2672,7 +3009,7 @@
             updateCartUI();
             pulseCartButton();
 
-            const targets = clickedBtnId ? [clickedBtnId] : [`btn-p0-${productId}`, `smart-btn-${productId}`];
+            const targets = opts.clickedBtnId ? [opts.clickedBtnId] : [`btn-p0-${productId}`, `smart-btn-${productId}`];
             targets.forEach(id => {
                 const btn = document.getElementById(id);
                 if (btn) {
@@ -2720,12 +3057,12 @@
             saveCart();
         }
 
-        function changeQty(productId, delta) {
-            const item = cart.find(i => i.id === productId);
+        function changeQtyByIndex(index, delta) {
+            const item = cart[index];
             if (!item) return;
             const nextQty = (Number(item.qty) || 1) + delta;
             if (nextQty <= 0) {
-                cart = cart.filter(i => i.id !== productId);
+                cart.splice(index, 1);
             } else {
                 item.qty = nextQty;
             }
@@ -2733,8 +3070,8 @@
             updateCartUI();
         }
 
-        function removeFromCart(productId) {
-            cart = cart.filter(i => i.id !== productId);
+        function removeFromCartByIndex(index) {
+            cart.splice(index, 1);
             saveCart();
             updateCartUI();
         }
@@ -2742,9 +3079,6 @@
         function clearCart() {
             cart = [];
             saveCart();
-            saveCartOrderNotes("");
-            const notesInput = document.getElementById("cartOrderNotesInput");
-            if (notesInput) notesInput.value = "";
             updateCartUI();
         }
 
@@ -2755,11 +3089,6 @@
             const countBadge = document.getElementById("floatingCartCount");
             const totalAmountEl = document.getElementById("cartTotalAmount");
             const container = document.getElementById("cartItemsContainer");
-            const notesInput = document.getElementById("cartOrderNotesInput");
-
-            if (notesInput && document.activeElement !== notesInput) {
-                notesInput.value = loadCartOrderNotes();
-            }
 
             if (countBadge) {
                 if (totalQty > 0) {
@@ -2790,21 +3119,21 @@
                 let variantSelectorsHTML = "";
                 if (variantCfg) {
                     const selects = [];
-                    if (Array.isArray(variantCfg.colors) && variantCfg.colors.length) {
-                        const currentColor = item.selectedColor || variantCfg.colors[0];
-                        const options = variantCfg.colors.map(c =>
-                            `<option value="${escapeHtmlAttr(c)}" ${c === currentColor ? "selected" : ""}>اللون: ${escapeHtmlAttr(c)}</option>`
-                        ).join("");
-                        selects.push(`<select class="cart-option-select" aria-label="اختر اللون" onchange="updateCartItemColor(${idx}, this.value)">${options}</select>`);
-                    }
                     if (Array.isArray(variantCfg.sizes) && variantCfg.sizes.length) {
                         const firstLabel = typeof variantCfg.sizes[0] === "string" ? variantCfg.sizes[0] : variantCfg.sizes[0].label;
                         const currentSize = item.selectedSize || firstLabel;
                         const options = variantCfg.sizes.map(s => {
                             const lbl = typeof s === "string" ? s : s.label;
-                            return `<option value="${escapeHtmlAttr(lbl)}" ${lbl === currentSize ? "selected" : ""}>${escapeHtmlAttr(lbl)}</option>`;
+                            return `<option value="${escapeHtmlAttr(lbl)}" ${lbl === currentSize ? "selected" : ""}>المقاس: ${escapeHtmlAttr(lbl)}</option>`;
                         }).join("");
-                        selects.push(`<select class="cart-option-select" aria-label="اختر المقاس" onchange="updateCartItemSize(${idx}, this.value)">${options}</select>`);
+                        selects.push(`<select class="cart-option-select" aria-label="تعديل المقاس" onchange="updateCartItemSize(${idx}, this.value)">${options}</select>`);
+                    }
+                    if (Array.isArray(variantCfg.colors) && variantCfg.colors.length) {
+                        const currentColor = item.selectedColor || variantCfg.colors[0];
+                        const options = variantCfg.colors.map(c =>
+                            `<option value="${escapeHtmlAttr(c)}" ${c === currentColor ? "selected" : ""}>اللون: ${escapeHtmlAttr(c)}</option>`
+                        ).join("");
+                        selects.push(`<select class="cart-option-select" aria-label="تعديل اللون" onchange="updateCartItemColor(${idx}, this.value)">${options}</select>`);
                     }
                     if (selects.length) {
                         variantSelectorsHTML = `<div class="cart-item-options">${selects.join("")}</div>`;
@@ -2820,11 +3149,11 @@
                                 <div class="cart-item-price">${p * q} جنيه</div>
                             </div>
                             <div class="qty-controls">
-                                <button type="button" class="qty-btn" onclick="changeQty('${item.id}', 1)">+</button>
+                                <button type="button" class="qty-btn" onclick="changeQtyByIndex(${idx}, 1)">+</button>
                                 <span class="qty-val">${q}</span>
-                                <button type="button" class="qty-btn" onclick="changeQty('${item.id}', -1)">-</button>
+                                <button type="button" class="qty-btn" onclick="changeQtyByIndex(${idx}, -1)">-</button>
                             </div>
-                            <button type="button" class="remove-item-btn" onclick="removeFromCart('${item.id}')" aria-label="حذف">✕</button>
+                            <button type="button" class="remove-item-btn" onclick="removeFromCartByIndex(${idx})" aria-label="حذف">✕</button>
                         </div>
                         ${variantSelectorsHTML}
                         <input type="text" class="cart-item-note-input" placeholder="تفاصيل إضافية للقطعة دي (لون، مقاس، كتابة...)" value="${escapeHtmlAttr(item.itemNote || "")}" oninput="updateCartItemNote(${idx}, this.value)">
@@ -2849,18 +3178,13 @@
                 total += sub;
 
                 const extras = [];
-                if (item.selectedColor) extras.push(`اللون: ${item.selectedColor}`);
                 if (item.selectedSize) extras.push(`المقاس: ${item.selectedSize}`);
+                if (item.selectedColor) extras.push(`اللون: ${item.selectedColor}`);
                 if (item.itemNote && item.itemNote.trim()) extras.push(`تفاصيل: ${item.itemNote.trim()}`);
 
                 const extraText = extras.length ? ` (${extras.join(" | ")})` : "";
                 lines.push(`${idx + 1}. ${item.title}${extraText} × ${q} = ${sub} جنيه`);
             });
-
-            const orderNotes = (document.getElementById("cartOrderNotesInput")?.value || loadCartOrderNotes()).trim();
-            if (orderNotes) {
-                lines.push("", `ملاحظات إضافية على الطلب: ${orderNotes}`);
-            }
 
             lines.push("", `الإجمالي: ${total} جنيه`, "الدفع عند الاستلام • استرجاع خلال أسبوع لو المنتج غير التفاصيل الموجودة");
             const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join("\n"))}`;
@@ -2890,7 +3214,8 @@
         function syncBodyScrollLock() {
             const cartOpen = document.getElementById("cartDrawer")?.classList.contains("open");
             const imgOpen = document.getElementById("imageModal")?.classList.contains("open");
-            document.body.style.overflow = (cartOpen || imgOpen) ? "hidden" : "";
+            const optOpen = document.getElementById("productOptionModal")?.classList.contains("open");
+            document.body.style.overflow = (cartOpen || imgOpen || optOpen) ? "hidden" : "";
         }
 
         function openCart() {
@@ -2951,8 +3276,11 @@
         window.addEventListener("popstate", () => {
             const cartOpen = document.getElementById("cartDrawer")?.classList.contains("open");
             const imgOpen = document.getElementById("imageModal")?.classList.contains("open");
+            const optOpen = document.getElementById("productOptionModal")?.classList.contains("open");
             activeOverlayName = null;
-            if (imgOpen) {
+            if (optOpen) {
+                closeProductOptionModal(true);
+            } else if (imgOpen) {
                 closeImageModal(true);
             } else if (cartOpen) {
                 closeCart(true);
@@ -2961,7 +3289,9 @@
 
         document.addEventListener("keydown", e => {
             if (e.key === "Escape") {
-                if (document.getElementById("imageModal")?.classList.contains("open")) {
+                if (document.getElementById("productOptionModal")?.classList.contains("open")) {
+                    closeProductOptionModal();
+                } else if (document.getElementById("imageModal")?.classList.contains("open")) {
                     closeImageModal();
                 } else if (document.getElementById("cartDrawer")?.classList.contains("open")) {
                     closeCart();
@@ -3163,7 +3493,6 @@
                 savedSubscribed = localStorage.getItem(CARAMEL_PUSH_SUBSCRIBED_KEY) === "true";
             } catch (e) {}
 
-            const browserGranted = typeof Notification !== "undefined" && Notification.permission === "granted";
             const browserDenied = typeof Notification !== "undefined" && Notification.permission === "denied";
 
             if (browserDenied) {
@@ -3173,12 +3502,31 @@
                 return;
             }
 
-            if (savedSubscribed || browserGranted) {
+            if (savedSubscribed) {
                 hideCaramelPushButtonImmediately();
             } else {
                 setCaramelPushButtonDefault();
             }
         })();
+
+        async function ensureOneSignalOptedIn(OneSignal) {
+            if (!OneSignal) return false;
+            try {
+                const subId = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.id;
+                const optedIn = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.optedIn === true;
+                if (subId && optedIn) return true;
+
+                if (OneSignal.User && OneSignal.User.PushSubscription && typeof OneSignal.User.PushSubscription.optIn === "function") {
+                    await OneSignal.User.PushSubscription.optIn();
+                }
+
+                const newSubId = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.id;
+                const newOptedIn = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.optedIn === true;
+                return Boolean(newSubId && newOptedIn);
+            } catch (e) {
+                return false;
+            }
+        }
 
         function updateCaramelPushButton(OneSignal) {
             const button = document.getElementById("caramelPushBtn");
@@ -3188,7 +3536,7 @@
             try {
                 const subId = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.id;
                 const optedIn = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.optedIn === true;
-                const permission = OneSignal.Notifications && OneSignal.Notifications.permissionNative;
+                const permission = (OneSignal.Notifications && OneSignal.Notifications.permissionNative) || (typeof Notification !== "undefined" ? Notification.permission : "default");
 
                 if (permission === "denied") {
                     try {
@@ -3205,7 +3553,18 @@
                             localStorage.setItem(CARAMEL_PUSH_SUBSCRIBED_KEY, "true");
                         } catch (e) {}
                     }
-                } else if (permission === "default") {
+                } else if (permission === "granted") {
+                    ensureOneSignalOptedIn(OneSignal).then(ok => {
+                        if (ok) {
+                            showGreenCircleAndHidePushBtn(1300);
+                        } else {
+                            try {
+                                localStorage.removeItem(CARAMEL_PUSH_SUBSCRIBED_KEY);
+                            } catch (e) {}
+                            setCaramelPushButtonDefault();
+                        }
+                    });
+                } else {
                     try {
                         localStorage.removeItem(CARAMEL_PUSH_SUBSCRIBED_KEY);
                     } catch (e) {}
@@ -3230,16 +3589,13 @@
                     await OneSignal.Notifications.requestPermission();
                 }
 
-                if (OneSignal.User && OneSignal.User.PushSubscription && typeof OneSignal.User.PushSubscription.optIn === "function") {
-                    await OneSignal.User.PushSubscription.optIn();
-                }
+                await ensureOneSignalOptedIn(OneSignal);
 
-                setTimeout(() => {
-                    const subId = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.id;
-                    const optedIn = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.optedIn === true;
+                setTimeout(async () => {
+                    const ok = await ensureOneSignalOptedIn(OneSignal);
                     const nativeGranted = typeof Notification !== "undefined" && Notification.permission === "granted";
 
-                    if (subId || (optedIn && nativeGranted) || nativeGranted) {
+                    if (ok || nativeGranted) {
                         showGreenCircleAndHidePushBtn(1500);
                     }
                 }, 1000);
