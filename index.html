@@ -513,7 +513,7 @@
         .hero-banner {
             background: linear-gradient(130deg, var(--espresso) 0%, var(--espresso-soft) 60%, var(--caramel-dark) 100%);
             color: #ffffff;
-            padding: 22px 18px;
+            padding: 20px 16px;
             border-radius: 22px;
             border: 1.5px solid rgba(200, 150, 102, 0.42);
             box-shadow: 0 14px 32px -12px rgba(24, 21, 18, 0.26), 0 0 24px -6px var(--glow);
@@ -536,13 +536,13 @@
         }
 
         .hero-banner h1 {
-            font-size: 1.48rem;
+            font-size: 1.44rem;
             font-weight: 900;
             line-height: 1.3;
         }
 
         .hero-banner p {
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             color: rgba(255, 255, 255, 0.92);
             max-width: 780px;
             font-weight: 600;
@@ -553,43 +553,58 @@
             font-weight: 800;
         }
 
+        /* صف الأزرار في نفس السطر لتوفير المساحة الرأسية */
         .hero-actions {
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: row;
+            flex-wrap: nowrap;
             align-items: center;
-            gap: 10px;
-            margin-top: 4px;
+            gap: 8px;
+            margin-top: 2px;
+            width: 100%;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .hero-actions::-webkit-scrollbar {
+            display: none;
         }
 
         .hero-btn-primary {
             display: inline-flex;
             align-items: center;
-            gap: 7px;
+            justify-content: center;
+            gap: 6px;
             background: linear-gradient(135deg, var(--caramel-light), var(--caramel));
             color: var(--espresso);
-            padding: 8px 16px;
+            padding: 8px 13px;
             border-radius: 12px;
-            font-size: 0.82rem;
+            font-size: 0.78rem;
             font-weight: 900;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .hero-notify-btn {
             display: inline-flex;
             align-items: center;
-            gap: 7px;
-            background: rgba(255, 255, 255, 0.11);
+            justify-content: center;
+            gap: 5px;
+            background: rgba(255, 255, 255, 0.12);
             color: var(--caramel-light);
-            border: 1.5px solid rgba(229, 190, 150, 0.65);
-            padding: 8px 15px;
+            border: 1.5px solid rgba(229, 190, 150, 0.7);
+            padding: 7px 12px;
             border-radius: 12px;
-            font-size: 0.82rem;
+            font-size: 0.78rem;
             font-weight: 900;
+            white-space: nowrap;
+            flex-shrink: 0;
             transition: transform 0.22s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease, opacity 0.35s ease;
         }
 
         .hero-notify-btn:hover {
             transform: translateY(-1px);
-            background: rgba(200, 150, 102, 0.22);
+            background: rgba(200, 150, 102, 0.24);
         }
 
         .hero-notify-btn.enabled-success {
@@ -613,18 +628,31 @@
         .hero-install-btn {
             display: none;
             align-items: center;
-            gap: 7px;
+            justify-content: center;
+            gap: 6px;
             background: rgba(255, 255, 255, 0.12);
             color: #ffffff;
             border: 1.5px solid var(--caramel-light);
-            padding: 8px 16px;
+            padding: 7px 12px;
             border-radius: 12px;
-            font-size: 0.82rem;
+            font-size: 0.78rem;
             font-weight: 900;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .hero-install-btn.visible {
             display: inline-flex;
+        }
+
+        @media (max-width: 390px) {
+            .hero-btn-primary,
+            .hero-notify-btn,
+            .hero-install-btn {
+                padding: 7px 10px;
+                font-size: 0.72rem;
+                gap: 4px;
+            }
         }
 
         .trust-strip {
@@ -1547,7 +1575,7 @@
                     <span id="enableNotificationsLabel">تشغيل الإشعارات</span>
                 </button>
                 <button type="button" class="hero-install-btn" id="heroInstallBtn" onclick="triggerInstallApp()">
-                    تثبيت المتجر كتطبيق
+                    تثبيت التطبيق
                 </button>
             </div>
         </section>
@@ -2822,7 +2850,7 @@
         updateSearchCancelButton();
     </script>
 
-    <!-- OneSignal Web Push v16 + Notification Toggle Button State -->
+    <!-- OneSignal Web Push v16 + Notification Button Logic -->
     <script>
         window.OneSignalDeferred = window.OneSignalDeferred || [];
     </script>
@@ -2832,16 +2860,20 @@
         let oneSignalInstance = null;
         let hideNotifyBtnTimer = null;
 
+        function getBrowserNotificationPermission() {
+            if (!("Notification" in window)) return "unsupported";
+            return Notification.permission;
+        }
+
         function isNotificationsCurrentlyEnabled() {
+            const perm = getBrowserNotificationPermission();
+            if (perm !== "granted") return false;
+
             const osInstance = oneSignalInstance || window.OneSignal;
-            const browserPerm = ("Notification" in window) ? Notification.permission : "default";
-            if (browserPerm === "granted") {
-                if (osInstance && osInstance.User && osInstance.User.PushSubscription) {
-                    return osInstance.User.PushSubscription.optedIn !== false;
-                }
-                return true;
+            if (osInstance && osInstance.User && osInstance.User.PushSubscription) {
+                return osInstance.User.PushSubscription.optedIn !== false;
             }
-            return false;
+            return true;
         }
 
         function syncNotifyButtonVisibility(animateSuccess = false) {
@@ -2878,40 +2910,53 @@
             }
         }
 
-        async function subscribeUserToCaramelPush(osInstance) {
-            if (!osInstance) {
-                if ("Notification" in window && typeof Notification.requestPermission === "function") {
-                    const perm = await Notification.requestPermission();
-                    return perm === "granted";
+        async function requestPushPermissionAndOptIn(osInstance) {
+            if (!("Notification" in window)) return false;
+
+            let perm = Notification.permission;
+            if (perm === "default") {
+                if (osInstance && osInstance.Notifications && typeof osInstance.Notifications.requestPermission === "function") {
+                    try {
+                        await osInstance.Notifications.requestPermission();
+                    } catch (e) {}
                 }
+                if (Notification.permission === "default" && typeof Notification.requestPermission === "function") {
+                    try {
+                        perm = await Notification.requestPermission();
+                    } catch (e) {
+                        perm = Notification.permission;
+                    }
+                } else {
+                    perm = Notification.permission;
+                }
+            }
+
+            if (perm !== "granted") {
                 return false;
             }
 
-            try {
-                if (osInstance.Notifications && typeof osInstance.Notifications.requestPermission === "function") {
-                    await osInstance.Notifications.requestPermission();
-                }
-                if (osInstance.User && osInstance.User.PushSubscription && typeof osInstance.User.PushSubscription.optIn === "function") {
+            if (osInstance && osInstance.User && osInstance.User.PushSubscription && typeof osInstance.User.PushSubscription.optIn === "function") {
+                try {
                     await osInstance.User.PushSubscription.optIn();
-                }
-                return isNotificationsCurrentlyEnabled();
-            } catch (e) {
-                return isNotificationsCurrentlyEnabled();
+                } catch (e) {}
             }
+
+            return true;
         }
 
         async function handleEnableNotificationsClick() {
             const osInstance = oneSignalInstance || window.OneSignal;
-            const enabled = await subscribeUserToCaramelPush(osInstance);
+            const granted = await requestPushPermissionAndOptIn(osInstance);
 
-            if (enabled || isNotificationsCurrentlyEnabled()) {
+            if (granted && isNotificationsCurrentlyEnabled()) {
                 syncNotifyButtonVisibility(true);
                 showCaramelToast("تم تشغيل الإشعارات بنجاح!");
-            } else if ("Notification" in window && Notification.permission === "denied") {
+            } else if (getBrowserNotificationPermission() === "denied") {
                 syncNotifyButtonVisibility(false);
-                showCaramelToast("الإشعارات مقفولة من إعدادات المتصفح، فعّلها من إعدادات الموقع.");
+                showCaramelToast("الإشعارات مقفولة من المتصفح، فعّلها من إعدادات الموقع.");
             } else {
                 syncNotifyButtonVisibility(false);
+                showCaramelToast("لم يتم تفعيل الإشعارات بعد.");
             }
         }
 
@@ -2921,24 +2966,19 @@
                 return;
             }
 
+            const perm = getBrowserNotificationPermission();
+            if (perm === "denied" || perm === "unsupported") {
+                syncNotifyButtonVisibility(false);
+                return;
+            }
+
             const osInstance = oneSignalInstance || window.OneSignal;
-            if (!osInstance || !osInstance.Notifications) {
-                syncNotifyButtonVisibility(false);
-                return;
-            }
-
-            const nativePerm = osInstance.Notifications.permissionNative;
-            if (nativePerm === "granted") {
-                try {
-                    if (osInstance.User && osInstance.User.PushSubscription && osInstance.User.PushSubscription.optedIn !== true) {
+            if (perm === "granted") {
+                if (osInstance && osInstance.User && osInstance.User.PushSubscription && typeof osInstance.User.PushSubscription.optIn === "function") {
+                    try {
                         await osInstance.User.PushSubscription.optIn();
-                    }
-                } catch (e) {}
-                syncNotifyButtonVisibility(false);
-                return;
-            }
-
-            if (nativePerm === "denied") {
+                    } catch (e) {}
+                }
                 syncNotifyButtonVisibility(false);
                 return;
             }
@@ -2956,8 +2996,8 @@
                 localStorage.setItem(AUTO_PUSH_ASKED_KEY, "true");
             } catch (e) {}
 
-            const ok = await subscribeUserToCaramelPush(osInstance);
-            if (ok || isNotificationsCurrentlyEnabled()) {
+            const ok = await requestPushPermissionAndOptIn(osInstance);
+            if (ok && isNotificationsCurrentlyEnabled()) {
                 syncNotifyButtonVisibility(true);
             }
         };
