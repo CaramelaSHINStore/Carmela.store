@@ -1003,6 +1003,20 @@
             border-radius: 999px;
         }
 
+        .variant-pill-hint {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 5px;
+            padding: 2px 8px;
+            border-radius: 999px;
+            background: #f6efe6;
+            border: 1px solid var(--border-gold);
+            color: var(--caramel-dark);
+            font-size: 0.66rem;
+            font-weight: 800;
+        }
+
         .product-details {
             padding: 12px;
             display: flex;
@@ -1151,6 +1165,246 @@
             color: var(--text-muted);
             font-size: 0.78rem;
             font-weight: 700;
+        }
+
+        /* نافذة اختيار المقاس واللون الاحترافية */
+        .variant-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(16, 13, 10, 0.68);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            z-index: 260;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 12px;
+        }
+
+        @media (min-width: 640px) {
+            .variant-backdrop {
+                align-items: center;
+                padding: 20px;
+            }
+        }
+
+        .variant-backdrop.open {
+            display: flex;
+        }
+
+        .variant-modal {
+            width: 100%;
+            max-width: 460px;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: #ffffff;
+            border-radius: 24px;
+            border: 1.5px solid var(--caramel);
+            box-shadow: 0 24px 50px rgba(16, 13, 10, 0.36);
+            display: flex;
+            flex-direction: column;
+            animation: variantSheetIn 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @keyframes variantSheetIn {
+            0% {
+                opacity: 0;
+                transform: translateY(24px) scale(0.97);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .variant-head {
+            background: linear-gradient(135deg, var(--espresso), var(--espresso-soft));
+            color: #ffffff;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(200, 150, 102, 0.32);
+        }
+
+        .variant-head img {
+            width: 58px;
+            height: 58px;
+            border-radius: 14px;
+            object-fit: cover;
+            border: 1.5px solid var(--caramel-light);
+            flex-shrink: 0;
+        }
+
+        .variant-head-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .variant-head-title {
+            font-size: 0.92rem;
+            font-weight: 900;
+            color: #ffffff;
+            line-height: 1.3;
+        }
+
+        .variant-head-price {
+            font-size: 0.96rem;
+            font-weight: 900;
+            color: var(--caramel-light);
+            margin-top: 3px;
+        }
+
+        .variant-close-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+            font-size: 1.35rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .variant-body {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            background: #faf7f2;
+        }
+
+        .variant-group-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.84rem;
+            font-weight: 900;
+            color: var(--espresso);
+            margin-bottom: 8px;
+        }
+
+        .variant-selected-pill {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--caramel-dark);
+            background: #f6efe6;
+            border: 1px solid var(--border-gold);
+            padding: 2px 9px;
+            border-radius: 999px;
+        }
+
+        .sizes-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .size-option-btn {
+            min-width: 54px;
+            padding: 8px 12px;
+            border-radius: 12px;
+            background: #ffffff;
+            color: var(--espresso);
+            border: 1.5px solid rgba(28, 23, 20, 0.14);
+            font-size: 0.82rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            transition: all 0.18s ease;
+        }
+
+        .size-option-btn:hover {
+            border-color: var(--caramel);
+            transform: translateY(-1px);
+        }
+
+        .size-option-btn.active {
+            background: linear-gradient(135deg, var(--espresso), var(--espresso-soft));
+            color: var(--caramel-light);
+            border-color: var(--caramel);
+            box-shadow: 0 6px 14px rgba(24, 21, 18, 0.18);
+        }
+
+        .colors-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .color-option-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: #ffffff;
+            color: var(--text-main);
+            border: 1.5px solid rgba(28, 23, 20, 0.14);
+            font-size: 0.78rem;
+            font-weight: 800;
+            transition: all 0.18s ease;
+        }
+
+        .color-option-btn:hover {
+            border-color: var(--caramel);
+            transform: translateY(-1px);
+        }
+
+        .color-option-btn.active {
+            background: #fff7ed;
+            color: var(--espresso);
+            border-color: var(--caramel-dark);
+            box-shadow: 0 0 0 2px rgba(200, 150, 102, 0.25);
+        }
+
+        .color-swatch-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(0, 0, 0, 0.22);
+            flex-shrink: 0;
+        }
+
+        .variant-note-input {
+            width: 100%;
+            border: 1.5px solid var(--border-gold);
+            border-radius: 12px;
+            padding: 9px 12px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-main);
+            background: #ffffff;
+            outline: none;
+        }
+
+        .variant-note-input:focus {
+            border-color: var(--caramel-dark);
+        }
+
+        .variant-footer {
+            padding: 12px 16px 16px;
+            background: #ffffff;
+            border-top: 1px solid rgba(28, 23, 20, 0.08);
+            display: flex;
+            gap: 8px;
+        }
+
+        .variant-confirm-btn {
+            flex: 1;
+            padding: 11px 14px;
+            border-radius: 13px;
+            background: linear-gradient(135deg, var(--caramel-light), var(--caramel));
+            color: var(--espresso);
+            font-size: 0.88rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: 0 8px 18px rgba(200, 150, 102, 0.35);
         }
 
         .floating-cart-pill {
@@ -1369,10 +1623,19 @@
             text-overflow: ellipsis;
         }
 
+        .cart-item-meta {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: var(--caramel-dark);
+            margin-top: 2px;
+            line-height: 1.35;
+        }
+
         .cart-item-price {
             font-size: 0.82rem;
             font-weight: 800;
-            color: var(--caramel-dark);
+            color: var(--espresso);
+            margin-top: 2px;
         }
 
         .qty-controls {
@@ -1658,6 +1921,51 @@
         <div class="feed-sentinel" id="feedSentinel"></div>
     </main>
 
+    <!-- نافذة اختيار المقاس واللون الاحترافية -->
+    <div class="variant-backdrop" id="variantBackdrop" onclick="closeVariantModal()">
+        <div class="variant-modal" onclick="event.stopPropagation()" role="dialog" aria-modal="true" aria-label="اختيار المقاس واللون">
+            <div class="variant-head">
+                <img id="variantProductImg" src="" alt="صورة المنتج">
+                <div class="variant-head-info">
+                    <div class="variant-head-title" id="variantProductTitle"></div>
+                    <div class="variant-head-price" id="variantProductPrice"></div>
+                </div>
+                <button type="button" class="variant-close-btn" onclick="closeVariantModal()" aria-label="إغلاق">&times;</button>
+            </div>
+
+            <div class="variant-body">
+                <div id="variantSizesBlock">
+                    <div class="variant-group-title">
+                        <span>اختر المقاس</span>
+                        <span class="variant-selected-pill" id="selectedSizeBadge">—</span>
+                    </div>
+                    <div class="sizes-grid" id="variantSizesGrid"></div>
+                </div>
+
+                <div id="variantColorsBlock">
+                    <div class="variant-group-title">
+                        <span>اختر اللون</span>
+                        <span class="variant-selected-pill" id="selectedColorBadge">—</span>
+                    </div>
+                    <div class="colors-grid" id="variantColorsGrid"></div>
+                </div>
+
+                <div>
+                    <div class="variant-group-title">
+                        <span>ملاحظة إضافية (اختياري)</span>
+                    </div>
+                    <input type="text" class="variant-note-input" id="variantCustomNote" placeholder="مثال: مقاس محير أو درجة لون معينة...">
+                </div>
+            </div>
+
+            <div class="variant-footer">
+                <button type="button" class="variant-confirm-btn" id="variantConfirmBtn" onclick="confirmVariantAddToCart()">
+                    <span>+ تأكيد وإضافة للسلة</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <button type="button" class="floating-cart-pill" id="floatingCartPill" onclick="openCart()" aria-label="سلة المشتريات">
         <svg viewBox="0 0 24 24" aria-hidden="true">
             <circle cx="9" cy="20" r="1.6"></circle>
@@ -1709,6 +2017,18 @@
         const CART_STORAGE_KEY = "caramel_store_cart_v1";
         const INTEREST_STORAGE_KEY = "caramel_smart_interest_v1";
         const BATCH_SIZE = 12;
+
+        const DEFAULT_CLOTHING_SIZES = ["S", "M", "L", "XL", "XXL"];
+        const DEFAULT_CLOTHING_COLORS = [
+            { name: "أسود", hex: "#1c1917" },
+            { name: "أبيض", hex: "#f8fafc" },
+            { name: "كحلي", hex: "#1e3a8a" },
+            { name: "نبيتي", hex: "#7f1d1d" },
+            { name: "بيج / كراميل", hex: "#c89666" },
+            { name: "موف", hex: "#7e22ce" },
+            { name: "بني", hex: "#5c3a21" },
+            { name: "لبني", hex: "#7dd3fc" }
+        ];
 
         let deferredInstallPrompt = null;
         let toastTimer = null;
@@ -2004,27 +2324,27 @@
             { id: "tafse-3", title: "مكرمية فاخرة هاند ميد 1×2 متر مع عصايا", desc: "قطعة ديكور يدوية بارزة بمقاس 1×2 متر ومعاها قطعتين رباط وعصايا هدية.", price: 1700, category: "tafse", img: "Tafse/IMG-20261117-WA0024.jpg" },
             { id: "tafse-4", title: "مكرمية يدوية 1×2 متر مع رباط هدية", desc: "تصميم بوهيمي أنيق بمقاس 1×2 متر يضيف روحاً مميزة للريسبشن أو الغرف.", price: 900, category: "tafse", img: "Tafse/IMG-20261117-WA0023.jpg" },
             { id: "tafse-5", title: "مكرمية ديكور 1×2 متر مع عصايا ورباط", desc: "شغل هاند ميد متكامل بمقاس 1×2 متر ومعاها قطعتين رباط وعصايا هدية.", price: 1600, category: "tafse", img: "Tafse/IMG-20261117-WA0034.jpg" },
-            { id: "tafse-6", title: "موديل أسود بقصة كشكشة", desc: "إطلالة أنثوية راقية باللون الأسود مع تفاصيل كشكشة ناعمة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094044923.webp" },
-            { id: "tafse-7", title: "عباية بشت قطيفة موف مع طرحة", desc: "خامة قطيفة دافئة بلون موف جذاب مع طرحة متناسقة لإطلالة شتوية أنيقة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094044497.webp" },
-            { id: "tafse-8", title: "فستان لبني بكشكشة وأكمام", desc: "لون لبني هادئ مع كشكشة وأكمام تمنحك حضوراً رقيقاً ومميزاً.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094044682.webp" },
-            { id: "tafse-9", title: "عباية قطيفة نبيتي ببروش", desc: "قطيفة نبيتي غنية مع لمسة بروش تضيف فخامة واضحة للإطلالة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094044361.webp" },
-            { id: "tafse-10", title: "عباية بني قماش بليسيه بأكمام واسعة", desc: "خامة بليسيه انسيابية باللون البني مع أكمام واسعة مريحة وأنيقة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094044174.webp" },
-            { id: "tafse-11", title: "عباية سوداء قماش جاكار مموج", desc: "قماش جاكار مموج يمنح العباية السوداء ملمساً غنياً وحضوراً مميزاً.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094044287.webp" },
-            { id: "tafse-12", title: "فستان أصفر فاتح برباط جانبي", desc: "لون أصفر فاتح مشرق مع رباط جانبي يحدد القصة بأناقة ناعمة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094043951.webp" },
-            { id: "tafse-13", title: "عباية قطيفة موف غامق مع طرحة", desc: "درجة موف غامق أنيقة بخامة قطيفة مريحة ودافئة مع طرحتها.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094043669.webp" },
-            { id: "tafse-14", title: "عباية قطيفة بني برباط على الأكمام", desc: "قطيفة بنية ناعمة مزينة برباط على الأكمام لإطلالة متوازنة ومريحة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094043790.webp" },
-            { id: "tafse-15", title: "فستان أزرق بليسيه برباط جانبي", desc: "قصة بليسيه جذابة باللون الأزرق مع رباط جانبي لإطلالة عصرية أنيقة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094043481.webp" },
-            { id: "tafse-16", title: "عباية كحلي بأزرار أمامية وأكمام واسعة", desc: "لون كحلي كلاسيكي عملي بأزرار أمامية وأكمام واسعة تمنحك حرية حركة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094043346.webp" },
-            { id: "tafse-17", title: "عباية قطيفة موف مطرزة مع طرحة", desc: "تطريز أنيق على قطيفة موف فخمة مع طرحة متناسقة للمناسبات والخروجات.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094043197.webp" },
-            { id: "tafse-18", title: "عباية سوداء قماش مضلع بأكمام واسعة", desc: "قماش مضلع عملي بلون أسود أنيق وأكمام واسعة تناسب اللبس اليومي.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094042876.webp" },
-            { id: "tafse-19", title: "شنطة هاند ميد خرز", desc: "شنطة يدوية مشغولة بالخرز بلمسة مميزة تناسب الخروجات والهدايا.", price: 50, category: "tafse", img: "Tafse/compressed_1795180558469.webp" },
-            { id: "tafse-20", title: "مراية هاند ميد حسب الطلب (أسماء وورد)", desc: "تنفيذ خاص حسب الطلب بتصميم أسماء وورد لهدية شخصية مميزة.", price: 500, category: "tafse", img: "Tafse/compressed_1795180558100.webp" },
-            { id: "tafse-21", title: "مراية هاند ميد حسب الطلب (ذهبي وفراشات)", desc: "تصميم يدوي حسب الطلب بلمسات ذهبية وفراشات لديكور أنيق ولافت.", price: 500, category: "tafse", img: "Tafse/compressed_1795180558884.webp" },
-            { id: "tafse-22", title: "مراية هاند ميد حسب الطلب (قلوب وصور)", desc: "قطعة هاند ميد مخصصة حسب الطلب بقلوب وصور لتخليد الذكريات.", price: 500, category: "tafse", img: "Tafse/compressed_1795180558694.webp" },
+            { id: "tafse-6", title: "موديل أسود بقصة كشكشة", desc: "إطلالة أنثوية راقية باللون الأسود مع تفاصيل كشكشة ناعمة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", sizes: ["S", "M", "L", "XL", "XXL", "السن المحير"], colors: [{ name: "أسود", hex: "#1c1917" }, { name: "كحلي", hex: "#1e3a8a" }, { name: "نبيتي", hex: "#7f1d1d" }], img: "Tafse/compressed_1795094044923.webp" },
+            { id: "tafse-7", title: "عباية بشت قطيفة موف مع طرحة", desc: "خامة قطيفة دافئة بلون موف جذاب مع طرحة متناسقة لإطلالة شتوية أنيقة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", sizes: ["S", "M", "L", "XL", "XXL", "السن المحير"], colors: [{ name: "موف", hex: "#7e22ce" }, { name: "موف غامق", hex: "#581c87" }, { name: "أسود", hex: "#1c1917" }], img: "Tafse/compressed_1795094044497.webp" },
+            { id: "tafse-8", title: "فستان لبني بكشكشة وأكمام", desc: "لون لبني هادئ مع كشكشة وأكمام تمنحك حضوراً رقيقاً ومميزاً.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", sizes: ["S", "M", "L", "XL", "XXL", "السن المحير"], colors: [{ name: "لبني", hex: "#7dd3fc" }, { name: "أبيض", hex: "#f8fafc" }, { name: "وردي فاتح", hex: "#fbcfe8" }], img: "Tafse/compressed_1795094044682.webp" },
+            { id: "tafse-9", title: "عباية قطيفة نبيتي ببروش", desc: "قطيفة نبيتي غنية مع لمسة بروش تضيف فخامة واضحة للإطلالة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", sizes: ["S", "M", "L", "XL", "XXL", "السن المحير"], colors: [{ name: "نبيتي", hex: "#7f1d1d" }, { name: "أسود", hex: "#1c1917" }, { name: "كحلي", hex: "#1e3a8a" }], img: "Tafse/compressed_1795094044361.webp" },
+            { id: "tafse-10", title: "عباية بني قماش بليسيه بأكمام واسعة", desc: "خامة بليسيه انسيابية باللون البني مع أكمام واسعة مريحة وأنيقة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", sizes: ["S", "M", "L", "XL", "XXL", "السن المحير"], colors: [{ name: "بني", hex: "#5c3a21" }, { name: "كراميل", hex: "#c89666" }, { name: "أسود", hex: "#1c1917" }], img: "Tafse/compressed_1795094044174.webp" },
+            { id: "tafse-11", title: "عباية سوداء قماش جاكار مموج", desc: "قماش جاكار مموج يمنح العباية السوداء ملمساً غنياً وحضوراً مميزاً.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", sizes: ["S", "M", "L", "XL", "XXL", "السن المحير"], colors: [{ name: "أسود", hex: "#1c1917" }, { name: "كحلي", hex: "#1e3a8a" }], img: "Tafse/compressed_1795094044287.webp" },
+            { id: "tafse-12", title: "فستان أصفر فاتح برباط جانبي", desc: "لون أصفر فاتح مشرق مع رباط جانبي يحدد القصة بأناقة ناعمة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", sizes: ["S", "M", "L", "XL", "XXL", "السن المحير"], colors: [{ name: "أصفر فاتح", hex: "#fef08a" }, { name: "أبيض", hex: "#f8fafc" }, { name: "لبني", hex: "#7dd3fc" }], img: "Tafse/compressed_1795094043951.webp" },
+            { id: "tafse-13", title: "عباية قطيفة موف غامق مع طرحة", desc: "درجة موف غامق أنيقة بخامة قطيفة مريحة ودافئة مع طرحتها.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", sizes: ["S", "M", "L", "XL", "XXL", "السن المحير"], colors: [{ name: "موف غامق", hex: "#581c87" }, { name: "موف", hex: "#7e22ce" }, { name: "أسود", hex: "#1c1917" }], img: "Tafse/compressed_1795094043669.webp" },
+            { id: "tafse-14", title: "عباية قطيفة بني برباط على الأكمام", desc: "قطيفة بنية ناعمة مزينة برباط على الأكمام لإطلالة متوازنة ومريحة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", sizes: ["S", "M", "L", "XL", "XXL", "السن المحير"], colors: [{ name: "بني", hex: "#5c3a21" }, { name: "نبيتي", hex: "#7f1d1d" }], img: "Tafse/compressed_1795094043790.webp" },
+            { id: "tafse-15", title: "فستان أزرق بليسيه برباط جانبي", desc: "قصة بليسيه جذابة باللون الأزرق مع رباط جانبي لإطلالة عصرية أنيقة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", sizes: ["S", "M", "L", "XL", "XXL", "السن المحير"], colors: [{ name: "أزرق", hex: "#2563eb" }, { name: "كحلي", hex: "#1e3a8a" }], img: "Tafse/compressed_1795094043481.webp" },
+            { id: "tafse-16", title: "عباية كحلي بأزرار أمامية وأكمام واسعة", desc: "لون كحلي كلاسيكي عملي بأزرار أمامية وأكمام واسعة تمنحك حرية حركة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", sizes: ["S", "M", "L", "XL", "XXL", "السن المحير"], colors: [{ name: "كحلي", hex: "#1e3a8a" }, { name: "أسود", hex: "#1c1917" }], img: "Tafse/compressed_1795094043346.webp" },
+            { id: "tafse-17", title: "عباية قطيفة موف مطرزة مع طرحة", desc: "تطريز أنيق على قطيفة موف فخمة مع طرحة متناسقة للمناسبات والخروجات.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", sizes: ["S", "M", "L", "XL", "XXL", "السن المحير"], colors: [{ name: "موف", hex: "#7e22ce" }, { name: "أسود", hex: "#1c1917" }], img: "Tafse/compressed_1795094043197.webp" },
+            { id: "tafse-18", title: "عباية سوداء قماش مضلع بأكمام واسعة", desc: "قماش مضلع عملي بلون أسود أنيق وأكمام واسعة تناسب اللبس اليومي.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", sizes: ["S", "M", "L", "XL", "XXL", "السن المحير"], colors: [{ name: "أسود", hex: "#1c1917" }, { name: "بني", hex: "#5c3a21" }], img: "Tafse/compressed_1795094042876.webp" },
+            { id: "tafse-19", title: "شنطة هاند ميد خرز", desc: "شنطة يدوية مشغولة بالخرز بلمسة مميزة تناسب الخروجات والهدايا.", price: 50, category: "tafse", colors: DEFAULT_CLOTHING_COLORS, img: "Tafse/compressed_1795180558469.webp" },
+            { id: "tafse-20", title: "مراية هاند ميد حسب الطلب (أسماء وورد)", desc: "تنفيذ خاص حسب الطلب بتصميم أسماء وورد لهدية شخصية مميزة.", price: 500, category: "tafse", colors: DEFAULT_CLOTHING_COLORS, img: "Tafse/compressed_1795180558100.webp" },
+            { id: "tafse-21", title: "مراية هاند ميد حسب الطلب (ذهبي وفراشات)", desc: "تصميم يدوي حسب الطلب بلمسات ذهبية وفراشات لديكور أنيق ولافت.", price: 500, category: "tafse", colors: DEFAULT_CLOTHING_COLORS, img: "Tafse/compressed_1795180558884.webp" },
+            { id: "tafse-22", title: "مراية هاند ميد حسب الطلب (قلوب وصور)", desc: "قطعة هاند ميد مخصصة حسب الطلب بقلوب وصور لتخليد الذكريات.", price: 500, category: "tafse", colors: DEFAULT_CLOTHING_COLORS, img: "Tafse/compressed_1795180558694.webp" },
 
-            { id: "wmn-1", title: "أندر نسائي مشجر دباغ / كاندي", desc: "خامة ناعمة ومريحة بتصميم مشجر أنيق للاستخدام اليومي.", price: 65, category: "women", img: "Clswmn/compressed_1795114616012.webp" },
-            { id: "wmn-2", title: "بدي دباغ ألوان", desc: "بدي دباغ بألوان متنوعة متاحة، مريح وعملي للاستخدام اليومي.", price: 130, category: "women", img: "Clswmn/compressed_1795214411055.webp" },
-            { id: "wmn-3", title: "بدي عجينة سلسله تريكو", desc: "خامة تريكو عجينة ناعمة ومريحة، فري سايز يلبس لحد 85 ك.", price: 230, category: "women", img: "Clswmn/compressed_1795214411279.webp" },
+            { id: "wmn-1", title: "أندر نسائي مشجر دباغ / كاندي", desc: "خامة ناعمة ومريحة بتصميم مشجر أنيق للاستخدام اليومي.", price: 65, category: "women", sizes: DEFAULT_CLOTHING_SIZES, colors: DEFAULT_CLOTHING_COLORS, img: "Clswmn/compressed_1795114616012.webp" },
+            { id: "wmn-2", title: "بدي دباغ ألوان", desc: "بدي دباغ بألوان متنوعة متاحة، مريح وعملي للاستخدام اليومي.", price: 130, category: "women", sizes: DEFAULT_CLOTHING_SIZES, colors: DEFAULT_CLOTHING_COLORS, img: "Clswmn/compressed_1795214411055.webp" },
+            { id: "wmn-3", title: "بدي عجينة سلسله تريكو", desc: "خامة تريكو عجينة ناعمة ومريحة، فري سايز يلبس لحد 85 ك.", price: 230, category: "women", sizes: ["Free Size (لحد 85 ك)", "M", "L", "XL"], colors: DEFAULT_CLOTHING_COLORS, img: "Clswmn/compressed_1795214411279.webp" },
 
             { id: "htm-1", title: "صابونة عطرية Bio Soft GODDESS", desc: "صابونة معطرة برائحة فخمة تمنح البشرة ترطيباً ونعومة تدوم طوال اليوم.", price: 60, category: "perfume", img: "Htm/compressed_1795218232411.webp" },
             { id: "htm-2", title: "صابونة عطرية Bio Soft VANILLA FREAK", desc: "صابونة عطرية برائحة الفانيليا المسكرة للترطيب والنعومة وانتعاش يدوم.", price: 60, category: "perfume", img: "Htm/compressed_1795218232627.webp" },
@@ -2032,11 +2352,11 @@
             { id: "htm-4", title: "صابونة العناية والنظافة النسائية Bio Soft", desc: "صابونة مخصصة للعناية والنظافة النسائية اليومية بانتعاش ولطف على البشرة.", price: 75, category: "women", img: "Htm/compressed_1795218232714.webp" },
             { id: "htm-5", title: "مزيل مكياج جارنييه Micellar Cleansing Water", desc: "ماء ميسيلار منظف يزيل المكياج ويلطف وينظف الوجه والعينين والشفاه.", price: 110, category: "perfume", img: "Htm/compressed_1795220884067.webp" },
             { id: "htm-6", title: "حمام كريم بالمايونيز وزبدة الشيا أوميجا 3", desc: "حمام كريم للشعر بالمايونيز وزبدة الشيا وأوميجا 3 يرطب وينعم ويمنح لمعاناً.", price: 140, category: "perfume", img: "Htm/compressed_1795220883880.webp" },
-            { id: "htm-7", title: "صبغة شعر خالية من الأمونيا Godrej Expert", desc: "صبغة كريمية خالية من الأمونيا تلون الشعر في 30 دقيقة (بني داكن وأسود).", price: 65, category: "perfume", img: "Htm/compressed_1795220884252.webp" },
+            { id: "htm-7", title: "صبغة شعر خالية من الأمونيا Godrej Expert", desc: "صبغة كريمية خالية من الأمونيا تلون الشعر في 30 دقيقة (بني داكن وأسود).", price: 65, category: "perfume", colors: [{ name: "أسود", hex: "#1c1917" }, { name: "بني داكن", hex: "#3b2314" }], img: "Htm/compressed_1795220884252.webp" },
             { id: "htm-8", title: "كريم مرطب لليدين Care Body & Soul", desc: "كريم لليدين بفيتامين E مناسب لجميع أنواع البشرة (50 مل) بروائح متعددة.", price: 80, category: "perfume", img: "Htm/compressed_1795220884341.webp" },
             { id: "htm-9", title: "اسبلش جسم AVUVA Body Splash", desc: "اسبلش جسم منعش وعطري بعدة روائح مميزة للاستخدام اليومي.", price: 130, category: "perfume", img: "Htm/compressed_1795220963492.webp" },
 
-            { id: "amn-1", title: "محفظة جلد بالأسماء حسب الطلب", desc: "هدية عملية وشخصية باسمك أو اسم من تحب بتقفيل مرتب يليق بكل يوم.", price: 200, category: "gifts", img: "Amnh/IMG-20261117-WA0007.jpg" },
+            { id: "amn-1", title: "محفظة جلد بالأسماء حسب الطلب", desc: "هدية عملية وشخصية باسمك أو اسم من تحب بتقفيل مرتب يليق بكل يوم.", price: 200, category: "gifts", colors: [{ name: "أسود", hex: "#1c1917" }, { name: "بني", hex: "#5c3a21" }, { name: "كراميل", hex: "#c89666" }], img: "Amnh/IMG-20261117-WA0007.jpg" },
             { id: "amn-2", title: "مرايا سحرية بصورتك", desc: "مفاجأة بتفاصيل تخطف القلب.. تظهر صورتك بوضوح أول ما تنور المرايا.", price: 300, category: "gifts", img: "Amnh/IMG-20261117-WA0006.jpg" },
             { id: "amn-3", title: "ساعة حائط بصورتك 30×40", desc: "حوّل أحلى ذكرى لقطعة ديكور تنور الحائط وتفضل قدام عينك كل يوم.", price: 280, category: "gifts", img: "Amnh/IMG-20261117-WA0019.jpg" },
             { id: "amn-4", title: "مج أبيض مطبوع بصورتك", desc: "ابدأ يومك بمشروبك المفضل وصورتك المطبوعة بوضوح على مج سيراميك أنيق.", price: 160, category: "gifts", img: "Amnh/IMG-20261117-WA0003.jpg" },
@@ -2064,12 +2384,43 @@
             { id: "brf-15", title: "LIVELY FOR MEN PARIS", desc: "حضور رجالي أنيق بزجاجة زرقاء مخططة تكمّل إطلالتك في كل خروجة.", price: 175, category: "perfume", img: "Prfa/compressed_1794950472010.webp" }
         ];
 
+        function getProductVariantsConfig(product) {
+            if (!product) return { hasVariants: false, sizes: [], colors: [] };
+
+            const isClothingTitle = /(عباية|فستان|بدي|أندر|اندر|تيشيرت|تي شيرت|بنطلون|بلوزة|قميص|بشت|موديل)/i.test(product.title || "");
+            const isClothingCat = product.category === "women" || product.category === "men" || product.category === "kids";
+
+            let sizes = Array.isArray(product.sizes) ? [...product.sizes] : [];
+            let colors = Array.isArray(product.colors)
+                ? product.colors.map(c => (typeof c === "string" ? { name: c, hex: "#c89666" } : c))
+                : [];
+
+            if (sizes.length === 0 && (isClothingTitle || isClothingCat)) {
+                sizes = [...DEFAULT_CLOTHING_SIZES];
+            }
+            if (colors.length === 0 && (isClothingTitle || isClothingCat)) {
+                colors = [...DEFAULT_CLOTHING_COLORS];
+            }
+
+            return {
+                hasVariants: sizes.length > 0 || colors.length > 0,
+                sizes,
+                colors
+            };
+        }
+
         let currentCategory = "all";
         let currentFeedItems = [];
         let renderedCount = 0;
         let feedCycle = 0;
         let cart = [];
         let activeOverlayName = null;
+        let pendingVariantContext = {
+            product: null,
+            clickedBtnId: null,
+            selectedSize: null,
+            selectedColor: null
+        };
         let interestData = {
             categories: {},
             keywords: {},
@@ -2292,6 +2643,11 @@
             const waText = encodeURIComponent(`أريد طلب ${product.title} بسعر ${displayPrice} جنيه من متجر كارامل`);
             const isFreshForUser = !interestData.seenIds.includes(product.id);
             const btnId = isSmartCard ? `smart-btn-${product.id}` : `btn-${instanceTag}-${product.id}`;
+            const cfg = getProductVariantsConfig(product);
+
+            const hintParts = [];
+            if (cfg.sizes.length) hintParts.push("مقاسات");
+            if (cfg.colors.length) hintParts.push("ألوان");
 
             return `
                 <article class="product-card">
@@ -2305,6 +2661,7 @@
                             <div class="product-title">${product.title}</div>
                             <div class="product-price">${displayPrice}<span>جنيه</span></div>
                             ${product.subPrice ? `<div class="product-sub">${product.subPrice}</div>` : ""}
+                            ${hintParts.length ? `<div class="variant-pill-hint">متاح: ${hintParts.join(" + ")}</div>` : ""}
                             ${product.desc ? `<div class="product-desc">${product.desc}</div>` : ""}
                         </div>
                         <div class="card-btns">
@@ -2443,6 +2800,7 @@
         function resetHomeFresh() {
             closeCart();
             closeImageModal();
+            closeVariantModal();
             resetFilters();
             renderSmartRecommendations();
             window.scrollTo({ top: 0, behavior: "smooth" });
@@ -2495,29 +2853,8 @@
             pill.classList.add("pop");
         }
 
-        function addToCart(productId, clickedBtnId = null) {
-            const product = PRODUCTS.find(p => p.id === productId);
-            if (!product) return;
-
-            trackProductInterest(product, 4, true);
-
-            const existing = cart.find(item => item.id === productId);
-            if (existing) {
-                existing.qty = (Number(existing.qty) || 1) + 1;
-            } else {
-                cart.push({
-                    id: product.id,
-                    title: product.title,
-                    price: Number(product.price) || 0,
-                    img: product.img,
-                    qty: 1
-                });
-            }
-
-            saveCart();
-            updateCartUI();
+        function triggerAddedFeedback(productId, clickedBtnId = null) {
             pulseCartButton();
-
             const targets = clickedBtnId ? [clickedBtnId] : [`btn-p0-${productId}`, `smart-btn-${productId}`];
             targets.forEach(id => {
                 const btn = document.getElementById(id);
@@ -2533,12 +2870,173 @@
             });
         }
 
-        function changeQty(productId, delta) {
-            const item = cart.find(i => i.id === productId);
+        function commitItemToCart(product, options = {}, clickedBtnId = null) {
+            const chosenSize = options.size || "";
+            const chosenColor = options.color || "";
+            const chosenNote = (options.note || "").trim();
+
+            const variantKey = `${product.id}__${chosenSize}__${chosenColor}__${chosenNote}`;
+            const existing = cart.find(item => (item.variantKey || `${item.id}____`) === variantKey);
+
+            if (existing) {
+                existing.qty = (Number(existing.qty) || 1) + 1;
+            } else {
+                cart.push({
+                    id: product.id,
+                    variantKey,
+                    title: product.title,
+                    price: Number(product.price) || 0,
+                    img: product.img,
+                    size: chosenSize,
+                    color: chosenColor,
+                    note: chosenNote,
+                    qty: 1
+                });
+            }
+
+            saveCart();
+            updateCartUI();
+            triggerAddedFeedback(product.id, clickedBtnId);
+
+            const summaryParts = [];
+            if (chosenSize) summaryParts.push(`مقاس ${chosenSize}`);
+            if (chosenColor) summaryParts.push(`لون ${chosenColor}`);
+            showCaramelToast(
+                summaryParts.length
+                    ? `تمت إضافة (${summaryParts.join(" - ")}) إلى المشتريات`
+                    : `تمت إضافة "${product.title}" إلى المشتريات`
+            );
+        }
+
+        function openVariantModal(product, clickedBtnId = null, cfg = null) {
+            const config = cfg || getProductVariantsConfig(product);
+            pendingVariantContext = {
+                product,
+                clickedBtnId,
+                selectedSize: config.sizes[0] || "",
+                selectedColor: config.colors[0] ? config.colors[0].name : ""
+            };
+
+            document.getElementById("variantProductImg").src = product.img;
+            document.getElementById("variantProductTitle").textContent = product.title;
+            document.getElementById("variantProductPrice").textContent = `${product.priceLabel || product.price} جنيه`;
+            document.getElementById("variantCustomNote").value = "";
+
+            const sizesBlock = document.getElementById("variantSizesBlock");
+            const sizesGrid = document.getElementById("variantSizesGrid");
+            const sizeBadge = document.getElementById("selectedSizeBadge");
+
+            if (config.sizes.length > 0) {
+                sizesBlock.style.display = "block";
+                sizeBadge.textContent = pendingVariantContext.selectedSize || "اختر";
+                sizesGrid.innerHTML = config.sizes.map(sz => {
+                    const isActive = sz === pendingVariantContext.selectedSize;
+                    return `<button type="button" class="size-option-btn ${isActive ? "active" : ""}" onclick="selectVariantSize('${sz.replace(/'/g, "\\'")}', this)">${sz}</button>`;
+                }).join("");
+            } else {
+                sizesBlock.style.display = "none";
+            }
+
+            const colorsBlock = document.getElementById("variantColorsBlock");
+            const colorsGrid = document.getElementById("variantColorsGrid");
+            const colorBadge = document.getElementById("selectedColorBadge");
+
+            if (config.colors.length > 0) {
+                colorsBlock.style.display = "block";
+                colorBadge.textContent = pendingVariantContext.selectedColor || "اختر";
+                colorsGrid.innerHTML = config.colors.map(col => {
+                    const isActive = col.name === pendingVariantContext.selectedColor;
+                    return `
+                        <button type="button" class="color-option-btn ${isActive ? "active" : ""}" onclick="selectVariantColor('${col.name.replace(/'/g, "\\'")}', this)">
+                            <span class="color-swatch-dot" style="background:${col.hex || "#c89666"};"></span>
+                            <span>${col.name}</span>
+                        </button>
+                    `;
+                }).join("");
+            } else {
+                colorsBlock.style.display = "none";
+            }
+
+            const backdrop = document.getElementById("variantBackdrop");
+            const isAlreadyOpen = backdrop && backdrop.classList.contains("open");
+            if (backdrop) backdrop.classList.add("open");
+            syncBodyScrollLock();
+            if (!isAlreadyOpen) {
+                pushOverlayHistoryState("variant");
+            }
+        }
+
+        function selectVariantSize(sizeVal, btnEl) {
+            pendingVariantContext.selectedSize = sizeVal;
+            document.querySelectorAll("#variantSizesGrid .size-option-btn").forEach(b => b.classList.remove("active"));
+            if (btnEl) btnEl.classList.add("active");
+            const badge = document.getElementById("selectedSizeBadge");
+            if (badge) badge.textContent = sizeVal;
+        }
+
+        function selectVariantColor(colorName, btnEl) {
+            pendingVariantContext.selectedColor = colorName;
+            document.querySelectorAll("#variantColorsGrid .color-option-btn").forEach(b => b.classList.remove("active"));
+            if (btnEl) btnEl.classList.add("active");
+            const badge = document.getElementById("selectedColorBadge");
+            if (badge) badge.textContent = colorName;
+        }
+
+        function confirmVariantAddToCart() {
+            const { product, clickedBtnId, selectedSize, selectedColor } = pendingVariantContext;
+            if (!product) return;
+            const note = document.getElementById("variantCustomNote")?.value || "";
+            closeVariantModal();
+            commitItemToCart(
+                product,
+                { size: selectedSize, color: selectedColor, note },
+                clickedBtnId
+            );
+        }
+
+        function closeVariantModal(fromPopState = false) {
+            const backdrop = document.getElementById("variantBackdrop");
+            if (backdrop) backdrop.classList.remove("open");
+            pendingVariantContext = {
+                product: null,
+                clickedBtnId: null,
+                selectedSize: null,
+                selectedColor: null
+            };
+            syncBodyScrollLock();
+            if (!fromPopState) {
+                popOverlayHistoryIfNeeded("variant");
+            } else if (activeOverlayName === "variant") {
+                activeOverlayName = null;
+            }
+        }
+
+        function addToCart(productId, clickedBtnId = null) {
+            const product = PRODUCTS.find(p => p.id === productId);
+            if (!product) return;
+
+            trackProductInterest(product, 4, true);
+
+            const cfg = getProductVariantsConfig(product);
+            if (cfg.hasVariants) {
+                openVariantModal(product, clickedBtnId, cfg);
+                return;
+            }
+
+            commitItemToCart(product, {}, clickedBtnId);
+        }
+
+        function findCartItemByKeyOrId(keyOrId) {
+            return cart.find(i => (i.variantKey || i.id) === keyOrId || i.id === keyOrId);
+        }
+
+        function changeQty(keyOrId, delta) {
+            const item = findCartItemByKeyOrId(keyOrId);
             if (!item) return;
+            const targetKey = item.variantKey || item.id;
             const nextQty = (Number(item.qty) || 1) + delta;
             if (nextQty <= 0) {
-                cart = cart.filter(i => i.id !== productId);
+                cart = cart.filter(i => (i.variantKey || i.id) !== targetKey);
             } else {
                 item.qty = nextQty;
             }
@@ -2546,8 +3044,10 @@
             updateCartUI();
         }
 
-        function removeFromCart(productId) {
-            cart = cart.filter(i => i.id !== productId);
+        function removeFromCart(keyOrId) {
+            const item = findCartItemByKeyOrId(keyOrId);
+            const targetKey = item ? (item.variantKey || item.id) : keyOrId;
+            cart = cart.filter(i => (i.variantKey || i.id) !== targetKey && i.id !== keyOrId);
             saveCart();
             updateCartUI();
         }
@@ -2556,6 +3056,14 @@
             cart = [];
             saveCart();
             updateCartUI();
+        }
+
+        function formatItemVariantText(item) {
+            const parts = [];
+            if (item.size) parts.push(`المقاس: ${item.size}`);
+            if (item.color) parts.push(`اللون: ${item.color}`);
+            if (item.note) parts.push(`ملاحظة: ${item.note}`);
+            return parts.join(" | ");
         }
 
         function updateCartUI() {
@@ -2590,20 +3098,23 @@
                 const catalogMatch = PRODUCTS.find(prod => prod.id === item.id);
                 const title = item.title || (catalogMatch ? catalogMatch.title : "منتج كارامل");
                 const img = item.img || (catalogMatch ? catalogMatch.img : "IMG-20261116-WA0032.jpg");
+                const itemKey = encodeURIComponent(item.variantKey || item.id);
+                const variantLine = formatItemVariantText(item);
 
                 return `
                     <div class="cart-item">
                         <img src="${img}" alt="${title}">
                         <div class="cart-item-info">
                             <div class="cart-item-title">${title}</div>
+                            ${variantLine ? `<div class="cart-item-meta">${variantLine}</div>` : ""}
                             <div class="cart-item-price">${p * q} جنيه</div>
                         </div>
                         <div class="qty-controls">
-                            <button type="button" class="qty-btn" onclick="changeQty('${item.id}', 1)">+</button>
+                            <button type="button" class="qty-btn" onclick="changeQty(decodeURIComponent('${itemKey}'), 1)">+</button>
                             <span class="qty-val">${q}</span>
-                            <button type="button" class="qty-btn" onclick="changeQty('${item.id}', -1)">-</button>
+                            <button type="button" class="qty-btn" onclick="changeQty(decodeURIComponent('${itemKey}'), -1)">-</button>
                         </div>
-                        <button type="button" class="remove-item-btn" onclick="removeFromCart('${item.id}')" aria-label="حذف">✕</button>
+                        <button type="button" class="remove-item-btn" onclick="removeFromCart(decodeURIComponent('${itemKey}'))" aria-label="حذف">✕</button>
                     </div>
                 `;
             }).join("");
@@ -2623,7 +3134,8 @@
                 const p = Number(item.price) || 0;
                 const sub = p * q;
                 total += sub;
-                lines.push(`${idx + 1}. ${item.title} × ${q} = ${sub} جنيه`);
+                const variantLine = formatItemVariantText(item);
+                lines.push(`${idx + 1}. ${item.title}${variantLine ? ` (${variantLine})` : ""} × ${q} = ${sub} جنيه`);
             });
 
             lines.push("", `الإجمالي: ${total} جنيه`, "الدفع عند الاستلام • استرجاع خلال أسبوع لو المنتج غير التفاصيل الموجودة");
@@ -2654,7 +3166,8 @@
         function syncBodyScrollLock() {
             const cartOpen = document.getElementById("cartDrawer")?.classList.contains("open");
             const imgOpen = document.getElementById("imageModal")?.classList.contains("open");
-            document.body.style.overflow = (cartOpen || imgOpen) ? "hidden" : "";
+            const varOpen = document.getElementById("variantBackdrop")?.classList.contains("open");
+            document.body.style.overflow = (cartOpen || imgOpen || varOpen) ? "hidden" : "";
         }
 
         function openCart() {
@@ -2713,10 +3226,13 @@
         }
 
         window.addEventListener("popstate", () => {
+            const varOpen = document.getElementById("variantBackdrop")?.classList.contains("open");
             const cartOpen = document.getElementById("cartDrawer")?.classList.contains("open");
             const imgOpen = document.getElementById("imageModal")?.classList.contains("open");
             activeOverlayName = null;
-            if (imgOpen) {
+            if (varOpen) {
+                closeVariantModal(true);
+            } else if (imgOpen) {
                 closeImageModal(true);
             } else if (cartOpen) {
                 closeCart(true);
@@ -2725,7 +3241,9 @@
 
         document.addEventListener("keydown", e => {
             if (e.key === "Escape") {
-                if (document.getElementById("imageModal")?.classList.contains("open")) {
+                if (document.getElementById("variantBackdrop")?.classList.contains("open")) {
+                    closeVariantModal();
+                } else if (document.getElementById("imageModal")?.classList.contains("open")) {
                     closeImageModal();
                 } else if (document.getElementById("cartDrawer")?.classList.contains("open")) {
                     closeCart();
@@ -2870,7 +3388,9 @@
 
             const osInstance = oneSignalInstance || window.OneSignal;
             if (osInstance && osInstance.User && osInstance.User.PushSubscription) {
-                return osInstance.User.PushSubscription.optedIn !== false;
+                if (typeof osInstance.User.PushSubscription.optedIn === "boolean") {
+                    return osInstance.User.PushSubscription.optedIn;
+                }
             }
             return true;
         }
@@ -2883,6 +3403,7 @@
 
             if (isNotificationsCurrentlyEnabled()) {
                 if (animateSuccess) {
+                    btn.disabled = false;
                     btn.classList.remove("hiding", "hidden-permanently");
                     btn.classList.add("enabled-success");
                     iconEl.textContent = "✓";
@@ -2896,16 +3417,52 @@
                                 btn.classList.add("hidden-permanently");
                             }
                         }, 360);
-                    }, 1100);
+                    }, 1200);
                 } else {
                     btn.classList.remove("enabled-success", "hiding");
                     btn.classList.add("hidden-permanently");
                 }
             } else {
                 clearTimeout(hideNotifyBtnTimer);
+                btn.disabled = false;
                 btn.classList.remove("enabled-success", "hiding", "hidden-permanently");
                 iconEl.textContent = "🔔";
                 labelEl.textContent = "تشغيل الإشعارات";
+            }
+        }
+
+        function withTimeout(promise, ms, fallbackValue) {
+            return Promise.race([
+                promise,
+                new Promise(resolve => setTimeout(() => resolve(fallbackValue), ms))
+            ]);
+        }
+
+        async function requestPermissionWithFallback() {
+            if (!("Notification" in window)) return "unsupported";
+            if (Notification.permission !== "default") return Notification.permission;
+
+            try {
+                if (typeof Notification.requestPermission === "function") {
+                    const res = Notification.requestPermission();
+                    if (res && typeof res.then === "function") {
+                        const result = await withTimeout(res, 5000, Notification.permission);
+                        return result || Notification.permission;
+                    }
+                    return Notification.permission;
+                }
+            } catch (e) {}
+
+            return Notification.permission;
+        }
+
+        async function tryOptInOneSignalNonBlocking(osInstance) {
+            const target = osInstance || oneSignalInstance || window.OneSignal;
+            if (!target || !target.User || !target.User.PushSubscription) return;
+            if (typeof target.User.PushSubscription.optIn === "function") {
+                try {
+                    await withTimeout(Promise.resolve(target.User.PushSubscription.optIn()), 3500, null);
+                } catch (e) {}
             }
         }
 
@@ -2927,27 +3484,14 @@
             }
 
             if (perm === "default") {
-                try {
-                    if (typeof Notification.requestPermission === "function") {
-                        perm = await Notification.requestPermission();
-                    } else if (osInstance && osInstance.Notifications && typeof osInstance.Notifications.requestPermission === "function") {
-                        await osInstance.Notifications.requestPermission();
-                        perm = Notification.permission;
-                    }
-                } catch (err) {
-                    perm = Notification.permission;
-                }
+                perm = await requestPermissionWithFallback();
             }
 
             if (perm !== "granted") {
                 return { ok: false, reason: perm };
             }
 
-            if (osInstance && osInstance.User && osInstance.User.PushSubscription && typeof osInstance.User.PushSubscription.optIn === "function") {
-                try {
-                    await osInstance.User.PushSubscription.optIn();
-                } catch (e) {}
-            }
+            tryOptInOneSignalNonBlocking(osInstance);
 
             return { ok: true, reason: "granted" };
         }
@@ -2958,11 +3502,21 @@
             if (btn) btn.disabled = true;
             if (labelEl) labelEl.textContent = "جاري التشغيل...";
 
+            const safetyResetTimer = setTimeout(() => {
+                if (getBrowserNotificationPermission() === "granted") {
+                    syncNotifyButtonVisibility(true);
+                    showCaramelToast("تم تشغيل الإشعارات بنجاح!");
+                } else {
+                    syncNotifyButtonVisibility(false);
+                }
+            }, 6000);
+
             try {
                 const osInstance = oneSignalInstance || window.OneSignal;
                 const res = await askNativePermissionFirst(osInstance);
+                clearTimeout(safetyResetTimer);
 
-                if (res.ok && isNotificationsCurrentlyEnabled()) {
+                if (res.ok && getBrowserNotificationPermission() === "granted") {
                     syncNotifyButtonVisibility(true);
                     showCaramelToast("تم تشغيل الإشعارات بنجاح!");
                 } else if (res.reason === "denied" || getBrowserNotificationPermission() === "denied") {
@@ -2972,11 +3526,10 @@
                     syncNotifyButtonVisibility(false);
                     showCaramelToast("لم يتم السماح بالإشعارات؛ اضغط مرة أخرى للموافقة.");
                 }
-            } finally {
-                if (btn) btn.disabled = false;
-                if (!isNotificationsCurrentlyEnabled()) {
-                    syncNotifyButtonVisibility(false);
-                }
+            } catch (e) {
+                clearTimeout(safetyResetTimer);
+                syncNotifyButtonVisibility(false);
+                showCaramelToast("حدثت مشكلة أثناء طلب الإذن، حاول مرة أخرى.");
             }
         }
 
@@ -2997,13 +3550,8 @@
                 return;
             }
 
-            const osInstance = oneSignalInstance || window.OneSignal;
             if (perm === "granted") {
-                if (osInstance && osInstance.User && osInstance.User.PushSubscription && typeof osInstance.User.PushSubscription.optIn === "function") {
-                    try {
-                        await osInstance.User.PushSubscription.optIn();
-                    } catch (e) {}
-                }
+                tryOptInOneSignalNonBlocking(oneSignalInstance);
                 syncNotifyButtonVisibility(false);
                 return;
             }
@@ -3021,8 +3569,8 @@
                 localStorage.setItem(AUTO_PUSH_ASKED_KEY, "true");
             } catch (e) {}
 
-            const res = await askNativePermissionFirst(osInstance);
-            if (res.ok && isNotificationsCurrentlyEnabled()) {
+            const res = await askNativePermissionFirst(oneSignalInstance);
+            if (res.ok && getBrowserNotificationPermission() === "granted") {
                 syncNotifyButtonVisibility(true);
             }
         };
@@ -3031,20 +3579,26 @@
 
         window.OneSignalDeferred.push(async function (OneSignal) {
             try {
-                await OneSignal.init({
-                    appId: "19f76037-4f5a-41b4-ada5-20e0abb2b1a7",
-                    serviceWorkerPath: "OneSignalSDKWorker.js",
-                    serviceWorkerParam: {
-                        scope: "/Carmelastore/"
-                    }
-                });
+                await withTimeout(
+                    OneSignal.init({
+                        appId: "19f76037-4f5a-41b4-ada5-20e0abb2b1a7",
+                        serviceWorkerPath: "OneSignalSDKWorker.js",
+                        serviceWorkerParam: {
+                            scope: "/Carmelastore/"
+                        }
+                    }),
+                    4500,
+                    null
+                );
 
                 oneSignalInstance = OneSignal;
                 syncNotifyButtonVisibility(false);
 
                 if (OneSignal.User && OneSignal.User.PushSubscription && typeof OneSignal.User.PushSubscription.addEventListener === "function") {
                     OneSignal.User.PushSubscription.addEventListener("change", () => {
-                        syncNotifyButtonVisibility(isNotificationsCurrentlyEnabled());
+                        if (getBrowserNotificationPermission() === "granted") {
+                            syncNotifyButtonVisibility(true);
+                        }
                     });
                 }
 
