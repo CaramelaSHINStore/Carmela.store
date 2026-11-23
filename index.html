@@ -556,6 +556,7 @@
         .hero-actions {
             display: flex;
             flex-wrap: wrap;
+            align-items: center;
             gap: 10px;
             margin-top: 4px;
         }
@@ -570,6 +571,43 @@
             border-radius: 12px;
             font-size: 0.82rem;
             font-weight: 900;
+        }
+
+        .hero-notify-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(255, 255, 255, 0.11);
+            color: var(--caramel-light);
+            border: 1.5px solid rgba(229, 190, 150, 0.65);
+            padding: 8px 15px;
+            border-radius: 12px;
+            font-size: 0.82rem;
+            font-weight: 900;
+            transition: transform 0.22s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease, opacity 0.35s ease;
+        }
+
+        .hero-notify-btn:hover {
+            transform: translateY(-1px);
+            background: rgba(200, 150, 102, 0.22);
+        }
+
+        .hero-notify-btn.enabled-success {
+            background: linear-gradient(135deg, #22c55e, #15803d);
+            color: #ffffff;
+            border-color: #86efac;
+            box-shadow: 0 6px 18px rgba(21, 128, 61, 0.45);
+            transform: scale(1.03);
+        }
+
+        .hero-notify-btn.hiding {
+            opacity: 0;
+            transform: scale(0.92);
+            pointer-events: none;
+        }
+
+        .hero-notify-btn.hidden-permanently {
+            display: none;
         }
 
         .hero-install-btn {
@@ -1504,6 +1542,10 @@
                 <a href="https://wa.me/201055436305?text=%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%AA%D9%88%D8%A7%D8%B5%D9%84%20%D9%84%D9%84%D8%B7%D9%84%D8%A8%D8%A7%D8%AA%20%D8%A7%D9%84%D8%AE%D8%A7%D8%B5%D8%A9%20%28%D9%85%D9%86%D8%AA%D8%AC%20%D8%BA%D9%8A%D8%B1%20%D9%85%D9%88%D8%AC%D9%88%D8%AF%29" class="hero-btn-primary" target="_blank" rel="noopener noreferrer">
                     تواصل للطلبات الخاصة
                 </a>
+                <button type="button" class="hero-notify-btn" id="enableNotificationsBtn" onclick="handleEnableNotificationsClick()" aria-label="تشغيل الإشعارات">
+                    <span id="enableNotificationsIcon">🔔</span>
+                    <span id="enableNotificationsLabel">تشغيل الإشعارات</span>
+                </button>
                 <button type="button" class="hero-install-btn" id="heroInstallBtn" onclick="triggerInstallApp()">
                     تثبيت المتجر كتطبيق
                 </button>
@@ -2780,7 +2822,7 @@
         updateSearchCancelButton();
     </script>
 
-    <!-- OneSignal Web Push v16 - Automatic Permission on First Visit / Install -->
+    <!-- OneSignal Web Push v16 + Notification Toggle Button State -->
     <script>
         window.OneSignalDeferred = window.OneSignalDeferred || [];
     </script>
@@ -2788,9 +2830,63 @@
     <script>
         const AUTO_PUSH_ASKED_KEY = "caramel_auto_push_prompted_v1";
         let oneSignalInstance = null;
+        let hideNotifyBtnTimer = null;
+
+        function isNotificationsCurrentlyEnabled() {
+            const osInstance = oneSignalInstance || window.OneSignal;
+            const browserPerm = ("Notification" in window) ? Notification.permission : "default";
+            if (browserPerm === "granted") {
+                if (osInstance && osInstance.User && osInstance.User.PushSubscription) {
+                    return osInstance.User.PushSubscription.optedIn !== false;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        function syncNotifyButtonVisibility(animateSuccess = false) {
+            const btn = document.getElementById("enableNotificationsBtn");
+            const iconEl = document.getElementById("enableNotificationsIcon");
+            const labelEl = document.getElementById("enableNotificationsLabel");
+            if (!btn || !iconEl || !labelEl) return;
+
+            if (isNotificationsCurrentlyEnabled()) {
+                if (animateSuccess) {
+                    btn.classList.remove("hiding", "hidden-permanently");
+                    btn.classList.add("enabled-success");
+                    iconEl.textContent = "✓";
+                    labelEl.textContent = "تم تفعيل الإشعارات";
+
+                    clearTimeout(hideNotifyBtnTimer);
+                    hideNotifyBtnTimer = setTimeout(() => {
+                        btn.classList.add("hiding");
+                        setTimeout(() => {
+                            if (isNotificationsCurrentlyEnabled()) {
+                                btn.classList.add("hidden-permanently");
+                            }
+                        }, 360);
+                    }, 1100);
+                } else {
+                    btn.classList.remove("enabled-success", "hiding");
+                    btn.classList.add("hidden-permanently");
+                }
+            } else {
+                clearTimeout(hideNotifyBtnTimer);
+                btn.classList.remove("enabled-success", "hiding", "hidden-permanently");
+                iconEl.textContent = "🔔";
+                labelEl.textContent = "تشغيل الإشعارات";
+            }
+        }
 
         async function subscribeUserToCaramelPush(osInstance) {
-            if (!osInstance) return false;
+            if (!osInstance) {
+                if ("Notification" in window && typeof Notification.requestPermission === "function") {
+                    const perm = await Notification.requestPermission();
+                    return perm === "granted";
+                }
+                return false;
+            }
+
             try {
                 if (osInstance.Notifications && typeof osInstance.Notifications.requestPermission === "function") {
                     await osInstance.Notifications.requestPermission();
@@ -2798,15 +2894,38 @@
                 if (osInstance.User && osInstance.User.PushSubscription && typeof osInstance.User.PushSubscription.optIn === "function") {
                     await osInstance.User.PushSubscription.optIn();
                 }
-                return true;
+                return isNotificationsCurrentlyEnabled();
             } catch (e) {
-                return false;
+                return isNotificationsCurrentlyEnabled();
+            }
+        }
+
+        async function handleEnableNotificationsClick() {
+            const osInstance = oneSignalInstance || window.OneSignal;
+            const enabled = await subscribeUserToCaramelPush(osInstance);
+
+            if (enabled || isNotificationsCurrentlyEnabled()) {
+                syncNotifyButtonVisibility(true);
+                showCaramelToast("تم تشغيل الإشعارات بنجاح!");
+            } else if ("Notification" in window && Notification.permission === "denied") {
+                syncNotifyButtonVisibility(false);
+                showCaramelToast("الإشعارات مقفولة من إعدادات المتصفح، فعّلها من إعدادات الموقع.");
+            } else {
+                syncNotifyButtonVisibility(false);
             }
         }
 
         window.promptCaramelPushAutomatically = async function (forceAfterInstall = false) {
+            if (isNotificationsCurrentlyEnabled()) {
+                syncNotifyButtonVisibility(false);
+                return;
+            }
+
             const osInstance = oneSignalInstance || window.OneSignal;
-            if (!osInstance || !osInstance.Notifications) return;
+            if (!osInstance || !osInstance.Notifications) {
+                syncNotifyButtonVisibility(false);
+                return;
+            }
 
             const nativePerm = osInstance.Notifications.permissionNative;
             if (nativePerm === "granted") {
@@ -2815,10 +2934,16 @@
                         await osInstance.User.PushSubscription.optIn();
                     }
                 } catch (e) {}
+                syncNotifyButtonVisibility(false);
                 return;
             }
 
-            if (nativePerm === "denied") return;
+            if (nativePerm === "denied") {
+                syncNotifyButtonVisibility(false);
+                return;
+            }
+
+            syncNotifyButtonVisibility(false);
 
             let alreadyAsked = false;
             try {
@@ -2831,8 +2956,13 @@
                 localStorage.setItem(AUTO_PUSH_ASKED_KEY, "true");
             } catch (e) {}
 
-            await subscribeUserToCaramelPush(osInstance);
+            const ok = await subscribeUserToCaramelPush(osInstance);
+            if (ok || isNotificationsCurrentlyEnabled()) {
+                syncNotifyButtonVisibility(true);
+            }
         };
+
+        syncNotifyButtonVisibility(false);
 
         window.OneSignalDeferred.push(async function (OneSignal) {
             try {
@@ -2845,11 +2975,20 @@
                 });
 
                 oneSignalInstance = OneSignal;
+                syncNotifyButtonVisibility(false);
+
+                if (OneSignal.User && OneSignal.User.PushSubscription && typeof OneSignal.User.PushSubscription.addEventListener === "function") {
+                    OneSignal.User.PushSubscription.addEventListener("change", () => {
+                        syncNotifyButtonVisibility(isNotificationsCurrentlyEnabled());
+                    });
+                }
 
                 setTimeout(() => {
                     window.promptCaramelPushAutomatically(false);
                 }, 1200);
-            } catch (e) {}
+            } catch (e) {
+                syncNotifyButtonVisibility(false);
+            }
         });
     </script>
 
