@@ -1167,7 +1167,6 @@
             font-weight: 700;
         }
 
-        /* نافذة اختيار المقاس واللون الاحترافية */
         .variant-backdrop {
             display: none;
             position: fixed;
@@ -1921,9 +1920,9 @@
         <div class="feed-sentinel" id="feedSentinel"></div>
     </main>
 
-    <!-- نافذة اختيار المقاس واللون الاحترافية -->
+    <!-- نافذة اختيار المقاس واللون والتفاصيل الاحترافية -->
     <div class="variant-backdrop" id="variantBackdrop" onclick="closeVariantModal()">
-        <div class="variant-modal" onclick="event.stopPropagation()" role="dialog" aria-modal="true" aria-label="اختيار المقاس واللون">
+        <div class="variant-modal" onclick="event.stopPropagation()" role="dialog" aria-modal="true" aria-label="اختيار المقاس واللون والتفاصيل">
             <div class="variant-head">
                 <img id="variantProductImg" src="" alt="صورة المنتج">
                 <div class="variant-head-info">
@@ -1950,11 +1949,11 @@
                     <div class="colors-grid" id="variantColorsGrid"></div>
                 </div>
 
-                <div>
+                <div id="variantNoteBlock">
                     <div class="variant-group-title">
-                        <span>ملاحظة إضافية (اختياري)</span>
+                        <span id="variantNoteTitle">ملاحظة إضافية</span>
                     </div>
-                    <input type="text" class="variant-note-input" id="variantCustomNote" placeholder="مثال: مقاس محير أو درجة لون معينة...">
+                    <input type="text" class="variant-note-input" id="variantCustomNote" placeholder="اكتب التفاصيل أو الاسم أو الملاحظة المطلوبة...">
                 </div>
             </div>
 
@@ -2028,6 +2027,16 @@
             { name: "موف", hex: "#7e22ce" },
             { name: "بني", hex: "#5c3a21" },
             { name: "لبني", hex: "#7dd3fc" }
+        ];
+
+        const DEFAULT_HOME_SCHOOL_COLORS = [
+            { name: "أبيض", hex: "#f8fafc" },
+            { name: "أسود", hex: "#1c1917" },
+            { name: "كراميل / بيج", hex: "#c89666" },
+            { name: "أزرق / لبني", hex: "#0284c7" },
+            { name: "وردي / بينك", hex: "#ec4899" },
+            { name: "أخضر", hex: "#16a34a" },
+            { name: "رمادي / استانلس", hex: "#94a3b8" }
         ];
 
         let deferredInstallPrompt = null;
@@ -2385,10 +2394,16 @@
         ];
 
         function getProductVariantsConfig(product) {
-            if (!product) return { hasVariants: false, sizes: [], colors: [] };
+            if (!product) return { hasVariants: false, sizes: [], colors: [], allowNote: false, noteLabel: "ملاحظة إضافية", notePlaceholder: "" };
 
+            const combinedText = `${product.title || ""} ${product.desc || ""}`;
             const isClothingTitle = /(عباية|فستان|بدي|أندر|اندر|تيشيرت|تي شيرت|بنطلون|بلوزة|قميص|بشت|موديل)/i.test(product.title || "");
             const isClothingCat = product.category === "women" || product.category === "men" || product.category === "kids";
+            const isHomeOrSchool = product.category === "home" || product.category === "school";
+            const isGiftOrCustom =
+                product.category === "gifts" ||
+                Boolean(product.allowNote) ||
+                /(حسب الطلب|بصورتك|بالأسماء|بالاسماء|هدية|مراية|محفظة|مج|تابلوه|برواز|جراب|عرسان)/i.test(combinedText);
 
             let sizes = Array.isArray(product.sizes) ? [...product.sizes] : [];
             let colors = Array.isArray(product.colors)
@@ -2398,14 +2413,31 @@
             if (sizes.length === 0 && (isClothingTitle || isClothingCat)) {
                 sizes = [...DEFAULT_CLOTHING_SIZES];
             }
-            if (colors.length === 0 && (isClothingTitle || isClothingCat)) {
-                colors = [...DEFAULT_CLOTHING_COLORS];
+
+            if (colors.length === 0) {
+                if (isClothingTitle || isClothingCat) {
+                    colors = [...DEFAULT_CLOTHING_COLORS];
+                } else if (isHomeOrSchool) {
+                    colors = [...DEFAULT_HOME_SCHOOL_COLORS];
+                }
+            }
+
+            const allowNote = Boolean(product.allowNote) || isGiftOrCustom;
+            let noteLabel = product.noteLabel || "ملاحظة إضافية";
+            let notePlaceholder = product.notePlaceholder || "اكتب التفاصيل المطلوبة أو الاسم أو الملاحظة...";
+
+            if (!product.noteLabel && isGiftOrCustom) {
+                noteLabel = "تفاصيل إضافية (الاسم / الصورة / التنفيذ)";
+                notePlaceholder = "مثال: اكتب الاسم المطلوب، أو تفاصيل الصورة/التصميم...";
             }
 
             return {
-                hasVariants: sizes.length > 0 || colors.length > 0,
+                hasVariants: sizes.length > 0 || colors.length > 0 || allowNote,
                 sizes,
-                colors
+                colors,
+                allowNote,
+                noteLabel,
+                notePlaceholder
             };
         }
 
@@ -2648,6 +2680,7 @@
             const hintParts = [];
             if (cfg.sizes.length) hintParts.push("مقاسات");
             if (cfg.colors.length) hintParts.push("ألوان");
+            if (cfg.allowNote) hintParts.push("تفاصيل");
 
             return `
                 <article class="product-card">
@@ -2901,6 +2934,7 @@
             const summaryParts = [];
             if (chosenSize) summaryParts.push(`مقاس ${chosenSize}`);
             if (chosenColor) summaryParts.push(`لون ${chosenColor}`);
+            if (chosenNote) summaryParts.push("بتفاصيل إضافية");
             showCaramelToast(
                 summaryParts.length
                     ? `تمت إضافة (${summaryParts.join(" - ")}) إلى المشتريات`
@@ -2920,7 +2954,20 @@
             document.getElementById("variantProductImg").src = product.img;
             document.getElementById("variantProductTitle").textContent = product.title;
             document.getElementById("variantProductPrice").textContent = `${product.priceLabel || product.price} جنيه`;
-            document.getElementById("variantCustomNote").value = "";
+
+            const noteInput = document.getElementById("variantCustomNote");
+            const noteBlock = document.getElementById("variantNoteBlock");
+            const noteTitle = document.getElementById("variantNoteTitle");
+            if (noteInput) {
+                noteInput.value = "";
+                noteInput.placeholder = config.notePlaceholder || "اكتب التفاصيل أو الاسم أو الملاحظة المطلوبة...";
+            }
+            if (noteTitle) {
+                noteTitle.textContent = config.noteLabel || "ملاحظة إضافية";
+            }
+            if (noteBlock) {
+                noteBlock.style.display = config.allowNote ? "block" : "none";
+            }
 
             const sizesBlock = document.getElementById("variantSizesBlock");
             const sizesGrid = document.getElementById("variantSizesGrid");
@@ -3062,7 +3109,7 @@
             const parts = [];
             if (item.size) parts.push(`المقاس: ${item.size}`);
             if (item.color) parts.push(`اللون: ${item.color}`);
-            if (item.note) parts.push(`ملاحظة: ${item.note}`);
+            if (item.note) parts.push(`تفاصيل/ملاحظة: ${item.note}`);
             return parts.join(" | ");
         }
 
@@ -3382,16 +3429,19 @@
             return Notification.permission;
         }
 
-        function isNotificationsCurrentlyEnabled() {
-            const perm = getBrowserNotificationPermission();
-            if (perm !== "granted") return false;
-
+        function isOneSignalOptedIn() {
             const osInstance = oneSignalInstance || window.OneSignal;
             if (osInstance && osInstance.User && osInstance.User.PushSubscription) {
                 if (typeof osInstance.User.PushSubscription.optedIn === "boolean") {
                     return osInstance.User.PushSubscription.optedIn;
                 }
             }
+            return null;
+        }
+
+        function isNotificationsCurrentlyEnabled() {
+            const perm = getBrowserNotificationPermission();
+            if (perm !== "granted") return false;
             return true;
         }
 
@@ -3458,12 +3508,14 @@
 
         async function tryOptInOneSignalNonBlocking(osInstance) {
             const target = osInstance || oneSignalInstance || window.OneSignal;
-            if (!target || !target.User || !target.User.PushSubscription) return;
+            if (!target || !target.User || !target.User.PushSubscription) return false;
             if (typeof target.User.PushSubscription.optIn === "function") {
                 try {
                     await withTimeout(Promise.resolve(target.User.PushSubscription.optIn()), 3500, null);
+                    return Boolean(target.User.PushSubscription.optedIn);
                 } catch (e) {}
             }
+            return false;
         }
 
         async function askNativePermissionFirst(osInstance) {
@@ -3491,9 +3543,9 @@
                 return { ok: false, reason: perm };
             }
 
-            tryOptInOneSignalNonBlocking(osInstance);
+            const osOptedIn = await tryOptInOneSignalNonBlocking(osInstance);
 
-            return { ok: true, reason: "granted" };
+            return { ok: true, reason: "granted", osOptedIn };
         }
 
         async function handleEnableNotificationsClick() {
@@ -3518,7 +3570,11 @@
 
                 if (res.ok && getBrowserNotificationPermission() === "granted") {
                     syncNotifyButtonVisibility(true);
-                    showCaramelToast("تم تشغيل الإشعارات بنجاح!");
+                    if (res.osOptedIn) {
+                        showCaramelToast("تم تشغيل الإشعارات والاشتراك في OneSignal!");
+                    } else {
+                        showCaramelToast("تم تشغيل الإشعارات في المتصفح (تأكد من رفع OneSignalSDKWorker.js).");
+                    }
                 } else if (res.reason === "denied" || getBrowserNotificationPermission() === "denied") {
                     syncNotifyButtonVisibility(false);
                     showCaramelToast("الإشعارات محظورة من المتصفح، افتح أذونات الموقع وفعّلها.");
@@ -3535,6 +3591,7 @@
 
         window.promptCaramelPushAutomatically = async function (forceAfterInstall = false) {
             if (isNotificationsCurrentlyEnabled()) {
+                tryOptInOneSignalNonBlocking(oneSignalInstance);
                 syncNotifyButtonVisibility(false);
                 return;
             }
@@ -3546,12 +3603,6 @@
 
             const perm = getBrowserNotificationPermission();
             if (perm === "denied") {
-                syncNotifyButtonVisibility(false);
-                return;
-            }
-
-            if (perm === "granted") {
-                tryOptInOneSignalNonBlocking(oneSignalInstance);
                 syncNotifyButtonVisibility(false);
                 return;
             }
@@ -3592,6 +3643,9 @@
                 );
 
                 oneSignalInstance = OneSignal;
+                if (getBrowserNotificationPermission() === "granted" && isOneSignalOptedIn() === false) {
+                    tryOptInOneSignalNonBlocking(OneSignal);
+                }
                 syncNotifyButtonVisibility(false);
 
                 if (OneSignal.User && OneSignal.User.PushSubscription && typeof OneSignal.User.PushSubscription.addEventListener === "function") {
