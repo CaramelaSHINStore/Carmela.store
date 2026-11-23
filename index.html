@@ -1920,9 +1920,9 @@
         <div class="feed-sentinel" id="feedSentinel"></div>
     </main>
 
-    <!-- نافذة اختيار المقاس واللون والتفاصيل الاحترافية -->
+    <!-- نافذة اختيار المقاس واللون والتفاصيل -->
     <div class="variant-backdrop" id="variantBackdrop" onclick="closeVariantModal()">
-        <div class="variant-modal" onclick="event.stopPropagation()" role="dialog" aria-modal="true" aria-label="اختيار المقاس واللون والتفاصيل">
+        <div class="variant-modal" onclick="event.stopPropagation()" role="dialog" aria-modal="true" aria-label="اختيار المقاس والتفاصيل">
             <div class="variant-head">
                 <img id="variantProductImg" src="" alt="صورة المنتج">
                 <div class="variant-head-info">
@@ -1951,9 +1951,9 @@
 
                 <div id="variantNoteBlock">
                     <div class="variant-group-title">
-                        <span id="variantNoteTitle">ملاحظة إضافية</span>
+                        <span id="variantNoteTitle">إضافة تفاصيل / ملاحظة</span>
                     </div>
-                    <input type="text" class="variant-note-input" id="variantCustomNote" placeholder="اكتب التفاصيل أو الاسم أو الملاحظة المطلوبة...">
+                    <input type="text" class="variant-note-input" id="variantCustomNote" placeholder="اكتب أي تفاصيل أو لون أو اسم أو ملاحظة تحب تضيفها...">
                 </div>
             </div>
 
@@ -2027,16 +2027,6 @@
             { name: "موف", hex: "#7e22ce" },
             { name: "بني", hex: "#5c3a21" },
             { name: "لبني", hex: "#7dd3fc" }
-        ];
-
-        const DEFAULT_HOME_SCHOOL_COLORS = [
-            { name: "أبيض", hex: "#f8fafc" },
-            { name: "أسود", hex: "#1c1917" },
-            { name: "كراميل / بيج", hex: "#c89666" },
-            { name: "أزرق / لبني", hex: "#0284c7" },
-            { name: "وردي / بينك", hex: "#ec4899" },
-            { name: "أخضر", hex: "#16a34a" },
-            { name: "رمادي / استانلس", hex: "#94a3b8" }
         ];
 
         let deferredInstallPrompt = null;
@@ -2346,10 +2336,10 @@
             { id: "tafse-16", title: "عباية كحلي بأزرار أمامية وأكمام واسعة", desc: "لون كحلي كلاسيكي عملي بأزرار أمامية وأكمام واسعة تمنحك حرية حركة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", sizes: ["S", "M", "L", "XL", "XXL", "السن المحير"], colors: [{ name: "كحلي", hex: "#1e3a8a" }, { name: "أسود", hex: "#1c1917" }], img: "Tafse/compressed_1795094043346.webp" },
             { id: "tafse-17", title: "عباية قطيفة موف مطرزة مع طرحة", desc: "تطريز أنيق على قطيفة موف فخمة مع طرحة متناسقة للمناسبات والخروجات.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", sizes: ["S", "M", "L", "XL", "XXL", "السن المحير"], colors: [{ name: "موف", hex: "#7e22ce" }, { name: "أسود", hex: "#1c1917" }], img: "Tafse/compressed_1795094043197.webp" },
             { id: "tafse-18", title: "عباية سوداء قماش مضلع بأكمام واسعة", desc: "قماش مضلع عملي بلون أسود أنيق وأكمام واسعة تناسب اللبس اليومي.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", sizes: ["S", "M", "L", "XL", "XXL", "السن المحير"], colors: [{ name: "أسود", hex: "#1c1917" }, { name: "بني", hex: "#5c3a21" }], img: "Tafse/compressed_1795094042876.webp" },
-            { id: "tafse-19", title: "شنطة هاند ميد خرز", desc: "شنطة يدوية مشغولة بالخرز بلمسة مميزة تناسب الخروجات والهدايا.", price: 50, category: "tafse", colors: DEFAULT_CLOTHING_COLORS, img: "Tafse/compressed_1795180558469.webp" },
-            { id: "tafse-20", title: "مراية هاند ميد حسب الطلب (أسماء وورد)", desc: "تنفيذ خاص حسب الطلب بتصميم أسماء وورد لهدية شخصية مميزة.", price: 500, category: "tafse", colors: DEFAULT_CLOTHING_COLORS, img: "Tafse/compressed_1795180558100.webp" },
-            { id: "tafse-21", title: "مراية هاند ميد حسب الطلب (ذهبي وفراشات)", desc: "تصميم يدوي حسب الطلب بلمسات ذهبية وفراشات لديكور أنيق ولافت.", price: 500, category: "tafse", colors: DEFAULT_CLOTHING_COLORS, img: "Tafse/compressed_1795180558884.webp" },
-            { id: "tafse-22", title: "مراية هاند ميد حسب الطلب (قلوب وصور)", desc: "قطعة هاند ميد مخصصة حسب الطلب بقلوب وصور لتخليد الذكريات.", price: 500, category: "tafse", colors: DEFAULT_CLOTHING_COLORS, img: "Tafse/compressed_1795180558694.webp" },
+            { id: "tafse-19", title: "شنطة هاند ميد خرز", desc: "شنطة يدوية مشغولة بالخرز بلمسة مميزة تناسب الخروجات والهدايا.", price: 50, category: "tafse", img: "Tafse/compressed_1795180558469.webp" },
+            { id: "tafse-20", title: "مراية هاند ميد حسب الطلب (أسماء وورد)", desc: "تنفيذ خاص حسب الطلب بتصميم أسماء وورد لهدية شخصية مميزة.", price: 500, category: "tafse", img: "Tafse/compressed_1795180558100.webp" },
+            { id: "tafse-21", title: "مراية هاند ميد حسب الطلب (ذهبي وفراشات)", desc: "تصميم يدوي حسب الطلب بلمسات ذهبية وفراشات لديكور أنيق ولافت.", price: 500, category: "tafse", img: "Tafse/compressed_1795180558884.webp" },
+            { id: "tafse-22", title: "مراية هاند ميد حسب الطلب (قلوب وصور)", desc: "قطعة هاند ميد مخصصة حسب الطلب بقلوب وصور لتخليد الذكريات.", price: 500, category: "tafse", img: "Tafse/compressed_1795180558694.webp" },
 
             { id: "wmn-1", title: "أندر نسائي مشجر دباغ / كاندي", desc: "خامة ناعمة ومريحة بتصميم مشجر أنيق للاستخدام اليومي.", price: 65, category: "women", sizes: DEFAULT_CLOTHING_SIZES, colors: DEFAULT_CLOTHING_COLORS, img: "Clswmn/compressed_1795114616012.webp" },
             { id: "wmn-2", title: "بدي دباغ ألوان", desc: "بدي دباغ بألوان متنوعة متاحة، مريح وعملي للاستخدام اليومي.", price: 130, category: "women", sizes: DEFAULT_CLOTHING_SIZES, colors: DEFAULT_CLOTHING_COLORS, img: "Clswmn/compressed_1795214411055.webp" },
@@ -2361,11 +2351,11 @@
             { id: "htm-4", title: "صابونة العناية والنظافة النسائية Bio Soft", desc: "صابونة مخصصة للعناية والنظافة النسائية اليومية بانتعاش ولطف على البشرة.", price: 75, category: "women", img: "Htm/compressed_1795218232714.webp" },
             { id: "htm-5", title: "مزيل مكياج جارنييه Micellar Cleansing Water", desc: "ماء ميسيلار منظف يزيل المكياج ويلطف وينظف الوجه والعينين والشفاه.", price: 110, category: "perfume", img: "Htm/compressed_1795220884067.webp" },
             { id: "htm-6", title: "حمام كريم بالمايونيز وزبدة الشيا أوميجا 3", desc: "حمام كريم للشعر بالمايونيز وزبدة الشيا وأوميجا 3 يرطب وينعم ويمنح لمعاناً.", price: 140, category: "perfume", img: "Htm/compressed_1795220883880.webp" },
-            { id: "htm-7", title: "صبغة شعر خالية من الأمونيا Godrej Expert", desc: "صبغة كريمية خالية من الأمونيا تلون الشعر في 30 دقيقة (بني داكن وأسود).", price: 65, category: "perfume", colors: [{ name: "أسود", hex: "#1c1917" }, { name: "بني داكن", hex: "#3b2314" }], img: "Htm/compressed_1795220884252.webp" },
+            { id: "htm-7", title: "صبغة شعر خالية من الأمونيا Godrej Expert", desc: "صبغة كريمية خالية من الأمونيا تلون الشعر في 30 دقيقة (بني داكن وأسود).", price: 65, category: "perfume", img: "Htm/compressed_1795220884252.webp" },
             { id: "htm-8", title: "كريم مرطب لليدين Care Body & Soul", desc: "كريم لليدين بفيتامين E مناسب لجميع أنواع البشرة (50 مل) بروائح متعددة.", price: 80, category: "perfume", img: "Htm/compressed_1795220884341.webp" },
             { id: "htm-9", title: "اسبلش جسم AVUVA Body Splash", desc: "اسبلش جسم منعش وعطري بعدة روائح مميزة للاستخدام اليومي.", price: 130, category: "perfume", img: "Htm/compressed_1795220963492.webp" },
 
-            { id: "amn-1", title: "محفظة جلد بالأسماء حسب الطلب", desc: "هدية عملية وشخصية باسمك أو اسم من تحب بتقفيل مرتب يليق بكل يوم.", price: 200, category: "gifts", colors: [{ name: "أسود", hex: "#1c1917" }, { name: "بني", hex: "#5c3a21" }, { name: "كراميل", hex: "#c89666" }], img: "Amnh/IMG-20261117-WA0007.jpg" },
+            { id: "amn-1", title: "محفظة جلد بالأسماء حسب الطلب", desc: "هدية عملية وشخصية باسمك أو اسم من تحب بتقفيل مرتب يليق بكل يوم.", price: 200, category: "gifts", img: "Amnh/IMG-20261117-WA0007.jpg" },
             { id: "amn-2", title: "مرايا سحرية بصورتك", desc: "مفاجأة بتفاصيل تخطف القلب.. تظهر صورتك بوضوح أول ما تنور المرايا.", price: 300, category: "gifts", img: "Amnh/IMG-20261117-WA0006.jpg" },
             { id: "amn-3", title: "ساعة حائط بصورتك 30×40", desc: "حوّل أحلى ذكرى لقطعة ديكور تنور الحائط وتفضل قدام عينك كل يوم.", price: 280, category: "gifts", img: "Amnh/IMG-20261117-WA0019.jpg" },
             { id: "amn-4", title: "مج أبيض مطبوع بصورتك", desc: "ابدأ يومك بمشروبك المفضل وصورتك المطبوعة بوضوح على مج سيراميك أنيق.", price: 160, category: "gifts", img: "Amnh/IMG-20261117-WA0003.jpg" },
@@ -2390,23 +2380,19 @@
             { id: "brf-12", title: "مسمم MUSAMAM", desc: "فخامة ذهبية بتفاصيل ثعبان مميزة تدي حضور قوي وهدية تشرّف.", price: 375, category: "perfume", img: "Prfa/compressed_1794950096662.webp" },
             { id: "brf-13", title: "قصة GISSAH", desc: "لمسة أنثوية ناعمة بلون وردي حالم وعلبة متناسقة مثالية للذوق الراقي.", price: 375, category: "perfume", img: "Prfa/compressed_1794950096748.webp" },
             { id: "brf-14", title: "يارا YARA", desc: "أيقونة الجاذبية والنعومة بلونها الوردي المميز وعلبتها الفخمة.", price: 375, category: "perfume", img: "Prfa/compressed_1794950096833.webp" },
-            { id: "brf-15", title: "LIVELY FOR MEN PARIS", desc: "حضور رجالي أنيق بزجاجة زرقاء مخططة تكمّل إطلالتك في كل خروجة.", price: 175, category: "perfume", img: "Prfa/compressed_1794950472010.webp" }
+            { id: "brf-15", title: "LIVELY FOR MEN PARIS", desc: "حضور رجالي أنيق بزجاجة زرقاء مخططة تكمّل إطلالتك في كل خروجة.", price: 175, category: "perfume", img: "Prfa/compressed_17950472010.webp" }
         ];
 
         function getProductVariantsConfig(product) {
-            if (!product) return { hasVariants: false, sizes: [], colors: [], allowNote: false, noteLabel: "ملاحظة إضافية", notePlaceholder: "" };
+            if (!product) return { hasVariants: false, sizes: [], colors: [], allowNote: false, noteLabel: "إضافة تفاصيل / ملاحظة", notePlaceholder: "" };
 
             const combinedText = `${product.title || ""} ${product.desc || ""}`;
             const isClothingTitle = /(عباية|فستان|بدي|أندر|اندر|تيشيرت|تي شيرت|بنطلون|بلوزة|قميص|بشت|موديل)/i.test(product.title || "");
             const isClothingCat = product.category === "women" || product.category === "men" || product.category === "kids";
-            const isHomeOrSchool = product.category === "home" || product.category === "school";
-            const isGiftOrCustom =
-                product.category === "gifts" ||
-                Boolean(product.allowNote) ||
-                /(حسب الطلب|بصورتك|بالأسماء|بالاسماء|هدية|مراية|محفظة|مج|تابلوه|برواز|جراب|عرسان)/i.test(combinedText);
+            const hasExplicitColors = Array.isArray(product.colors) && product.colors.length > 0;
 
             let sizes = Array.isArray(product.sizes) ? [...product.sizes] : [];
-            let colors = Array.isArray(product.colors)
+            let colors = hasExplicitColors
                 ? product.colors.map(c => (typeof c === "string" ? { name: c, hex: "#c89666" } : c))
                 : [];
 
@@ -2414,30 +2400,29 @@
                 sizes = [...DEFAULT_CLOTHING_SIZES];
             }
 
-            if (colors.length === 0) {
-                if (isClothingTitle || isClothingCat) {
-                    colors = [...DEFAULT_CLOTHING_COLORS];
-                } else if (isHomeOrSchool) {
-                    colors = [...DEFAULT_HOME_SCHOOL_COLORS];
-                }
+            if (colors.length === 0 && (isClothingTitle || isClothingCat)) {
+                colors = [...DEFAULT_CLOTHING_COLORS];
             }
 
-            const allowNote = Boolean(product.allowNote) || isGiftOrCustom;
-            let noteLabel = product.noteLabel || "ملاحظة إضافية";
-            let notePlaceholder = product.notePlaceholder || "اكتب التفاصيل المطلوبة أو الاسم أو الملاحظة...";
-
-            if (!product.noteLabel && isGiftOrCustom) {
-                noteLabel = "تفاصيل إضافية (الاسم / الصورة / التنفيذ)";
-                notePlaceholder = "مثال: اكتب الاسم المطلوب، أو تفاصيل الصورة/التصميم...";
-            }
+            const allowNote =
+                product.allowNote !== false &&
+                (
+                    Boolean(product.allowNote) ||
+                    sizes.length > 0 ||
+                    colors.length > 0 ||
+                    product.category === "home" ||
+                    product.category === "school" ||
+                    product.category === "gifts" ||
+                    /(حسب الطلب|بصورتك|بالأسماء|بالاسماء|هدية|مراية|محفظة|مج|تابلوه|برواز|جراب|عرسان)/i.test(combinedText)
+                );
 
             return {
                 hasVariants: sizes.length > 0 || colors.length > 0 || allowNote,
                 sizes,
                 colors,
                 allowNote,
-                noteLabel,
-                notePlaceholder
+                noteLabel: product.noteLabel || "إضافة تفاصيل / ملاحظة",
+                notePlaceholder: product.notePlaceholder || "اكتب أي تفاصيل أو لون أو اسم أو ملاحظة تحب تضيفها..."
             };
         }
 
@@ -2680,7 +2665,7 @@
             const hintParts = [];
             if (cfg.sizes.length) hintParts.push("مقاسات");
             if (cfg.colors.length) hintParts.push("ألوان");
-            if (cfg.allowNote) hintParts.push("تفاصيل");
+            if (cfg.allowNote) hintParts.push("إضافة تفاصيل");
 
             return `
                 <article class="product-card">
@@ -2960,10 +2945,10 @@
             const noteTitle = document.getElementById("variantNoteTitle");
             if (noteInput) {
                 noteInput.value = "";
-                noteInput.placeholder = config.notePlaceholder || "اكتب التفاصيل أو الاسم أو الملاحظة المطلوبة...";
+                noteInput.placeholder = config.notePlaceholder || "اكتب أي تفاصيل أو لون أو اسم أو ملاحظة تحب تضيفها...";
             }
             if (noteTitle) {
-                noteTitle.textContent = config.noteLabel || "ملاحظة إضافية";
+                noteTitle.textContent = config.noteLabel || "إضافة تفاصيل / ملاحظة";
             }
             if (noteBlock) {
                 noteBlock.style.display = config.allowNote ? "block" : "none";
@@ -3429,6 +3414,16 @@
             return Notification.permission;
         }
 
+        function getOneSignalSubscriptionId() {
+            const osInstance = oneSignalInstance || window.OneSignal;
+            try {
+                if (osInstance && osInstance.User && osInstance.User.PushSubscription) {
+                    return osInstance.User.PushSubscription.id || null;
+                }
+            } catch (e) {}
+            return null;
+        }
+
         function isOneSignalOptedIn() {
             const osInstance = oneSignalInstance || window.OneSignal;
             if (osInstance && osInstance.User && osInstance.User.PushSubscription) {
@@ -3440,9 +3435,7 @@
         }
 
         function isNotificationsCurrentlyEnabled() {
-            const perm = getBrowserNotificationPermission();
-            if (perm !== "granted") return false;
-            return true;
+            return getBrowserNotificationPermission() === "granted";
         }
 
         function syncNotifyButtonVisibility(animateSuccess = false) {
@@ -3508,14 +3501,16 @@
 
         async function tryOptInOneSignalNonBlocking(osInstance) {
             const target = osInstance || oneSignalInstance || window.OneSignal;
-            if (!target || !target.User || !target.User.PushSubscription) return false;
-            if (typeof target.User.PushSubscription.optIn === "function") {
-                try {
-                    await withTimeout(Promise.resolve(target.User.PushSubscription.optIn()), 3500, null);
-                    return Boolean(target.User.PushSubscription.optedIn);
-                } catch (e) {}
-            }
-            return false;
+            if (!target || !target.User || !target.User.PushSubscription) return { optedIn: false, id: null };
+            try {
+                if (target.User.PushSubscription.optedIn === false && typeof target.User.PushSubscription.optIn === "function") {
+                    await withTimeout(Promise.resolve(target.User.PushSubscription.optIn()), 4000, null);
+                }
+            } catch (e) {}
+            return {
+                optedIn: Boolean(target.User.PushSubscription.optedIn),
+                id: target.User.PushSubscription.id || null
+            };
         }
 
         async function askNativePermissionFirst(osInstance) {
@@ -3543,9 +3538,14 @@
                 return { ok: false, reason: perm };
             }
 
-            const osOptedIn = await tryOptInOneSignalNonBlocking(osInstance);
+            const osStatus = await tryOptInOneSignalNonBlocking(osInstance);
 
-            return { ok: true, reason: "granted", osOptedIn };
+            return {
+                ok: true,
+                reason: "granted",
+                osOptedIn: osStatus.optedIn,
+                subId: osStatus.id
+            };
         }
 
         async function handleEnableNotificationsClick() {
@@ -3570,10 +3570,10 @@
 
                 if (res.ok && getBrowserNotificationPermission() === "granted") {
                     syncNotifyButtonVisibility(true);
-                    if (res.osOptedIn) {
-                        showCaramelToast("تم تشغيل الإشعارات والاشتراك في OneSignal!");
+                    if (res.osOptedIn && res.subId) {
+                        showCaramelToast("تم تفعيل إشعارات OneSignal بنجاح!");
                     } else {
-                        showCaramelToast("تم تشغيل الإشعارات في المتصفح (تأكد من رفع OneSignalSDKWorker.js).");
+                        showCaramelToast("تم الإذن في المتصفح — راجع OneSignalSDKWorker.js وإعدادات OneSignal.");
                     }
                 } else if (res.reason === "denied" || getBrowserNotificationPermission() === "denied") {
                     syncNotifyButtonVisibility(false);
@@ -3643,7 +3643,7 @@
                 );
 
                 oneSignalInstance = OneSignal;
-                if (getBrowserNotificationPermission() === "granted" && isOneSignalOptedIn() === false) {
+                if (getBrowserNotificationPermission() === "granted") {
                     tryOptInOneSignalNonBlocking(OneSignal);
                 }
                 syncNotifyButtonVisibility(false);
