@@ -7,16 +7,16 @@
     <title>متجر كارامل - Caramel Store</title>
 
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/Caramelstoresuez/Carmelastore/refs/heads/main/compressed_1795355576678.jpeg">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg">
 
     <meta property="og:site_name" content="متجر كارامل - Caramel Store">
     <meta property="og:locale" content="ar_AR">
     <meta property="og:title" content="متجر كارامل - Caramel Store">
     <meta property="og:description" content="كل حاجة تحتاجها عند كارامل بأرخص الأسعار والتوصيل لباب المنزل في أسرع وقت، وحتى لو المنتج مش موجود بنجيبهولك.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://caramelstoresuez.github.io/Carmelastore/">
-    <meta property="og:image" content="https://raw.githubusercontent.com/Caramelstoresuez/Carmelastore/refs/heads/main/compressed_1795355576678.jpeg">
-    <meta property="og:image:secure_url" content="https://raw.githubusercontent.com/Caramelstoresuez/Carmelastore/refs/heads/main/compressed_1795355576678.jpeg">
+    <meta property="og:url" content="https://caramelashinstore.github.io/Carmela.store/">
+    <meta property="og:image" content="https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg">
+    <meta property="og:image:secure_url" content="https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg">
     <meta property="og:image:type" content="image/jpeg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -24,8 +24,8 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="متجر كارامل - Caramel Store">
     <meta name="twitter:description" content="كل حاجة تحتاجها عند كارامل بأرخص الأسعار والتوصيل لباب المنزل في أسرع وقت، وحتى لو المنتج مش موجود بنجيبهولك.">
-    <meta name="twitter:image" content="https://raw.githubusercontent.com/Caramelstoresuez/Carmelastore/refs/heads/main/compressed_1795355576678.jpeg">
-    <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/Caramelstoresuez/Carmelastore/refs/heads/main/compressed_1795355576678.jpeg">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg">
+    <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -513,7 +513,7 @@
         .hero-banner {
             background: linear-gradient(130deg, var(--espresso) 0%, var(--espresso-soft) 60%, var(--caramel-dark) 100%);
             color: #ffffff;
-            padding: 20px 16px;
+            padding: 22px 18px;
             border-radius: 22px;
             border: 1.5px solid rgba(200, 150, 102, 0.42);
             box-shadow: 0 14px 32px -12px rgba(24, 21, 18, 0.26), 0 0 24px -6px var(--glow);
@@ -536,13 +536,13 @@
         }
 
         .hero-banner h1 {
-            font-size: 1.44rem;
+            font-size: 1.48rem;
             font-weight: 900;
             line-height: 1.3;
         }
 
         .hero-banner p {
-            font-size: 0.88rem;
+            font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.92);
             max-width: 780px;
             font-weight: 600;
@@ -555,103 +555,38 @@
 
         .hero-actions {
             display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-            align-items: center;
-            gap: 8px;
-            margin-top: 2px;
-            width: 100%;
-            overflow-x: auto;
-            scrollbar-width: none;
-        }
-
-        .hero-actions::-webkit-scrollbar {
-            display: none;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 4px;
         }
 
         .hero-btn-primary {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
-            gap: 6px;
+            gap: 7px;
             background: linear-gradient(135deg, var(--caramel-light), var(--caramel));
             color: var(--espresso);
-            padding: 8px 13px;
+            padding: 8px 16px;
             border-radius: 12px;
-            font-size: 0.78rem;
+            font-size: 0.82rem;
             font-weight: 900;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-
-        .hero-notify-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            background: rgba(255, 255, 255, 0.12);
-            color: var(--caramel-light);
-            border: 1.5px solid rgba(229, 190, 150, 0.7);
-            padding: 7px 12px;
-            border-radius: 12px;
-            font-size: 0.78rem;
-            font-weight: 900;
-            white-space: nowrap;
-            flex-shrink: 0;
-            transition: transform 0.22s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease, opacity 0.35s ease;
-        }
-
-        .hero-notify-btn:hover {
-            transform: translateY(-1px);
-            background: rgba(200, 150, 102, 0.24);
-        }
-
-        .hero-notify-btn.enabled-success {
-            background: linear-gradient(135deg, #22c55e, #15803d);
-            color: #ffffff;
-            border-color: #86efac;
-            box-shadow: 0 6px 18px rgba(21, 128, 61, 0.45);
-            transform: scale(1.03);
-        }
-
-        .hero-notify-btn.hiding {
-            opacity: 0;
-            transform: scale(0.92);
-            pointer-events: none;
-        }
-
-        .hero-notify-btn.hidden-permanently {
-            display: none;
         }
 
         .hero-install-btn {
             display: none;
             align-items: center;
-            justify-content: center;
-            gap: 6px;
+            gap: 7px;
             background: rgba(255, 255, 255, 0.12);
             color: #ffffff;
             border: 1.5px solid var(--caramel-light);
-            padding: 7px 12px;
+            padding: 8px 16px;
             border-radius: 12px;
-            font-size: 0.78rem;
+            font-size: 0.82rem;
             font-weight: 900;
-            white-space: nowrap;
-            flex-shrink: 0;
         }
 
         .hero-install-btn.visible {
             display: inline-flex;
-        }
-
-        @media (max-width: 390px) {
-            .hero-btn-primary,
-            .hero-notify-btn,
-            .hero-install-btn {
-                padding: 7px 10px;
-                font-size: 0.72rem;
-                gap: 4px;
-            }
         }
 
         .trust-strip {
@@ -1003,20 +938,6 @@
             border-radius: 999px;
         }
 
-        .variant-pill-hint {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            margin-top: 5px;
-            padding: 2px 8px;
-            border-radius: 999px;
-            background: #f6efe6;
-            border: 1px solid var(--border-gold);
-            color: var(--caramel-dark);
-            font-size: 0.66rem;
-            font-weight: 800;
-        }
-
         .product-details {
             padding: 12px;
             display: flex;
@@ -1167,243 +1088,86 @@
             font-weight: 700;
         }
 
-        .variant-backdrop {
-            display: none;
+        .floating-notification-pill {
             position: fixed;
-            inset: 0;
-            background: rgba(16, 13, 10, 0.68);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            z-index: 260;
-            align-items: flex-end;
-            justify-content: center;
-            padding: 12px;
-        }
-
-        @media (min-width: 640px) {
-            .variant-backdrop {
-                align-items: center;
-                padding: 20px;
-            }
-        }
-
-        .variant-backdrop.open {
-            display: flex;
-        }
-
-        .variant-modal {
-            width: 100%;
-            max-width: 460px;
-            max-height: 90vh;
-            overflow-y: auto;
-            background: #ffffff;
-            border-radius: 24px;
-            border: 1.5px solid var(--caramel);
-            box-shadow: 0 24px 50px rgba(16, 13, 10, 0.36);
-            display: flex;
-            flex-direction: column;
-            animation: variantSheetIn 0.26s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        @keyframes variantSheetIn {
-            0% {
-                opacity: 0;
-                transform: translateY(24px) scale(0.97);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        .variant-head {
-            background: linear-gradient(135deg, var(--espresso), var(--espresso-soft));
-            color: #ffffff;
-            padding: 14px 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border-bottom: 1px solid rgba(200, 150, 102, 0.32);
-        }
-
-        .variant-head img {
-            width: 58px;
-            height: 58px;
-            border-radius: 14px;
-            object-fit: cover;
-            border: 1.5px solid var(--caramel-light);
-            flex-shrink: 0;
-        }
-
-        .variant-head-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .variant-head-title {
-            font-size: 0.92rem;
-            font-weight: 900;
-            color: #ffffff;
-            line-height: 1.3;
-        }
-
-        .variant-head-price {
-            font-size: 0.96rem;
-            font-weight: 900;
-            color: var(--caramel-light);
-            margin-top: 3px;
-        }
-
-        .variant-close-btn {
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.12);
-            color: #ffffff;
-            font-size: 1.35rem;
-            display: inline-flex;
+            left: 16px;
+            bottom: 86px;
+            z-index: 149;
+            display: none;
             align-items: center;
             justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .variant-body {
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            background: #faf7f2;
-        }
-
-        .variant-group-title {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 0.84rem;
-            font-weight: 900;
-            color: var(--espresso);
-            margin-bottom: 8px;
-        }
-
-        .variant-selected-pill {
-            font-size: 0.72rem;
-            font-weight: 800;
-            color: var(--caramel-dark);
-            background: #f6efe6;
-            border: 1px solid var(--border-gold);
-            padding: 2px 9px;
+            gap: 8px;
+            max-width: min(270px, calc(100vw - 32px));
+            padding: 11px 15px;
+            border: 1px solid rgba(229, 190, 150, 0.8);
             border-radius: 999px;
-        }
-
-        .sizes-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .size-option-btn {
-            min-width: 54px;
-            padding: 8px 12px;
-            border-radius: 12px;
-            background: #ffffff;
-            color: var(--espresso);
-            border: 1.5px solid rgba(28, 23, 20, 0.14);
-            font-size: 0.82rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            transition: all 0.18s ease;
-        }
-
-        .size-option-btn:hover {
-            border-color: var(--caramel);
-            transform: translateY(-1px);
-        }
-
-        .size-option-btn.active {
-            background: linear-gradient(135deg, var(--espresso), var(--espresso-soft));
-            color: var(--caramel-light);
-            border-color: var(--caramel);
-            box-shadow: 0 6px 14px rgba(24, 21, 18, 0.18);
-        }
-
-        .colors-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .color-option-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 7px 12px;
-            border-radius: 999px;
-            background: #ffffff;
-            color: var(--text-main);
-            border: 1.5px solid rgba(28, 23, 20, 0.14);
-            font-size: 0.78rem;
-            font-weight: 800;
-            transition: all 0.18s ease;
-        }
-
-        .color-option-btn:hover {
-            border-color: var(--caramel);
-            transform: translateY(-1px);
-        }
-
-        .color-option-btn.active {
-            background: #fff7ed;
-            color: var(--espresso);
-            border-color: var(--caramel-dark);
-            box-shadow: 0 0 0 2px rgba(200, 150, 102, 0.25);
-        }
-
-        .color-swatch-dot {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            border: 1.5px solid rgba(0, 0, 0, 0.22);
-            flex-shrink: 0;
-        }
-
-        .variant-note-input {
-            width: 100%;
-            border: 1.5px solid var(--border-gold);
-            border-radius: 12px;
-            padding: 9px 12px;
-            font-family: 'Cairo', sans-serif;
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: var(--text-main);
-            background: #ffffff;
-            outline: none;
-        }
-
-        .variant-note-input:focus {
-            border-color: var(--caramel-dark);
-        }
-
-        .variant-footer {
-            padding: 12px 16px 16px;
-            background: #ffffff;
-            border-top: 1px solid rgba(28, 23, 20, 0.08);
-            display: flex;
-            gap: 8px;
-        }
-
-        .variant-confirm-btn {
-            flex: 1;
-            padding: 11px 14px;
-            border-radius: 13px;
             background: linear-gradient(135deg, var(--caramel-light), var(--caramel));
             color: var(--espresso);
-            font-size: 0.88rem;
+            box-shadow: 0 8px 22px rgba(24, 21, 18, 0.24);
+            font-size: 0.82rem;
             font-weight: 900;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            box-shadow: 0 8px 18px rgba(200, 150, 102, 0.35);
+            line-height: 1.35;
+            transition: width 0.28s ease, height 0.28s ease, min-width 0.28s ease, padding 0.28s ease, border-radius 0.28s ease, opacity 0.35s ease, transform 0.35s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+        }
+
+        .floating-notification-pill.visible {
+            display: inline-flex;
+        }
+
+        .floating-notification-pill.circle-check-only {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            padding: 0;
+            border-radius: 50%;
+            gap: 0;
+            background: linear-gradient(135deg, #22c55e, #15803d);
+            color: #ffffff;
+            border-color: #86efac;
+            box-shadow: 0 10px 24px rgba(21, 128, 61, 0.42);
+            transform: scale(1.06);
+        }
+
+        .floating-notification-pill.circle-check-only #caramelPushBtnText {
+            display: none;
+        }
+
+        .floating-notification-pill.circle-check-only #caramelPushIcon svg {
+            width: 22px;
+            height: 22px;
+            stroke-width: 2.6;
+        }
+
+        .floating-notification-pill.hiding-smooth {
+            opacity: 0;
+            transform: translateY(10px) scale(0.88);
+            pointer-events: none;
+        }
+
+        .floating-notification-pill svg {
+            width: 19px;
+            height: 19px;
+            flex: 0 0 19px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2.2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        @media (max-width: 420px) {
+            .floating-notification-pill {
+                bottom: 82px;
+                left: 12px;
+                padding: 9px 12px;
+                font-size: 0.75rem;
+            }
+            .floating-notification-pill.circle-check-only {
+                width: 46px;
+                height: 46px;
+                min-width: 46px;
+                padding: 0;
+            }
         }
 
         .floating-cart-pill {
@@ -1468,7 +1232,7 @@
 
         .caramel-toast {
             position: fixed;
-            bottom: 90px;
+            bottom: 148px;
             left: 50%;
             transform: translateX(-50%) translateY(12px);
             z-index: 350;
@@ -1595,9 +1359,16 @@
             border-radius: 14px;
             padding: 10px;
             display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        .cart-item-top {
+            display: flex;
             align-items: center;
             gap: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
         }
 
         .cart-item img {
@@ -1622,19 +1393,49 @@
             text-overflow: ellipsis;
         }
 
-        .cart-item-meta {
-            font-size: 0.7rem;
-            font-weight: 800;
-            color: var(--caramel-dark);
-            margin-top: 2px;
-            line-height: 1.35;
-        }
-
         .cart-item-price {
             font-size: 0.82rem;
             font-weight: 800;
-            color: var(--espresso);
-            margin-top: 2px;
+            color: var(--caramel-dark);
+        }
+
+        .cart-item-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .cart-option-select,
+        .cart-item-note-input,
+        .cart-order-notes-textarea {
+            font-family: 'Cairo', sans-serif;
+            border: 1px solid var(--border-gold);
+            border-radius: 10px;
+            background: #faf7f2;
+            color: var(--text-main);
+            font-weight: 700;
+            outline: none;
+            transition: border-color 0.2s ease, background 0.2s ease;
+        }
+
+        .cart-option-select:focus,
+        .cart-item-note-input:focus,
+        .cart-order-notes-textarea:focus {
+            border-color: var(--caramel-dark);
+            background: #ffffff;
+        }
+
+        .cart-option-select {
+            font-size: 0.76rem;
+            padding: 5px 8px;
+            flex: 1;
+            min-width: 115px;
+        }
+
+        .cart-item-note-input {
+            width: 100%;
+            font-size: 0.75rem;
+            padding: 6px 9px;
         }
 
         .qty-controls {
@@ -1677,6 +1478,28 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
+        }
+
+        .cart-order-notes-box {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .cart-order-notes-label {
+            font-size: 0.76rem;
+            font-weight: 800;
+            color: var(--espresso-soft);
+        }
+
+        .cart-order-notes-textarea {
+            width: 100%;
+            min-height: 54px;
+            max-height: 110px;
+            resize: vertical;
+            padding: 7px 10px;
+            font-size: 0.78rem;
+            line-height: 1.4;
         }
 
         .cart-policy-note {
@@ -1775,7 +1598,7 @@
 
     <header>
         <button type="button" class="logo-pill" onclick="resetHomeFresh()" aria-label="العودة للصفحة الرئيسية">
-            <img src="https://raw.githubusercontent.com/Caramelstoresuez/Carmelastore/refs/heads/main/compressed_1795355576678.jpeg" alt="لوجو متجر كارامل" class="header-brand-img">
+            <img src="https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg" alt="لوجو متجر كارامل" class="header-brand-img">
             <div class="logo-text-group">
                 <div class="logo">CARAMEL</div>
                 <div class="logo-sub" id="headerBrandSub" data-en="CARAMEL STORE" data-ar="كارامل ستور">CARAMEL STORE</div>
@@ -1831,12 +1654,8 @@
                 <a href="https://wa.me/201055436305?text=%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%AA%D9%88%D8%A7%D8%B5%D9%84%20%D9%84%D9%84%D8%B7%D9%84%D8%A8%D8%A7%D8%AA%20%D8%A7%D9%84%D8%AE%D8%A7%D8%B5%D8%A9%20%28%D9%85%D9%86%D8%AA%D8%AC%20%D8%BA%D9%8A%D8%B1%20%D9%85%D9%88%D8%AC%D9%88%D8%AF%29" class="hero-btn-primary" target="_blank" rel="noopener noreferrer">
                     تواصل للطلبات الخاصة
                 </a>
-                <button type="button" class="hero-notify-btn" id="enableNotificationsBtn" onclick="handleEnableNotificationsClick()" aria-label="تشغيل الإشعارات">
-                    <span id="enableNotificationsIcon">🔔</span>
-                    <span id="enableNotificationsLabel">تشغيل الإشعارات</span>
-                </button>
                 <button type="button" class="hero-install-btn" id="heroInstallBtn" onclick="triggerInstallApp()">
-                    تثبيت التطبيق
+                    تثبيت المتجر كتطبيق
                 </button>
             </div>
         </section>
@@ -1920,51 +1739,6 @@
         <div class="feed-sentinel" id="feedSentinel"></div>
     </main>
 
-    <!-- نافذة اختيار المقاس واللون والتفاصيل -->
-    <div class="variant-backdrop" id="variantBackdrop" onclick="closeVariantModal()">
-        <div class="variant-modal" onclick="event.stopPropagation()" role="dialog" aria-modal="true" aria-label="اختيار المقاس والتفاصيل">
-            <div class="variant-head">
-                <img id="variantProductImg" src="" alt="صورة المنتج">
-                <div class="variant-head-info">
-                    <div class="variant-head-title" id="variantProductTitle"></div>
-                    <div class="variant-head-price" id="variantProductPrice"></div>
-                </div>
-                <button type="button" class="variant-close-btn" onclick="closeVariantModal()" aria-label="إغلاق">&times;</button>
-            </div>
-
-            <div class="variant-body">
-                <div id="variantSizesBlock">
-                    <div class="variant-group-title">
-                        <span>اختر المقاس</span>
-                        <span class="variant-selected-pill" id="selectedSizeBadge">—</span>
-                    </div>
-                    <div class="sizes-grid" id="variantSizesGrid"></div>
-                </div>
-
-                <div id="variantColorsBlock">
-                    <div class="variant-group-title">
-                        <span>اختر اللون</span>
-                        <span class="variant-selected-pill" id="selectedColorBadge">—</span>
-                    </div>
-                    <div class="colors-grid" id="variantColorsGrid"></div>
-                </div>
-
-                <div id="variantNoteBlock">
-                    <div class="variant-group-title">
-                        <span id="variantNoteTitle">إضافة تفاصيل / ملاحظة</span>
-                    </div>
-                    <input type="text" class="variant-note-input" id="variantCustomNote" placeholder="اكتب أي تفاصيل أو لون أو اسم أو ملاحظة تحب تضيفها...">
-                </div>
-            </div>
-
-            <div class="variant-footer">
-                <button type="button" class="variant-confirm-btn" id="variantConfirmBtn" onclick="confirmVariantAddToCart()">
-                    <span>+ تأكيد وإضافة للسلة</span>
-                </button>
-            </div>
-        </div>
-    </div>
-
     <button type="button" class="floating-cart-pill" id="floatingCartPill" onclick="openCart()" aria-label="سلة المشتريات">
         <svg viewBox="0 0 24 24" aria-hidden="true">
             <circle cx="9" cy="20" r="1.6"></circle>
@@ -1972,6 +1746,17 @@
             <path d="M2.5 3h2.3l2.4 11.4a1.8 1.8 0 0 0 1.8 1.4h9.2a1.8 1.8 0 0 0 1.7-1.3L21.5 7H6.1"></path>
         </svg>
         <span class="cart-badge-count" id="floatingCartCount"></span>
+    </button>
+
+    <button type="button" class="floating-notification-pill" id="caramelPushBtn"
+        onclick="enableCaramelPush()" aria-label="تفعيل إشعارات متجر كارامل">
+        <span id="caramelPushIcon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+                <path d="M10 21h4"></path>
+            </svg>
+        </span>
+        <span id="caramelPushBtnText">فعّل إشعارات العروض</span>
     </button>
 
     <div class="caramel-toast" id="caramelToast" role="status" aria-live="polite"></div>
@@ -1987,6 +1772,10 @@
         </div>
         <div class="cart-body" id="cartItemsContainer"></div>
         <div class="cart-footer">
+            <div class="cart-order-notes-box">
+                <label for="cartOrderNotesInput" class="cart-order-notes-label">تفاصيل أو ملاحظات إضافية للطلب (اختياري):</label>
+                <textarea id="cartOrderNotesInput" class="cart-order-notes-textarea" placeholder="اكتب أي تفاصيل تحب تضيفها أو تعدلها (لون معين، مقاس، عنوان التوصيل...)" oninput="saveCartOrderNotes(this.value)"></textarea>
+            </div>
             <div class="cart-policy-note">
                 الدفع عند الاستلام • استرجاع خلال أسبوع لو المنتج غير التفاصيل الموجودة.
             </div>
@@ -2012,25 +1801,65 @@
 
     <script>
         const WHATSAPP_NUMBER = "201055436305";
-        const STORE_URL = "https://caramelstoresuez.github.io/Carmelastore/";
+        const STORE_URL = "https://caramelashinstore.github.io/Carmela.store/";
         const CART_STORAGE_KEY = "caramel_store_cart_v1";
+        const CART_ORDER_NOTES_KEY = "caramel_store_order_notes_v1";
         const INTEREST_STORAGE_KEY = "caramel_smart_interest_v1";
         const BATCH_SIZE = 12;
 
-        const DEFAULT_CLOTHING_SIZES = ["S", "M", "L", "XL", "XXL"];
-        const DEFAULT_CLOTHING_COLORS = [
-            { name: "أسود", hex: "#1c1917" },
-            { name: "أبيض", hex: "#f8fafc" },
-            { name: "كحلي", hex: "#1e3a8a" },
-            { name: "نبيتي", hex: "#7f1d1d" },
-            { name: "بيج / كراميل", hex: "#c89666" },
-            { name: "موف", hex: "#7e22ce" },
-            { name: "بني", hex: "#5c3a21" },
-            { name: "لبني", hex: "#7dd3fc" }
-        ];
+        const PRODUCT_VARIANTS = {
+            "hm-22": { colors: ["بنفسجي", "باندا"] },
+            "wmn-2": { colors: ["أسود", "أبيض", "بيج", "كشمير", "نبيتي", "كحلي"] },
+            "hm-61": { colors: ["أسود", "بيج", "وردي", "أزرق"] },
+            "htm-7": { colors: ["أسود", "بني داكن"] },
+            "tafse-6": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
+            "tafse-7": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
+            "tafse-8": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
+            "tafse-9": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
+            "tafse-10": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
+            "tafse-11": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
+            "tafse-12": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
+            "tafse-13": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
+            "tafse-14": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
+            "tafse-15": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
+            "tafse-16": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
+            "tafse-17": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
+            "tafse-18": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] }
+        };
 
         let deferredInstallPrompt = null;
         let toastTimer = null;
+
+        function escapeHtmlAttr(str) {
+            return String(str || "")
+                .replace(/&/g, "&amp;")
+                .replace(/"/g, "&quot;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;");
+        }
+
+        function getProductVariantConfig(product) {
+            if (!product) return null;
+            if (PRODUCT_VARIANTS[product.id]) return PRODUCT_VARIANTS[product.id];
+            const config = {};
+            if (Array.isArray(product.colors) && product.colors.length) config.colors = product.colors;
+            if (Array.isArray(product.sizes) && product.sizes.length) config.sizes = product.sizes;
+            return (config.colors || config.sizes) ? config : null;
+        }
+
+        function loadCartOrderNotes() {
+            try {
+                return localStorage.getItem(CART_ORDER_NOTES_KEY) || "";
+            } catch (e) {
+                return "";
+            }
+        }
+
+        function saveCartOrderNotes(val) {
+            try {
+                localStorage.setItem(CART_ORDER_NOTES_KEY, val || "");
+            } catch (e) {}
+        }
 
         function showCaramelToast(message) {
             const toastEl = document.getElementById("caramelToast");
@@ -2040,7 +1869,7 @@
             clearTimeout(toastTimer);
             toastTimer = setTimeout(() => {
                 toastEl.classList.remove("show");
-            }, 3800);
+            }, 3500);
         }
 
         function setInstallButtonsVisible(show) {
@@ -2070,11 +1899,6 @@
             deferredInstallPrompt = null;
             setInstallButtonsVisible(false);
             showCaramelToast("تم تثبيت تطبيق متجر كارامل بنجاح!");
-            if (typeof window.promptCaramelPushAutomatically === "function") {
-                setTimeout(() => {
-                    window.promptCaramelPushAutomatically(true);
-                }, 600);
-            }
         });
 
         async function shareStoreApp() {
@@ -2323,27 +2147,27 @@
             { id: "tafse-3", title: "مكرمية فاخرة هاند ميد 1×2 متر مع عصايا", desc: "قطعة ديكور يدوية بارزة بمقاس 1×2 متر ومعاها قطعتين رباط وعصايا هدية.", price: 1700, category: "tafse", img: "Tafse/IMG-20261117-WA0024.jpg" },
             { id: "tafse-4", title: "مكرمية يدوية 1×2 متر مع رباط هدية", desc: "تصميم بوهيمي أنيق بمقاس 1×2 متر يضيف روحاً مميزة للريسبشن أو الغرف.", price: 900, category: "tafse", img: "Tafse/IMG-20261117-WA0023.jpg" },
             { id: "tafse-5", title: "مكرمية ديكور 1×2 متر مع عصايا ورباط", desc: "شغل هاند ميد متكامل بمقاس 1×2 متر ومعاها قطعتين رباط وعصايا هدية.", price: 1600, category: "tafse", img: "Tafse/IMG-20261117-WA0034.jpg" },
-            { id: "tafse-6", title: "موديل أسود بقصة كشكشة", desc: "إطلالة أنثوية راقية باللون الأسود مع تفاصيل كشكشة ناعمة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", sizes: ["S", "M", "L", "XL", "XXL", "السن المحير"], colors: [{ name: "أسود", hex: "#1c1917" }, { name: "كحلي", hex: "#1e3a8a" }, { name: "نبيتي", hex: "#7f1d1d" }], img: "Tafse/compressed_1795094044923.webp" },
-            { id: "tafse-7", title: "عباية بشت قطيفة موف مع طرحة", desc: "خامة قطيفة دافئة بلون موف جذاب مع طرحة متناسقة لإطلالة شتوية أنيقة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", sizes: ["S", "M", "L", "XL", "XXL", "السن المحير"], colors: [{ name: "موف", hex: "#7e22ce" }, { name: "موف غامق", hex: "#581c87" }, { name: "أسود", hex: "#1c1917" }], img: "Tafse/compressed_1795094044497.webp" },
-            { id: "tafse-8", title: "فستان لبني بكشكشة وأكمام", desc: "لون لبني هادئ مع كشكشة وأكمام تمنحك حضوراً رقيقاً ومميزاً.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", sizes: ["S", "M", "L", "XL", "XXL", "السن المحير"], colors: [{ name: "لبني", hex: "#7dd3fc" }, { name: "أبيض", hex: "#f8fafc" }, { name: "وردي فاتح", hex: "#fbcfe8" }], img: "Tafse/compressed_1795094044682.webp" },
-            { id: "tafse-9", title: "عباية قطيفة نبيتي ببروش", desc: "قطيفة نبيتي غنية مع لمسة بروش تضيف فخامة واضحة للإطلالة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", sizes: ["S", "M", "L", "XL", "XXL", "السن المحير"], colors: [{ name: "نبيتي", hex: "#7f1d1d" }, { name: "أسود", hex: "#1c1917" }, { name: "كحلي", hex: "#1e3a8a" }], img: "Tafse/compressed_1795094044361.webp" },
-            { id: "tafse-10", title: "عباية بني قماش بليسيه بأكمام واسعة", desc: "خامة بليسيه انسيابية باللون البني مع أكمام واسعة مريحة وأنيقة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", sizes: ["S", "M", "L", "XL", "XXL", "السن المحير"], colors: [{ name: "بني", hex: "#5c3a21" }, { name: "كراميل", hex: "#c89666" }, { name: "أسود", hex: "#1c1917" }], img: "Tafse/compressed_1795094044174.webp" },
-            { id: "tafse-11", title: "عباية سوداء قماش جاكار مموج", desc: "قماش جاكار مموج يمنح العباية السوداء ملمساً غنياً وحضوراً مميزاً.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", sizes: ["S", "M", "L", "XL", "XXL", "السن المحير"], colors: [{ name: "أسود", hex: "#1c1917" }, { name: "كحلي", hex: "#1e3a8a" }], img: "Tafse/compressed_1795094044287.webp" },
-            { id: "tafse-12", title: "فستان أصفر فاتح برباط جانبي", desc: "لون أصفر فاتح مشرق مع رباط جانبي يحدد القصة بأناقة ناعمة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", sizes: ["S", "M", "L", "XL", "XXL", "السن المحير"], colors: [{ name: "أصفر فاتح", hex: "#fef08a" }, { name: "أبيض", hex: "#f8fafc" }, { name: "لبني", hex: "#7dd3fc" }], img: "Tafse/compressed_1795094043951.webp" },
-            { id: "tafse-13", title: "عباية قطيفة موف غامق مع طرحة", desc: "درجة موف غامق أنيقة بخامة قطيفة مريحة ودافئة مع طرحتها.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", sizes: ["S", "M", "L", "XL", "XXL", "السن المحير"], colors: [{ name: "موف غامق", hex: "#581c87" }, { name: "موف", hex: "#7e22ce" }, { name: "أسود", hex: "#1c1917" }], img: "Tafse/compressed_1795094043669.webp" },
-            { id: "tafse-14", title: "عباية قطيفة بني برباط على الأكمام", desc: "قطيفة بنية ناعمة مزينة برباط على الأكمام لإطلالة متوازنة ومريحة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", sizes: ["S", "M", "L", "XL", "XXL", "السن المحير"], colors: [{ name: "بني", hex: "#5c3a21" }, { name: "نبيتي", hex: "#7f1d1d" }], img: "Tafse/compressed_1795094043790.webp" },
-            { id: "tafse-15", title: "فستان أزرق بليسيه برباط جانبي", desc: "قصة بليسيه جذابة باللون الأزرق مع رباط جانبي لإطلالة عصرية أنيقة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", sizes: ["S", "M", "L", "XL", "XXL", "السن المحير"], colors: [{ name: "أزرق", hex: "#2563eb" }, { name: "كحلي", hex: "#1e3a8a" }], img: "Tafse/compressed_1795094043481.webp" },
-            { id: "tafse-16", title: "عباية كحلي بأزرار أمامية وأكمام واسعة", desc: "لون كحلي كلاسيكي عملي بأزرار أمامية وأكمام واسعة تمنحك حرية حركة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", sizes: ["S", "M", "L", "XL", "XXL", "السن المحير"], colors: [{ name: "كحلي", hex: "#1e3a8a" }, { name: "أسود", hex: "#1c1917" }], img: "Tafse/compressed_1795094043346.webp" },
-            { id: "tafse-17", title: "عباية قطيفة موف مطرزة مع طرحة", desc: "تطريز أنيق على قطيفة موف فخمة مع طرحة متناسقة للمناسبات والخروجات.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", sizes: ["S", "M", "L", "XL", "XXL", "السن المحير"], colors: [{ name: "موف", hex: "#7e22ce" }, { name: "أسود", hex: "#1c1917" }], img: "Tafse/compressed_1795094043197.webp" },
-            { id: "tafse-18", title: "عباية سوداء قماش مضلع بأكمام واسعة", desc: "قماش مضلع عملي بلون أسود أنيق وأكمام واسعة تناسب اللبس اليومي.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", sizes: ["S", "M", "L", "XL", "XXL", "السن المحير"], colors: [{ name: "أسود", hex: "#1c1917" }, { name: "بني", hex: "#5c3a21" }], img: "Tafse/compressed_1795094042876.webp" },
+            { id: "tafse-6", title: "موديل أسود بقصة كشكشة", desc: "إطلالة أنثوية راقية باللون الأسود مع تفاصيل كشكشة ناعمة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094044923.webp" },
+            { id: "tafse-7", title: "عباية بشت قطيفة موف مع طرحة", desc: "خامة قطيفة دافئة بلون موف جذاب مع طرحة متناسقة لإطلالة شتوية أنيقة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094044497.webp" },
+            { id: "tafse-8", title: "فستان لبني بكشكشة وأكمام", desc: "لون لبني هادئ مع كشكشة وأكمام تمنحك حضوراً رقيقاً ومميزاً.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094044682.webp" },
+            { id: "tafse-9", title: "عباية قطيفة نبيتي ببروش", desc: "قطيفة نبيتي غنية مع لمسة بروش تضيف فخامة واضحة للإطلالة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094044361.webp" },
+            { id: "tafse-10", title: "عباية بني قماش بليسيه بأكمام واسعة", desc: "خامة بليسيه انسيابية باللون البني مع أكمام واسعة مريحة وأنيقة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094044174.webp" },
+            { id: "tafse-11", title: "عباية سوداء قماش جاكار مموج", desc: "قماش جاكار مموج يمنح العباية السوداء ملمساً غنياً وحضوراً مميزاً.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094044287.webp" },
+            { id: "tafse-12", title: "فستان أصفر فاتح برباط جانبي", desc: "لون أصفر فاتح مشرق مع رباط جانبي يحدد القصة بأناقة ناعمة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094043951.webp" },
+            { id: "tafse-13", title: "عباية قطيفة موف غامق مع طرحة", desc: "درجة موف غامق أنيقة بخامة قطيفة مريحة ودافئة مع طرحتها.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094043669.webp" },
+            { id: "tafse-14", title: "عباية قطيفة بني برباط على الأكمام", desc: "قطيفة بنية ناعمة مزينة برباط على الأكمام لإطلالة متوازنة ومريحة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094043790.webp" },
+            { id: "tafse-15", title: "فستان أزرق بليسيه برباط جانبي", desc: "قصة بليسيه جذابة باللون الأزرق مع رباط جانبي لإطلالة عصرية أنيقة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094043481.webp" },
+            { id: "tafse-16", title: "عباية كحلي بأزرار أمامية وأكمام واسعة", desc: "لون كحلي كلاسيكي عملي بأزرار أمامية وأكمام واسعة تمنحك حرية حركة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094043346.webp" },
+            { id: "tafse-17", title: "عباية قطيفة موف مطرزة مع طرحة", desc: "تطريز أنيق على قطيفة موف فخمة مع طرحة متناسقة للمناسبات والخروجات.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094043197.webp" },
+            { id: "tafse-18", title: "عباية سوداء قماش مضلع بأكمام واسعة", desc: "قماش مضلع عملي بلون أسود أنيق وأكمام واسعة تناسب اللبس اليومي.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094042876.webp" },
             { id: "tafse-19", title: "شنطة هاند ميد خرز", desc: "شنطة يدوية مشغولة بالخرز بلمسة مميزة تناسب الخروجات والهدايا.", price: 50, category: "tafse", img: "Tafse/compressed_1795180558469.webp" },
             { id: "tafse-20", title: "مراية هاند ميد حسب الطلب (أسماء وورد)", desc: "تنفيذ خاص حسب الطلب بتصميم أسماء وورد لهدية شخصية مميزة.", price: 500, category: "tafse", img: "Tafse/compressed_1795180558100.webp" },
             { id: "tafse-21", title: "مراية هاند ميد حسب الطلب (ذهبي وفراشات)", desc: "تصميم يدوي حسب الطلب بلمسات ذهبية وفراشات لديكور أنيق ولافت.", price: 500, category: "tafse", img: "Tafse/compressed_1795180558884.webp" },
             { id: "tafse-22", title: "مراية هاند ميد حسب الطلب (قلوب وصور)", desc: "قطعة هاند ميد مخصصة حسب الطلب بقلوب وصور لتخليد الذكريات.", price: 500, category: "tafse", img: "Tafse/compressed_1795180558694.webp" },
 
-            { id: "wmn-1", title: "أندر نسائي مشجر دباغ / كاندي", desc: "خامة ناعمة ومريحة بتصميم مشجر أنيق للاستخدام اليومي.", price: 65, category: "women", sizes: DEFAULT_CLOTHING_SIZES, colors: DEFAULT_CLOTHING_COLORS, img: "Clswmn/compressed_1795114616012.webp" },
-            { id: "wmn-2", title: "بدي دباغ ألوان", desc: "بدي دباغ بألوان متنوعة متاحة، مريح وعملي للاستخدام اليومي.", price: 130, category: "women", sizes: DEFAULT_CLOTHING_SIZES, colors: DEFAULT_CLOTHING_COLORS, img: "Clswmn/compressed_1795214411055.webp" },
-            { id: "wmn-3", title: "بدي عجينة سلسله تريكو", desc: "خامة تريكو عجينة ناعمة ومريحة، فري سايز يلبس لحد 85 ك.", price: 230, category: "women", sizes: ["Free Size (لحد 85 ك)", "M", "L", "XL"], colors: DEFAULT_CLOTHING_COLORS, img: "Clswmn/compressed_1795214411279.webp" },
+            { id: "wmn-1", title: "أندر نسائي مشجر دباغ / كاندي", desc: "خامة ناعمة ومريحة بتصميم مشجر أنيق للاستخدام اليومي.", price: 65, category: "women", img: "Clswmn/compressed_1795114616012.webp" },
+            { id: "wmn-2", title: "بدي دباغ ألوان", desc: "بدي دباغ بألوان متنوعة متاحة، مريح وعملي للاستخدام اليومي.", price: 130, category: "women", img: "Clswmn/compressed_1795214411055.webp" },
+            { id: "wmn-3", title: "بدي عجينة سلسله تريكو", desc: "خامة تريكو عجينة ناعمة ومريحة، فري سايز يلبس لحد 85 ك.", price: 230, category: "women", img: "Clswmn/compressed_1795214411279.webp" },
 
             { id: "htm-1", title: "صابونة عطرية Bio Soft GODDESS", desc: "صابونة معطرة برائحة فخمة تمنح البشرة ترطيباً ونعومة تدوم طوال اليوم.", price: 60, category: "perfume", img: "Htm/compressed_1795218232411.webp" },
             { id: "htm-2", title: "صابونة عطرية Bio Soft VANILLA FREAK", desc: "صابونة عطرية برائحة الفانيليا المسكرة للترطيب والنعومة وانتعاش يدوم.", price: 60, category: "perfume", img: "Htm/compressed_1795218232627.webp" },
@@ -2380,51 +2204,8 @@
             { id: "brf-12", title: "مسمم MUSAMAM", desc: "فخامة ذهبية بتفاصيل ثعبان مميزة تدي حضور قوي وهدية تشرّف.", price: 375, category: "perfume", img: "Prfa/compressed_1794950096662.webp" },
             { id: "brf-13", title: "قصة GISSAH", desc: "لمسة أنثوية ناعمة بلون وردي حالم وعلبة متناسقة مثالية للذوق الراقي.", price: 375, category: "perfume", img: "Prfa/compressed_1794950096748.webp" },
             { id: "brf-14", title: "يارا YARA", desc: "أيقونة الجاذبية والنعومة بلونها الوردي المميز وعلبتها الفخمة.", price: 375, category: "perfume", img: "Prfa/compressed_1794950096833.webp" },
-            { id: "brf-15", title: "LIVELY FOR MEN PARIS", desc: "حضور رجالي أنيق بزجاجة زرقاء مخططة تكمّل إطلالتك في كل خروجة.", price: 175, category: "perfume", img: "Prfa/compressed_17950472010.webp" }
+            { id: "brf-15", title: "LIVELY FOR MEN PARIS", desc: "حضور رجالي أنيق بزجاجة زرقاء مخططة تكمّل إطلالتك في كل خروجة.", price: 175, category: "perfume", img: "Prfa/compressed_1794950472010.webp" }
         ];
-
-        function getProductVariantsConfig(product) {
-            if (!product) return { hasVariants: false, sizes: [], colors: [], allowNote: false, noteLabel: "إضافة تفاصيل / ملاحظة", notePlaceholder: "" };
-
-            const combinedText = `${product.title || ""} ${product.desc || ""}`;
-            const isClothingTitle = /(عباية|فستان|بدي|أندر|اندر|تيشيرت|تي شيرت|بنطلون|بلوزة|قميص|بشت|موديل)/i.test(product.title || "");
-            const isClothingCat = product.category === "women" || product.category === "men" || product.category === "kids";
-            const hasExplicitColors = Array.isArray(product.colors) && product.colors.length > 0;
-
-            let sizes = Array.isArray(product.sizes) ? [...product.sizes] : [];
-            let colors = hasExplicitColors
-                ? product.colors.map(c => (typeof c === "string" ? { name: c, hex: "#c89666" } : c))
-                : [];
-
-            if (sizes.length === 0 && (isClothingTitle || isClothingCat)) {
-                sizes = [...DEFAULT_CLOTHING_SIZES];
-            }
-
-            if (colors.length === 0 && (isClothingTitle || isClothingCat)) {
-                colors = [...DEFAULT_CLOTHING_COLORS];
-            }
-
-            const allowNote =
-                product.allowNote !== false &&
-                (
-                    Boolean(product.allowNote) ||
-                    sizes.length > 0 ||
-                    colors.length > 0 ||
-                    product.category === "home" ||
-                    product.category === "school" ||
-                    product.category === "gifts" ||
-                    /(حسب الطلب|بصورتك|بالأسماء|بالاسماء|هدية|مراية|محفظة|مج|تابلوه|برواز|جراب|عرسان)/i.test(combinedText)
-                );
-
-            return {
-                hasVariants: sizes.length > 0 || colors.length > 0 || allowNote,
-                sizes,
-                colors,
-                allowNote,
-                noteLabel: product.noteLabel || "إضافة تفاصيل / ملاحظة",
-                notePlaceholder: product.notePlaceholder || "اكتب أي تفاصيل أو لون أو اسم أو ملاحظة تحب تضيفها..."
-            };
-        }
 
         let currentCategory = "all";
         let currentFeedItems = [];
@@ -2432,12 +2213,6 @@
         let feedCycle = 0;
         let cart = [];
         let activeOverlayName = null;
-        let pendingVariantContext = {
-            product: null,
-            clickedBtnId: null,
-            selectedSize: null,
-            selectedColor: null
-        };
         let interestData = {
             categories: {},
             keywords: {},
@@ -2660,27 +2435,20 @@
             const waText = encodeURIComponent(`أريد طلب ${product.title} بسعر ${displayPrice} جنيه من متجر كارامل`);
             const isFreshForUser = !interestData.seenIds.includes(product.id);
             const btnId = isSmartCard ? `smart-btn-${product.id}` : `btn-${instanceTag}-${product.id}`;
-            const cfg = getProductVariantsConfig(product);
-
-            const hintParts = [];
-            if (cfg.sizes.length) hintParts.push("مقاسات");
-            if (cfg.colors.length) hintParts.push("ألوان");
-            if (cfg.allowNote) hintParts.push("إضافة تفاصيل");
 
             return `
                 <article class="product-card">
                     <div class="product-img-box" onclick="openImageModal('${product.img}', '${product.id}')">
                         <span class="product-cat-badge">${CATEGORY_NAMES[product.category] || "متجر كارامل"}</span>
                         ${isSmartCard && isFreshForUser ? `<span class="new-for-you-badge">جديد ليك</span>` : ""}
-                        <img src="${product.img}" alt="${product.title}" loading="lazy">
+                        <img src="${product.img}" alt="${escapeHtmlAttr(product.title)}" loading="lazy">
                     </div>
                     <div class="product-details">
                         <div>
-                            <div class="product-title">${product.title}</div>
+                            <div class="product-title">${escapeHtmlAttr(product.title)}</div>
                             <div class="product-price">${displayPrice}<span>جنيه</span></div>
-                            ${product.subPrice ? `<div class="product-sub">${product.subPrice}</div>` : ""}
-                            ${hintParts.length ? `<div class="variant-pill-hint">متاح: ${hintParts.join(" + ")}</div>` : ""}
-                            ${product.desc ? `<div class="product-desc">${product.desc}</div>` : ""}
+                            ${product.subPrice ? `<div class="product-sub">${escapeHtmlAttr(product.subPrice)}</div>` : ""}
+                            ${product.desc ? `<div class="product-desc">${escapeHtmlAttr(product.desc)}</div>` : ""}
                         </div>
                         <div class="card-btns">
                             <button type="button" class="add-cart-btn" id="${btnId}" onclick="addToCart('${product.id}', '${btnId}')">
@@ -2818,7 +2586,6 @@
         function resetHomeFresh() {
             closeCart();
             closeImageModal();
-            closeVariantModal();
             resetFilters();
             renderSmartRecommendations();
             window.scrollTo({ top: 0, behavior: "smooth" });
@@ -2871,8 +2638,40 @@
             pill.classList.add("pop");
         }
 
-        function triggerAddedFeedback(productId, clickedBtnId = null) {
+        function addToCart(productId, clickedBtnId = null) {
+            const product = PRODUCTS.find(p => p.id === productId);
+            if (!product) return;
+
+            trackProductInterest(product, 4, true);
+
+            const variantCfg = getProductVariantConfig(product);
+            const defaultColor = variantCfg && variantCfg.colors ? variantCfg.colors[0] : "";
+            const defaultSizeObj = variantCfg && variantCfg.sizes ? variantCfg.sizes[0] : null;
+            const defaultSize = defaultSizeObj ? (typeof defaultSizeObj === "string" ? defaultSizeObj : defaultSizeObj.label) : "";
+            const initialPrice = (defaultSizeObj && typeof defaultSizeObj === "object" && defaultSizeObj.price)
+                ? Number(defaultSizeObj.price)
+                : (Number(product.price) || 0);
+
+            const existing = cart.find(item => item.id === productId);
+            if (existing) {
+                existing.qty = (Number(existing.qty) || 1) + 1;
+            } else {
+                cart.push({
+                    id: product.id,
+                    title: product.title,
+                    price: initialPrice,
+                    img: product.img,
+                    qty: 1,
+                    selectedColor: defaultColor,
+                    selectedSize: defaultSize,
+                    itemNote: ""
+                });
+            }
+
+            saveCart();
+            updateCartUI();
             pulseCartButton();
+
             const targets = clickedBtnId ? [clickedBtnId] : [`btn-p0-${productId}`, `smart-btn-${productId}`];
             targets.forEach(id => {
                 const btn = document.getElementById(id);
@@ -2888,187 +2687,45 @@
             });
         }
 
-        function commitItemToCart(product, options = {}, clickedBtnId = null) {
-            const chosenSize = options.size || "";
-            const chosenColor = options.color || "";
-            const chosenNote = (options.note || "").trim();
+        function updateCartItemColor(index, newColor) {
+            if (!cart[index]) return;
+            cart[index].selectedColor = newColor;
+            saveCart();
+            updateCartUI();
+        }
 
-            const variantKey = `${product.id}__${chosenSize}__${chosenColor}__${chosenNote}`;
-            const existing = cart.find(item => (item.variantKey || `${item.id}____`) === variantKey);
+        function updateCartItemSize(index, newSizeLabel) {
+            const item = cart[index];
+            if (!item) return;
+            item.selectedSize = newSizeLabel;
 
-            if (existing) {
-                existing.qty = (Number(existing.qty) || 1) + 1;
-            } else {
-                cart.push({
-                    id: product.id,
-                    variantKey,
-                    title: product.title,
-                    price: Number(product.price) || 0,
-                    img: product.img,
-                    size: chosenSize,
-                    color: chosenColor,
-                    note: chosenNote,
-                    qty: 1
-                });
+            const catalogMatch = PRODUCTS.find(prod => prod.id === item.id);
+            const variantCfg = getProductVariantConfig(catalogMatch);
+            if (variantCfg && Array.isArray(variantCfg.sizes)) {
+                const matched = variantCfg.sizes.find(s => (typeof s === "string" ? s : s.label) === newSizeLabel);
+                if (matched && typeof matched === "object" && matched.price) {
+                    item.price = Number(matched.price);
+                } else if (catalogMatch) {
+                    item.price = Number(catalogMatch.price) || item.price;
+                }
             }
 
             saveCart();
             updateCartUI();
-            triggerAddedFeedback(product.id, clickedBtnId);
-
-            const summaryParts = [];
-            if (chosenSize) summaryParts.push(`مقاس ${chosenSize}`);
-            if (chosenColor) summaryParts.push(`لون ${chosenColor}`);
-            if (chosenNote) summaryParts.push("بتفاصيل إضافية");
-            showCaramelToast(
-                summaryParts.length
-                    ? `تمت إضافة (${summaryParts.join(" - ")}) إلى المشتريات`
-                    : `تمت إضافة "${product.title}" إلى المشتريات`
-            );
         }
 
-        function openVariantModal(product, clickedBtnId = null, cfg = null) {
-            const config = cfg || getProductVariantsConfig(product);
-            pendingVariantContext = {
-                product,
-                clickedBtnId,
-                selectedSize: config.sizes[0] || "",
-                selectedColor: config.colors[0] ? config.colors[0].name : ""
-            };
-
-            document.getElementById("variantProductImg").src = product.img;
-            document.getElementById("variantProductTitle").textContent = product.title;
-            document.getElementById("variantProductPrice").textContent = `${product.priceLabel || product.price} جنيه`;
-
-            const noteInput = document.getElementById("variantCustomNote");
-            const noteBlock = document.getElementById("variantNoteBlock");
-            const noteTitle = document.getElementById("variantNoteTitle");
-            if (noteInput) {
-                noteInput.value = "";
-                noteInput.placeholder = config.notePlaceholder || "اكتب أي تفاصيل أو لون أو اسم أو ملاحظة تحب تضيفها...";
-            }
-            if (noteTitle) {
-                noteTitle.textContent = config.noteLabel || "إضافة تفاصيل / ملاحظة";
-            }
-            if (noteBlock) {
-                noteBlock.style.display = config.allowNote ? "block" : "none";
-            }
-
-            const sizesBlock = document.getElementById("variantSizesBlock");
-            const sizesGrid = document.getElementById("variantSizesGrid");
-            const sizeBadge = document.getElementById("selectedSizeBadge");
-
-            if (config.sizes.length > 0) {
-                sizesBlock.style.display = "block";
-                sizeBadge.textContent = pendingVariantContext.selectedSize || "اختر";
-                sizesGrid.innerHTML = config.sizes.map(sz => {
-                    const isActive = sz === pendingVariantContext.selectedSize;
-                    return `<button type="button" class="size-option-btn ${isActive ? "active" : ""}" onclick="selectVariantSize('${sz.replace(/'/g, "\\'")}', this)">${sz}</button>`;
-                }).join("");
-            } else {
-                sizesBlock.style.display = "none";
-            }
-
-            const colorsBlock = document.getElementById("variantColorsBlock");
-            const colorsGrid = document.getElementById("variantColorsGrid");
-            const colorBadge = document.getElementById("selectedColorBadge");
-
-            if (config.colors.length > 0) {
-                colorsBlock.style.display = "block";
-                colorBadge.textContent = pendingVariantContext.selectedColor || "اختر";
-                colorsGrid.innerHTML = config.colors.map(col => {
-                    const isActive = col.name === pendingVariantContext.selectedColor;
-                    return `
-                        <button type="button" class="color-option-btn ${isActive ? "active" : ""}" onclick="selectVariantColor('${col.name.replace(/'/g, "\\'")}', this)">
-                            <span class="color-swatch-dot" style="background:${col.hex || "#c89666"};"></span>
-                            <span>${col.name}</span>
-                        </button>
-                    `;
-                }).join("");
-            } else {
-                colorsBlock.style.display = "none";
-            }
-
-            const backdrop = document.getElementById("variantBackdrop");
-            const isAlreadyOpen = backdrop && backdrop.classList.contains("open");
-            if (backdrop) backdrop.classList.add("open");
-            syncBodyScrollLock();
-            if (!isAlreadyOpen) {
-                pushOverlayHistoryState("variant");
-            }
+        function updateCartItemNote(index, noteText) {
+            if (!cart[index]) return;
+            cart[index].itemNote = noteText;
+            saveCart();
         }
 
-        function selectVariantSize(sizeVal, btnEl) {
-            pendingVariantContext.selectedSize = sizeVal;
-            document.querySelectorAll("#variantSizesGrid .size-option-btn").forEach(b => b.classList.remove("active"));
-            if (btnEl) btnEl.classList.add("active");
-            const badge = document.getElementById("selectedSizeBadge");
-            if (badge) badge.textContent = sizeVal;
-        }
-
-        function selectVariantColor(colorName, btnEl) {
-            pendingVariantContext.selectedColor = colorName;
-            document.querySelectorAll("#variantColorsGrid .color-option-btn").forEach(b => b.classList.remove("active"));
-            if (btnEl) btnEl.classList.add("active");
-            const badge = document.getElementById("selectedColorBadge");
-            if (badge) badge.textContent = colorName;
-        }
-
-        function confirmVariantAddToCart() {
-            const { product, clickedBtnId, selectedSize, selectedColor } = pendingVariantContext;
-            if (!product) return;
-            const note = document.getElementById("variantCustomNote")?.value || "";
-            closeVariantModal();
-            commitItemToCart(
-                product,
-                { size: selectedSize, color: selectedColor, note },
-                clickedBtnId
-            );
-        }
-
-        function closeVariantModal(fromPopState = false) {
-            const backdrop = document.getElementById("variantBackdrop");
-            if (backdrop) backdrop.classList.remove("open");
-            pendingVariantContext = {
-                product: null,
-                clickedBtnId: null,
-                selectedSize: null,
-                selectedColor: null
-            };
-            syncBodyScrollLock();
-            if (!fromPopState) {
-                popOverlayHistoryIfNeeded("variant");
-            } else if (activeOverlayName === "variant") {
-                activeOverlayName = null;
-            }
-        }
-
-        function addToCart(productId, clickedBtnId = null) {
-            const product = PRODUCTS.find(p => p.id === productId);
-            if (!product) return;
-
-            trackProductInterest(product, 4, true);
-
-            const cfg = getProductVariantsConfig(product);
-            if (cfg.hasVariants) {
-                openVariantModal(product, clickedBtnId, cfg);
-                return;
-            }
-
-            commitItemToCart(product, {}, clickedBtnId);
-        }
-
-        function findCartItemByKeyOrId(keyOrId) {
-            return cart.find(i => (i.variantKey || i.id) === keyOrId || i.id === keyOrId);
-        }
-
-        function changeQty(keyOrId, delta) {
-            const item = findCartItemByKeyOrId(keyOrId);
+        function changeQty(productId, delta) {
+            const item = cart.find(i => i.id === productId);
             if (!item) return;
-            const targetKey = item.variantKey || item.id;
             const nextQty = (Number(item.qty) || 1) + delta;
             if (nextQty <= 0) {
-                cart = cart.filter(i => (i.variantKey || i.id) !== targetKey);
+                cart = cart.filter(i => i.id !== productId);
             } else {
                 item.qty = nextQty;
             }
@@ -3076,10 +2733,8 @@
             updateCartUI();
         }
 
-        function removeFromCart(keyOrId) {
-            const item = findCartItemByKeyOrId(keyOrId);
-            const targetKey = item ? (item.variantKey || item.id) : keyOrId;
-            cart = cart.filter(i => (i.variantKey || i.id) !== targetKey && i.id !== keyOrId);
+        function removeFromCart(productId) {
+            cart = cart.filter(i => i.id !== productId);
             saveCart();
             updateCartUI();
         }
@@ -3087,15 +2742,10 @@
         function clearCart() {
             cart = [];
             saveCart();
+            saveCartOrderNotes("");
+            const notesInput = document.getElementById("cartOrderNotesInput");
+            if (notesInput) notesInput.value = "";
             updateCartUI();
-        }
-
-        function formatItemVariantText(item) {
-            const parts = [];
-            if (item.size) parts.push(`المقاس: ${item.size}`);
-            if (item.color) parts.push(`اللون: ${item.color}`);
-            if (item.note) parts.push(`تفاصيل/ملاحظة: ${item.note}`);
-            return parts.join(" | ");
         }
 
         function updateCartUI() {
@@ -3105,6 +2755,11 @@
             const countBadge = document.getElementById("floatingCartCount");
             const totalAmountEl = document.getElementById("cartTotalAmount");
             const container = document.getElementById("cartItemsContainer");
+            const notesInput = document.getElementById("cartOrderNotesInput");
+
+            if (notesInput && document.activeElement !== notesInput) {
+                notesInput.value = loadCartOrderNotes();
+            }
 
             if (countBadge) {
                 if (totalQty > 0) {
@@ -3124,29 +2779,55 @@
                 return;
             }
 
-            container.innerHTML = cart.map(item => {
+            container.innerHTML = cart.map((item, idx) => {
                 const q = Number(item.qty) || 1;
                 const p = Number(item.price) || 0;
                 const catalogMatch = PRODUCTS.find(prod => prod.id === item.id);
                 const title = item.title || (catalogMatch ? catalogMatch.title : "منتج كارامل");
                 const img = item.img || (catalogMatch ? catalogMatch.img : "IMG-20261116-WA0032.jpg");
-                const itemKey = encodeURIComponent(item.variantKey || item.id);
-                const variantLine = formatItemVariantText(item);
+                const variantCfg = getProductVariantConfig(catalogMatch);
+
+                let variantSelectorsHTML = "";
+                if (variantCfg) {
+                    const selects = [];
+                    if (Array.isArray(variantCfg.colors) && variantCfg.colors.length) {
+                        const currentColor = item.selectedColor || variantCfg.colors[0];
+                        const options = variantCfg.colors.map(c =>
+                            `<option value="${escapeHtmlAttr(c)}" ${c === currentColor ? "selected" : ""}>اللون: ${escapeHtmlAttr(c)}</option>`
+                        ).join("");
+                        selects.push(`<select class="cart-option-select" aria-label="اختر اللون" onchange="updateCartItemColor(${idx}, this.value)">${options}</select>`);
+                    }
+                    if (Array.isArray(variantCfg.sizes) && variantCfg.sizes.length) {
+                        const firstLabel = typeof variantCfg.sizes[0] === "string" ? variantCfg.sizes[0] : variantCfg.sizes[0].label;
+                        const currentSize = item.selectedSize || firstLabel;
+                        const options = variantCfg.sizes.map(s => {
+                            const lbl = typeof s === "string" ? s : s.label;
+                            return `<option value="${escapeHtmlAttr(lbl)}" ${lbl === currentSize ? "selected" : ""}>${escapeHtmlAttr(lbl)}</option>`;
+                        }).join("");
+                        selects.push(`<select class="cart-option-select" aria-label="اختر المقاس" onchange="updateCartItemSize(${idx}, this.value)">${options}</select>`);
+                    }
+                    if (selects.length) {
+                        variantSelectorsHTML = `<div class="cart-item-options">${selects.join("")}</div>`;
+                    }
+                }
 
                 return `
                     <div class="cart-item">
-                        <img src="${img}" alt="${title}">
-                        <div class="cart-item-info">
-                            <div class="cart-item-title">${title}</div>
-                            ${variantLine ? `<div class="cart-item-meta">${variantLine}</div>` : ""}
-                            <div class="cart-item-price">${p * q} جنيه</div>
+                        <div class="cart-item-top">
+                            <img src="${img}" alt="${escapeHtmlAttr(title)}">
+                            <div class="cart-item-info">
+                                <div class="cart-item-title">${escapeHtmlAttr(title)}</div>
+                                <div class="cart-item-price">${p * q} جنيه</div>
+                            </div>
+                            <div class="qty-controls">
+                                <button type="button" class="qty-btn" onclick="changeQty('${item.id}', 1)">+</button>
+                                <span class="qty-val">${q}</span>
+                                <button type="button" class="qty-btn" onclick="changeQty('${item.id}', -1)">-</button>
+                            </div>
+                            <button type="button" class="remove-item-btn" onclick="removeFromCart('${item.id}')" aria-label="حذف">✕</button>
                         </div>
-                        <div class="qty-controls">
-                            <button type="button" class="qty-btn" onclick="changeQty(decodeURIComponent('${itemKey}'), 1)">+</button>
-                            <span class="qty-val">${q}</span>
-                            <button type="button" class="qty-btn" onclick="changeQty(decodeURIComponent('${itemKey}'), -1)">-</button>
-                        </div>
-                        <button type="button" class="remove-item-btn" onclick="removeFromCart(decodeURIComponent('${itemKey}'))" aria-label="حذف">✕</button>
+                        ${variantSelectorsHTML}
+                        <input type="text" class="cart-item-note-input" placeholder="تفاصيل إضافية للقطعة دي (لون، مقاس، كتابة...)" value="${escapeHtmlAttr(item.itemNote || "")}" oninput="updateCartItemNote(${idx}, this.value)">
                     </div>
                 `;
             }).join("");
@@ -3166,9 +2847,20 @@
                 const p = Number(item.price) || 0;
                 const sub = p * q;
                 total += sub;
-                const variantLine = formatItemVariantText(item);
-                lines.push(`${idx + 1}. ${item.title}${variantLine ? ` (${variantLine})` : ""} × ${q} = ${sub} جنيه`);
+
+                const extras = [];
+                if (item.selectedColor) extras.push(`اللون: ${item.selectedColor}`);
+                if (item.selectedSize) extras.push(`المقاس: ${item.selectedSize}`);
+                if (item.itemNote && item.itemNote.trim()) extras.push(`تفاصيل: ${item.itemNote.trim()}`);
+
+                const extraText = extras.length ? ` (${extras.join(" | ")})` : "";
+                lines.push(`${idx + 1}. ${item.title}${extraText} × ${q} = ${sub} جنيه`);
             });
+
+            const orderNotes = (document.getElementById("cartOrderNotesInput")?.value || loadCartOrderNotes()).trim();
+            if (orderNotes) {
+                lines.push("", `ملاحظات إضافية على الطلب: ${orderNotes}`);
+            }
 
             lines.push("", `الإجمالي: ${total} جنيه`, "الدفع عند الاستلام • استرجاع خلال أسبوع لو المنتج غير التفاصيل الموجودة");
             const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join("\n"))}`;
@@ -3198,8 +2890,7 @@
         function syncBodyScrollLock() {
             const cartOpen = document.getElementById("cartDrawer")?.classList.contains("open");
             const imgOpen = document.getElementById("imageModal")?.classList.contains("open");
-            const varOpen = document.getElementById("variantBackdrop")?.classList.contains("open");
-            document.body.style.overflow = (cartOpen || imgOpen || varOpen) ? "hidden" : "";
+            document.body.style.overflow = (cartOpen || imgOpen) ? "hidden" : "";
         }
 
         function openCart() {
@@ -3258,13 +2949,10 @@
         }
 
         window.addEventListener("popstate", () => {
-            const varOpen = document.getElementById("variantBackdrop")?.classList.contains("open");
             const cartOpen = document.getElementById("cartDrawer")?.classList.contains("open");
             const imgOpen = document.getElementById("imageModal")?.classList.contains("open");
             activeOverlayName = null;
-            if (varOpen) {
-                closeVariantModal(true);
-            } else if (imgOpen) {
+            if (imgOpen) {
                 closeImageModal(true);
             } else if (cartOpen) {
                 closeCart(true);
@@ -3273,9 +2961,7 @@
 
         document.addEventListener("keydown", e => {
             if (e.key === "Escape") {
-                if (document.getElementById("variantBackdrop")?.classList.contains("open")) {
-                    closeVariantModal();
-                } else if (document.getElementById("imageModal")?.classList.contains("open")) {
+                if (document.getElementById("imageModal")?.classList.contains("open")) {
                     closeImageModal();
                 } else if (document.getElementById("cartDrawer")?.classList.contains("open")) {
                     closeCart();
@@ -3399,269 +3085,193 @@
         updateSearchCancelButton();
     </script>
 
-    <!-- OneSignal Web Push v16 + Direct Browser Permission Fallback -->
-    <script>
-        window.OneSignalDeferred = window.OneSignalDeferred || [];
-    </script>
+    <!-- OneSignal Web Push v16 - Caramel Store -->
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" async></script>
     <script>
-        const AUTO_PUSH_ASKED_KEY = "caramel_auto_push_prompted_v1";
-        let oneSignalInstance = null;
-        let hideNotifyBtnTimer = null;
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+        window.OneSignalCaramel = null;
 
-        function getBrowserNotificationPermission() {
-            if (!("Notification" in window)) return "unsupported";
-            return Notification.permission;
-        }
+        const CARAMEL_PUSH_SUBSCRIBED_KEY = "caramel_push_subscribed_v1";
+        let caramelPushHideTimer = null;
 
-        function getOneSignalSubscriptionId() {
-            const osInstance = oneSignalInstance || window.OneSignal;
-            try {
-                if (osInstance && osInstance.User && osInstance.User.PushSubscription) {
-                    return osInstance.User.PushSubscription.id || null;
-                }
-            } catch (e) {}
-            return null;
-        }
+        function setCaramelPushButtonDefault() {
+            const button = document.getElementById("caramelPushBtn");
+            const iconEl = document.getElementById("caramelPushIcon");
+            const label = document.getElementById("caramelPushBtnText");
+            if (!button || !label) return;
 
-        function isOneSignalOptedIn() {
-            const osInstance = oneSignalInstance || window.OneSignal;
-            if (osInstance && osInstance.User && osInstance.User.PushSubscription) {
-                if (typeof osInstance.User.PushSubscription.optedIn === "boolean") {
-                    return osInstance.User.PushSubscription.optedIn;
-                }
+            clearTimeout(caramelPushHideTimer);
+            button.disabled = false;
+            button.classList.remove("circle-check-only", "hiding-smooth");
+            button.classList.add("visible");
+
+            if (iconEl) {
+                iconEl.innerHTML = `
+                    <svg viewBox="0 0 24 24">
+                        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+                        <path d="M10 21h4"></path>
+                    </svg>
+                `;
             }
-            return null;
+            label.textContent = "فعّل إشعارات العروض";
         }
 
-        function isNotificationsCurrentlyEnabled() {
-            return getBrowserNotificationPermission() === "granted";
+        function hideCaramelPushButtonImmediately() {
+            const button = document.getElementById("caramelPushBtn");
+            if (!button) return;
+            clearTimeout(caramelPushHideTimer);
+            button.classList.remove("visible", "circle-check-only", "hiding-smooth");
         }
 
-        function syncNotifyButtonVisibility(animateSuccess = false) {
-            const btn = document.getElementById("enableNotificationsBtn");
-            const iconEl = document.getElementById("enableNotificationsIcon");
-            const labelEl = document.getElementById("enableNotificationsLabel");
-            if (!btn || !iconEl || !labelEl) return;
+        function showGreenCircleAndHidePushBtn(delayBeforeHideMs = 1500) {
+            const button = document.getElementById("caramelPushBtn");
+            const iconEl = document.getElementById("caramelPushIcon");
+            const label = document.getElementById("caramelPushBtnText");
+            if (!button) return;
 
-            if (isNotificationsCurrentlyEnabled()) {
-                if (animateSuccess) {
-                    btn.disabled = false;
-                    btn.classList.remove("hiding", "hidden-permanently");
-                    btn.classList.add("enabled-success");
-                    iconEl.textContent = "✓";
-                    labelEl.textContent = "تم تفعيل الإشعارات";
+            try {
+                localStorage.setItem(CARAMEL_PUSH_SUBSCRIBED_KEY, "true");
+            } catch (e) {}
 
-                    clearTimeout(hideNotifyBtnTimer);
-                    hideNotifyBtnTimer = setTimeout(() => {
-                        btn.classList.add("hiding");
-                        setTimeout(() => {
-                            if (isNotificationsCurrentlyEnabled()) {
-                                btn.classList.add("hidden-permanently");
-                            }
-                        }, 360);
-                    }, 1200);
-                } else {
-                    btn.classList.remove("enabled-success", "hiding");
-                    btn.classList.add("hidden-permanently");
-                }
+            button.disabled = true;
+            button.classList.add("visible");
+            button.classList.remove("hiding-smooth");
+            button.classList.add("circle-check-only");
+
+            if (label) label.textContent = "";
+
+            if (iconEl) {
+                iconEl.innerHTML = `
+                    <svg viewBox="0 0 24 24">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                `;
+            }
+
+            clearTimeout(caramelPushHideTimer);
+            caramelPushHideTimer = setTimeout(() => {
+                button.classList.add("hiding-smooth");
+                setTimeout(() => {
+                    hideCaramelPushButtonImmediately();
+                }, 360);
+            }, delayBeforeHideMs);
+        }
+
+        (function initCaramelPushButtonState() {
+            let savedSubscribed = false;
+            try {
+                savedSubscribed = localStorage.getItem(CARAMEL_PUSH_SUBSCRIBED_KEY) === "true";
+            } catch (e) {}
+
+            const browserGranted = typeof Notification !== "undefined" && Notification.permission === "granted";
+            const browserDenied = typeof Notification !== "undefined" && Notification.permission === "denied";
+
+            if (browserDenied) {
+                setCaramelPushButtonDefault();
+                const label = document.getElementById("caramelPushBtnText");
+                if (label) label.textContent = "إشعارات المتجر محظورة";
+                return;
+            }
+
+            if (savedSubscribed || browserGranted) {
+                hideCaramelPushButtonImmediately();
             } else {
-                clearTimeout(hideNotifyBtnTimer);
-                btn.disabled = false;
-                btn.classList.remove("enabled-success", "hiding", "hidden-permanently");
-                iconEl.textContent = "🔔";
-                labelEl.textContent = "تشغيل الإشعارات";
+                setCaramelPushButtonDefault();
             }
-        }
+        })();
 
-        function withTimeout(promise, ms, fallbackValue) {
-            return Promise.race([
-                promise,
-                new Promise(resolve => setTimeout(() => resolve(fallbackValue), ms))
-            ]);
-        }
-
-        async function requestPermissionWithFallback() {
-            if (!("Notification" in window)) return "unsupported";
-            if (Notification.permission !== "default") return Notification.permission;
+        function updateCaramelPushButton(OneSignal) {
+            const button = document.getElementById("caramelPushBtn");
+            const label = document.getElementById("caramelPushBtnText");
+            if (!button || !OneSignal) return;
 
             try {
-                if (typeof Notification.requestPermission === "function") {
-                    const res = Notification.requestPermission();
-                    if (res && typeof res.then === "function") {
-                        const result = await withTimeout(res, 5000, Notification.permission);
-                        return result || Notification.permission;
+                const subId = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.id;
+                const optedIn = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.optedIn === true;
+                const permission = OneSignal.Notifications && OneSignal.Notifications.permissionNative;
+
+                if (permission === "denied") {
+                    try {
+                        localStorage.removeItem(CARAMEL_PUSH_SUBSCRIBED_KEY);
+                    } catch (e) {}
+                    setCaramelPushButtonDefault();
+                    if (label) label.textContent = "إشعارات المتجر محظورة";
+                } else if (optedIn && subId) {
+                    const alreadyHid = !button.classList.contains("visible");
+                    if (!alreadyHid && !button.classList.contains("circle-check-only")) {
+                        showGreenCircleAndHidePushBtn(1300);
+                    } else if (alreadyHid) {
+                        try {
+                            localStorage.setItem(CARAMEL_PUSH_SUBSCRIBED_KEY, "true");
+                        } catch (e) {}
                     }
-                    return Notification.permission;
+                } else if (permission === "default") {
+                    try {
+                        localStorage.removeItem(CARAMEL_PUSH_SUBSCRIBED_KEY);
+                    } catch (e) {}
+                    setCaramelPushButtonDefault();
                 }
             } catch (e) {}
-
-            return Notification.permission;
         }
 
-        async function tryOptInOneSignalNonBlocking(osInstance) {
-            const target = osInstance || oneSignalInstance || window.OneSignal;
-            if (!target || !target.User || !target.User.PushSubscription) return { optedIn: false, id: null };
-            try {
-                if (target.User.PushSubscription.optedIn === false && typeof target.User.PushSubscription.optIn === "function") {
-                    await withTimeout(Promise.resolve(target.User.PushSubscription.optIn()), 4000, null);
-                }
-            } catch (e) {}
-            return {
-                optedIn: Boolean(target.User.PushSubscription.optedIn),
-                id: target.User.PushSubscription.id || null
-            };
-        }
+        window.enableCaramelPush = async function () {
+            const OneSignal = window.OneSignalCaramel;
 
-        async function askNativePermissionFirst(osInstance) {
-            if (!window.isSecureContext) {
-                showCaramelToast("الإشعارات تتطلب رابط HTTPS أو localhost.");
-                return { ok: false, reason: "insecure" };
+            if (!OneSignal) {
+                return;
             }
-
-            if (!("Notification" in window)) {
-                showCaramelToast("متصفحك الحالي لا يدعم إشعارات الويب.");
-                return { ok: false, reason: "unsupported" };
-            }
-
-            let perm = Notification.permission;
-
-            if (perm === "denied") {
-                return { ok: false, reason: "denied" };
-            }
-
-            if (perm === "default") {
-                perm = await requestPermissionWithFallback();
-            }
-
-            if (perm !== "granted") {
-                return { ok: false, reason: perm };
-            }
-
-            const osStatus = await tryOptInOneSignalNonBlocking(osInstance);
-
-            return {
-                ok: true,
-                reason: "granted",
-                osOptedIn: osStatus.optedIn,
-                subId: osStatus.id
-            };
-        }
-
-        async function handleEnableNotificationsClick() {
-            const btn = document.getElementById("enableNotificationsBtn");
-            const labelEl = document.getElementById("enableNotificationsLabel");
-            if (btn) btn.disabled = true;
-            if (labelEl) labelEl.textContent = "جاري التشغيل...";
-
-            const safetyResetTimer = setTimeout(() => {
-                if (getBrowserNotificationPermission() === "granted") {
-                    syncNotifyButtonVisibility(true);
-                    showCaramelToast("تم تشغيل الإشعارات بنجاح!");
-                } else {
-                    syncNotifyButtonVisibility(false);
-                }
-            }, 6000);
 
             try {
-                const osInstance = oneSignalInstance || window.OneSignal;
-                const res = await askNativePermissionFirst(osInstance);
-                clearTimeout(safetyResetTimer);
+                if (OneSignal.Notifications && OneSignal.Notifications.permissionNative === "denied") {
+                    return;
+                }
 
-                if (res.ok && getBrowserNotificationPermission() === "granted") {
-                    syncNotifyButtonVisibility(true);
-                    if (res.osOptedIn && res.subId) {
-                        showCaramelToast("تم تفعيل إشعارات OneSignal بنجاح!");
-                    } else {
-                        showCaramelToast("تم الإذن في المتصفح — راجع OneSignalSDKWorker.js وإعدادات OneSignal.");
+                if (OneSignal.Notifications && typeof OneSignal.Notifications.requestPermission === "function") {
+                    await OneSignal.Notifications.requestPermission();
+                }
+
+                if (OneSignal.User && OneSignal.User.PushSubscription && typeof OneSignal.User.PushSubscription.optIn === "function") {
+                    await OneSignal.User.PushSubscription.optIn();
+                }
+
+                setTimeout(() => {
+                    const subId = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.id;
+                    const optedIn = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.optedIn === true;
+                    const nativeGranted = typeof Notification !== "undefined" && Notification.permission === "granted";
+
+                    if (subId || (optedIn && nativeGranted) || nativeGranted) {
+                        showGreenCircleAndHidePushBtn(1500);
                     }
-                } else if (res.reason === "denied" || getBrowserNotificationPermission() === "denied") {
-                    syncNotifyButtonVisibility(false);
-                    showCaramelToast("الإشعارات محظورة من المتصفح، افتح أذونات الموقع وفعّلها.");
-                } else if (res.reason !== "insecure" && res.reason !== "unsupported") {
-                    syncNotifyButtonVisibility(false);
-                    showCaramelToast("لم يتم السماح بالإشعارات؛ اضغط مرة أخرى للموافقة.");
-                }
-            } catch (e) {
-                clearTimeout(safetyResetTimer);
-                syncNotifyButtonVisibility(false);
-                showCaramelToast("حدثت مشكلة أثناء طلب الإذن، حاول مرة أخرى.");
-            }
-        }
-
-        window.promptCaramelPushAutomatically = async function (forceAfterInstall = false) {
-            if (isNotificationsCurrentlyEnabled()) {
-                tryOptInOneSignalNonBlocking(oneSignalInstance);
-                syncNotifyButtonVisibility(false);
-                return;
-            }
-
-            if (!window.isSecureContext || !("Notification" in window)) {
-                syncNotifyButtonVisibility(false);
-                return;
-            }
-
-            const perm = getBrowserNotificationPermission();
-            if (perm === "denied") {
-                syncNotifyButtonVisibility(false);
-                return;
-            }
-
-            syncNotifyButtonVisibility(false);
-
-            let alreadyAsked = false;
-            try {
-                alreadyAsked = localStorage.getItem(AUTO_PUSH_ASKED_KEY) === "true";
-            } catch (e) {}
-
-            if (alreadyAsked && !forceAfterInstall) return;
-
-            try {
-                localStorage.setItem(AUTO_PUSH_ASKED_KEY, "true");
-            } catch (e) {}
-
-            const res = await askNativePermissionFirst(oneSignalInstance);
-            if (res.ok && getBrowserNotificationPermission() === "granted") {
-                syncNotifyButtonVisibility(true);
-            }
+                }, 1000);
+            } catch (error) {}
         };
 
-        syncNotifyButtonVisibility(false);
-
-        window.OneSignalDeferred.push(async function (OneSignal) {
+        OneSignalDeferred.push(async function (OneSignal) {
             try {
-                await withTimeout(
-                    OneSignal.init({
-                        appId: "19f76037-4f5a-41b4-ada5-20e0abb2b1a7",
-                        serviceWorkerPath: "OneSignalSDKWorker.js",
-                        serviceWorkerParam: {
-                            scope: "/Carmelastore/"
-                        }
-                    }),
-                    4500,
-                    null
-                );
+                await OneSignal.init({
+                    appId: "19f76037-4f5a-41b4-ada5-20e0abb2b1a7",
+                    serviceWorkerPath: "OneSignalSDKWorker.js",
+                    serviceWorkerParam: {
+                        scope: "./"
+                    }
+                });
 
-                oneSignalInstance = OneSignal;
-                if (getBrowserNotificationPermission() === "granted") {
-                    tryOptInOneSignalNonBlocking(OneSignal);
-                }
-                syncNotifyButtonVisibility(false);
+                window.OneSignalCaramel = OneSignal;
 
                 if (OneSignal.User && OneSignal.User.PushSubscription && typeof OneSignal.User.PushSubscription.addEventListener === "function") {
-                    OneSignal.User.PushSubscription.addEventListener("change", () => {
-                        if (getBrowserNotificationPermission() === "granted") {
-                            syncNotifyButtonVisibility(true);
+                    OneSignal.User.PushSubscription.addEventListener("change", function (event) {
+                        const currentOptedIn = event && event.current ? event.current.optedIn === true : false;
+                        const currentId = event && event.current ? event.current.id : null;
+                        if (currentOptedIn && currentId) {
+                            showGreenCircleAndHidePushBtn(1500);
+                        } else {
+                            updateCaramelPushButton(OneSignal);
                         }
                     });
                 }
 
-                setTimeout(() => {
-                    window.promptCaramelPushAutomatically(false);
-                }, 1200);
-            } catch (e) {
-                syncNotifyButtonVisibility(false);
-            }
+                updateCaramelPushButton(OneSignal);
+            } catch (error) {}
         });
     </script>
 
