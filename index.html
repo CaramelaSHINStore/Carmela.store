@@ -2998,10 +2998,17 @@
         }
 
         window.enableCaramelPush = async function () {
-            const OneSignal = window.OneSignalCaramel;
+            let OneSignal = window.OneSignalCaramel;
+            let tries = 0;
+
+            while (!OneSignal && tries < 25) {
+                await new Promise(r => setTimeout(r, 200));
+                OneSignal = window.OneSignalCaramel;
+                tries++;
+            }
 
             if (!OneSignal) {
-                showCaramelToast("جاري تجهيز خدمة الإشعارات، جرّب بعد ثوانٍ...");
+                showCaramelToast("تعذّر تحميل خدمة الإشعارات، أعد تحميل الصفحة وجرّب.");
                 return;
             }
 
