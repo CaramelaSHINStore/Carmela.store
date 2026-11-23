@@ -1267,7 +1267,7 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        /* نافذة اختيار المقاس والتفاصيل قبل الإضافة للسلة */
+        /* نافذة اختيار المقاس والعدد والتفاصيل قبل الإضافة للسلة */
         .option-modal-backdrop {
             display: none;
             position: fixed;
@@ -1375,10 +1375,54 @@
             gap: 6px;
         }
 
+        .option-field-row-inline {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            background: #ffffff;
+            padding: 8px 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border-gold);
+        }
+
         .option-field-label {
             font-size: 0.8rem;
             font-weight: 900;
             color: var(--espresso-soft);
+        }
+
+        .modal-qty-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-qty-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 9px;
+            background: var(--espresso);
+            color: var(--caramel-light);
+            font-weight: 900;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.18s ease;
+        }
+
+        .modal-qty-btn:hover {
+            background: var(--caramel-dark);
+            color: #ffffff;
+        }
+
+        .modal-qty-val {
+            min-width: 24px;
+            text-align: center;
+            font-size: 0.92rem;
+            font-weight: 900;
+            color: var(--text-main);
         }
 
         .option-pills-row {
@@ -1939,7 +1983,7 @@
 
     <div class="caramel-toast" id="caramelToast" role="status" aria-live="polite"></div>
 
-    <!-- نافذة تحديد المقاس والتفاصيل قبل الإضافة للسلة -->
+    <!-- نافذة تحديد المقاس والعدد والتفاصيل قبل الإضافة للسلة -->
     <div class="option-modal-backdrop" id="productOptionModal" onclick="closeProductOptionModal()">
         <div class="option-modal-card" onclick="event.stopPropagation()">
             <div class="option-modal-header">
@@ -1952,6 +1996,15 @@
                     <div class="option-modal-product-info">
                         <div class="option-modal-product-title" id="optionModalTitle"></div>
                         <div class="option-modal-product-price" id="optionModalPrice"></div>
+                    </div>
+                </div>
+
+                <div class="option-field-row-inline">
+                    <span class="option-field-label">العدد المطلوب:</span>
+                    <div class="modal-qty-box">
+                        <button type="button" class="modal-qty-btn" onclick="changeModalQty(1)" aria-label="زيادة العدد">+</button>
+                        <span class="modal-qty-val" id="optionModalQtyVal">1</span>
+                        <button type="button" class="modal-qty-btn" onclick="changeModalQty(-1)" aria-label="إنقاص العدد">-</button>
                     </div>
                 </div>
 
@@ -2049,7 +2102,8 @@
             clickedBtnId: null,
             selectedSize: "",
             selectedColor: "",
-            currentPrice: 0
+            currentPrice: 0,
+            qty: 1
         };
 
         function escapeHtmlAttr(str) {
@@ -2871,7 +2925,7 @@
             pill.classList.add("pop");
         }
 
-        /* نافذة اختيار المقاس والتفاصيل قبل الإضافة للسلة */
+        /* نافذة اختيار المقاس والعدد والتفاصيل قبل الإضافة للسلة */
         function openProductOptionModal(productId, clickedBtnId = null) {
             const product = PRODUCTS.find(p => p.id === productId);
             if (!product) return;
@@ -2889,13 +2943,15 @@
                 clickedBtnId,
                 selectedSize: defaultSize,
                 selectedColor: defaultColor,
-                currentPrice: initialPrice
+                currentPrice: initialPrice,
+                qty: 1
             };
 
             document.getElementById("optionModalImg").src = product.img;
             document.getElementById("optionModalImg").alt = product.title;
             document.getElementById("optionModalTitle").textContent = product.title;
             document.getElementById("optionModalPrice").textContent = `${initialPrice} جنيه`;
+            document.getElementById("optionModalQtyVal").textContent = "1";
             document.getElementById("optionModalNoteInput").value = "";
 
             const sizeGroup = document.getElementById("optionModalSizeGroup");
@@ -2932,6 +2988,13 @@
             pushOverlayHistoryState("options");
         }
 
+        function changeModalQty(delta) {
+            const nextQty = Math.max(1, (Number(pendingOptionSelection.qty) || 1) + delta);
+            pendingOptionSelection.qty = nextQty;
+            const qtyEl = document.getElementById("optionModalQtyVal");
+            if (qtyEl) qtyEl.textContent = String(nextQty);
+        }
+
         function selectModalSize(sizeLabel, priceVal, btnEl) {
             pendingOptionSelection.selectedSize = sizeLabel;
             pendingOptionSelection.currentPrice = Number(priceVal) || pendingOptionSelection.currentPrice;
@@ -2958,7 +3021,7 @@
         }
 
         function confirmAddProductWithOptions() {
-            const { productId, clickedBtnId, selectedSize, selectedColor, currentPrice } = pendingOptionSelection;
+            const { productId, clickedBtnId, selectedSize, selectedColor, currentPrice, qty } = pendingOptionSelection;
             if (!productId) return;
             const noteText = (document.getElementById("optionModalNoteInput")?.value || "").trim();
 
@@ -2968,6 +3031,7 @@
                 selectedColor,
                 itemNote: noteText,
                 price: currentPrice,
+                qty: Number(qty) || 1,
                 clickedBtnId
             });
         }
@@ -2982,6 +3046,7 @@
             const selectedSize = opts.selectedSize || "";
             const itemNote = opts.itemNote || "";
             const itemPrice = Number(opts.price) || Number(product.price) || 0;
+            const addedQty = Math.max(1, Number(opts.qty) || 1);
 
             const existing = cart.find(item =>
                 item.id === productId &&
@@ -2991,14 +3056,14 @@
             );
 
             if (existing) {
-                existing.qty = (Number(existing.qty) || 1) + 1;
+                existing.qty = (Number(existing.qty) || 1) + addedQty;
             } else {
                 cart.push({
                     id: product.id,
                     title: product.title,
                     price: itemPrice,
                     img: product.img,
-                    qty: 1,
+                    qty: addedQty,
                     selectedColor,
                     selectedSize,
                     itemNote
@@ -3146,7 +3211,7 @@
                             <img src="${img}" alt="${escapeHtmlAttr(title)}">
                             <div class="cart-item-info">
                                 <div class="cart-item-title">${escapeHtmlAttr(title)}</div>
-                                <div class="cart-item-price">${p * q} جنيه</div>
+                                <div class="cart-item-price">${p} جنيه</div>
                             </div>
                             <div class="qty-controls">
                                 <button type="button" class="qty-btn" onclick="changeQtyByIndex(${idx}, 1)">+</button>
@@ -3183,7 +3248,7 @@
                 if (item.itemNote && item.itemNote.trim()) extras.push(`تفاصيل: ${item.itemNote.trim()}`);
 
                 const extraText = extras.length ? ` (${extras.join(" | ")})` : "";
-                lines.push(`${idx + 1}. ${item.title}${extraText} × ${q} = ${sub} جنيه`);
+                lines.push(`${idx + 1}. ${item.title}${extraText} — السعر: ${p} جنيه × ${q}`);
             });
 
             lines.push("", `الإجمالي: ${total} جنيه`, "الدفع عند الاستلام • استرجاع خلال أسبوع لو المنتج غير التفاصيل الموجودة");
