@@ -1092,26 +1092,31 @@
             position: fixed;
             left: 16px;
             bottom: 86px;
-            z-index: 149;
+            z-index: 250;
             display: none;
             align-items: center;
             justify-content: center;
             gap: 8px;
             max-width: min(270px, calc(100vw - 32px));
             padding: 11px 15px;
-            border: 1px solid rgba(229, 190, 150, 0.8);
+            border: 1.5px solid #ffffff;
             border-radius: 999px;
             background: linear-gradient(135deg, var(--caramel-light), var(--caramel));
             color: var(--espresso);
-            box-shadow: 0 8px 22px rgba(24, 21, 18, 0.24);
+            box-shadow: 0 8px 22px rgba(24, 21, 18, 0.32);
             font-size: 0.82rem;
             font-weight: 900;
             line-height: 1.35;
-            transition: width 0.28s ease, height 0.28s ease, min-width 0.28s ease, padding 0.28s ease, border-radius 0.28s ease, opacity 0.35s ease, transform 0.35s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+            touch-action: manipulation;
+            user-select: none;
         }
 
         .floating-notification-pill.visible {
             display: inline-flex;
+        }
+
+        .floating-notification-pill:active {
+            transform: scale(0.96);
         }
 
         .floating-notification-pill.circle-check-only {
@@ -1125,7 +1130,6 @@
             color: #ffffff;
             border-color: #86efac;
             box-shadow: 0 10px 24px rgba(21, 128, 61, 0.42);
-            transform: scale(1.06);
         }
 
         .floating-notification-pill.circle-check-only #caramelPushBtnText {
@@ -2869,13 +2873,14 @@
     </script>
 
     <!-- OneSignal Web Push v16 - Caramel Store -->
-    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" async></script>
     <script>
         window.OneSignalDeferred = window.OneSignalDeferred || [];
-        window.OneSignalCaramel = null;
-
+    </script>
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" async></script>
+    <script>
         const CARAMEL_PUSH_SUBSCRIBED_KEY = "caramel_push_subscribed_v1";
         let caramelPushHideTimer = null;
+        let isOneSignalReady = false;
 
         function setCaramelPushButtonDefault() {
             const button = document.getElementById("caramelPushBtn");
@@ -2963,15 +2968,22 @@
             }
         })();
 
-        function updateCaramelPushButton(OneSignal) {
+        function getActiveOneSignalInstance() {
+            if (window.OneSignal && typeof window.OneSignal.init === "function") {
+                return window.OneSignal;
+            }
+            return null;
+        }
+
+        function updateCaramelPushButton(osInstance) {
             const button = document.getElementById("caramelPushBtn");
             const label = document.getElementById("caramelPushBtnText");
-            if (!button || !OneSignal) return;
+            if (!button || !osInstance) return;
 
             try {
-                const subId = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.id;
-                const optedIn = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.optedIn === true;
-                const permission = OneSignal.Notifications && OneSignal.Notifications.permissionNative;
+                const subId = osInstance.User && osInstance.User.PushSubscription && osInstance.User.PushSubscription.id;
+                const optedIn = osInstance.User && osInstance.User.PushSubscription && osInstance.User.PushSubscription.optedIn === true;
+                const permission = osInstance.Notifications && osInstance.Notifications.permissionNative;
 
                 if (permission === "denied") {
                     try {
@@ -2998,37 +3010,41 @@
         }
 
         window.enableCaramelPush = async function () {
-            let OneSignal = window.OneSignalCaramel;
-            let tries = 0;
+            const osInstance = getActiveOneSignalInstance();
 
-            while (!OneSignal && tries < 25) {
-                await new Promise(r => setTimeout(r, 200));
-                OneSignal = window.OneSignalCaramel;
-                tries++;
+            if (typeof Notification !== "undefined" && Notification.permission === "denied") {
+                showCaramelToast("الإشعارات محظورة من إعدادات المتصفح، فعّلها من أذونات الموقع.");
+                return;
             }
 
-            if (!OneSignal) {
-                showCaramelToast("تعذّر تحميل خدمة الإشعارات، أعد تحميل الصفحة وجرّب.");
+            if (!osInstance || !isOneSignalReady) {
+                if (typeof Notification !== "undefined" && typeof Notification.requestPermission === "function") {
+                    try {
+                        const perm = await Notification.requestPermission();
+                        if (perm === "granted") {
+                            showGreenCircleAndHidePushBtn(1500);
+                        } else if (perm === "denied") {
+                            showCaramelToast("تم رفض الإشعارات، يمكنك تفعيلها من إعدادات المتصفح.");
+                        }
+                    } catch (e) {}
+                } else {
+                    showCaramelToast("جاري تحميل خدمة الإشعارات، اضغط مرة أخرى بعد قليل.");
+                }
                 return;
             }
 
             try {
-                if (OneSignal.Notifications && OneSignal.Notifications.permissionNative === "denied") {
-                    showCaramelToast("الإشعارات محظورة من إعدادات المتصفح، فعّلها من أذونات الموقع.");
-                    return;
+                if (osInstance.Notifications && typeof osInstance.Notifications.requestPermission === "function") {
+                    await osInstance.Notifications.requestPermission();
                 }
 
-                if (OneSignal.Notifications && typeof OneSignal.Notifications.requestPermission === "function") {
-                    await OneSignal.Notifications.requestPermission();
-                }
-
-                if (OneSignal.User && OneSignal.User.PushSubscription && typeof OneSignal.User.PushSubscription.optIn === "function") {
-                    await OneSignal.User.PushSubscription.optIn();
+                if (osInstance.User && osInstance.User.PushSubscription && typeof osInstance.User.PushSubscription.optIn === "function") {
+                    await osInstance.User.PushSubscription.optIn();
                 }
 
                 setTimeout(() => {
-                    const subId = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.id;
-                    const optedIn = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.optedIn === true;
+                    const subId = osInstance.User && osInstance.User.PushSubscription && osInstance.User.PushSubscription.id;
+                    const optedIn = osInstance.User && osInstance.User.PushSubscription && osInstance.User.PushSubscription.optedIn === true;
                     const nativeGranted = typeof Notification !== "undefined" && Notification.permission === "granted";
 
                     if (subId || (optedIn && nativeGranted) || nativeGranted) {
@@ -3036,13 +3052,13 @@
                     } else {
                         showCaramelToast("لم يتم تفعيل الإشعارات بعد، تأكد من اختيار سماح.");
                     }
-                }, 1000);
+                }, 800);
             } catch (error) {
-                showCaramelToast("حدث خطأ أثناء تفعيل الإشعارات.");
+                showCaramelToast("تعذّر إتمام التفعيل الآن، جرّب مرة أخرى.");
             }
         };
 
-        OneSignalDeferred.push(async function (OneSignal) {
+        window.OneSignalDeferred.push(async function (OneSignal) {
             try {
                 await OneSignal.init({
                     appId: "19f76037-4f5a-41b4-ada5-20e0abb2b1a7",
@@ -3052,7 +3068,7 @@
                     }
                 });
 
-                window.OneSignalCaramel = OneSignal;
+                isOneSignalReady = true;
 
                 if (OneSignal.User && OneSignal.User.PushSubscription && typeof OneSignal.User.PushSubscription.addEventListener === "function") {
                     OneSignal.User.PushSubscription.addEventListener("change", function (event) {
@@ -3067,7 +3083,9 @@
                 }
 
                 updateCaramelPushButton(OneSignal);
-            } catch (error) {}
+            } catch (error) {
+                isOneSignalReady = false;
+            }
         });
     </script>
 
