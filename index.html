@@ -89,7 +89,6 @@
         a { text-decoration: none; color: inherit; }
         button { font-family: 'Cairo', sans-serif; cursor: pointer; border: none; background: none; }
 
-        /* Modern scroll indicator bar */
         .scroll-progress-track {
             position: fixed;
             top: 0;
@@ -447,7 +446,6 @@
             color: #ffffff;
         }
 
-        /* Locked frame spotlight boxes where only the product flips inside */
         .dual-spotlight-row {
             display: grid;
             grid-template-columns: 1fr;
@@ -1130,7 +1128,6 @@
 
         .caramel-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-        /* Modern Bento Categories Drawer */
         .cats-backdrop {
             display: none;
             position: fixed;
@@ -1281,7 +1278,7 @@
             display: none;
             position: fixed;
             inset: 0;
-            z-index: 260;
+            z-index: 320;
             background: rgba(16, 13, 10, 0.72);
             backdrop-filter: blur(8px);
             align-items: center;
@@ -1455,7 +1452,7 @@
             top: 0;
             left: 0;
             bottom: 0;
-            width: min(410px, 94vw);
+            width: min(430px, 95vw);
             background: #ffffff;
             z-index: 210;
             transform: translateX(-105%);
@@ -1471,136 +1468,238 @@
         .cart-header {
             background: var(--espresso);
             color: #ffffff;
-            padding: 14px 16px;
+            padding: 12px 14px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 8px;
         }
 
-        .cart-header h3 { font-size: 1rem; font-weight: 900; color: var(--accent-soft); flex: 1; }
+        .cart-header h3 { font-size: 0.96rem; font-weight: 900; color: var(--accent-soft); flex: 1; }
         .cart-header-actions { display: flex; align-items: center; gap: 6px; }
 
         .back-from-cart-btn {
             background: rgba(255, 255, 255, 0.08);
             color: var(--accent-soft);
             border: 1px solid rgba(255, 255, 255, 0.14);
-            padding: 5px 10px;
+            padding: 4px 10px;
             border-radius: 10px;
-            font-size: 0.76rem;
+            font-size: 0.74rem;
             font-weight: 800;
         }
 
         .close-cart-btn {
-            width: 34px;
-            height: 34px;
-            border-radius: 11px;
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
             background: rgba(255, 255, 255, 0.12);
             color: #ffffff;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
+        .cart-summary-strip {
+            padding: 7px 14px;
+            background: var(--accent-tint);
+            border-bottom: 1px solid var(--accent-glow);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.74rem;
+            font-weight: 800;
+            color: var(--espresso-soft);
+        }
+
+        /* Compact cart body to display maximum order items at once */
         .cart-body {
             flex: 1;
             overflow-y: auto;
-            padding: 14px 16px;
+            padding: 8px 12px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 6px;
             background: var(--page-mood-bg);
         }
 
-        .cart-empty { text-align: center; padding: 40px 14px; color: var(--text-muted); font-weight: 700; font-size: 0.92rem; }
+        .cart-empty { text-align: center; padding: 36px 14px; color: var(--text-muted); font-weight: 700; font-size: 0.88rem; }
 
         .cart-item {
             background: #ffffff;
-            border: 1px solid rgba(28, 23, 20, 0.08);
-            border-radius: 15px;
-            padding: 10px;
+            border: 1px solid rgba(24, 20, 18, 0.08);
+            border-radius: 12px;
+            padding: 6px 8px;
             display: flex;
             flex-direction: column;
+            gap: 4px;
+            box-shadow: 0 4px 10px -8px rgba(18, 16, 14, 0.16);
+        }
+
+        .cart-item-top {
+            display: flex;
+            align-items: center;
             gap: 8px;
         }
 
-        .cart-item-top { display: flex; align-items: center; gap: 10px; }
-        .cart-item img { width: 56px; height: 56px; border-radius: 11px; object-fit: cover; flex-shrink: 0; }
-        .cart-item-info { flex: 1; min-width: 0; }
-        .cart-item-title { font-size: 0.84rem; font-weight: 800; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .cart-item-price { font-size: 0.82rem; font-weight: 800; color: var(--accent-deep); }
-        .cart-item-options { display: flex; flex-wrap: wrap; gap: 6px; }
+        .cart-item img {
+            width: 42px;
+            height: 42px;
+            border-radius: 9px;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 1px solid var(--accent-glow);
+        }
+
+        .cart-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .cart-item-title {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.25;
+        }
+
+        .cart-item-meta-line {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.72rem;
+            line-height: 1.2;
+            margin-top: 2px;
+        }
+
+        .cart-item-price {
+            font-weight: 900;
+            color: var(--accent-deep);
+            white-space: nowrap;
+        }
+
+        .cart-item-merchant {
+            font-size: 0.66rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .cart-item-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
 
         .cart-option-select, .cart-item-note-input {
             font-family: 'Cairo', sans-serif;
-            border: 1px solid var(--accent-glow);
-            border-radius: 10px;
+            border: 1px solid rgba(24, 20, 18, 0.12);
+            border-radius: 8px;
             background: var(--page-mood-bg);
             color: var(--text-main);
             font-weight: 700;
             outline: none;
         }
 
-        .cart-option-select { font-size: 0.76rem; padding: 5px 8px; flex: 1; min-width: 115px; }
-        .cart-item-note-input { width: 100%; font-size: 0.75rem; padding: 6px 9px; }
-        .qty-controls { display: flex; align-items: center; gap: 6px; }
+        .cart-option-select {
+            font-size: 0.68rem;
+            padding: 2px 6px;
+            flex: 1;
+            min-width: 92px;
+        }
+
+        .cart-item-note-input {
+            width: 100%;
+            font-size: 0.69rem;
+            padding: 3px 7px;
+        }
+
+        .qty-controls {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            flex-shrink: 0;
+        }
 
         .qty-btn {
-            width: 26px;
-            height: 26px;
-            border-radius: 9px;
-            background: #f3ede6;
-            color: var(--espresso);
+            width: 22px;
+            height: 22px;
+            border-radius: 7px;
+            background: var(--espresso);
+            color: var(--accent-soft);
             font-weight: 900;
-            font-size: 0.9rem;
+            font-size: 0.82rem;
+            line-height: 1;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .qty-val { font-size: 0.84rem; font-weight: 800; min-width: 18px; text-align: center; }
-        .remove-item-btn { color: #b91c1c; font-size: 0.85rem; font-weight: 800; padding: 4px 6px; }
+        .qty-val {
+            font-size: 0.76rem;
+            font-weight: 900;
+            min-width: 16px;
+            text-align: center;
+        }
+
+        .remove-item-btn {
+            color: #b91c1c;
+            background: #fef2f2;
+            border-radius: 7px;
+            width: 22px;
+            height: 22px;
+            font-size: 0.74rem;
+            font-weight: 900;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
 
         .cart-footer {
-            padding: 14px 16px;
+            padding: 10px 14px 12px;
             background: #ffffff;
             border-top: 1px solid rgba(28, 23, 20, 0.1);
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 7px;
         }
 
         .cart-policy-note {
             background: var(--page-mood-bg);
             border: 1px solid var(--accent-glow);
-            border-radius: 12px;
-            padding: 8px 10px;
-            font-size: 0.74rem;
+            border-radius: 10px;
+            padding: 6px 9px;
+            font-size: 0.69rem;
             font-weight: 700;
             color: var(--espresso-soft);
         }
 
-        .cart-total-row { display: flex; align-items: center; justify-content: space-between; font-size: 1rem; font-weight: 900; }
-        .cart-total-amount { color: var(--accent-deep); font-size: 1.15rem; }
+        .cart-total-row { display: flex; align-items: center; justify-content: space-between; font-size: 0.94rem; font-weight: 900; }
+        .cart-total-amount { color: var(--accent-deep); font-size: 1.08rem; }
 
         .checkout-wa-btn {
             width: 100%;
-            padding: 11px 14px;
-            border-radius: 13px;
+            padding: 9px 14px;
+            border-radius: 12px;
             background: linear-gradient(135deg, #16a34a, #15803d);
             color: #ffffff;
-            font-size: 0.9rem;
+            font-size: 0.86rem;
             font-weight: 800;
         }
 
         .clear-cart-btn {
             width: 100%;
-            padding: 7px;
-            border-radius: 11px;
+            padding: 6px;
+            border-radius: 10px;
             background: #fef2f2;
             color: #b91c1c;
-            font-size: 0.78rem;
+            font-size: 0.74rem;
             font-weight: 800;
         }
 
@@ -1608,7 +1707,7 @@
             display: none;
             position: fixed;
             inset: 0;
-            z-index: 300;
+            z-index: 280;
             background: rgba(14, 11, 9, 0.88);
             backdrop-filter: blur(10px);
             align-items: center;
@@ -1639,8 +1738,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 230px;
-            max-height: 44vh;
+            min-height: 220px;
+            max-height: 42vh;
             overflow: hidden;
             flex-shrink: 0;
         }
@@ -1648,7 +1747,7 @@
         .preview-top-media img {
             width: 100%;
             height: 100%;
-            max-height: 44vh;
+            max-height: 42vh;
             object-fit: contain;
             display: block;
             padding: 8px;
@@ -1674,11 +1773,11 @@
         }
 
         .preview-detail-body {
-            padding: 16px;
+            padding: 15px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 11px;
+            gap: 10px;
             background: var(--page-mood-bg);
         }
 
@@ -1710,7 +1809,7 @@
         }
 
         .preview-product-title {
-            font-size: 1.08rem;
+            font-size: 1.05rem;
             font-weight: 900;
             color: var(--espresso);
             line-height: 1.38;
@@ -1722,26 +1821,26 @@
             flex-wrap: wrap;
             gap: 8px;
             background: #ffffff;
-            padding: 10px 13px;
+            padding: 9px 13px;
             border-radius: 15px;
             border: 1px solid var(--accent-glow);
         }
 
         .preview-main-price {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             font-weight: 900;
             color: var(--accent-deep);
         }
 
         .preview-main-price span {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 700;
             color: var(--text-muted);
             margin-right: 3px;
         }
 
         .preview-sub-price {
-            font-size: 0.78rem;
+            font-size: 0.76rem;
             font-weight: 800;
             color: var(--espresso-soft);
             background: var(--accent-tint);
@@ -1752,38 +1851,38 @@
         .preview-story-card {
             background: #ffffff;
             border-radius: 16px;
-            padding: 12px 14px;
+            padding: 11px 13px;
             border: 1px solid rgba(24, 20, 18, 0.08);
             box-shadow: 0 6px 18px -12px rgba(18, 16, 14, 0.16);
         }
 
         .preview-story-label {
-            font-size: 0.75rem;
+            font-size: 0.74rem;
             font-weight: 900;
             color: var(--accent-deep);
-            margin-bottom: 5px;
+            margin-bottom: 4px;
             display: block;
         }
 
         .preview-story-text {
-            font-size: 0.88rem;
+            font-size: 0.86rem;
             font-weight: 700;
             color: var(--text-main);
-            line-height: 1.72;
+            line-height: 1.65;
         }
 
         .preview-hook-note {
-            margin-top: 8px;
-            padding-top: 8px;
+            margin-top: 7px;
+            padding-top: 7px;
             border-top: 1px dashed rgba(24, 20, 18, 0.12);
-            font-size: 0.78rem;
+            font-size: 0.76rem;
             font-weight: 800;
             color: var(--espresso-soft);
         }
 
         .preview-actions-row {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1.2fr 0.8fr;
             gap: 8px;
             padding-top: 2px;
         }
@@ -1926,6 +2025,7 @@
 
         <div class="section-heading" id="productsSectionHeading">
             <h2 id="activeCategoryTitle">كل المنتجات</h2>
+            <span class="smart-tag" id="resultsCountBadge"></span>
         </div>
 
         <section class="products-grid" id="productsGrid"></section>
@@ -2042,6 +2142,10 @@
                 <button type="button" class="close-cart-btn" onclick="closeCart()" aria-label="إغلاق السلة">&times;</button>
             </div>
         </div>
+        <div class="cart-summary-strip" id="cartSummaryStrip">
+            <span>الطلبات المسجلة: <strong id="cartDistinctCount">0</strong></span>
+            <span>إجمالي القطع: <strong id="cartTotalPieces">0</strong></span>
+        </div>
         <div class="cart-body" id="cartItemsContainer"></div>
         <div class="cart-footer">
             <div class="cart-policy-note">الدفع عند الاستلام • استرجاع خلال أسبوع لو المنتج غير التفاصيل الموجودة.</div>
@@ -2140,7 +2244,6 @@
         let trendSlideIdx = 0;
         let dealSlideIdx = 0;
 
-        /* Update scroll progress bar smoothly */
         window.addEventListener("scroll", () => {
             const fill = document.getElementById("scrollProgressFill");
             if (!fill) return;
@@ -2196,7 +2299,7 @@
             toastEl.textContent = message;
             toastEl.classList.add("show");
             clearTimeout(toastTimer);
-            toastTimer = setTimeout(() => { toastEl.classList.remove("show"); }, 3500);
+            toastTimer = setTimeout(() => { toastEl.classList.remove("show"); }, 3200);
         }
 
         function setInstallButtonsVisible(show) {
@@ -2390,11 +2493,12 @@
             return "شيرين غريب";
         }
 
+        /* Clean, accurately categorized catalog */
         const PRODUCTS = [
             { id: "hm-1", title: "جوانتي سيليكون حراري للمطبخ", desc: "امسك الصواني السخنة بثبات وأمان تام من أول لمسة بدون قلق من الحرارة.", price: 155, category: "home", img: "Kit/compressed_1795117656213.jpg" },
             { id: "hm-2", title: "شماعة لوكس 3×1", desc: "ضاعف مساحة دولابك في ثوانٍ ورتّب أكثر من قطعة فوق بعض بأناقة.", price: 40, category: "home", img: "Kit/compressed_1794957387150.webp" },
             { id: "hm-3", title: "شماعة ميدو 6×1", desc: "حل ذكي لتوفير مساحة الدولاب ولمّ أكثر من قطعة في مكان واحد.", price: 35, category: "home", img: "Kit/compressed_1794957386430.webp" },
-            { id: "hm-4", title: "شماعة أبو الخير أطفال 6×1", desc: "رتّب هدوم طفلك بسهولة ووفّر مساحة الدولاب بتصميم عملي مريح.", price: 35, category: "home", img: "Kit/compressed_1794957387291.webp" },
+            { id: "hm-4", title: "شماعة أبو الخير أطفال 6×1", desc: "رتّب هدوم طفلك بسهولة ووفّر مساحة الدولاب بتصميم عملي مريح.", price: 35, category: "kids", categories: ["kids", "home"], img: "Kit/compressed_1794957387291.webp" },
             { id: "hm-5", title: "شماعة بنطلون جينز", desc: "علّق بناطيلك بدون كرمشة ووفّر مساحة كبيرة جوه الدولاب.", price: 35, category: "home", img: "Kit/compressed_1794957387004.webp" },
             { id: "hm-6", title: "شماعة تفاح", desc: "لمسة ديكور لافتة وعملية تعلّق عليها عباياتك وشنطك بكل سهولة.", price: 75, category: "home", img: "Kit/compressed_1794957388762.webp" },
             { id: "hm-7", title: "شماعة استايل حائطية", desc: "خلّي مدخل البيت أو الغرفة مرتب دايماً بتعليقة شيك وعملية.", price: 65, category: "home", img: "Kit/compressed_1794957391461.webp" },
@@ -2413,7 +2517,7 @@
             { id: "hm-20", title: "ستاند ملابس وجزامة 5 دور", desc: "سعة أكبر بـ 5 أدوار لتنظيم الأحذية والملابس والشنط بشكل مرتب.", price: 310, category: "home", img: "Kit/compressed_1794957387416.webp" },
             { id: "hm-21", title: "منظم متعدد دوار", desc: "لفّة واحدة توصلك لكل أغراضك الصغيرة فوراً وتوفّر وقتك ومساحتك.", price: 200, category: "home", img: "Kit/compressed_1794957388217.webp" },
             { id: "hm-22", title: "شنطة حفظ حراري (بنفسجي / باندا)", desc: "خفيفة وعملية تحافظ على حرارة أكلك ومشروباتك أثناء الخروج والعمل.", price: 200, category: "home", img: "Kit/compressed_1794957387731.webp" },
-            { id: "hm-23", title: "شنطة حفظ حراري أسود Safeer", desc: "تصميم أنيق باللون الأسود يحفظ درجة حرارة الوجبات للرحلات والعمل.", price: 230, category: "home", img: "Kit/compressed_1794957388552.webp" },
+            { id: "hm-23", title: "شنطة حفظ حراري أسود Safeer", desc: "تصميم أنيق باللون الأسود يحفظ درجة حرارة الوجبات للرحلات والعمل.", price: 230, category: "home", categories: ["home", "men"], img: "Kit/compressed_1794957388552.webp" },
             { id: "hm-24", title: "ستاند مايكرويف", desc: "ارفع المايكرويف بثبات واستغل المساحة اللي تحته في تنظيم مطبخك.", price: 285, category: "home", img: "Kit/compressed_1794957387972.webp" },
             { id: "hm-25", title: "جزامة شي إن معدن 7 دور", desc: "7 أدوار عملية تلم عدد كبير من الأحذية بشكل أنيق ومنظم في المدخل.", price: 450, category: "home", img: "Kit/compressed_1794957389198.webp" },
             { id: "hm-26", title: "شنطة حفظ حراري كبيرة أسود Safeer", desc: "حجم أوسع مناسب للوجبات الكبيرة والمشاوير الطويلة والرحلات العائلية.", price: 270, category: "home", img: "Kit/compressed_1794957392433.webp" },
@@ -2434,11 +2538,11 @@
             { id: "hm-41", title: "طقم صواني بيتزا / فرن جرانيت Gigilli (مكانك)", desc: "توزيع حرارة متوازن وسطح جرانيت يساعد على خبز وتسوية مثالية وتنظيف أسهل.", price: 2200, category: "home", img: "Kit/IMG-20261116-WA0064.jpg" },
             { id: "hm-42", title: "طقم بولات / أطباق عميقة مرسومة 6 قطع", desc: "6 بولات عميقة بتصميم مبهج تناسب الاستخدام اليومي والضيافة المميزة.", price: 240, category: "home", img: "Kit/IMG-20261116-WA0065.jpg" },
             { id: "hm-43", title: "طقم سكاكين SMEG في علبة (6 سكاكين)", desc: "طقم 6 سكاكين مطبخ في علبة أنيقة لتقطيع وتحضير الأطعمة بدقة وسلاسة.", price: 850, category: "home", img: "Kit/IMG-20261116-WA0066.jpg" },
-            { id: "hm-44", title: "لحاف / طقم سرير MORANO", desc: "اختيار مميز يجمع بين الشكل الأنيق والاعتمادية في تجديد غرفة النوم.", price: 1800, category: "home", img: "Kit/IMG-20261116-WA0071.jpg" },
-            { id: "hm-45", title: "طقم كوبايات زجاج منقوش في علبة", desc: "طقم كوبايات زجاج منقوش فاخر في علبة أنيقة مناسب للضيافة والهدايا.", price: 1500, category: "home", img: "Kit/IMG-20261116-WA0075.jpg" },
+            { id: "hm-44", title: "لحاف / طقم سرير MORANO", desc: "اختيار مميز يجمع بين الشكل الأنيق والاعتمادية في تجديد غرفة النوم.", price: 1800, category: "home", img: "Kit/compressed_1795113635317.webp" },
+            { id: "hm-45", title: "طقم كوبايات زجاج منقوش في علبة", desc: "طقم كوبايات زجاج منقوش فاخر في علبة أنيقة مناسب للضيافة والهدايا.", price: 1500, category: "home", categories: ["home", "gifts"], img: "Kit/IMG-20261116-WA0075.jpg" },
             { id: "hm-46", title: "طقم أطباق / بولات LAMSA Mini Arco (6 قطع)", desc: "6 قطع صغيرة مفيدة للبيت والمطبخ بسعر مناسب جداً للاستخدام اليومي.", price: 80, category: "home", img: "Kit/IMG-20261116-WA0076.jpg" },
             { id: "hm-47", title: "مجموعة عطور / سبراي I LIKE IT (6 عبوات)", desc: "6 عبوات عطر وسبراي I LIKE IT متنوعة للرجال والنساء بسعر مميز.", price: 250, category: "perfume", img: "Kit/IMG-20261116-WA0081.jpg" },
-            { id: "hm-48", title: "معطرات / بخاخات (4 عبوات)", desc: "يمنح الغرف والمنزل رائحة منعشة ومريحة تدوم طوال اليوم.", price: 100, category: "perfume", img: "Kit/IMG-20261116-WA0082.jpg" },
+            { id: "hm-48", title: "معطرات / بخاخات (4 عبوات)", desc: "يمنح الغرف والمنزل رائحة منعشة ومريحة تدوم طوال اليوم.", price: 100, category: "perfume", categories: ["perfume", "home"], img: "Kit/IMG-20261116-WA0082.jpg" },
             { id: "hm-49", title: "طقم صواني تقديم استانلس أصلي ثقيل (قطعتين)", desc: "كل الصواني قطعتين، استانلس أصلي ثقيل ضد الصدأ بتشطيب راقٍ للتقديم والضيافة.", price: 1600, category: "home", img: "Kit/IMG-20261116-WA0085.jpg" },
             { id: "hm-50", title: "زيت مساج للجسم", desc: "قوام ناعم يساعد على الانزلاق المريح وتنعيم البشرة أثناء الاسترخاء.", price: 70, category: "perfume", img: "Kit/IMG-20261116-WA0104.jpg" },
             { id: "hm-51", title: "طقم أكواب / كاسات زجاج GARBO GLASSWARE", desc: "طقم أكواب زجاج جاربو بتصميم عصري ومتين يبرز شكل التقديم على المائدة.", price: 500, category: "home", img: "Kit/IMG-20261116-WA0101.jpg" },
@@ -2453,60 +2557,60 @@
             { id: "libr-2", title: "زمزمية مياه رياضية MOT", desc: "عملية وسهلة الحمل للتمارين والمدرسة والخروجات اليومية.", price: 140, category: "school", img: "Libr/compressed_1795160031599.webp" },
             { id: "libr-3", title: "ورق فلوسكاب زاد ZAD", desc: "ورق كتابة مناسب للواجبات والامتحانات والتدوين اليومي.", price: 30, category: "school", img: "Libr/compressed_1795160031301.webp" },
             { id: "libr-4", title: "نوت بوك سلك 100 ورقة", desc: "تجليد سلك مريح يفتح بالكامل لكتابة المحاضرات والمذاكرة بسهولة.", price: 100, priceLabel: "100 / 120 / 150", category: "school", img: "Libr/compressed_1795160031025.webp" },
-            { id: "libr-5", title: "مقلمة أميرات ديزني", desc: "تصميم بناتي جذاب يجمع الأقلام والأدوات المدرسية في مكان واحد.", price: 120, category: "school", img: "Libr/compressed_1795160030736.webp" },
-            { id: "libr-6", title: "لانش بوكس ملون", desc: "يحفظ ساندويتشات وفواكه المدرسة بشكل مرتب ومبهج للأطفال.", price: 120, category: "school", img: "Libr/compressed_1795160030424.webp" },
-            { id: "libr-7", title: "سبورة كتابة LCD PANEL", desc: "لوح رسم وكتابة إلكتروني خفيف وممتع للأطفال والطلاب مع زر مسح فوري.", price: 65, category: "school", img: "Libr/compressed_1795160030099.webp" },
+            { id: "libr-5", title: "مقلمة أميرات ديزني", desc: "تصميم بناتي جذاب يجمع الأقلام والأدوات المدرسية في مكان واحد.", price: 120, category: "school", categories: ["school", "kids"], img: "Libr/compressed_1795160030736.webp" },
+            { id: "libr-6", title: "لانش بوكس ملون", desc: "يحفظ ساندويتشات وفواكه المدرسة بشكل مرتب ومبهج للأطفال.", price: 120, category: "school", categories: ["school", "kids"], img: "Libr/compressed_1795160030424.webp" },
+            { id: "libr-7", title: "سبورة كتابة LCD PANEL", desc: "لوح رسم وكتابة إلكتروني خفيف وممتع للأطفال والطلاب مع زر مسح فوري.", price: 65, category: "school", categories: ["school", "kids"], img: "Libr/compressed_1795160030099.webp" },
             { id: "libr-8", title: "نوت بوك سلك 80 / 100 ورقة", desc: "دفتر سلك عملي وخفيف للمذاكرة وتدوين الأفكار اليومية.", price: 65, category: "school", img: "Libr/compressed_1795160029820.webp" },
             { id: "libr-9", title: "زمزمية مياه متدرجة بمؤشر ساعات", desc: "ألوان متدرجة مع علامات زمنية تشجع على شرب المياه بانتظام طوال اليوم.", price: 140, category: "school", img: "Libr/compressed_1795160029544.webp" },
             { id: "libr-10", title: "باكو كشاكيل 10 كشاكيل", desc: "توفير عملي بـ 10 كشاكيل جاهزة للمدرسة والدروس والمذاكرة.", price: 70, category: "school", img: "Libr/compressed_1795160029204.webp" },
             { id: "libr-11", title: "زمزمية مياه متدرجة بينك وأزرق", desc: "تدرج لوني جذاب وشكل عصري مناسب للمدرسة والنادي والجامعة.", price: 140, category: "school", img: "Libr/compressed_1795160028924.webp" },
-            { id: "libr-12", title: "رش ثلج للأفراح GALA", desc: "يضيف أجواء احتفالية ومبهجة لأعياد الميلاد والحفلات والمناسبات.", price: 30, category: "school", img: "Libr/compressed_1795160028621.webp" },
-            { id: "libr-13", title: "مقلمة Kawai وردية", desc: "تصميم لطيف باللون الوردي لحفظ الأقلام والمسطرة والممحاة بترتيب.", price: 50, category: "school", img: "Libr/compressed_1795160028347.webp" },
+            { id: "libr-12", title: "رش ثلج للأفراح GALA", desc: "يضيف أجواء احتفالية ومبهجة لأعياد الميلاد والحفلات والمناسبات.", price: 30, category: "gifts", img: "Libr/compressed_1795160028621.webp" },
+            { id: "libr-13", title: "مقلمة Kawai وردية", desc: "تصميم لطيف باللون الوردي لحفظ الأقلام والمسطرة والممحاة بترتيب.", price: 50, category: "school", categories: ["school", "kids"], img: "Libr/compressed_1795160028347.webp" },
             { id: "libr-14", title: "زمزمية مياه متدرجة Winning", desc: "شكل رياضي عملي وتدرج ألوان مميز لاصطحابها في كل مكان.", price: 140, category: "school", img: "Libr/compressed_1795160028072.webp" },
-            { id: "libr-15", title: "دبل فيس Mounting Tape", desc: "شريط لاصق مزدوج الوجه لتثبيت البوسترات والأدوات الخفيفة بسهولة.", price: 30, category: "school", img: "Libr/compressed_1795160027793.webp" },
+            { id: "libr-15", title: "دبل فيس Mounting Tape", desc: "شريط لاصق مزدوج الوجه لتثبيت البوسترات والأدوات الخفيفة بسهولة.", price: 30, category: "school", categories: ["school", "home"], img: "Libr/compressed_1795160027793.webp" },
             { id: "libr-16", title: "منظم / مقلمة SUN GROUP", desc: "يجمع الأدوات المكتبية أو المدرسية بشكل منظم وسهل الوصول.", price: 70, category: "school", img: "Libr/compressed_1795160027493.webp" },
-            { id: "libr-17", title: "زمزميات أطفال فضاء قطعتين", desc: "قطعتان برسومات فضاء محببة للأطفال للمدرسة والخروجات.", price: 100, category: "school", img: "Libr/compressed_1795160027187.webp" },
-            { id: "libr-18", title: "كيس بالونات 100 قطعة", desc: "100 بالونة لتزيين حفلات أعياد الميلاد والمفاجآت والمناسبات السعيدة.", price: 85, category: "school", img: "Libr/compressed_1795160026903.webp" },
-            { id: "libr-19", title: "صلصال أطفال NARA", desc: "يشجع الأطفال على الإبداع وتشكيل المجسمات وتنمية المهارات اليدوية.", price: 45, category: "school", img: "Libr/compressed_1795160026583.webp" },
+            { id: "libr-17", title: "زمزميات أطفال فضاء قطعتين", desc: "قطعتان برسومات فضاء محببة للأطفال للمدرسة والخروجات.", price: 100, category: "kids", categories: ["kids", "school"], img: "Libr/compressed_1795160027187.webp" },
+            { id: "libr-18", title: "كيس بالونات 100 قطعة", desc: "100 بالونة لتزيين حفلات أعياد الميلاد والمفاجآت والمناسبات السعيدة.", price: 85, category: "gifts", categories: ["gifts", "kids"], img: "Libr/compressed_1795160026903.webp" },
+            { id: "libr-19", title: "صلصال أطفال NARA", desc: "يشجع الأطفال على الإبداع وتشكيل المجسمات وتنمية المهارات اليدوية.", price: 45, category: "kids", categories: ["kids", "school"], img: "Libr/compressed_1795160026583.webp" },
             { id: "libr-20", title: "قلم جاف شكل باندا", desc: "قلم بتصميم باندا يضيف لمسة مرحة للكتابة والمذاكرة.", price: 10, category: "school", img: "Libr/compressed_1795160026304.webp" },
             { id: "libr-21", title: "ورق كوخ باكو", desc: "باكو ورق مناسب للأنشطة المدرسية والأعمال الفنية والتطبيقات.", price: 65, category: "school", img: "Libr/compressed_1795160026004.webp" },
-            { id: "libr-22", title: "لانش بوكس CAMEL LUNCH BOX", desc: "علبة طعام عملية للمدرسة تحافظ على وجبة طفلك منظمة وسهلة الفتح.", price: 120, category: "school", img: "Libr/compressed_1795160025726.webp" },
-            { id: "libr-23", title: "مقص أطفال SCISSORS", desc: "تصميم مريح ليد الأطفال لقص الورق والأعمال الفنية بأمان.", price: 20, category: "school", img: "Libr/compressed_1795160025453.webp" },
+            { id: "libr-22", title: "لانش بوكس CAMEL LUNCH BOX", desc: "علبة طعام عملية للمدرسة تحافظ على وجبة طفلك منظمة وسهلة الفتح.", price: 120, category: "school", categories: ["school", "kids"], img: "Libr/compressed_1795160025726.webp" },
+            { id: "libr-23", title: "مقص أطفال SCISSORS", desc: "تصميم مريح ليد الأطفال لقص الورق والأعمال الفنية بأمان.", price: 20, category: "kids", categories: ["kids", "school"], img: "Libr/compressed_1795160025453.webp" },
             { id: "libr-24", title: "فوم جليتر باكو ألوان", desc: "ألوان لامعة جذابة للأشغال اليدوية والوسائل التعليمية وتزيين اللوحات.", price: 65, category: "school", img: "Libr/compressed_1795160025160.webp" },
             { id: "libr-25", title: "شريط لاصق سيلتيب Falcon", desc: "رول لاصق شفاف عملي لتغليف الأوراق والرسائل والأعمال اليومية.", price: 20, category: "school", img: "Libr/compressed_1795160024869.webp" },
             { id: "libr-26", title: "نوت بوك سلك غلاف أنمي", desc: "غلاف أنمي عصري وأوراق سلك مريحة للدراسة وتدوين الملاحظات.", price: 125, priceLabel: "125 / 100 / 150", category: "school", img: "Libr/compressed_1795160024565.webp" },
-            { id: "libr-27", title: "مقلمة Andiosya Group بناتي", desc: "مقلمة بناتي أنيقة لحفظ الأقلام والأدوات المدرسية بشكل مرتب.", price: 65, category: "school", img: "Libr/compressed_1795160024235.webp" },
-            { id: "libr-28", title: "ألوان فلوماستر دومس DOMS Aqua 12 لون", desc: "12 لوناً زاهياً للرسم والتلوين والأنشطة المدرسية بوضوح جميل.", price: 50, category: "school", img: "Libr/compressed_1795160023862.webp" },
-            { id: "tafse-1", title: "مكرمية حائط هاند ميد 1×2 متر", desc: "شغل يدوي مميز بمقاس 1×2 متر مع قطعتين رباط لتزيين الحوائط بلمسة دافئة.", price: 900, category: "tafse", img: "Tafse/IMG-20261117-WA0029.jpg" },
-            { id: "tafse-2", title: "مكرمية ديكور هاند ميد 1×2 متر مع عصايا", desc: "مقاس 1×2 متر شغل يدوي متقن ومعاها قطعتين رباط وعصايا هدية لتعليق فخم.", price: 1550, category: "tafse", img: "Tafse/IMG-20261117-WA0027.jpg" },
-            { id: "tafse-3", title: "مكرمية فاخرة هاند ميد 1×2 متر مع عصايا", desc: "قطعة ديكور يدوية بارزة بمقاس 1×2 متر ومعاها قطعتين رباط وعصايا هدية.", price: 1700, category: "tafse", img: "Tafse/IMG-20261117-WA0024.jpg" },
-            { id: "tafse-4", title: "مكرمية يدوية 1×2 متر مع رباط هدية", desc: "تصميم بوهيمي أنيق بمقاس 1×2 متر يضيف روحاً مميزة للريسبشن أو الغرف.", price: 900, category: "tafse", img: "Tafse/IMG-20261117-WA0023.jpg" },
-            { id: "tafse-5", title: "مكرمية ديكور 1×2 متر مع عصايا ورباط", desc: "شغل هاند ميد متكامل بمقاس 1×2 متر ومعاها قطعتين رباط وعصايا هدية.", price: 1600, category: "tafse", img: "Tafse/IMG-20261117-WA0034.jpg" },
-            { id: "tafse-6", title: "موديل أسود بقصة كشكشة", desc: "إطلالة أنثوية راقية باللون الأسود مع تفاصيل كشكشة ناعمة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094044923.webp" },
-            { id: "tafse-7", title: "عباية بشت قطيفة موف مع طرحة", desc: "خامة قطيفة دافئة بلون موف جذاب مع طرحة متناسقة لإطلالة شتوية أنيقة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094044497.webp" },
-            { id: "tafse-8", title: "فستان لبني بكشكشة وأكمام", desc: "لون لبني هادئ مع كشكشة وأكمام تمنحك حضوراً رقيقاً ومميزاً.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094044682.webp" },
-            { id: "tafse-9", title: "عباية قطيفة نبيتي ببروش", desc: "قطيفة نبيتي غنية مع لمسة بروش تضيف فخامة واضحة للإطلالة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094044361.webp" },
-            { id: "tafse-10", title: "عباية بني قماش بليسيه بأكمام واسعة", desc: "خامة بليسيه انسيابية باللون البني مع أكمام واسعة مريحة وأنيقة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094044174.webp" },
-            { id: "tafse-11", title: "عباية سوداء قماش جاكار مموج", desc: "قماش جاكار مموج يمنح العباية السوداء ملمساً غنياً وحضوراً مميزاً.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094044287.webp" },
-            { id: "tafse-12", title: "فستان أصفر فاتح برباط جانبي", desc: "لون أصفر فاتح مشرق مع رباط جانبي يحدد القصة بأناقة ناعمة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094043951.webp" },
-            { id: "tafse-13", title: "عباية قطيفة موف غامق مع طرحة", desc: "درجة موف غامق أنيقة بخامة قطيفة مريحة ودافئة مع طرحتها.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094043669.webp" },
-            { id: "tafse-14", title: "عباية قطيفة بني برباط على الأكمام", desc: "قطيفة بنية ناعمة مزينة برباط على الأكمام لإطلالة متوازنة ومريحة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094043790.webp" },
-            { id: "tafse-15", title: "فستان أزرق بليسيه برباط جانبي", desc: "قصة بليسيه جذابة باللون الأزرق مع رباط جانبي لإطلالة عصرية أنيقة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094043481.webp" },
-            { id: "tafse-16", title: "عباية كحلي بأزرار أمامية وأكمام واسعة", desc: "لون كحلي كلاسيكي عملي بأزرار أمامية وأكمام واسعة تمنحك حرية حركة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094043346.webp" },
-            { id: "tafse-17", title: "عباية قطيفة موف مطرزة مع طرحة", desc: "تطريز أنيق على قطيفة موف فخمة مع طرحة متناسقة للمناسبات والخروجات.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094043197.webp" },
-            { id: "tafse-18", title: "عباية سوداء قماش مضلع بأكمام واسعة", desc: "قماش مضلع عملي بلون أسود أنيق وأكمام واسعة تناسب اللبس اليومي.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", img: "Tafse/compressed_1795094042876.webp" },
-            { id: "tafse-19", title: "شنطة هاند ميد خرز", desc: "شنطة يدوية مشغولة بالخرز بلمسة مميزة تناسب الخروجات والهدايا.", price: 50, category: "tafse", img: "Tafse/compressed_1795180558469.webp" },
-            { id: "tafse-20", title: "مراية هاند ميد حسب الطلب (أسماء وورد)", desc: "تنفيذ خاص حسب الطلب بتصميم أسماء وورد لهدية شخصية مميزة.", price: 500, category: "tafse", img: "Tafse/compressed_1795180558100.webp" },
-            { id: "tafse-21", title: "مراية هاند ميد حسب الطلب (ذهبي وفراشات)", desc: "تصميم يدوي حسب الطلب بلمسات ذهبية وفراشات لديكور أنيق ولافت.", price: 500, category: "tafse", img: "Tafse/compressed_1795180558884.webp" },
-            { id: "tafse-22", title: "مراية هاند ميد حسب الطلب (قلوب وصور)", desc: "قطعة هاند ميد مخصصة حسب الطلب بقلوب وصور لتخليد الذكريات.", price: 500, category: "tafse", img: "Tafse/compressed_1795180558694.webp" },
+            { id: "libr-27", title: "مقلمة Andiosya Group بناتي", desc: "مقلمة بناتي أنيقة لحفظ الأقلام والأدوات المدرسية بشكل مرتب.", price: 65, category: "school", categories: ["school", "kids"], img: "Libr/compressed_1795160024235.webp" },
+            { id: "libr-28", title: "ألوان فلوماستر دومس DOMS Aqua 12 لون", desc: "12 لوناً زاهياً للرسم والتلوين والأنشطة المدرسية بوضوح جميل.", price: 50, category: "school", categories: ["school", "kids"], img: "Libr/compressed_1795160023862.webp" },
+            { id: "tafse-1", title: "مكرمية حائط هاند ميد 1×2 متر", desc: "شغل يدوي مميز بمقاس 1×2 متر مع قطعتين رباط لتزيين الحوائط بلمسة دافئة.", price: 900, category: "tafse", categories: ["tafse", "home"], img: "Tafse/IMG-20261117-WA0029.jpg" },
+            { id: "tafse-2", title: "مكرمية ديكور هاند ميد 1×2 متر مع عصايا", desc: "مقاس 1×2 متر شغل يدوي متقن ومعاها قطعتين رباط وعصايا هدية لتعليق فخم.", price: 1550, category: "tafse", categories: ["tafse", "home"], img: "Tafse/IMG-20261117-WA0027.jpg" },
+            { id: "tafse-3", title: "مكرمية فاخرة هاند ميد 1×2 متر مع عصايا", desc: "قطعة ديكور يدوية بارزة بمقاس 1×2 متر ومعاها قطعتين رباط وعصايا هدية.", price: 1700, category: "tafse", categories: ["tafse", "home"], img: "Tafse/IMG-20261117-WA0024.jpg" },
+            { id: "tafse-4", title: "مكرمية يدوية 1×2 متر مع رباط هدية", desc: "تصميم بوهيمي أنيق بمقاس 1×2 متر يضيف روحاً مميزة للريسبشن أو الغرف.", price: 900, category: "tafse", categories: ["tafse", "home"], img: "Tafse/IMG-20261117-WA0023.jpg" },
+            { id: "tafse-5", title: "مكرمية ديكور 1×2 متر مع عصايا ورباط", desc: "شغل هاند ميد متكامل بمقاس 1×2 متر ومعاها قطعتين رباط وعصايا هدية.", price: 1600, category: "tafse", categories: ["tafse", "home"], img: "Tafse/IMG-20261117-WA0034.jpg" },
+            { id: "tafse-6", title: "موديل أسود بقصة كشكشة", desc: "إطلالة أنثوية راقية باللون الأسود مع تفاصيل كشكشة ناعمة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", categories: ["tafse", "women"], img: "Tafse/compressed_1795094044923.webp" },
+            { id: "tafse-7", title: "عباية بشت قطيفة موف مع طرحة", desc: "خامة قطيفة دافئة بلون موف جذاب مع طرحة متناسقة لإطلالة شتوية أنيقة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", categories: ["tafse", "women"], img: "Tafse/compressed_1795094044497.webp" },
+            { id: "tafse-8", title: "فستان لبني بكشكشة وأكمام", desc: "لون لبني هادئ مع كشكشة وأكمام تمنحك حضوراً رقيقاً ومميزاً.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", categories: ["tafse", "women"], img: "Tafse/compressed_1795094044682.webp" },
+            { id: "tafse-9", title: "عباية قطيفة نبيتي ببروش", desc: "قطيفة نبيتي غنية مع لمسة بروش تضيف فخامة واضحة للإطلالة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", categories: ["tafse", "women"], img: "Tafse/compressed_1795094044361.webp" },
+            { id: "tafse-10", title: "عباية بني قماش بليسيه بأكمام واسعة", desc: "خامة بليسيه انسيابية باللون البني مع أكمام واسعة مريحة وأنيقة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", categories: ["tafse", "women"], img: "Tafse/compressed_1795094044174.webp" },
+            { id: "tafse-11", title: "عباية سوداء قماش جاكار مموج", desc: "قماش جاكار مموج يمنح العباية السوداء ملمساً غنياً وحضوراً مميزاً.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", categories: ["tafse", "women"], img: "Tafse/compressed_1795094044287.webp" },
+            { id: "tafse-12", title: "فستان أصفر فاتح برباط جانبي", desc: "لون أصفر فاتح مشرق مع رباط جانبي يحدد القصة بأناقة ناعمة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", categories: ["tafse", "women"], img: "Tafse/compressed_1795094043951.webp" },
+            { id: "tafse-13", title: "عباية قطيفة موف غامق مع طرحة", desc: "درجة موف غامق أنيقة بخامة قطيفة مريحة ودافئة مع طرحتها.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", categories: ["tafse", "women"], img: "Tafse/compressed_1795094043669.webp" },
+            { id: "tafse-14", title: "عباية قطيفة بني برباط على الأكمام", desc: "قطيفة بنية ناعمة مزينة برباط على الأكمام لإطلالة متوازنة ومريحة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", categories: ["tafse", "women"], img: "Tafse/compressed_1795094043790.webp" },
+            { id: "tafse-15", title: "فستان أزرق بليسيه برباط جانبي", desc: "قصة بليسيه جذابة باللون الأزرق مع رباط جانبي لإطلالة عصرية أنيقة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", categories: ["tafse", "women"], img: "Tafse/compressed_1795094043481.webp" },
+            { id: "tafse-16", title: "عباية كحلي بأزرار أمامية وأكمام واسعة", desc: "لون كحلي كلاسيكي عملي بأزرار أمامية وأكمام واسعة تمنحك حرية حركة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", categories: ["tafse", "women"], img: "Tafse/compressed_1795094043346.webp" },
+            { id: "tafse-17", title: "عباية قطيفة موف مطرزة مع طرحة", desc: "تطريز أنيق على قطيفة موف فخمة مع طرحة متناسقة للمناسبات والخروجات.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", categories: ["tafse", "women"], img: "Tafse/compressed_1795094043197.webp" },
+            { id: "tafse-18", title: "عباية سوداء قماش مضلع بأكمام واسعة", desc: "قماش مضلع عملي بلون أسود أنيق وأكمام واسعة تناسب اللبس اليومي.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", categories: ["tafse", "women"], img: "Tafse/compressed_1795094042876.webp" },
+            { id: "tafse-19", title: "شنطة هاند ميد خرز", desc: "شنطة يدوية مشغولة بالخرز بلمسة مميزة تناسب الخروجات والهدايا.", price: 50, category: "tafse", categories: ["tafse", "gifts"], img: "Tafse/compressed_1795180558469.webp" },
+            { id: "tafse-20", title: "مراية هاند ميد حسب الطلب (أسماء وورد)", desc: "تنفيذ خاص حسب الطلب بتصميم أسماء وورد لهدية شخصية مميزة.", price: 500, category: "tafse", categories: ["tafse", "gifts"], img: "Tafse/compressed_1795180558100.webp" },
+            { id: "tafse-21", title: "مراية هاند ميد حسب الطلب (ذهبي وفراشات)", desc: "تصميم يدوي حسب الطلب بلمسات ذهبية وفراشات لديكور أنيق ولافت.", price: 500, category: "tafse", categories: ["tafse", "gifts", "home"], img: "Tafse/compressed_1795180558884.webp" },
+            { id: "tafse-22", title: "مراية هاند ميد حسب الطلب (قلوب وصور)", desc: "قطعة هاند ميد مخصصة حسب الطلب بقلوب وصور لتخليد الذكريات.", price: 500, category: "tafse", categories: ["tafse", "gifts"], img: "Tafse/compressed_1795180558694.webp" },
             { id: "wmn-1", title: "أندر نسائي مشجر دباغ / كاندي", desc: "خامة ناعمة ومريحة بتصميم مشجر أنيق للاستخدام اليومي.", price: 65, category: "women", img: "Clswmn/compressed_1795114616012.webp" },
             { id: "wmn-2", title: "بدي دباغ ألوان", desc: "بدي دباغ بألوان متنوعة متاحة، مريح وعملي للاستخدام اليومي.", price: 130, category: "women", img: "Clswmn/compressed_1795214411055.webp" },
             { id: "wmn-3", title: "بدي عجينة سلسله تريكو", desc: "خامة تريكو عجينة ناعمة ومريحة، فري سايز يلبس لحد 85 ك.", price: 230, category: "women", img: "Clswmn/compressed_1795214411279.webp" },
             { id: "htm-1", title: "صابونة عطرية Bio Soft GODDESS", desc: "صابونة معطرة برائحة فخمة تمنح البشرة ترطيباً ونعومة تدوم طوال اليوم.", price: 60, category: "perfume", img: "Htm/compressed_1795218232411.webp" },
             { id: "htm-2", title: "صابونة عطرية Bio Soft VANILLA FREAK", desc: "صابونة عطرية برائحة الفانيليا المسكرة للترطيب والنعومة وانتعاش يدوم.", price: 60, category: "perfume", img: "Htm/compressed_1795218232627.webp" },
             { id: "htm-3", title: "صابونة سكراب وتفتيح Bio Soft Gluta-collagen", desc: "سكراب وتفتيح لطيف يزيل الجلد الميت ويمنح البشرة نعومة وإشراقة.", price: 75, category: "perfume", img: "Htm/compressed_1795218232533.webp" },
-            { id: "htm-4", title: "صابونة العناية والنظافة النسائية Bio Soft", desc: "صابونة مخصصة للعناية والنظافة النسائية اليومية بانتعاش ولطف على البشرة.", price: 75, category: "women", img: "Htm/compressed_1795218232714.webp" },
-            { id: "htm-5", title: "مزيل مكياج جارنييه Micellar Cleansing Water", desc: "ماء ميسيلار منظف يزيل المكياج ويلطف وينظف الوجه والعينين والشفاه.", price: 110, category: "perfume", img: "Htm/compressed_1795220884067.webp" },
+            { id: "htm-4", title: "صابونة العناية والنظافة النسائية Bio Soft", desc: "صابونة مخصصة للعناية والنظافة النسائية اليومية بانتعاش ولطف على البشرة.", price: 75, category: "perfume", categories: ["perfume", "women"], img: "Htm/compressed_1795218232714.webp" },
+            { id: "htm-5", title: "مزيل مكياج جارنييه Micellar Cleansing Water", desc: "ماء ميسيلار منظف يزيل المكياج ويلطف وينظف الوجه والعينين والشفاه.", price: 110, category: "perfume", categories: ["perfume", "women"], img: "Htm/compressed_1795220884067.webp" },
             { id: "htm-6", title: "حمام كريم بالمايونيز وزبدة الشيا أوميجا 3", desc: "حمام كريم للشعر بالمايونيز وزبدة الشيا وأوميجا 3 يرطب وينعم ويمنح لمعاناً.", price: 140, category: "perfume", img: "Htm/compressed_1795220883880.webp" },
             { id: "htm-7", title: "صبغة شعر خالية من الأمونيا Godrej Expert", desc: "صبغة كريمية خالية من الأمونيا تلون الشعر في 30 دقيقة (بني داكن وأسود).", price: 65, category: "perfume", img: "Htm/compressed_1795220884252.webp" },
             { id: "htm-8", title: "كريم مرطب لليدين Care Body & Soul", desc: "كريم لليدين بفيتامين E مناسب لجميع أنواع البشرة (50 مل) بروائح متعددة.", price: 80, category: "perfume", img: "Htm/compressed_1795220884341.webp" },
@@ -2517,14 +2621,14 @@
             { id: "htm-13", title: "شامبو وبلسم للشعر بخلاصة الثوم Nature's (الواحد)", desc: "شامبو وبلسم للشعر بخلاصة الثوم للمساعدة في تقليل تساقط الشعر (سعر العبوة الواحدة).", price: 140, category: "perfume", img: "Htm/compressed_1795220883880.webp" },
             { id: "htm-14", title: "شاور أوبال OPAL 3 لتر وربع", desc: "شاور جل أوبال حجم عائلي 3.25 لتر بروائح منعشة وترطيب يدوم.", price: 175, category: "perfume", img: "Htm/compressed_1795220963492.webp" },
             { id: "htm-15", title: "شاور 2 لتر (روائح متنوعة)", desc: "شاور جل سعة 2 لتر بروائح متعددة لتنظيف وترطيب الجسم.", price: 160, category: "perfume", img: "Htm/compressed_1795220963492.webp" },
-            { id: "amn-1", title: "محفظة جلد بالأسماء حسب الطلب", desc: "هدية عملية وشخصية باسمك أو اسم من تحب بتقفيل مرتب يليق بكل يوم.", price: 200, category: "gifts", img: "Amnh/IMG-20261117-WA0007.jpg" },
+            { id: "amn-1", title: "محفظة جلد بالأسماء حسب الطلب", desc: "هدية عملية وشخصية باسمك أو اسم من تحب بتقفيل مرتب يليق بكل يوم.", price: 200, category: "gifts", categories: ["gifts", "men"], img: "Amnh/IMG-20261117-WA0007.jpg" },
             { id: "amn-2", title: "مرايا سحرية بصورتك", desc: "مفاجأة بتفاصيل تخطف القلب.. تظهر صورتك بوضوح أول ما تنور المرايا.", price: 300, category: "gifts", img: "Amnh/IMG-20261117-WA0006.jpg" },
-            { id: "amn-3", title: "ساعة حائط بصورتك 30×40", desc: "حوّل أحلى ذكرى لقطعة ديكور تنور الحائط وتفضل قدام عينك كل يوم.", price: 280, category: "gifts", img: "Amnh/IMG-20261117-WA0019.jpg" },
+            { id: "amn-3", title: "ساعة حائط بصورتك 30×40", desc: "حوّل أحلى ذكرى لقطعة ديكور تنور الحائط وتفضل قدام عينك كل يوم.", price: 280, category: "gifts", categories: ["gifts", "home"], img: "Amnh/IMG-20261117-WA0019.jpg" },
             { id: "amn-4", title: "مج أبيض مطبوع بصورتك", desc: "ابدأ يومك بمشروبك المفضل وصورتك المطبوعة بوضوح على مج سيراميك أنيق.", price: 160, category: "gifts", img: "Amnh/IMG-20261117-WA0003.jpg" },
             { id: "amn-5", title: "منديل العرسان", desc: "لمسة مميزة وذكرى جميلة ليوم الفرح والمناسبات الخاصة.", price: 130, category: "gifts", img: "Amnh/IMG-20261117-WA0018.jpg" },
-            { id: "amn-6", title: "تابلوه ديكور 30×40", desc: "اجمع صورك وكلماتك المميزة في تابلوه أنيق يكمّل ديكور الغرفة بذوق.", price: 220, category: "gifts", img: "Amnh/IMG-20261117-WA0017.jpg" },
-            { id: "amn-7", title: "تابلوه ديكور كبير 60×90", desc: "حضور جداري كبير يجمع صورك بعبارات ملهمة لهدية أو ديكور يغيّر شكل المكان.", price: 500, category: "gifts", img: "Amnh/IMG-20261117-WA0016.jpg" },
-            { id: "amn-8", title: "برواز صور 15×21 أسود", desc: "برواز أنيق يضم صورك المفضلة مع لمسة كتابة لهدية راقية بسعر مناسب.", price: 100, category: "gifts", img: "Amnh/IMG-20261117-WA0014.jpg" },
+            { id: "amn-6", title: "تابلوه ديكور 30×40", desc: "اجمع صورك وكلماتك المميزة في تابلوه أنيق يكمّل ديكور الغرفة بذوق.", price: 220, category: "gifts", categories: ["gifts", "home"], img: "Amnh/IMG-20261117-WA0017.jpg" },
+            { id: "amn-7", title: "تابلوه ديكور كبير 60×90", desc: "حضور جداري كبير يجمع صورك بعبارات ملهمة لهدية أو ديكور يغيّر شكل المكان.", price: 500, category: "gifts", categories: ["gifts", "home"], img: "Amnh/IMG-20261117-WA0016.jpg" },
+            { id: "amn-8", title: "برواز صور 15×21 أسود", desc: "برواز أنيق يضم صورك المفضلة مع لمسة كتابة لهدية راقية بسعر مناسب.", price: 100, category: "gifts", categories: ["gifts", "home"], img: "Amnh/IMG-20261117-WA0014.jpg" },
             { id: "amn-9", title: "طباعة جراب موبايل بصورتك", desc: "خلّي موبايلك يعبر عن ذوقك بصورة مطبوعة بتصميم عمودي أنيق.", price: 100, category: "gifts", img: "Amnh/IMG-20261117-WA0009.jpg" },
             { id: "amn-10", title: "مج سحري بصورتك", desc: "أول ما تصب المشروب السخن تظهر صورتك المفاجأة.. فكرة هدية ما تتنسيش.", price: 230, category: "gifts", img: "Amnh/IMG-20261117-WA0004.jpg" },
             { id: "brf-1", title: "Princess", desc: "زجاجة وردية أنيقة بتاج رقيق تدي إحساس بالرقة والجاذبية الأنثوية.", price: 200, category: "perfume", img: "Prfa/IMG-20261116-WA0067.jpg" },
@@ -2533,17 +2637,17 @@
             { id: "brf-4", title: "مجموعة عطور جيب Dizurde (4 عبوات)", desc: "4 روائح متنوعة في حجم عملي يكمّل الشنطة ويكون معاك في كل مكان.", price: 45, category: "perfume", img: "Prfa/IMG-20261116-WA0078.jpg" },
             { id: "brf-5", title: "BRIDAL", desc: "طابع رومانسي أنيق بغطاء خشبي وعلبة مزينة بالورود للمناسبات الخاصة.", price: 200, category: "perfume", img: "Prfa/IMG-20261116-WA0079.jpg" },
             { id: "brf-6", title: "Tender", desc: "إطلالة راقية بفيونكة ناعمة وعلبة ذهبية لامعة تلفت النظر من أول ثانية.", price: 200, category: "perfume", img: "Prfa/IMG-20261116-WA0080.jpg" },
-            { id: "brf-7", title: "INVICTUS", desc: "إحساس عصري واثق بتدرج فضي رمادي جذاب وسعر ولا أروع.", price: 150, category: "perfume", img: "Prfa/IMG-20261116-WA0083.jpg" },
-            { id: "brf-8", title: "SILVER SCENT INTENSE", desc: "طابع قوي وواضح بلمسة سوداء وفضية تناسب السهرات والإطلالات المميزة.", price: 150, category: "perfume", img: "Prfa/IMG-20261116-WA0084.jpg" },
+            { id: "brf-7", title: "INVICTUS", desc: "إحساس عصري واثق بتدرج فضي رمادي جذاب وسعر ولا أروع.", price: 150, category: "perfume", categories: ["perfume", "men"], img: "Prfa/IMG-20261116-WA0083.jpg" },
+            { id: "brf-8", title: "SILVER SCENT INTENSE", desc: "طابع قوي وواضح بلمسة سوداء وفضية تناسب السهرات والإطلالات المميزة.", price: 150, category: "perfume", categories: ["perfume", "men"], img: "Prfa/IMG-20261116-WA0084.jpg" },
             { id: "brf-9", title: "ALWAYS ON MY MIND", desc: "حجم عملي بلمسة ذهبية وعلبة بيج أنيقة تحطه في الشنطة أو على التسريحة.", price: 100, category: "perfume", img: "Prfa/IMG-20261116-WA0102.jpg" },
             { id: "brf-10", title: "QUEEN", desc: "إطلالة بيضاء نقية ومرتبة مثالية كهدية أنيقة أو استخدام يومي خفيف.", price: 100, category: "perfume", img: "Prfa/IMG-20261116-WA0103.jpg" },
             { id: "brf-11", title: "مسمم MUSAMAM BLACK INTENSE", desc: "إطلالة داكنة جريئة بتصميم ثعبان أسود يخطف الأنظار قبل أول رشة.", price: 375, category: "perfume", img: "Prfa/compressed_1794950096546.webp" },
             { id: "brf-12", title: "مسمم MUSAMAM", desc: "فخامة ذهبية بتفاصيل ثعبان مميزة تدي حضور قوي وهدية تشرّف.", price: 375, category: "perfume", img: "Prfa/compressed_1794950096662.webp" },
             { id: "brf-13", title: "قصة GISSAH", desc: "لمسة أنثوية ناعمة بلون وردي حالم وعلبة متناسقة مثالية للذوق الراقي.", price: 375, category: "perfume", img: "Prfa/compressed_1794950096748.webp" },
             { id: "brf-14", title: "يارا YARA", desc: "أيقونة الجاذبية والنعومة بلونها الوردي المميز وعلبتها الفخمة.", price: 375, category: "perfume", img: "Prfa/compressed_1794950096833.webp" },
-            { id: "brf-16", title: "برفان حريمي", desc: "برفان حريمي بلمسة أنثوية ناعمة ومنعشة للاستخدام اليومي.", price: 100, category: "perfume", img: "Prfa/IMG-20261116-WA0103.jpg" },
-            { id: "hm-59", title: "زجاجة حراري شي إن (استانلس 304)", desc: "زجاجة حراري من شي إن متاحة بأشكالها، استانلس مختوم درجة 18/304، مانعة للتسريب وتحتفظ بالحرارة والبرودة لأكثر من 6 ساعات للمشروبات الساخنة والباردة.", price: 200, category: "home", img: "Clswmn/compressed_1795215870151.webp" },
-            { id: "libr-29", title: "زجاجة حراري شي إن (استانلس 304)", desc: "زجاجة حراري من شي إن متاحة بأشكالها، استانلس مختوم درجة 18/304، مانعة للتسريب وتحتفظ بالحرارة والبرودة لأكثر من 6 ساعات للمشروبات الساخنة والباردة.", price: 200, category: "school", img: "Clswmn/compressed_1795215870151.webp" },
+            { id: "brf-16", title: "برفان حريمي", desc: "برفان حريمي بلمسة أنثوية ناعمة ومنعشة للاستخدام اليومي.", price: 100, category: "perfume", categories: ["perfume", "women"], img: "Prfa/IMG-20261116-WA0103.jpg" },
+            { id: "hm-59", title: "زجاجة حراري شي إن (استانلس 304)", desc: "زجاجة حراري من شي إن متاحة بأشكالها، استانلس مختوم درجة 18/304، مانعة للتسريب وتحتفظ بالحرارة والبرودة لأكثر من 6 ساعات للمشروبات الساخنة والباردة.", price: 200, category: "home", categories: ["home", "school"], img: "Clswmn/compressed_1795215870151.webp" },
+            { id: "libr-29", title: "زجاجة حراري شي إن (استانلس 304)", desc: "زجاجة حراري من شي إن متاحة بأشكالها، استانلس مختوم درجة 18/304، مانعة للتسريب وتحتفظ بالحرارة والبرودة لأكثر من 6 ساعات للمشروبات الساخنة والباردة.", price: 200, category: "school", categories: ["school", "home"], img: "Clswmn/compressed_1795215870151.webp" },
             { id: "hm-60", title: "مج حراري نقش ورد ذهبي", desc: "مج حراري فاخر بغطاء محكم ونقوش ورد ذهبية أنيقة، يحافظ على مشروبك ساخن أو بارد لأطول وقت في البيت أو الشغل، وهدية شيك وعملية في كل المناسبات.", price: 225, category: "home", categories: ["home", "gifts"], img: "Htm/compressed_1795308109261.webp" },
             { id: "hm-61", title: "مج حراري كوفي COFFEE ألوان", desc: "مج حراري عملي بتصميم عصري وألوان شيك تناسب كل الأذواق، رفيقك المثالي للقهوة والمشروبات اليومية في أي مكان وهدية مميزة لمحبي القهوة.", price: 180, category: "home", categories: ["home", "gifts"], img: "Htm/compressed_1795308109497.webp" },
             { id: "hm-62", title: "منظم / طبق تسالي ومكسرات مقسم بيد (4 أقسام)", desc: "منظم تسالي ومكسرات مقسم 4 أقسام بيد حمل مريحة للتقديم الأنيق في المناسبات والضيافة.", price: 275, category: "home", categories: ["home", "gifts"], img: "Kit/IMG-20261116-WA0056.jpg" },
@@ -2552,7 +2656,7 @@
             { id: "hm-65", title: "منظمات تخزين بغطاء ملون (أزرق وأخضر)", desc: "منظمات تخزين مطبخ عملية بغطاء سهل الفتح لحفظ الحبوب والمكسرات.", price: 75, category: "home", img: "Kit/compressed_1795113634977.webp" },
             { id: "hm-66", title: "طقم كؤوس / أكواب زجاجية في علبة", desc: "طقم كؤوس زجاجية فاخرة في علبة هدايا وتقديم أنيقة.", price: 1250, category: "home", categories: ["home", "gifts"], img: "Kit/IMG-20261116-WA0075.jpg" },
             { id: "hm-67", title: "طبق فاكهة كريستال بقاعدة من بلانك ماكس", desc: "طبق فاكهة كريستال بقاعدة من بلانك ماكس بتصميم أنيق للسفرة والضيافة.", price: 400, category: "home", categories: ["home", "gifts"], img: "Kit/IMG-20261116-WA0081.jpg" },
-            { id: "tafse-23", title: "رانر طاولة مكرمية هاند ميد 50×150 سم", desc: "شغل مكرمية يدوي أنيق بمقاس 50 سم في متر ونص مع شراشيب ناعمة، يدي السفرة أو الترابيزة لمسة دافئة وشيك جداً في بيتك.", price: 500, category: "tafse", img: "Htm/compressed_1795351999998.webp" }
+            { id: "tafse-23", title: "رانر طاولة مكرمية هاند ميد 50×150 سم", desc: "شغل مكرمية يدوي أنيق بمقاس 50 سم في متر ونص مع شراشيب ناعمة، يدي السفرة أو الترابيزة لمسة دافئة وشيك جداً في بيتك.", price: 500, category: "tafse", categories: ["tafse", "home"], img: "Htm/compressed_1795351999998.webp" }
         ];
 
         PRODUCTS.forEach(p => { p.merchant = inferMerchantForProduct(p); });
@@ -2565,7 +2669,7 @@
         let continuationItems = [];
         let continuationBatchIndex = 0;
         let cart = [];
-        let activeOverlayName = null;
+        let overlayStack = [];
         let interestData = { categories: {}, keywords: {}, seenIds: [], sessionRoll: Math.random() };
 
         function isFullSelectionMode() {
@@ -2662,6 +2766,7 @@
             return String(str || "").replace(/[٠-٩۰-۹]/g, ch => arabicMap[ch] || ch);
         }
 
+        /* Enhanced Arabic & token normalization for reliable search */
         function normalizeText(str) {
             return normalizeArabicDigits(str || "")
                 .toLowerCase()
@@ -2671,20 +2776,24 @@
                 .replace(/ى/g, "ي")
                 .replace(/ؤ/g, "و")
                 .replace(/ئ/g, "ي")
+                .replace(/[-_×*\/\\()\[\]{}.,،:؛!؟]+/g, " ")
                 .replace(/\s+/g, " ")
                 .trim();
         }
 
         function extractTokens(text) {
-            return normalizeText(text).split(/[\s،,./\\\-*()]+/).map(t => t.trim()).filter(t => t.length >= 1);
+            return normalizeText(text).split(/\s+/).map(t => t.trim()).filter(t => t.length >= 1);
         }
 
         function matchesSearchQuery(product, rawQuery) {
             const normalizedQuery = normalizeText(rawQuery);
             if (!normalizedQuery) return true;
-            const catLabel = CATEGORY_NAMES[product.category] || "";
+            const allCats = [product.category, ...(Array.isArray(product.categories) ? product.categories : [])];
+            const catLabels = allCats.map(c => CATEGORY_NAMES[c] || c || "").join(" ");
             const merchantLabel = product.merchant || "";
-            const searchableHaystack = normalizeText(`${product.title} ${product.desc || ""} ${merchantLabel} ${product.price} ${product.priceLabel || ""} ${product.subPrice || ""} ${catLabel} ${product.category}`);
+            const searchableHaystack = normalizeText(
+                `${product.title} ${product.desc || ""} ${merchantLabel} ${product.price} ${product.priceLabel || ""} ${product.subPrice || ""} ${catLabels}`
+            );
             const terms = normalizedQuery.split(" ").filter(Boolean);
             return terms.every(term => searchableHaystack.includes(term));
         }
@@ -2944,11 +3053,10 @@
             renderSideCategoriesList();
             const drawer = document.getElementById("catsDrawer");
             const backdrop = document.getElementById("catsBackdrop");
-            const isAlreadyOpen = drawer && drawer.classList.contains("open");
             if (drawer) drawer.classList.add("open");
             if (backdrop) backdrop.classList.add("open");
             syncBodyScrollLock();
-            if (!isAlreadyOpen) pushOverlayHistoryState("cats");
+            pushOverlayState("cats");
         }
 
         function closeCategoriesDrawer(fromPopState = false) {
@@ -2957,8 +3065,7 @@
             if (drawer) drawer.classList.remove("open");
             if (backdrop) backdrop.classList.remove("open");
             syncBodyScrollLock();
-            if (!fromPopState) popOverlayHistoryIfNeeded("cats");
-            else if (activeOverlayName === "cats") activeOverlayName = null;
+            if (!fromPopState) removeOverlayState("cats");
         }
 
         function selectTopQuickTab(cat, tabEl) {
@@ -3223,6 +3330,7 @@
 
             const grid = document.getElementById("productsGrid");
             const titleEl = document.getElementById("activeCategoryTitle");
+            const countBadgeEl = document.getElementById("resultsCountBadge");
             const sentinel = document.getElementById("feedSentinel");
             const rawQuery = document.getElementById("homeSearchInput")?.value || "";
             const trimmedQuery = rawQuery.trim();
@@ -3234,7 +3342,11 @@
                 ? " — مدخلات جديدة"
                 : (currentFeedMode === "deals" ? " — أسعار اقتصادية" : " — من أجلك");
             const baseCatTitle = currentMerchant ? `منتجات التاجر: ${currentMerchant}` : `${CATEGORY_NAMES[category] || "المنتجات"}${modeSuffix}`;
-            titleEl.textContent = trimmedQuery ? `${baseCatTitle} — نتائج البحث عن: "${trimmedQuery}"` : baseCatTitle;
+            titleEl.textContent = trimmedQuery ? `${baseCatTitle} — بحث: "${trimmedQuery}"` : baseCatTitle;
+
+            if (countBadgeEl) {
+                countBadgeEl.textContent = `${filteredList.length} منتج`;
+            }
 
             currentFeedItems = buildFeedPool(category, rawQuery);
 
@@ -3274,10 +3386,7 @@
         }
 
         function resetHomeFresh() {
-            closeProductOptionModal();
-            closeCategoriesDrawer();
-            closeCart();
-            closeImageModal();
+            closeAllOverlays();
             interestData.sessionRoll = Math.random();
             resetFilters();
             renderSpotlightBoxes();
@@ -3317,6 +3426,41 @@
             btn.classList.remove("pop");
             void btn.offsetWidth;
             btn.classList.add("pop");
+        }
+
+        /* Clean stack-based overlay state management to prevent history.back() conflicts */
+        function pushOverlayState(name) {
+            if (!overlayStack.includes(name)) {
+                overlayStack.push(name);
+            }
+            try {
+                if (window.history && typeof window.history.pushState === "function") {
+                    window.history.pushState({ caramelStack: [...overlayStack] }, "", window.location.href);
+                }
+            } catch (e) {}
+        }
+
+        function removeOverlayState(name) {
+            overlayStack = overlayStack.filter(item => item !== name);
+        }
+
+        function syncBodyScrollLock() {
+            const cartOpen = document.getElementById("cartDrawer")?.classList.contains("open");
+            const catsOpen = document.getElementById("catsDrawer")?.classList.contains("open");
+            const imgOpen = document.getElementById("imageModal")?.classList.contains("open");
+            const optOpen = document.getElementById("productOptionModal")?.classList.contains("open");
+            document.body.style.overflow = (cartOpen || catsOpen || imgOpen || optOpen) ? "hidden" : "";
+        }
+
+        function closeAllOverlays() {
+            overlayStack = [];
+            document.getElementById("productOptionModal")?.classList.remove("open");
+            document.getElementById("imageModal")?.classList.remove("open");
+            document.getElementById("cartDrawer")?.classList.remove("open");
+            document.getElementById("cartBackdrop")?.classList.remove("open");
+            document.getElementById("catsDrawer")?.classList.remove("open");
+            document.getElementById("catsBackdrop")?.classList.remove("open");
+            syncBodyScrollLock();
         }
 
         function openProductOptionModal(productId, clickedBtnId = null) {
@@ -3367,7 +3511,7 @@
             const modal = document.getElementById("productOptionModal");
             if (modal) modal.classList.add("open");
             syncBodyScrollLock();
-            pushOverlayHistoryState("options");
+            pushOverlayState("options");
         }
 
         function changeModalQty(delta) {
@@ -3395,8 +3539,7 @@
             const modal = document.getElementById("productOptionModal");
             if (modal) modal.classList.remove("open");
             syncBodyScrollLock();
-            if (!fromPopState) popOverlayHistoryIfNeeded("options");
-            else if (activeOverlayName === "options") activeOverlayName = null;
+            if (!fromPopState) removeOverlayState("options");
         }
 
         function confirmAddProductWithOptions() {
@@ -3436,6 +3579,7 @@
             saveCart();
             updateCartUI();
             pulseCartButton();
+            showCaramelToast(`تمت إضافة "${product.title}" للمشتريات (${addedQty})`);
 
             const targets = opts.clickedBtnId ? [opts.clickedBtnId] : [`btn-p0-${productId}`];
             targets.forEach(id => {
@@ -3505,6 +3649,8 @@
 
             const bottomBadge = document.getElementById("bottomCartCount");
             const totalAmountEl = document.getElementById("cartTotalAmount");
+            const distinctEl = document.getElementById("cartDistinctCount");
+            const piecesEl = document.getElementById("cartTotalPieces");
             const container = document.getElementById("cartItemsContainer");
 
             if (bottomBadge) {
@@ -3516,6 +3662,8 @@
                     bottomBadge.classList.remove("visible");
                 }
             }
+            if (distinctEl) distinctEl.textContent = String(cart.length);
+            if (piecesEl) piecesEl.textContent = String(totalQty);
             if (totalAmountEl) totalAmountEl.textContent = `${totalPrice} جنيه`;
             if (!container) return;
 
@@ -3527,6 +3675,7 @@
             container.innerHTML = cart.map((item, idx) => {
                 const q = Number(item.qty) || 1;
                 const p = Number(item.price) || 0;
+                const lineTotal = p * q;
                 const catalogMatch = PRODUCTS.find(prod => prod.id === item.id);
                 const title = item.title || (catalogMatch ? catalogMatch.title : "منتج كارامل");
                 const merchantName = item.merchant || (catalogMatch ? catalogMatch.merchant : "شيرين غريب");
@@ -3559,7 +3708,10 @@
                             <img src="${img}" alt="${escapeHtmlAttr(title)}" onerror="this.style.display='none'">
                             <div class="cart-item-info">
                                 <div class="cart-item-title">${escapeHtmlAttr(title)}</div>
-                                <div class="cart-item-price">${p} جنيه • ${escapeHtmlAttr(merchantName)}</div>
+                                <div class="cart-item-meta-line">
+                                    <span class="cart-item-price">${lineTotal} جنيه</span>
+                                    <span class="cart-item-merchant">• ${escapeHtmlAttr(merchantName)}</span>
+                                </div>
                             </div>
                             <div class="qty-controls">
                                 <button type="button" class="qty-btn" onclick="changeQtyByIndex(${idx}, 1)">+</button>
@@ -3569,7 +3721,7 @@
                             <button type="button" class="remove-item-btn" onclick="removeFromCartByIndex(${idx})" aria-label="حذف">✕</button>
                         </div>
                         ${variantSelectorsHTML}
-                        <input type="text" class="cart-item-note-input" placeholder="تفاصيل إضافية للقطعة دي (لون، مقاس، كتابة...)" value="${escapeHtmlAttr(item.itemNote || "")}" oninput="updateCartItemNote(${idx}, this.value)">
+                        <input type="text" class="cart-item-note-input" placeholder="تفاصيل إضافية (لون، مقاس، كتابة...)" value="${escapeHtmlAttr(item.itemNote || "")}" oninput="updateCartItemNote(${idx}, this.value)">
                     </div>
                 `;
             }).join("");
@@ -3595,42 +3747,15 @@
             window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join("\n"))}`, "_blank", "noopener,noreferrer");
         }
 
-        function pushOverlayHistoryState(overlayName) {
-            try {
-                if (!activeOverlayName && window.history && typeof window.history.pushState === "function") {
-                    window.history.pushState({ caramelOverlay: overlayName }, "", window.location.href);
-                    activeOverlayName = overlayName;
-                }
-            } catch (e) {}
-        }
-
-        function popOverlayHistoryIfNeeded(overlayName) {
-            if (activeOverlayName === overlayName) {
-                activeOverlayName = null;
-                if (window.history && typeof window.history.back === "function") {
-                    try { window.history.back(); } catch (e) {}
-                }
-            }
-        }
-
-        function syncBodyScrollLock() {
-            const cartOpen = document.getElementById("cartDrawer")?.classList.contains("open");
-            const catsOpen = document.getElementById("catsDrawer")?.classList.contains("open");
-            const imgOpen = document.getElementById("imageModal")?.classList.contains("open");
-            const optOpen = document.getElementById("productOptionModal")?.classList.contains("open");
-            document.body.style.overflow = (cartOpen || catsOpen || imgOpen || optOpen) ? "hidden" : "";
-        }
-
         function openCart() {
             cart = loadCartFromStorage();
             updateCartUI();
             const drawer = document.getElementById("cartDrawer");
-            const isAlreadyOpen = drawer && drawer.classList.contains("open");
-            if (drawer) drawer.classList.add("open");
             const backdrop = document.getElementById("cartBackdrop");
+            if (drawer) drawer.classList.add("open");
             if (backdrop) backdrop.classList.add("open");
             syncBodyScrollLock();
-            if (!isAlreadyOpen) pushOverlayHistoryState("cart");
+            pushOverlayState("cart");
         }
 
         function closeCart(fromPopState = false) {
@@ -3639,8 +3764,7 @@
             if (drawer) drawer.classList.remove("open");
             if (backdrop) backdrop.classList.remove("open");
             syncBodyScrollLock();
-            if (!fromPopState) popOverlayHistoryIfNeeded("cart");
-            else if (activeOverlayName === "cart") activeOverlayName = null;
+            if (!fromPopState) removeOverlayState("cart");
         }
 
         function openImageModal(src, productId = null) {
@@ -3650,7 +3774,6 @@
             }
 
             const modal = document.getElementById("imageModal");
-            const isAlreadyOpen = modal && modal.classList.contains("open");
             const imgEl = document.getElementById("modalImagePreview");
             if (imgEl) {
                 imgEl.src = src;
@@ -3687,9 +3810,11 @@
 
                 if (addBtn) {
                     addBtn.style.display = "flex";
-                    addBtn.onclick = () => {
-                        closeImageModal();
-                        openProductOptionModal(product.id);
+                    addBtn.onclick = (ev) => {
+                        ev.preventDefault();
+                        ev.stopPropagation();
+                        closeImageModal(false);
+                        openProductOptionModal(product.id, `btn-p0-${product.id}`);
                     };
                 }
                 if (waBtn) {
@@ -3711,7 +3836,7 @@
 
             if (modal) modal.classList.add("open");
             syncBodyScrollLock();
-            if (!isAlreadyOpen) pushOverlayHistoryState("image");
+            pushOverlayState("image");
         }
 
         function closeImageModal(fromPopState = false) {
@@ -3720,20 +3845,16 @@
             const img = document.getElementById("modalImagePreview");
             if (img) img.src = "";
             syncBodyScrollLock();
-            if (!fromPopState) popOverlayHistoryIfNeeded("image");
-            else if (activeOverlayName === "image") activeOverlayName = null;
+            if (!fromPopState) removeOverlayState("image");
         }
 
         window.addEventListener("popstate", () => {
-            const cartOpen = document.getElementById("cartDrawer")?.classList.contains("open");
-            const catsOpen = document.getElementById("catsDrawer")?.classList.contains("open");
-            const imgOpen = document.getElementById("imageModal")?.classList.contains("open");
-            const optOpen = document.getElementById("productOptionModal")?.classList.contains("open");
-            activeOverlayName = null;
-            if (optOpen) closeProductOptionModal(true);
-            else if (imgOpen) closeImageModal(true);
-            else if (cartOpen) closeCart(true);
-            else if (catsOpen) closeCategoriesDrawer(true);
+            const topOverlay = overlayStack.pop();
+            if (topOverlay === "options") closeProductOptionModal(true);
+            else if (topOverlay === "image") closeImageModal(true);
+            else if (topOverlay === "cart") closeCart(true);
+            else if (topOverlay === "cats") closeCategoriesDrawer(true);
+            else closeAllOverlays();
         });
 
         document.addEventListener("keydown", e => {
