@@ -2219,13 +2219,12 @@
         const BATCH_SIZE = 12;
         const CONTINUATION_STEP = 8;
 
-        /* ملفات JSON الخاصة بكل تاجر - عدل أو أضف منتجات كل تاجر في ملفه */
+        /* ملفات JSON الخاصة بكل تاجر داخل مجلد merchants/ - عدل أو أضف منتجات كل تاجر في ملفه */
         const MERCHANT_JSON_FILES = [
-            { url: "data/shireen.json", defaultMerchant: "شيرين غريب" },
-            { url: "data/umm-waleed.json", defaultMerchant: "أم وليد" },
-            { url: "data/umm-ammar.json", defaultMerchant: "أم عمار" },
-            { url: "data/mohamed-ghareeb.json", defaultMerchant: "محمد غريب" },
-            { url: "data/caramel-handmade.json", defaultMerchant: "كارامل للهاند ميد" }
+            { url: "merchants/mohamed-ghareeb.json", defaultMerchant: "محمد غريب" },
+            { url: "merchants/shireen-ghareeb.json", defaultMerchant: "شيرين غريب" },
+            { url: "merchants/umm-ammar.json", defaultMerchant: "أم عمار" },
+            { url: "merchants/umm-waleed.json", defaultMerchant: "أم وليد" }
         ];
 
         const DEFAULT_APPAREL_SIZES = ["S", "M", "L", "XL", "XXL"];
@@ -2778,8 +2777,8 @@
 
         async function loadMerchantProductsFromJson() {
             if (!Array.isArray(MERCHANT_JSON_FILES) || !MERCHANT_JSON_FILES.length) return;
-            const loadedFromFiles = [];
-            const seenIds = new Set();
+            const jsonProductsById = new Map();
+            let loadedAnyJson = false;
 
             for (const entry of MERCHANT_JSON_FILES) {
                 if (!entry || !entry.url) continue;
@@ -2788,31 +2787,63 @@
                     if (!resp || !resp.ok) continue;
                     const data = await resp.json();
                     const list = Array.isArray(data) ? data : (Array.isArray(data.products) ? data.products : []);
-                    list.forEach((rawItem, i) => {
-                        if (!rawItem || !rawItem.title) return;
-                        const itemId = rawItem.id || `${entry.url.replace(/[^a-z0-9]/gi, "-")}-${i}`;
-                        if (seenIds.has(itemId)) return;
-                        seenIds.add(itemId);
+                    loadedAnyJson = true;
 
+                    list.forEach((rawItem, i) => {
+                        const itemTitle = rawItem && (rawItem.title || rawItem.name);
+                        if (!rawItem || !itemTitle) return;
+                        const slugPrefix = entry.url.replace(/^merchants\//i, "").replace(/\.json$/i, "").replace(/[^a-z0-9]/gi, "-");
+                        const itemId = rawItem.id || `${slugPrefix}-${i + 1}`;
                         const rawImg = rawItem.img || rawItem.image || rawItem.photo || rawItem.imgUrl || "";
                         const normalizedImg = normalizeProductImageUrl(rawImg);
 
-                        loadedFromFiles.push({
+                        jsonProductsById.set(itemId, {
                             ...rawItem,
                             id: itemId,
+                            title: itemTitle,
+                            desc: rawItem.desc || rawItem.description || "",
                             img: normalizedImg,
                             price: Number(rawItem.price) || 0,
                             category: rawItem.category || "home",
-                            merchant: inferMerchantForProduct(rawItem, entry.defaultMerchant || "")
+                            merchant: inferMerchantForProduct({ ...rawItem, title: itemTitle }, entry.defaultMerchant || "")
                         });
                     });
                 } catch (err) {
-                    /* تجاهل الملف غير الموجود حالياً أو عند الفتح المباشر من الجهاز */
+                    /* تجاهل الملف غير الموجود أو غير المكتمل حالياً */
                 }
             }
 
-            if (loadedFromFiles.length > 0) {
-                PRODUCTS.splice(0, PRODUCTS.length, ...loadedFromFiles);
+            if (loadedAnyJson && jsonProductsById.size > 0) {
+                const mergedList = [];
+                const seenIds = new Set();
+
+                for (const baseProd of FALLBACK_PRODUCTS) {
+                    const overrideProd = jsonProductsById.get(baseProd.id);
+                    if (overrideProd) {
+                        mergedList.push({
+                            ...baseProd,
+                            ...overrideProd,
+                            img: overrideProd.img || normalizeProductImageUrl(baseProd.img),
+                            merchant: overrideProd.merchant || inferMerchantForProduct(baseProd)
+                        });
+                    } else {
+                        mergedList.push({
+                            ...baseProd,
+                            img: normalizeProductImageUrl(baseProd.img),
+                            merchant: inferMerchantForProduct(baseProd)
+                        });
+                    }
+                    seenIds.add(baseProd.id);
+                }
+
+                for (const [id, jsonProd] of jsonProductsById.entries()) {
+                    if (!seenIds.has(id)) {
+                        mergedList.push(jsonProd);
+                        seenIds.add(id);
+                    }
+                }
+
+                PRODUCTS.splice(0, PRODUCTS.length, ...mergedList);
                 renderSpotlightBoxes();
                 renderProducts(currentCategory);
                 renderSideCategoriesList();
@@ -4122,137 +4153,126 @@
             else if (topOverlay === "image") closeImageModal(true);
             else if (topOverlay === "cart") closeCart(true);
             else if (topOverlay === "cats") closeCategoriesDrawer(true);
-            else closeAllOverlays();
-        });
-
-        document.addEventListener("keydown", e => {
-            if (e.key === "Escape") {
-                if (document.getElementById("productOptionModal")?.classList.contains("open")) closeProductOptionModal();
-                else if (document.getElementById("imageModal")?.classList.contains("open")) closeImageModal();
-                else if (document.getElementById("cartDrawer")?.classList.contains("open")) closeCart();
-                else if (document.getElementById("catsDrawer")?.classList.contains("open")) closeCategoriesDrawer();
+            else {
+                if (document.getElementById("productOptionModal")?.classList.contains("open")) closeProductOptionModal(true);
+                else if (document.getElementById("imageModal")?.classList.contains("open")) closeImageModal(true);
+                else if (document.getElementById("cartDrawer")?.classList.contains("open")) closeCart(true);
+                else if (document.getElementById("catsDrawer")?.classList.contains("open")) closeCategoriesDrawer(true);
             }
         });
+
+        window.addEventListener("storage", e => {
+            if (e.key === CART_STORAGE_KEY) { cart = loadCartFromStorage(); updateCartUI(); }
+        });
+
+        const ONESIGNAL_APP_ID = "d35d882e-5208-4f63-bf56-6f0f200aa7c2";
+        const PUSH_ENABLED_KEY = "caramel_push_enabled_v1";
+
+        function setPushButtonToCircleCheck(animateSmooth = false) {
+            const btn = document.getElementById("caramelPushBtn");
+            const iconWrap = document.getElementById("caramelPushIcon");
+            if (!btn) return;
+            btn.classList.add("visible", "circle-check-only");
+            btn.title = "الإشعارات مفعلة";
+            btn.setAttribute("aria-label", "الإشعارات مفعلة");
+            if (iconWrap) iconWrap.innerHTML = `<svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"></path></svg>`;
+            if (animateSmooth) {
+                setTimeout(() => { btn.classList.add("hiding-smooth"); }, 2200);
+                setTimeout(() => { btn.classList.remove("visible", "circle-check-only", "hiding-smooth"); }, 2650);
+            }
+        }
+
+        function setPushButtonToSubscribePrompt() {
+            const btn = document.getElementById("caramelPushBtn");
+            const txt = document.getElementById("caramelPushBtnText");
+            const iconWrap = document.getElementById("caramelPushIcon");
+            if (!btn) return;
+            btn.classList.remove("circle-check-only", "hiding-smooth");
+            btn.classList.add("visible");
+            btn.title = "فعّل إشعارات متجر كارامل";
+            btn.setAttribute("aria-label", "تفعيل إشعارات متجر كارامل");
+            if (iconWrap) iconWrap.innerHTML = `<svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg>`;
+            if (txt) txt.textContent = "فعّل إشعارات العروض";
+        }
+
+        function syncPushButtonWithPermission() {
+            const perm = ("Notification" in window) ? Notification.permission : "default";
+            if (perm === "granted") {
+                try { localStorage.setItem(PUSH_ENABLED_KEY, "1"); } catch (e) {}
+                setPushButtonToCircleCheck(false);
+                return;
+            }
+            if (perm === "denied") {
+                setPushButtonToSubscribePrompt();
+                return;
+            }
+            let alreadyEnabled = false;
+            try { alreadyEnabled = localStorage.getItem(PUSH_ENABLED_KEY) === "1"; } catch (e) {}
+            if (alreadyEnabled) setPushButtonToCircleCheck(false);
+            else setPushButtonToSubscribePrompt();
+        }
+
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+        window.OneSignalDeferred.push(async function(OneSignal) {
+            try {
+                await OneSignal.init({ appId: ONESIGNAL_APP_ID, allowLocalhostAsSecureOrigin: true });
+                if (OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.optedIn) {
+                    try { localStorage.setItem(PUSH_ENABLED_KEY, "1"); } catch (e) {}
+                    setPushButtonToCircleCheck(false);
+                }
+            } catch (e) {}
+        });
+
+        async function enableCaramelPush() {
+            if (!("Notification" in window)) {
+                showCaramelToast("متصفحك الحالي لا يدعم إشعارات الويب المباشرة.");
+                return;
+            }
+            if (Notification.permission === "denied") {
+                showCaramelToast("الإشعارات محظورة من إعدادات المتصفح.. افتح أذونات الموقع وفعّل Notifications.");
+                return;
+            }
+            try {
+                const permission = await Notification.requestPermission();
+                if (permission === "granted") {
+                    try { localStorage.setItem(PUSH_ENABLED_KEY, "1"); } catch (e) {}
+                    setPushButtonToCircleCheck(true);
+                    window.OneSignalDeferred = window.OneSignalDeferred || [];
+                    window.OneSignalDeferred.push(async function(OneSignal) {
+                        try {
+                            if (OneSignal.User && OneSignal.User.PushSubscription && typeof OneSignal.User.PushSubscription.optIn === "function") {
+                                await OneSignal.User.PushSubscription.optIn();
+                            }
+                        } catch (e) {}
+                    });
+                    showCaramelToast("تم تفعيل إشعارات متجر كارامل بنجاح!");
+                } else {
+                    showCaramelToast("يمكنك تفعيل الإشعارات في أي وقت لمتابعة أحدث العروض.");
+                }
+            } catch (e) {
+                showCaramelToast("تعذر تفعيل الإشعارات الآن، حاول مرة أخرى.");
+            }
+        }
 
         const sentinelEl = document.getElementById("feedSentinel");
         if (sentinelEl && "IntersectionObserver" in window) {
-            const observer = new IntersectionObserver(entries => {
+            const feedObserver = new IntersectionObserver(entries => {
                 if (entries.some(entry => entry.isIntersecting)) renderMoreFeedItems();
             }, { rootMargin: "420px 0px" });
-            observer.observe(sentinelEl);
+            feedObserver.observe(sentinelEl);
         }
 
         window.addEventListener("scroll", () => {
-            if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 620)) renderMoreFeedItems();
+            if (!sentinelEl) return;
+            const rect = sentinelEl.getBoundingClientRect();
+            if (rect.top < window.innerHeight + 380) renderMoreFeedItems();
         }, { passive: true });
 
-        (function initOneSignalNotifications() {
-            const ONESIGNAL_APP_ID = "d39b1684-55d7-4f88-be7e-a29f2d8011fb";
-            const PUSH_STATE_STORAGE_KEY = "caramel_push_subscribed_v1";
-            const pushBtn = document.getElementById("caramelPushBtn");
-            const pushBtnText = document.getElementById("caramelPushBtnText");
-            const pushIcon = document.getElementById("caramelPushIcon");
-            let hideCircleTimer = null;
-
-            window.OneSignalDeferred = window.OneSignalDeferred || [];
-
-            function setBellIcon() {
-                if (pushIcon) {
-                    pushIcon.innerHTML = `<svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg>`;
-                }
-            }
-
-            function setCheckIcon() {
-                if (pushIcon) {
-                    pushIcon.innerHTML = `<svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg>`;
-                }
-            }
-
-            function showPill(text) {
-                if (!pushBtn) return;
-                clearTimeout(hideCircleTimer);
-                pushBtn.classList.remove("circle-check-only", "hiding-smooth");
-                setBellIcon();
-                if (pushBtnText && text) pushBtnText.textContent = text;
-                pushBtn.classList.add("visible");
-            }
-
-            function hidePillCompletely() {
-                if (!pushBtn) return;
-                clearTimeout(hideCircleTimer);
-                pushBtn.classList.remove("visible", "circle-check-only", "hiding-smooth");
-            }
-
-            function turnIntoSmallCheckAndFadeOut() {
-                if (!pushBtn) return;
-                clearTimeout(hideCircleTimer);
-                setCheckIcon();
-                pushBtn.classList.add("visible", "circle-check-only");
-                pushBtn.classList.remove("hiding-smooth");
-                hideCircleTimer = setTimeout(() => {
-                    pushBtn.classList.add("hiding-smooth");
-                    setTimeout(() => { hidePillCompletely(); }, 350);
-                }, 2600);
-            }
-
-            function markSubscribedLocally() {
-                try { localStorage.setItem(PUSH_STATE_STORAGE_KEY, "1"); } catch (e) {}
-            }
-
-            function isAlreadySubscribedLocally() {
-                try { return localStorage.getItem(PUSH_STATE_STORAGE_KEY) === "1"; } catch (e) { return false; }
-            }
-
-            async function syncSubscriptionStatus(os) {
-                try {
-                    if (isAlreadySubscribedLocally()) { hidePillCompletely(); return; }
-                    const optedIn = Boolean(os?.User?.PushSubscription?.optedIn);
-                    const token = os?.User?.PushSubscription?.token;
-                    if (optedIn && token) { markSubscribedLocally(); hidePillCompletely(); }
-                    else showPill("فعّل إشعارات العروض");
-                } catch (e) { showPill("فعّل إشعارات العروض"); }
-            }
-
-            window.enableCaramelPush = async function() {
-                showPill("جاري التفعيل...");
-                window.OneSignalDeferred.push(async function(OneSignal) {
-                    try {
-                        await OneSignal.Notifications.requestPermission();
-                        if (OneSignal.User?.PushSubscription?.optIn) await OneSignal.User.PushSubscription.optIn();
-                        setTimeout(async () => {
-                            const optedIn = Boolean(OneSignal?.User?.PushSubscription?.optedIn);
-                            if (optedIn || Notification.permission === "granted") {
-                                markSubscribedLocally();
-                                turnIntoSmallCheckAndFadeOut();
-                                showCaramelToast("تم تفعيل إشعارات عروض متجر كارامل بنجاح!");
-                            } else {
-                                showPill("فعّل إشعارات العروض");
-                            }
-                        }, 600);
-                    } catch (err) { showPill("فعّل إشعارات العروض"); }
-                });
-            };
-
-            if (isAlreadySubscribedLocally()) { hidePillCompletely(); return; }
-            showPill("فعّل إشعارات العروض");
-
-            window.OneSignalDeferred.push(async function(OneSignal) {
-                try {
-                    await OneSignal.init({ appId: ONESIGNAL_APP_ID, allowLocalhostAsSecureOrigin: true });
-                    await syncSubscriptionStatus(OneSignal);
-                    OneSignal.User?.PushSubscription?.addEventListener?.("change", event => {
-                        const current = event?.current || event;
-                        if (current?.optedIn) { markSubscribedLocally(); turnIntoSmallCheckAndFadeOut(); }
-                    });
-                } catch (e) { showPill("فعّل إشعارات العروض"); }
-            });
-        })();
-
-        updateSearchCancelButton();
+        renderSideCategoriesList();
         renderSpotlightBoxes();
         renderProducts("all");
-        renderSideCategoriesList();
         updateCartUI();
+        syncPushButtonWithPermission();
         loadMerchantProductsFromJson();
     </script>
 </body>
