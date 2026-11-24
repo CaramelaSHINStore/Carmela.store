@@ -105,15 +105,15 @@
             100% { opacity: 1; transform: translateY(0) scale(1); }
         }
 
-        /* Smooth side-flip page turn animation for spotlight images */
+        /* Smooth side-flip page turn inside fixed photo frame */
         @keyframes slideSideFlip {
             0% {
-                opacity: 0.18;
-                transform: perspective(700px) rotateY(-28deg) translateX(18px) scale(0.97);
+                opacity: 0.12;
+                transform: perspective(680px) rotateY(-24deg) translateX(14px) scale(0.97);
             }
             100% {
                 opacity: 1;
-                transform: perspective(700px) rotateY(0deg) translateX(0) scale(1);
+                transform: perspective(680px) rotateY(0deg) translateX(0) scale(1);
             }
         }
 
@@ -304,7 +304,7 @@
 
         .search-cancel-btn.visible { display: inline-flex; align-items: center; justify-content: center; }
 
-        /* Stylish capsule category bar right below header (scrolls away naturally on page scroll) */
+        /* Stylish capsule category bar right below header */
         .quick-top-tabs {
             background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, var(--accent-tint) 100%);
             border-bottom: 1px solid var(--accent-glow);
@@ -426,7 +426,7 @@
             color: #ffffff;
         }
 
-        /* Rotating Photo Spotlight Cards for Trends & Special Deals */
+        /* Locked frame spotlight boxes where only the product flips inside */
         .dual-spotlight-row {
             display: grid;
             grid-template-columns: 1fr;
@@ -450,6 +450,8 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
+            height: 214px;
+            overflow: hidden;
         }
 
         .spotlight-box-header {
@@ -457,6 +459,8 @@
             align-items: center;
             justify-content: space-between;
             gap: 8px;
+            flex-shrink: 0;
+            height: 26px;
         }
 
         .spotlight-box-title {
@@ -483,37 +487,38 @@
             background: var(--accent-tint);
             padding: 2px 10px;
             border-radius: 999px;
+            white-space: nowrap;
+        }
+
+        .spotlight-frame-slot {
+            flex: 1;
+            height: 152px;
+            min-height: 152px;
+            max-height: 152px;
+            overflow: hidden;
         }
 
         .rotating-showcase-card {
-            position: relative;
+            width: 100%;
+            height: 152px;
             border-radius: 18px;
             overflow: hidden;
             background: var(--page-mood-bg);
             border: 1px solid rgba(24, 20, 18, 0.07);
             display: grid;
-            grid-template-columns: 132px 1fr;
-            min-height: 136px;
-            transition: border-color 0.25s ease, transform 0.25s ease;
+            grid-template-columns: 142px 1fr;
         }
 
         @media (min-width: 480px) {
             .rotating-showcase-card {
-                grid-template-columns: 152px 1fr;
-                min-height: 146px;
+                grid-template-columns: 156px 1fr;
             }
-        }
-
-        .rotating-showcase-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-2px);
         }
 
         .showcase-photo-wrap {
             position: relative;
             width: 100%;
-            height: 100%;
-            min-height: 136px;
+            height: 152px;
             background: #ece4da;
             cursor: zoom-in;
             overflow: hidden;
@@ -521,7 +526,7 @@
 
         .showcase-photo-wrap img {
             width: 100%;
-            height: 100%;
+            height: 152px;
             object-fit: cover;
             display: block;
             transform-origin: right center;
@@ -530,18 +535,20 @@
 
         .showcase-info-panel {
             padding: 10px 12px;
+            height: 152px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            gap: 6px;
+            gap: 4px;
             cursor: pointer;
+            overflow: hidden;
         }
 
         .showcase-prod-title {
             font-size: 0.88rem;
             font-weight: 900;
             color: var(--espresso);
-            line-height: 1.4;
+            line-height: 1.38;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
@@ -552,6 +559,9 @@
             font-size: 0.7rem;
             font-weight: 800;
             color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .showcase-bottom-row {
@@ -559,13 +569,14 @@
             align-items: center;
             justify-content: space-between;
             gap: 8px;
-            margin-top: 2px;
+            flex-shrink: 0;
         }
 
         .showcase-prod-price {
             font-size: 1rem;
             font-weight: 900;
             color: var(--accent-deep);
+            white-space: nowrap;
         }
 
         .showcase-prod-price span {
@@ -579,6 +590,7 @@
             display: flex;
             align-items: center;
             gap: 5px;
+            flex-shrink: 0;
         }
 
         .showcase-dot {
@@ -662,29 +674,6 @@
             border: 1px solid var(--accent-glow);
             padding: 3px 11px;
             border-radius: 999px;
-        }
-
-        .smart-section {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, var(--accent-tint) 100%);
-            border: 1px solid var(--accent-glow);
-            border-radius: 24px;
-            padding: 14px;
-            margin-bottom: 16px;
-            box-shadow: var(--shadow-main);
-            display: none;
-        }
-
-        .smart-section.visible { display: block; }
-
-        .smart-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-top: 10px;
-        }
-
-        @media (min-width: 768px) {
-            .smart-grid { grid-template-columns: repeat(4, 1fr); gap: 15px; }
         }
 
         .continuation-after-section {
@@ -815,18 +804,6 @@
         }
 
         .product-card:hover .product-img-box img { transform: scale(1.04); }
-
-        .new-for-you-badge {
-            position: absolute;
-            top: 8px;
-            left: 8px;
-            background: linear-gradient(135deg, var(--accent-soft), var(--accent));
-            color: var(--espresso);
-            font-size: 0.6rem;
-            font-weight: 900;
-            padding: 2px 8px;
-            border-radius: 999px;
-        }
 
         .product-details {
             padding: 11px 12px 12px;
@@ -1783,7 +1760,7 @@
             </a>
         </div>
 
-        <section class="dual-spotlight-row" aria-label="ترندات وأسعار مميزة متغيرة">
+        <section class="dual-spotlight-row" aria-label="ترندات وأسعار مميزة ثابتة الإطار">
             <div class="spotlight-box">
                 <div class="spotlight-box-header">
                     <span class="spotlight-box-title">
@@ -1792,7 +1769,7 @@
                     </span>
                     <span class="spotlight-box-sub" id="trendsAiBadge">متجدد حسب ذوقك</span>
                 </div>
-                <div id="trendsSpotlightGrid"></div>
+                <div class="spotlight-frame-slot" id="trendsSpotlightGrid"></div>
             </div>
 
             <div class="spotlight-box">
@@ -1803,7 +1780,7 @@
                     </span>
                     <span class="spotlight-box-sub" id="dealsAiBadge">مختارة لك</span>
                 </div>
-                <div id="dealsSpotlightGrid"></div>
+                <div class="spotlight-frame-slot" id="dealsSpotlightGrid"></div>
             </div>
         </section>
 
@@ -1812,14 +1789,6 @@
             <button type="button" class="feed-pill-btn" data-mode="new" onclick="setFeedMode('new', this)">مدخلات جديدة</button>
             <button type="button" class="feed-pill-btn" data-mode="deals" onclick="setFeedMode('deals', this)">أسعار اقتصادية</button>
         </div>
-
-        <section class="smart-section" id="smartRecommendationsSection">
-            <div class="section-heading">
-                <h2>مقترح ليك بناءً على اهتماماتك</h2>
-                <span class="smart-tag">جديد من ذوقك</span>
-            </div>
-            <div class="smart-grid" id="smartRecommendationsGrid"></div>
-        </section>
 
         <section class="merchant-banner" id="activeMerchantBanner" aria-live="polite">
             <div class="merchant-banner-info">
@@ -2256,7 +2225,6 @@
             "hm-22", "hm-23", "hm-26", "hm-28", "hm-29", "hm-30", "hm-31"
         ]);
 
-        /* tafse-19 (شنطة هاند ميد خرز) assigned to أم عمار */
         const UMM_AMMAR_PRODUCT_IDS = new Set([
             "tafse-6", "tafse-7", "tafse-8", "tafse-9", "tafse-10", "tafse-11", "tafse-12",
             "tafse-13", "tafse-14", "tafse-15", "tafse-16", "tafse-17", "tafse-18", "tafse-19",
@@ -2464,7 +2432,6 @@
             PRODUCTS.splice(idx, 1);
             renderSpotlightBoxes();
             renderProducts(currentCategory);
-            renderSmartRecommendations();
         }
 
         function handleProductImageError(imgEl, productId) {
@@ -2476,7 +2443,6 @@
             const idx = PRODUCTS.findIndex(p => p.id === productId);
             if (idx !== -1) {
                 PRODUCTS.splice(idx, 1);
-                renderSmartRecommendations();
             }
         }
 
@@ -2525,6 +2491,24 @@
                 [arr[i], arr[j]] = [arr[j], arr[i]];
             }
             return arr;
+        }
+
+        /* Smart merchant interleaver: prevents placing two products from the same merchant side-by-side */
+        function interleaveMerchantsSmartly(list) {
+            if (!Array.isArray(list) || list.length <= 2) return [...(list || [])];
+            const remaining = [...list];
+            const result = [];
+            let lastMerchant = "";
+
+            while (remaining.length > 0) {
+                let candidateIdx = remaining.findIndex(item => (item.merchant || "") !== lastMerchant);
+                if (candidateIdx === -1) candidateIdx = 0;
+                const [picked] = remaining.splice(candidateIdx, 1);
+                result.push(picked);
+                lastMerchant = picked.merchant || "";
+            }
+
+            return result;
         }
 
         function normalizeArabicDigits(str) {
@@ -2576,7 +2560,6 @@
                 renderSpotlightBoxes();
             }
             renderProducts(currentCategory);
-            renderSmartRecommendations();
         }
 
         function handleSearchKeyDown(event) {
@@ -2590,7 +2573,6 @@
             if (input) { input.value = ""; input.blur(); }
             updateSearchCancelButton();
             renderProducts(currentCategory);
-            renderSmartRecommendations();
         }
 
         function trackProductInterest(product, weight = 1, markSeen = true) {
@@ -2608,7 +2590,9 @@
             }
             saveInterest();
             renderSpotlightBoxes();
-            renderSmartRecommendations();
+            if (currentFeedMode === "for-you") {
+                renderProducts(currentCategory);
+            }
         }
 
         function scoreProductForUser(product, seedOffset = 0) {
@@ -2634,18 +2618,6 @@
             return catScore + kwScore + freshnessBonus + dynamicJitter;
         }
 
-        function getSmartRecommendations(limit = 4) {
-            const hasAnyInterest = Object.keys(interestData.categories).length > 0 || Object.keys(interestData.keywords).length > 0 || interestData.seenIds.length > 0 || cart.length > 0;
-            if (!hasAnyInterest) return [];
-            const scoredList = PRODUCTS.map(product => ({
-                product,
-                seenRank: interestData.seenIds.includes(product.id) ? 1 : 0,
-                score: scoreProductForUser(product, 1)
-            }));
-            scoredList.sort((a, b) => (a.seenRank !== b.seenRank ? a.seenRank - b.seenRank : b.score - a.score));
-            return scoredList.slice(0, limit).map(entry => entry.product);
-        }
-
         function buildEngagingHookForProduct(product) {
             if (!product) return "اختيار عملي ومناسب ليك من متجر كارامل والدفع عند الاستلام.";
             if (product.category === "gifts") return "هدية بتفاصيل تلمس القلب وتفضل ذكرى مميزة مع صاحبها — اطلبها والدفع عند الاستلام.";
@@ -2656,7 +2628,7 @@
             return "قطعة عملية ومفيدة تسهل يومك وتضيف لمسة مرتبة — اطلبها دلوقتي والدفع عند الاستلام.";
         }
 
-        /* Paint spotlight slide avoiding any duplicate image with the sibling spotlight */
+        /* Flip only the product content inside the fixed spotlight frame */
         function paintSpotlightSlide(kind) {
             const list = kind === "trends" ? trendSlideList : dealSlideList;
             const otherList = kind === "trends" ? dealSlideList : trendSlideList;
@@ -2687,7 +2659,7 @@
             container.innerHTML = `
                 <div class="rotating-showcase-card">
                     <div class="showcase-photo-wrap" onclick="openImageModal('${p.img}', '${p.id}')">
-                        <img src="${p.img}" alt="${escapeHtmlAttr(p.title)}" onerror="removeProductById('${p.id}')">
+                        <img key="${p.id}-${idx}" src="${p.img}" alt="${escapeHtmlAttr(p.title)}" onerror="removeProductById('${p.id}')">
                     </div>
                     <div class="showcase-info-panel" onclick="openImageModal('${p.img}', '${p.id}')">
                         <div class="showcase-prod-title">${escapeHtmlAttr(p.title)}</div>
@@ -2712,11 +2684,11 @@
             if (!PRODUCTS.length) return;
             const hasTaste = Object.keys(interestData.categories).length > 0 || Object.keys(interestData.keywords).length > 0 || cart.length > 0;
 
-            const trendRanked = [...PRODUCTS].sort((a, b) => {
+            const trendRanked = interleaveMerchantsSmartly([...PRODUCTS].sort((a, b) => {
                 const scoreA = scoreProductForUser(a, 3) + (["hm-59", "tafse-23", "amn-2", "brf-14"].includes(a.id) ? 6 : 0);
                 const scoreB = scoreProductForUser(b, 3) + (["hm-59", "tafse-23", "amn-2", "brf-14"].includes(b.id) ? 6 : 0);
                 return scoreB - scoreA;
-            });
+            }));
 
             const pickedTrends = [];
             for (const p of trendRanked) {
@@ -2727,7 +2699,7 @@
             trendSlideIdx = trendSlideIdx % Math.max(1, trendSlideList.length);
 
             const usedTrendImgs = new Set(trendSlideList.map(x => x.img));
-            const dealRanked = [...PRODUCTS]
+            const dealRanked = interleaveMerchantsSmartly([...PRODUCTS]
                 .filter(p => Number(p.price) > 0)
                 .sort((a, b) => {
                     const tasteA = scoreProductForUser(a, 5);
@@ -2737,7 +2709,7 @@
                     const totalA = hasTaste ? (tasteA * 1.15 + priceFactorA * 2.2) : (priceFactorA * 3 + (interestData.sessionRoll * 5));
                     const totalB = hasTaste ? (tasteB * 1.15 + priceFactorB * 2.2) : (priceFactorB * 3 + (interestData.sessionRoll * 5));
                     return totalB - totalA;
-                });
+                }));
 
             const pickedDeals = [];
             for (const p of dealRanked) {
@@ -2758,7 +2730,7 @@
             paintSpotlightSlide("deals");
         }
 
-        // Rotate spotlight slides with smooth side-flip every 3.6 seconds
+        // Flip product inside the fixed spotlight frame every 3.6 seconds
         setInterval(() => {
             if (document.visibilityState !== "visible") return;
             if (trendSlideList.length > 1) {
@@ -2844,7 +2816,7 @@
                 });
             }
             if (!pool.length) pool = [...PRODUCTS];
-            return shuffleArray(pool).slice(0, limit);
+            return interleaveMerchantsSmartly(shuffleArray(pool)).slice(0, limit);
         }
 
         function appendMoreContinuationCards() {
@@ -2853,7 +2825,7 @@
             continuationBatchIndex += 1;
             const nextWave = buildOtherProductsWave(CONTINUATION_STEP);
             continuationItems.push(...nextWave);
-            grid.insertAdjacentHTML("beforeend", nextWave.map(p => buildProductCardHTML(p, false, `cont-${continuationBatchIndex}`)).join(""));
+            grid.insertAdjacentHTML("beforeend", nextWave.map(p => buildProductCardHTML(p, `cont-${continuationBatchIndex}`)).join(""));
         }
 
         function renderContinuationAfterSection() {
@@ -2880,7 +2852,7 @@
                         <span class="smart-tag">منتجات متنوعة مستمرة</span>
                     </div>
                     <div class="continuation-after-grid" id="continuationAfterGrid">
-                        ${continuationItems.map(p => buildProductCardHTML(p, false, "cont-0")).join("")}
+                        ${continuationItems.map(p => buildProductCardHTML(p, "cont-0")).join("")}
                     </div>
                     <div class="continuation-load-more-wrap">
                         <button type="button" class="continuation-load-more-btn" onclick="appendMoreContinuationCards()">
@@ -2903,7 +2875,6 @@
                 item.classList.toggle("active", item.getAttribute("data-quick") === "all");
             });
             renderProducts("all");
-            renderSmartRecommendations();
             if (shouldScroll) scrollToProductsTop();
         }
 
@@ -2911,7 +2882,6 @@
             currentMerchant = "";
             applyCategoryPageMood(currentCategory);
             renderProducts(currentCategory);
-            renderSmartRecommendations();
             if (shouldScroll) scrollToProductsTop();
         }
 
@@ -2950,17 +2920,15 @@
             `;
         }
 
-        function buildProductCardHTML(product, isSmartCard = false, instanceTag = "base") {
+        function buildProductCardHTML(product, instanceTag = "base") {
             const displayPrice = product.priceLabel || product.price;
             const merchantName = product.merchant || "شيرين غريب";
             const waText = encodeURIComponent(`أريد طلب ${product.title} بسعر ${displayPrice} جنيه (التاجر: ${merchantName}) من متجر كارامل`);
-            const isFreshForUser = !interestData.seenIds.includes(product.id);
-            const btnId = isSmartCard ? `smart-btn-${product.id}` : `btn-${instanceTag}-${product.id}`;
+            const btnId = `btn-${instanceTag}-${product.id}`;
 
             return `
-                <article class="product-card" data-product-id="${escapeHtmlAttr(product.id)}">
+                <article class="product-card" data-product-id="${escapeHtmlAttr(product.id)}" data-merchant="${escapeHtmlAttr(merchantName)}">
                     <div class="product-img-box" onclick="openImageModal('${product.img}', '${product.id}')">
-                        ${isSmartCard && isFreshForUser ? `<span class="new-for-you-badge">جديد ليك</span>` : ""}
                         <img src="${product.img}" alt="${escapeHtmlAttr(product.title)}" loading="lazy" onerror="handleProductImageError(this, '${product.id}')">
                     </div>
                     <div class="product-details">
@@ -2989,22 +2957,6 @@
             `;
         }
 
-        function renderSmartRecommendations() {
-            const section = document.getElementById("smartRecommendationsSection");
-            const grid = document.getElementById("smartRecommendationsGrid");
-            if (!section || !grid) return;
-
-            const recs = getSmartRecommendations(4);
-            if (!recs.length) {
-                section.classList.remove("visible");
-                grid.innerHTML = "";
-                return;
-            }
-
-            section.classList.add("visible");
-            grid.innerHTML = recs.map(p => buildProductCardHTML(p, true, "smart")).join("");
-        }
-
         function sortEconomicAcrossCategories(list) {
             const byPriceAsc = [...list].sort((a, b) => (Number(a.price) || 999999) - (Number(b.price) || 999999));
             const buckets = new Map();
@@ -3025,7 +2977,7 @@
                     }
                 }
             }
-            return interleaved;
+            return interleaveMerchantsSmartly(interleaved);
         }
 
         function getFilteredProducts(category, rawQuery) {
@@ -3038,7 +2990,13 @@
             if (currentFeedMode === "deals") {
                 list = sortEconomicAcrossCategories(list);
             } else if (currentFeedMode === "new") {
-                list = [...list].reverse();
+                list = interleaveMerchantsSmartly([...list].reverse());
+            } else {
+                const hasTaste = Object.keys(interestData.categories).length > 0 || Object.keys(interestData.keywords).length > 0 || cart.length > 0;
+                const ranked = hasTaste
+                    ? [...list].sort((a, b) => scoreProductForUser(b, 2) - scoreProductForUser(a, 2))
+                    : shuffleArray(list);
+                list = interleaveMerchantsSmartly(ranked);
             }
 
             return list;
@@ -3048,8 +3006,7 @@
             const base = getFilteredProducts(category, rawQuery);
             if (base.length === 0) return [];
 
-            const orderedBase = currentFeedMode === "for-you" ? shuffleArray(base) : base;
-            const items = orderedBase.map(product => ({ type: "product", product, tag: "p0" }));
+            const items = base.map(product => ({ type: "product", product, tag: "p0" }));
             if (!currentMerchant) {
                 items.splice(Math.min(7, items.length), 0, { type: "special", id: "special-0" });
             }
@@ -3060,7 +3017,7 @@
             const sourcePool = getFilteredProducts(category, rawQuery);
             if (sourcePool.length === 0) return;
             feedCycle += 1;
-            const waveSorted = currentFeedMode === "for-you" ? shuffleArray(sourcePool) : sourcePool;
+            const waveSorted = currentFeedMode === "for-you" ? interleaveMerchantsSmartly(shuffleArray(sourcePool)) : sourcePool;
             const waveItems = waveSorted.map(product => ({ type: "product", product, tag: `w${feedCycle}` }));
             waveItems.push({ type: "special", id: `special-${feedCycle}` });
             currentFeedItems.push(...waveItems);
@@ -3077,7 +3034,7 @@
             if (isFullSelectionMode()) {
                 if (renderedCount < currentFeedItems.length) {
                     const remainingSlice = currentFeedItems.slice(renderedCount);
-                    grid.insertAdjacentHTML("beforeend", remainingSlice.map(entry => entry.type === "special" ? buildSpecialRequestCardHTML() : buildProductCardHTML(entry.product, false, entry.tag)).join(""));
+                    grid.insertAdjacentHTML("beforeend", remainingSlice.map(entry => entry.type === "special" ? buildSpecialRequestCardHTML() : buildProductCardHTML(entry.product, entry.tag)).join(""));
                     renderedCount = currentFeedItems.length;
                 }
                 if (!document.getElementById("continuationAfterGrid")) renderContinuationAfterSection();
@@ -3091,7 +3048,7 @@
             const nextSlice = currentFeedItems.slice(renderedCount, renderedCount + BATCH_SIZE);
             if (!nextSlice.length) return;
 
-            grid.insertAdjacentHTML("beforeend", nextSlice.map(entry => entry.type === "special" ? buildSpecialRequestCardHTML() : buildProductCardHTML(entry.product, false, entry.tag)).join(""));
+            grid.insertAdjacentHTML("beforeend", nextSlice.map(entry => entry.type === "special" ? buildSpecialRequestCardHTML() : buildProductCardHTML(entry.product, entry.tag)).join(""));
             renderedCount += nextSlice.length;
             if (sentinel) sentinel.textContent = "اكتشف المزيد بالأسفل أو اطلب أي منتج خاص";
         }
@@ -3111,7 +3068,9 @@
             const filteredList = getFilteredProducts(category, rawQuery);
             updateMerchantBanner(filteredList);
 
-            const modeSuffix = currentFeedMode === "new" ? " — مدخلات جديدة (من الأحدث للأقدم)" : (currentFeedMode === "deals" ? " — أسعار اقتصادية من كل قسم" : "");
+            const modeSuffix = currentFeedMode === "new"
+                ? " — مدخلات جديدة"
+                : (currentFeedMode === "deals" ? " — أسعار اقتصادية" : " — من أجلك");
             const baseCatTitle = currentMerchant ? `منتجات التاجر: ${currentMerchant}` : `${CATEGORY_NAMES[category] || "المنتجات"}${modeSuffix}`;
             titleEl.textContent = trimmedQuery ? `${baseCatTitle} — نتائج البحث عن: "${trimmedQuery}"` : baseCatTitle;
 
@@ -3160,12 +3119,11 @@
             interestData.sessionRoll = Math.random();
             resetFilters();
             renderSpotlightBoxes();
-            renderSmartRecommendations();
             window.scrollTo({ top: 0, behavior: "smooth" });
         }
 
         function scrollToProductsTop() {
-            const heading = currentMerchant ? document.getElementById("activeMerchantBanner") : document.getElementById("productsSectionHeading");
+            const heading = currentMerchant ? document.getElementById("activeMerchantBanner") : document.getElementById("feedFilterPills");
             if (!heading) return;
             const rect = heading.getBoundingClientRect();
             window.scrollTo({ top: Math.max(0, window.scrollY + rect.top - 130), behavior: "smooth" });
@@ -3183,7 +3141,6 @@
                 renderSpotlightBoxes();
             }
             renderProducts(category);
-            renderSmartRecommendations();
             if (shouldScroll) scrollToProductsTop();
         }
 
@@ -3318,7 +3275,7 @@
             updateCartUI();
             pulseCartButton();
 
-            const targets = opts.clickedBtnId ? [opts.clickedBtnId] : [`btn-p0-${productId}`, `smart-btn-${productId}`];
+            const targets = opts.clickedBtnId ? [opts.clickedBtnId] : [`btn-p0-${productId}`];
             targets.forEach(id => {
                 const btn = document.getElementById(id);
                 if (btn) {
@@ -3643,7 +3600,6 @@
 
         renderSpotlightBoxes();
         renderProducts("all");
-        renderSmartRecommendations();
         updateCartUI();
         updateSearchCancelButton();
     </script>
