@@ -14,7 +14,7 @@
     <meta property="og:title" content="متجر كارامل - Caramel Store">
     <meta property="og:description" content="كل حاجة تحتاجها عند كارامل بأرخص الأسعار والتوصيل لباب المنزل في أسرع وقت، وحتى لو المنتج مش موجود بنجيبهولك.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://caramelashinstore.github.io/Carmela.store/">
+    <meta property="og:url" content="https://caramelstoresuez.github.io/Carmelastore/">
     <meta property="og:image" content="https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg">
     <meta property="og:image:secure_url" content="https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg">
     <meta property="og:image:type" content="image/jpeg">
@@ -809,12 +809,38 @@
             display: flex;
             flex-direction: column;
             transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+            position: relative;
+        }
+
+        .product-card.card-style-gold {
+            border: 1.5px solid #c89666;
+            background: linear-gradient(180deg, #fffdf9 0%, #ffffff 100%);
+        }
+
+        .product-card.card-style-vip {
+            border: 1.5px solid #181412;
+            background: linear-gradient(180deg, #f8f4ef 0%, #ffffff 100%);
         }
 
         .product-card:hover {
             transform: translateY(-4px);
             border-color: var(--accent);
             box-shadow: 0 18px 34px -18px rgba(18, 16, 14, 0.26);
+        }
+
+        .card-json-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            z-index: 4;
+            background: rgba(18, 16, 14, 0.86);
+            color: var(--accent-soft);
+            border: 1px solid rgba(200, 150, 102, 0.45);
+            font-size: 0.65rem;
+            font-weight: 900;
+            padding: 2px 9px;
+            border-radius: 999px;
+            pointer-events: none;
         }
 
         .product-img-box {
@@ -2333,17 +2359,33 @@
 
     <script>
         const WHATSAPP_NUMBER = "201055436305";
-        const STORE_URL = "https://caramelashinstore.github.io/Carmela.store/";
+        const STORE_URL = "https://caramelstoresuez.github.io/Carmelastore/";
         const CART_STORAGE_KEY = "caramel_store_cart_v1";
         const INTEREST_STORAGE_KEY = "caramel_smart_interest_v1";
         const BATCH_SIZE = 12;
         const CONTINUATION_STEP = 8;
 
-        const MERCHANT_JSON_FILES = [
-            { url: "merchants/mohamed-ghareeb.json", defaultMerchant: "محمد غريب" },
-            { url: "merchants/shireen-ghareeb.json", defaultMerchant: "شيرين غريب" },
-            { url: "merchants/umm-ammar.json", defaultMerchant: "أم عمار" },
-            { url: "merchants/umm-waleed.json", defaultMerchant: "أم وليد" }
+        // إعدادات الربط التلقائي بمجلد التجار على GitHub + المسار المحلي
+        const GITHUB_MERCHANTS_CONFIG = {
+            owner: "Caramelstoresuez",
+            repo: "Carmelastore",
+            branch: "main",
+            folder: "merchants"
+        };
+
+        // أسماء التجار المعروفين لملفات الـ JSON الحالية (وأي ملف جديد يُضاف يُستخرج اسمه تلقائياً)
+        const KNOWN_MERCHANT_SLUGS = {
+            "mohamed-ghareeb": "محمد غريب",
+            "shireen-ghareeb": "شيرين غريب",
+            "umm-ammar": "أم عمار",
+            "umm-waleed": "أم وليد"
+        };
+
+        const FALLBACK_MERCHANT_FILES = [
+            "merchants/mohamed-ghareeb.json",
+            "merchants/shireen-ghareeb.json",
+            "merchants/umm-ammar.json",
+            "merchants/umm-waleed.json"
         ];
 
         const DEFAULT_APPAREL_SIZES = ["S", "M", "L", "XL", "XXL"];
@@ -2420,16 +2462,23 @@
         }
 
         function extractImagesFromRawProduct(rawItem) {
-            if (!rawItem) return [];
+            if (!rawItem || typeof rawItem !== "object") return [];
             const candidates = [];
-            const fields = [rawItem.img, rawItem.image, rawItem.photo, rawItem.imgUrl, rawItem.images, rawItem.photos, rawItem.imgs];
+            const fields = [
+                rawItem.img, rawItem.image, rawItem.photo, rawItem.imgUrl, rawItem.imageUrl,
+                rawItem.thumbnail, rawItem.thumb, rawItem.picture, rawItem.pic,
+                rawItem.images, rawItem.photos, rawItem.imgs, rawItem.gallery
+            ];
 
             fields.forEach(val => {
                 if (!val) return;
                 if (Array.isArray(val)) {
                     val.forEach(v => {
                         if (typeof v === "string") candidates.push(v);
-                        else if (v && typeof v === "object" && (v.url || v.src || v.img)) candidates.push(v.url || v.src || v.img);
+                        else if (v && typeof v === "object") {
+                            const nested = v.url || v.src || v.img || v.image || v.link;
+                            if (nested) candidates.push(nested);
+                        }
                     });
                 } else if (typeof val === "string") {
                     if (val.includes(",") || val.includes("\n") || val.includes("|")) {
@@ -2437,6 +2486,9 @@
                     } else {
                         candidates.push(val);
                     }
+                } else if (typeof val === "object") {
+                    const nested = val.url || val.src || val.img || val.image;
+                    if (nested) candidates.push(nested);
                 }
             });
 
@@ -2864,9 +2916,51 @@
             "om-ammar-1", "om-ammar-2", "om-ammar-3", "om-ammar-pearl-bag-350"
         ]);
 
+        function resolveMerchantNameFromFile(fileNameOrUrl) {
+            const cleanBase = String(fileNameOrUrl || "")
+                .split("/").pop()
+                .replace(/\.json$/i, "")
+                .toLowerCase()
+                .trim();
+            if (KNOWN_MERCHANT_SLUGS[cleanBase]) return KNOWN_MERCHANT_SLUGS[cleanBase];
+            if (!cleanBase) return "";
+            return cleanBase
+                .replace(/[-_]+/g, " ")
+                .replace(/\b\w/g, ch => ch.toUpperCase());
+        }
+
+        function inferCategorySmartly(rawCat, title = "", desc = "") {
+            const validKeys = Object.keys(CATEGORY_NAMES).filter(k => k !== "all");
+            const normCat = normalizeText(rawCat || "");
+            if (validKeys.includes(normCat)) return normCat;
+
+            const catAliases = {
+                "المنزل": "home", "منزل": "home", "مطبخ": "home", "ادوات منزليه": "home", "ديكور": "home",
+                "المدرسه": "school", "مدرسه": "school", "مكتبه": "school", "ادوات مدرسيه": "school", "قرطاسيه": "school",
+                "هاند ميد": "tafse", "هاندميد": "tafse", "يدوي": "tafse", "مكرميه": "tafse", "تفصيل": "tafse",
+                "الاطفال": "kids", "اطفال": "kids", "بيبي": "kids", "العاب": "kids",
+                "النساء": "women", "نساء": "women", "حريمي": "women", "بناتي": "women", "ملابس حريمي": "women",
+                "الرجال": "men", "رجال": "men", "رجالي": "men", "شبابي": "men",
+                "العنايه والعطور": "perfume", "عطور": "perfume", "برفان": "perfume", "برفانات": "perfume", "عنايه": "perfume", "سبلاش": "perfume",
+                "الهدايا": "gifts", "هدايا": "gifts", "هديه": "gifts", "طباعه": "gifts"
+            };
+            if (catAliases[normCat]) return catAliases[normCat];
+
+            const combined = normalizeText(`${rawCat || ""} ${title} ${desc}`);
+            if (/(عطر|برفان|سبلاش|اسبلش|مخمريه|بادي|لوشن|كريم|شامبو)/.test(combined)) return "perfume";
+            if (/(كشكول|نوت بوك|قلم|اقلام|استيكه|برايه|مسطره|كراسه|مدرس|شنطه مدرس)/.test(combined)) return "school";
+            if (/(هاند ميد|مكرميه|خرز|لولي|كروشيه|تطريز|عبايه|ملحفه)/.test(combined)) return "tafse";
+            if (/(هديه|هدايا|بوكس|مرايا سحريه|طباعه|مج حراري)/.test(combined)) return "gifts";
+            if (/(اطفال|طفل|بيبي|لعبه|العاب)/.test(combined)) return "kids";
+            if (/(حريمي|نسائي|طرحه|بلوزه|دريس|فستان|بيجامه حريمي)/.test(combined)) return "women";
+            if (/(رجالي|شبابي|محفظه رجالي|تيشيرت رجالي)/.test(combined)) return "men";
+            return "home";
+        }
+
         function inferMerchantForProduct(product, fallbackMerchant = "") {
             if (!product) return fallbackMerchant || "متجر كارامل";
-            if (product.merchant) return product.merchant;
+            const directMerchant = product.merchant || product.seller || product.vendor || product.store || product.owner;
+            if (directMerchant && String(directMerchant).trim()) return String(directMerchant).trim();
             if (SHIREEN_PRODUCT_IDS.has(product.id)) return "شيرين غريب";
             if (UMM_AMMAR_PRODUCT_IDS.has(product.id)) return "أم عمار";
             if (UMM_WALEED_PRODUCT_IDS.has(product.id) || (product.id && product.id.startsWith("amn-"))) return "أم وليد";
@@ -2877,55 +2971,182 @@
             return "متجر كارامل";
         }
 
-        // المنتجات تُستقبل بالكامل من ملفات الـ JSON الخاصة بالتجار
+        function parseNumericPrice(rawPrice) {
+            if (typeof rawPrice === "number" && !Number.isNaN(rawPrice)) return rawPrice;
+            const cleaned = normalizeArabicDigits(String(rawPrice || "")).replace(/[^\d.]/g, "");
+            const num = parseFloat(cleaned);
+            return Number.isNaN(num) ? 0 : num;
+        }
+
+        function extractRawItemsFromJsonPayload(payload, fileMerchantName = "") {
+            if (!payload) return { items: [], fileMerchant: fileMerchantName, fileStyle: "" };
+            let detectedMerchant = fileMerchantName;
+            let detectedStyle = "";
+
+            if (Array.isArray(payload)) {
+                return { items: payload, fileMerchant: detectedMerchant, fileStyle: detectedStyle };
+            }
+
+            if (typeof payload === "object") {
+                if (payload.merchant || payload.merchantName || payload.seller || payload.name) {
+                    const topName = payload.merchant || payload.merchantName || payload.seller || (!payload.price && !payload.img ? payload.name : "");
+                    if (topName && typeof topName === "string") detectedMerchant = topName.trim();
+                }
+                if (payload.style || payload.theme || payload.cardStyle) {
+                    detectedStyle = String(payload.style || payload.theme || payload.cardStyle).trim();
+                }
+
+                const arrayKeys = ["products", "items", "data", "catalog", "list", "offers", "goods"];
+                for (const key of arrayKeys) {
+                    if (Array.isArray(payload[key])) {
+                        return { items: payload[key], fileMerchant: detectedMerchant, fileStyle: detectedStyle };
+                    }
+                }
+
+                // دعم استايل JSON مقسم كمجموعات أو أقسام داخل كائن واحد
+                const collected = [];
+                Object.entries(payload).forEach(([key, val]) => {
+                    if (Array.isArray(val)) {
+                        val.forEach(entry => {
+                            if (entry && typeof entry === "object") {
+                                collected.push({ category: entry.category || key, ...entry });
+                            }
+                        });
+                    } else if (val && typeof val === "object" && (val.title || val.name || val.price || val.img || val.image)) {
+                        collected.push({ id: val.id || key, ...val });
+                    }
+                });
+                if (collected.length) {
+                    return { items: collected, fileMerchant: detectedMerchant, fileStyle: detectedStyle };
+                }
+            }
+
+            return { items: [], fileMerchant: detectedMerchant, fileStyle: detectedStyle };
+        }
+
+        function normalizeRawJsonProduct(rawItem, index, slugPrefix, fileMerchant, fileStyle) {
+            if (!rawItem || typeof rawItem !== "object") return null;
+            const itemTitle = String(rawItem.title || rawItem.name || rawItem.product_name || rawItem.productName || "").trim();
+            if (!itemTitle) return null;
+
+            const itemId = String(rawItem.id || rawItem.code || rawItem.sku || `${slugPrefix}-${index + 1}`).trim();
+            const itemDesc = String(rawItem.desc || rawItem.description || rawItem.details || rawItem.notes || "").trim();
+            const extractedImgs = extractImagesFromRawProduct(rawItem);
+            const rawPriceVal = rawItem.price ?? rawItem.cost ?? rawItem.amount ?? rawItem.salePrice ?? 0;
+            const numericPrice = parseNumericPrice(rawPriceVal);
+            const priceLabel = rawItem.priceLabel || (typeof rawPriceVal === "string" && /[a-zA-Z\u0600-\u06FF]/.test(rawPriceVal) ? rawPriceVal.trim() : "");
+            const rawCategory = rawItem.category || rawItem.section || rawItem.department || rawItem.type || "";
+            const resolvedCategory = inferCategorySmartly(rawCategory, itemTitle, itemDesc);
+
+            const normalized = {
+                ...rawItem,
+                id: itemId,
+                title: itemTitle,
+                desc: itemDesc,
+                img: extractedImgs[0] || "",
+                images: extractedImgs,
+                price: numericPrice,
+                priceLabel: priceLabel || undefined,
+                subPrice: rawItem.subPrice || rawItem.oldPrice || rawItem.unit || "",
+                category: resolvedCategory,
+                badge: String(rawItem.badge || rawItem.tag || rawItem.label || "").trim(),
+                cardStyle: String(rawItem.style || rawItem.cardStyle || fileStyle || "").trim().toLowerCase()
+            };
+
+            normalized.merchant = inferMerchantForProduct(normalized, fileMerchant);
+            return normalized;
+        }
+
+        // المنتجات تُستقبل ديناميكياً بالكامل من مجلد merchants على GitHub + الملفات المحلية
         const PRODUCTS = [];
+
+        async function discoverMerchantJsonSources() {
+            const sourcesMap = new Map();
+
+            // 1) اكتشاف جميع ملفات JSON داخل مجلد merchants على GitHub تلقائياً (حتى لو أضفت تجار جدد)
+            try {
+                const apiUrl = `https://api.github.com/repos/${GITHUB_MERCHANTS_CONFIG.owner}/${GITHUB_MERCHANTS_CONFIG.repo}/contents/${GITHUB_MERCHANTS_CONFIG.folder}?ref=${GITHUB_MERCHANTS_CONFIG.branch}&ts=${Date.now()}`;
+                const apiResp = await fetch(apiUrl, { cache: "no-store" });
+                if (apiResp && apiResp.ok) {
+                    const filesList = await apiResp.json();
+                    if (Array.isArray(filesList)) {
+                        filesList.forEach(f => {
+                            if (f && f.type === "file" && /\.json$/i.test(f.name)) {
+                                const slug = f.name.replace(/\.json$/i, "");
+                                sourcesMap.set(f.name.toLowerCase(), {
+                                    slug,
+                                    localUrl: `${GITHUB_MERCHANTS_CONFIG.folder}/${f.name}`,
+                                    rawUrl: f.download_url || `https://raw.githubusercontent.com/${GITHUB_MERCHANTS_CONFIG.owner}/${GITHUB_MERCHANTS_CONFIG.repo}/${GITHUB_MERCHANTS_CONFIG.branch}/${GITHUB_MERCHANTS_CONFIG.folder}/${encodeURIComponent(f.name)}`,
+                                    defaultMerchant: resolveMerchantNameFromFile(f.name)
+                                });
+                            }
+                        });
+                    }
+                }
+            } catch (e) {}
+
+            // 2) إضافة الملفات الأساسية كضمان إضافي في حال عدم توفر GitHub API
+            FALLBACK_MERCHANT_FILES.forEach(path => {
+                const fileName = path.split("/").pop();
+                const key = fileName.toLowerCase();
+                if (!sourcesMap.has(key)) {
+                    const slug = fileName.replace(/\.json$/i, "");
+                    sourcesMap.set(key, {
+                        slug,
+                        localUrl: path,
+                        rawUrl: `https://raw.githubusercontent.com/${GITHUB_MERCHANTS_CONFIG.owner}/${GITHUB_MERCHANTS_CONFIG.repo}/${GITHUB_MERCHANTS_CONFIG.branch}/${path}`,
+                        defaultMerchant: resolveMerchantNameFromFile(fileName)
+                    });
+                }
+            });
+
+            return Array.from(sourcesMap.values());
+        }
+
+        async function fetchJsonWithFallback(source) {
+            const urlsToTry = [
+                `${source.localUrl}?ts=${Date.now()}`,
+                `${source.rawUrl}?ts=${Date.now()}`
+            ];
+            for (const url of urlsToTry) {
+                try {
+                    const resp = await fetch(url, { cache: "no-store" });
+                    if (resp && resp.ok) {
+                        const text = await resp.text();
+                        const cleanText = text.replace(/^\uFEFF/, "").trim();
+                        if (cleanText) return JSON.parse(cleanText);
+                    }
+                } catch (e) {}
+            }
+            return null;
+        }
 
         async function loadMerchantProductsFromJson() {
             isLoadingJsonProducts = true;
             renderProducts(currentCategory);
 
-            if (!Array.isArray(MERCHANT_JSON_FILES) || !MERCHANT_JSON_FILES.length) {
-                isLoadingJsonProducts = false;
-                renderSpotlightBoxes();
-                renderProducts(currentCategory);
-                renderSideCategoriesList();
-                updateCartUI();
-                return;
-            }
-
+            const merchantSources = await discoverMerchantJsonSources();
             const jsonProductsById = new Map();
 
-            for (const entry of MERCHANT_JSON_FILES) {
-                if (!entry || !entry.url) continue;
-                try {
-                    const resp = await fetch(`${entry.url}?ts=${Date.now()}`, { cache: "no-store" });
-                    if (!resp || !resp.ok) continue;
-                    const data = await resp.json();
-                    const list = Array.isArray(data) ? data : (Array.isArray(data.products) ? data.products : []);
+            const fetchedPayloads = await Promise.all(
+                merchantSources.map(async source => ({
+                    source,
+                    payload: await fetchJsonWithFallback(source)
+                }))
+            );
 
-                    list.forEach((rawItem, i) => {
-                        const itemTitle = rawItem && (rawItem.title || rawItem.name);
-                        if (!rawItem || !itemTitle) return;
-                        const slugPrefix = entry.url.replace(/^merchants\//i, "").replace(/\.json$/i, "").replace(/[^a-z0-9]/gi, "-");
-                        const itemId = rawItem.id || `${slugPrefix}-${i + 1}`;
-                        const extractedImgs = extractImagesFromRawProduct(rawItem);
-                        const mergedProduct = {
-                            ...rawItem,
-                            id: itemId,
-                            title: itemTitle,
-                            desc: rawItem.desc || rawItem.description || "",
-                            img: extractedImgs[0] || "",
-                            images: extractedImgs,
-                            price: Number(rawItem.price) || 0,
-                            category: rawItem.category || "home"
-                        };
-                        mergedProduct.merchant = inferMerchantForProduct(mergedProduct, entry.defaultMerchant || "");
-                        jsonProductsById.set(itemId, mergedProduct);
-                    });
-                } catch (err) {
-                    /* تجاهل الملف غير الموجود أو غير المكتمل حالياً */
-                }
-            }
+            fetchedPayloads.forEach(({ source, payload }) => {
+                if (!payload) return;
+                const { items, fileMerchant, fileStyle } = extractRawItemsFromJsonPayload(payload, source.defaultMerchant);
+                const slugPrefix = source.slug.replace(/[^a-z0-9\u0600-\u06FF]/gi, "-");
+
+                items.forEach((rawItem, idx) => {
+                    const normalized = normalizeRawJsonProduct(rawItem, idx, slugPrefix, fileMerchant, fileStyle);
+                    if (!normalized) return;
+                    const uniqueKey = `${slugPrefix}::${normalized.id}`;
+                    jsonProductsById.set(uniqueKey, normalized);
+                });
+            });
 
             const loadedList = Array.from(jsonProductsById.values());
             PRODUCTS.splice(0, PRODUCTS.length, ...loadedList);
@@ -2964,6 +3185,13 @@
                     imgEl.src = altSrc;
                     return;
                 }
+            }
+
+            if (retryStep <= 1 && currentSrc && !/^https?:\/\//i.test(currentSrc)) {
+                imgEl.setAttribute("data-retry-step", "2");
+                const cleanPath = currentSrc.replace(/^\.?\//, "");
+                imgEl.src = `https://raw.githubusercontent.com/${GITHUB_MERCHANTS_CONFIG.owner}/${GITHUB_MERCHANTS_CONFIG.repo}/${GITHUB_MERCHANTS_CONFIG.branch}/${cleanPath}`;
+                return;
             }
 
             imgEl.style.opacity = "0.18";
@@ -3275,7 +3503,7 @@
             if (!container) return;
 
             if (!list.length) {
-                container.innerHTML = `<div class="rotating-showcase-card" style="display:flex;align-items:center;justify-content:center;padding:14px;text-align:center;font-size:0.8rem;font-weight:800;color:var(--text-muted);">${isLoadingJsonProducts ? "جاري تحميل المنتجات من ملفات الـ JSON..." : "لا توجد منتجات متاحة حالياً في ملفات الـ JSON."}</div>`;
+                container.innerHTML = `<div class="rotating-showcase-card" style="display:flex;align-items:center;justify-content:center;padding:14px;text-align:center;font-size:0.8rem;font-weight:800;color:var(--text-muted);">${isLoadingJsonProducts ? "جاري سحب منتجات التجار من ملفات الـ JSON..." : "لا توجد منتجات متاحة حالياً."}</div>`;
                 return;
             }
 
@@ -3334,8 +3562,8 @@
             const hasTaste = Object.keys(interestData.categories).length > 0 || Object.keys(interestData.keywords).length > 0 || cart.length > 0;
 
             const trendRanked = interleaveMerchantsSmartly([...PRODUCTS].sort((a, b) => {
-                const scoreA = scoreProductForUser(a, 3) + (["hm-59", "tafse-23", "amn-2", "brf-14"].includes(a.id) ? 6 : 0);
-                const scoreB = scoreProductForUser(b, 3) + (["hm-59", "tafse-23", "amn-2", "brf-14"].includes(b.id) ? 6 : 0);
+                const scoreA = scoreProductForUser(a, 3) + (a.badge ? 8 : 0);
+                const scoreB = scoreProductForUser(b, 3) + (b.badge ? 8 : 0);
                 return scoreB - scoreA;
             }));
 
@@ -3587,6 +3815,11 @@
             const waUrl = buildProductWhatsAppUrl(product, imgSrc);
             const btnId = `btn-${instanceTag}-${product.id}`;
 
+            const styleClass = product.cardStyle === "gold"
+                ? "card-style-gold"
+                : (product.cardStyle === "vip" ? "card-style-vip" : "");
+            const badgeHtml = product.badge ? `<span class="card-json-badge">${escapeHtmlAttr(product.badge)}</span>` : "";
+
             const multiControlsHTML = hasMultiImgs ? `
                 <button type="button" class="card-img-nav-btn prev" onclick="cycleCardImage(this, '${escapeHtmlAttr(product.id)}', -1, event)" aria-label="الصورة السابقة">›</button>
                 <button type="button" class="card-img-nav-btn next" onclick="cycleCardImage(this, '${escapeHtmlAttr(product.id)}', 1, event)" aria-label="الصورة التالية">‹</button>
@@ -3597,7 +3830,8 @@
             ` : "";
 
             return `
-                <article class="product-card" data-product-id="${escapeHtmlAttr(product.id)}" data-merchant="${escapeHtmlAttr(merchantName)}">
+                <article class="product-card ${styleClass}" data-product-id="${escapeHtmlAttr(product.id)}" data-merchant="${escapeHtmlAttr(merchantName)}">
+                    ${badgeHtml}
                     <div class="product-img-box"
                          onmouseenter="startCardAutoSlide(this.closest('.product-card'), '${escapeHtmlAttr(product.id)}')"
                          onmouseleave="stopCardAutoSlide()"
@@ -3770,7 +4004,7 @@
                 if (isLoadingJsonProducts && !PRODUCTS.length) {
                     grid.innerHTML = `
                         <div style="grid-column: 1 / -1; background: #fff; padding: 26px; border-radius: 20px; text-align: center; border: 1px solid var(--accent-glow);">
-                            <p style="font-weight: 800; color: var(--espresso-soft);">جاري تحميل المنتجات من ملفات الـ JSON...</p>
+                            <p style="font-weight: 800; color: var(--espresso-soft);">جاري تحميل منتجات التجار من ملفات الـ JSON...</p>
                         </div>
                     `;
                     return;
@@ -3779,7 +4013,7 @@
                 const emptyMsg = trimmedQuery
                     ? `ملقيناش نتيجة مطابقة لـ "${trimmedQuery}".. وحتى لو المنتج مش موجود بنجيبهولك!`
                     : (!PRODUCTS.length
-                        ? "لا توجد منتجات محمّلة حالياً من ملفات الـ JSON الخاصة بالتجار."
+                        ? "لم يتم العثور على منتجات صالحة داخل ملفات الـ JSON حالياً."
                         : "لا توجد منتجات مطابقة للتصفية الحالية.. وحتى لو المنتج مش موجود بنجيبهولك!");
 
                 grid.innerHTML = `
