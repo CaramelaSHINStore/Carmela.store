@@ -36,6 +36,12 @@
             --caramel: #c89666;
             --caramel-light: #e5be96;
             --caramel-dark: #9e6d40;
+            --accent: #c89666;
+            --accent-soft: #e5be96;
+            --accent-deep: #9e6d40;
+            --accent-glow: rgba(200, 150, 102, 0.35);
+            --accent-tint: rgba(200, 150, 102, 0.08);
+            --page-mood-bg: #faf7f2;
             --espresso: #181512;
             --espresso-soft: #2b231e;
             --cream-soft: #f6efe6;
@@ -48,6 +54,87 @@
             --shadow-main: 0 10px 28px -10px rgba(24, 21, 18, 0.12);
         }
 
+        body.cat-mode-all {
+            --accent: #c89666;
+            --accent-soft: #e5be96;
+            --accent-deep: #9e6d40;
+            --accent-glow: rgba(200, 150, 102, 0.38);
+            --accent-tint: rgba(200, 150, 102, 0.07);
+            --page-mood-bg: #faf7f2;
+        }
+
+        body.cat-mode-home {
+            --accent: #b88656;
+            --accent-soft: #e6c6a5;
+            --accent-deep: #8c5e32;
+            --accent-glow: rgba(184, 134, 86, 0.38);
+            --accent-tint: rgba(184, 134, 86, 0.08);
+            --page-mood-bg: #fbf7f2;
+        }
+
+        body.cat-mode-school {
+            --accent: #0284c7;
+            --accent-soft: #7dd3fc;
+            --accent-deep: #0369a1;
+            --accent-glow: rgba(2, 132, 199, 0.38);
+            --accent-tint: rgba(2, 132, 199, 0.08);
+            --page-mood-bg: #f2f9fd;
+        }
+
+        body.cat-mode-tafse {
+            --accent: #52624b;
+            --accent-soft: #a3b899;
+            --accent-deep: #394633;
+            --accent-glow: rgba(82, 98, 75, 0.38);
+            --accent-tint: rgba(82, 98, 75, 0.08);
+            --page-mood-bg: #f5f8f4;
+        }
+
+        body.cat-mode-kids {
+            --accent: #1d6f8a;
+            --accent-soft: #7dd3fc;
+            --accent-deep: #134e63;
+            --accent-glow: rgba(29, 111, 138, 0.38);
+            --accent-tint: rgba(29, 111, 138, 0.08);
+            --page-mood-bg: #f2f8fa;
+        }
+
+        body.cat-mode-women {
+            --accent: #d97706;
+            --accent-soft: #fcd34d;
+            --accent-deep: #b45309;
+            --accent-glow: rgba(217, 119, 6, 0.38);
+            --accent-tint: rgba(217, 119, 6, 0.08);
+            --page-mood-bg: #fdf8f0;
+        }
+
+        body.cat-mode-men {
+            --accent: #2d3a4b;
+            --accent-soft: #94a3b8;
+            --accent-deep: #1e293b;
+            --accent-glow: rgba(45, 58, 75, 0.38);
+            --accent-tint: rgba(45, 58, 75, 0.08);
+            --page-mood-bg: #f4f6f9;
+        }
+
+        body.cat-mode-gifts {
+            --accent: #db2777;
+            --accent-soft: #f9a8d4;
+            --accent-deep: #9d174d;
+            --accent-glow: rgba(219, 39, 119, 0.38);
+            --accent-tint: rgba(219, 39, 119, 0.08);
+            --page-mood-bg: #fdf3f8;
+        }
+
+        body.cat-mode-perfume {
+            --accent: #3b82f6;
+            --accent-soft: #93c5fd;
+            --accent-deep: #1d4ed8;
+            --accent-glow: rgba(59, 130, 246, 0.42);
+            --accent-tint: rgba(59, 130, 246, 0.09);
+            --page-mood-bg: #f2f7ff;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -57,13 +144,14 @@
 
         body {
             font-family: 'Cairo', sans-serif;
-            background-color: var(--bg-main);
+            background-color: var(--page-mood-bg);
             color: var(--text-main);
             line-height: 1.6;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             overflow-x: clip;
+            transition: background-color 0.35s ease;
         }
 
         a {
@@ -80,12 +168,12 @@
 
         @keyframes logoPulse {
             0%, 100% {
-                border-color: var(--caramel);
-                box-shadow: 0 0 16px var(--glow), inset 0 0 10px rgba(229, 190, 150, 0.15);
+                border-color: var(--accent);
+                box-shadow: 0 0 16px var(--accent-glow), inset 0 0 10px rgba(229, 190, 150, 0.15);
             }
             50% {
-                border-color: #ffd8a8;
-                box-shadow: 0 0 28px rgba(255, 216, 168, 0.65), inset 0 0 16px rgba(229, 190, 150, 0.28);
+                border-color: var(--accent-soft);
+                box-shadow: 0 0 28px var(--accent-glow), inset 0 0 16px rgba(229, 190, 150, 0.28);
             }
         }
 
@@ -102,10 +190,10 @@
 
         @keyframes activeCatGlow {
             0%, 100% {
-                box-shadow: 0 0 0 3px #ffffff, 0 0 0 5.5px var(--ring-color, var(--caramel)), 0 0 18px var(--ring-glow, rgba(200, 150, 102, 0.85));
+                box-shadow: 0 0 0 3px #ffffff, 0 0 0 5.5px var(--ring-color, var(--accent)), 0 0 18px var(--ring-glow, rgba(200, 150, 102, 0.85));
             }
             50% {
-                box-shadow: 0 0 0 3px #ffffff, 0 0 0 6.5px var(--ring-color, var(--caramel)), 0 0 26px var(--ring-glow, rgba(200, 150, 102, 1));
+                box-shadow: 0 0 0 3px #ffffff, 0 0 0 6.5px var(--ring-color, var(--accent)), 0 0 26px var(--ring-glow, rgba(200, 150, 102, 1));
             }
         }
 
@@ -140,7 +228,7 @@
         @keyframes nodeLockPulse {
             0%, 100% {
                 transform: scale(1) rotate(45deg);
-                box-shadow: 0 0 0 0 rgba(158, 109, 64, 0.45);
+                box-shadow: 0 0 0 0 var(--accent-glow);
             }
             50% {
                 transform: scale(1.22) rotate(45deg);
@@ -176,12 +264,13 @@
             position: sticky;
             top: 0;
             z-index: 120;
-            border-bottom: 1px solid rgba(200, 150, 102, 0.28);
+            border-bottom: 1px solid var(--accent-glow);
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 10px;
             box-shadow: 0 6px 22px rgba(0, 0, 0, 0.16);
+            transition: border-color 0.3s ease;
         }
 
         .logo-pill {
@@ -190,14 +279,14 @@
             gap: 8px;
             padding: 5px 12px;
             border-radius: 999px;
-            background: linear-gradient(135deg, rgba(200, 150, 102, 0.18), rgba(43, 35, 30, 0.95));
-            border: 1.5px solid var(--caramel);
+            background: linear-gradient(135deg, var(--accent-tint), rgba(43, 35, 30, 0.95));
+            border: 1.5px solid var(--accent);
             animation: logoPulse 3s infinite ease-in-out;
             cursor: pointer;
             min-width: 0;
             flex: 0 1 auto;
             max-width: fit-content;
-            transition: transform 0.2s ease, max-width 0.42s cubic-bezier(0.22, 1, 0.36, 1), padding 0.35s ease;
+            transition: transform 0.2s ease, max-width 0.42s cubic-bezier(0.22, 1, 0.36, 1), padding 0.35s ease, border-color 0.3s ease;
         }
 
         header.scrolled-slogan .logo-pill {
@@ -214,8 +303,9 @@
             height: 32px;
             border-radius: 50%;
             object-fit: cover;
-            border: 1.5px solid var(--caramel-light);
+            border: 1.5px solid var(--accent-soft);
             flex-shrink: 0;
+            transition: border-color 0.3s ease;
         }
 
         .logo-text-group {
@@ -236,10 +326,10 @@
         .logo-sub {
             font-size: 0.54rem;
             font-weight: 700;
-            color: var(--caramel-light);
+            color: var(--accent-soft);
             letter-spacing: 1.4px;
             text-transform: uppercase;
-            transition: opacity 0.25s ease, transform 0.25s ease, letter-spacing 0.25s ease;
+            transition: opacity 0.25s ease, transform 0.25s ease, letter-spacing 0.25s ease, color 0.3s ease;
         }
 
         header.scrolled-slogan .logo-sub {
@@ -256,7 +346,7 @@
             font-size: 0.78rem;
             font-weight: 900;
             color: #ffffff;
-            background: rgba(200, 150, 102, 0.16);
+            background: var(--accent-tint);
             border: 1px solid transparent;
             border-radius: 999px;
             padding: 2px 0;
@@ -275,7 +365,7 @@
             opacity: 1;
             padding: 2px 11px;
             margin-right: 2px;
-            border-color: rgba(229, 190, 150, 0.45);
+            border-color: var(--accent-soft);
             transform: translateX(0);
         }
 
@@ -290,7 +380,7 @@
             display: none;
             align-items: center;
             gap: 5px;
-            background: linear-gradient(135deg, var(--caramel-light), var(--caramel));
+            background: linear-gradient(135deg, var(--accent-soft), var(--accent));
             color: var(--espresso);
             border: 1px solid rgba(255, 255, 255, 0.28);
             padding: 6px 11px;
@@ -298,7 +388,7 @@
             font-size: 0.74rem;
             font-weight: 900;
             white-space: nowrap;
-            box-shadow: 0 4px 14px rgba(200, 150, 102, 0.35);
+            box-shadow: 0 4px 14px var(--accent-glow);
             transition: transform 0.2s ease, filter 0.2s ease;
         }
 
@@ -319,8 +409,8 @@
             align-items: center;
             justify-content: center;
             background: rgba(255, 255, 255, 0.09);
-            color: var(--caramel-light);
-            border: 1.2px solid rgba(200, 150, 102, 0.5);
+            color: var(--accent-soft);
+            border: 1.2px solid var(--accent);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             flex-shrink: 0;
             transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
@@ -328,9 +418,9 @@
 
         .icon-circle-btn:hover {
             transform: translateY(-1px) scale(1.05);
-            background: var(--caramel);
-            color: var(--espresso);
-            border-color: var(--caramel-light);
+            background: var(--accent);
+            color: #ffffff;
+            border-color: var(--accent-soft);
         }
 
         .icon-circle-btn svg {
@@ -409,16 +499,16 @@
             flex: 0 0 72px;
             height: 2px;
             border-radius: 999px;
-            background: linear-gradient(90deg, rgba(200, 150, 102, 0.12), var(--caramel-dark));
+            background: linear-gradient(90deg, var(--accent-tint), var(--accent-deep));
             opacity: 0;
             transform: scaleX(0);
             transform-origin: right center;
-            transition: transform 1.15s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.9s ease;
+            transition: transform 1.15s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.9s ease, background 0.35s ease;
             will-change: transform, opacity;
         }
 
         .slogan-track-line.end {
-            background: linear-gradient(270deg, rgba(200, 150, 102, 0.12), var(--caramel-dark));
+            background: linear-gradient(270deg, var(--accent-tint), var(--accent-deep));
             transform: scaleX(0);
             transform-origin: left center;
         }
@@ -428,10 +518,10 @@
             height: 8px;
             border-radius: 2px;
             transform: rotate(45deg) scale(0.35);
-            background: var(--caramel-dark);
-            border: 1.5px solid var(--caramel-light);
+            background: var(--accent-deep);
+            border: 1.5px solid var(--accent-soft);
             opacity: 0;
-            transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.35s, opacity 0.65s ease 0.35s;
+            transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.35s, opacity 0.65s ease 0.35s, background 0.35s ease, border-color 0.35s ease;
             flex-shrink: 0;
             will-change: transform, opacity;
         }
@@ -470,7 +560,7 @@
         }
 
         .slogan-role-part {
-            background: linear-gradient(100deg, var(--caramel-dark) 0%, #c48549 42%, #7d522b 50%, var(--caramel-dark) 100%);
+            background: linear-gradient(100deg, var(--accent-deep) 0%, var(--accent) 45%, var(--accent-deep) 100%);
             background-size: 220% 100%;
             -webkit-background-clip: text;
             background-clip: text;
@@ -478,9 +568,9 @@
             display: inline-block;
             padding: 2px 10px;
             border-radius: 8px;
-            border-bottom: 2px solid var(--caramel);
+            border-bottom: 2px solid var(--accent);
             animation: pieceSettleRight 0.72s cubic-bezier(0.22, 1, 0.36, 1) both, sloganSheen 4.5s ease-in-out infinite;
-            transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease;
+            transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease, border-color 0.35s ease;
             will-change: transform, opacity;
         }
 
@@ -522,16 +612,17 @@
         }
 
         .hero-banner {
-            background: linear-gradient(130deg, var(--espresso) 0%, var(--espresso-soft) 60%, var(--caramel-dark) 100%);
+            background: linear-gradient(130deg, var(--espresso) 0%, var(--espresso-soft) 58%, var(--accent-deep) 100%);
             color: #ffffff;
             padding: 22px 18px;
             border-radius: 22px;
-            border: 1.5px solid rgba(200, 150, 102, 0.42);
-            box-shadow: 0 14px 32px -12px rgba(24, 21, 18, 0.26), 0 0 24px -6px var(--glow);
+            border: 1.5px solid var(--accent-glow);
+            box-shadow: 0 14px 32px -12px rgba(24, 21, 18, 0.26), 0 0 24px -6px var(--accent-glow);
             margin-bottom: 12px;
             display: flex;
             flex-direction: column;
             gap: 10px;
+            transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
         }
 
         .hero-badge {
@@ -539,11 +630,12 @@
             width: fit-content;
             font-size: 0.72rem;
             font-weight: 800;
-            color: var(--caramel-light);
+            color: var(--accent-soft);
             background: rgba(255, 255, 255, 0.09);
-            border: 1px solid rgba(200, 150, 102, 0.35);
+            border: 1px solid var(--accent-glow);
             padding: 3px 11px;
             border-radius: 999px;
+            transition: color 0.3s ease, border-color 0.3s ease;
         }
 
         .hero-banner h1 {
@@ -560,8 +652,9 @@
         }
 
         .hero-highlight {
-            color: var(--caramel-light);
+            color: var(--accent-soft);
             font-weight: 800;
+            transition: color 0.3s ease;
         }
 
         .hero-actions {
@@ -575,12 +668,13 @@
             display: inline-flex;
             align-items: center;
             gap: 7px;
-            background: linear-gradient(135deg, var(--caramel-light), var(--caramel));
+            background: linear-gradient(135deg, var(--accent-soft), var(--accent));
             color: var(--espresso);
             padding: 8px 16px;
             border-radius: 12px;
             font-size: 0.82rem;
             font-weight: 900;
+            transition: background 0.35s ease;
         }
 
         .hero-install-btn {
@@ -589,7 +683,7 @@
             gap: 7px;
             background: rgba(255, 255, 255, 0.12);
             color: #ffffff;
-            border: 1.5px solid var(--caramel-light);
+            border: 1.5px solid var(--accent-soft);
             padding: 8px 16px;
             border-radius: 12px;
             font-size: 0.82rem;
@@ -602,7 +696,7 @@
 
         .trust-strip {
             background: #ffffff;
-            border: 1px solid var(--border-gold);
+            border: 1.5px solid var(--accent-glow);
             border-radius: 16px;
             padding: 10px 14px;
             margin-bottom: 16px;
@@ -615,6 +709,7 @@
             font-size: 0.8rem;
             font-weight: 800;
             color: var(--espresso-soft);
+            transition: border-color 0.35s ease;
         }
 
         .trust-pill {
@@ -627,8 +722,9 @@
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: var(--caramel-dark);
+            background: var(--accent-deep);
             flex-shrink: 0;
+            transition: background 0.35s ease;
         }
 
         .section-heading {
@@ -650,21 +746,23 @@
         .smart-tag {
             font-size: 0.72rem;
             font-weight: 800;
-            color: var(--caramel-dark);
-            background: #f6efe6;
-            border: 1px solid var(--border-gold);
+            color: var(--accent-deep);
+            background: var(--accent-tint);
+            border: 1px solid var(--accent-glow);
             padding: 2px 10px;
             border-radius: 999px;
+            transition: color 0.35s ease, background 0.35s ease, border-color 0.35s ease;
         }
 
         .smart-section {
-            background: linear-gradient(180deg, #fffdf9 0%, #f8f1e7 100%);
-            border: 1.5px solid var(--border-gold);
+            background: linear-gradient(180deg, #ffffff 0%, var(--accent-tint) 100%);
+            border: 1.5px solid var(--accent-glow);
             border-radius: 20px;
             padding: 14px;
             margin-bottom: 18px;
             box-shadow: var(--shadow-main);
             display: none;
+            transition: background 0.35s ease, border-color 0.35s ease;
         }
 
         .smart-section.visible {
@@ -685,16 +783,17 @@
             }
         }
 
-        .merchant-after-section {
+        .continuation-after-section {
             margin-top: 24px;
-            background: linear-gradient(180deg, #fffdf9 0%, #f6efe6 100%);
-            border: 1.5px solid var(--border-gold);
+            background: linear-gradient(180deg, #ffffff 0%, var(--accent-tint) 100%);
+            border: 1.5px solid var(--accent-glow);
             border-radius: 20px;
             padding: 16px 14px;
             box-shadow: var(--shadow-main);
+            transition: background 0.35s ease, border-color 0.35s ease;
         }
 
-        .merchant-after-header {
+        .continuation-after-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -703,27 +802,27 @@
             margin-bottom: 12px;
         }
 
-        .merchant-after-header h3 {
+        .continuation-after-header h3 {
             font-size: 1.04rem;
             font-weight: 900;
             color: var(--espresso);
         }
 
-        .merchant-after-grid {
+        .continuation-after-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
         }
 
         @media (min-width: 768px) {
-            .merchant-after-grid {
+            .continuation-after-grid {
                 grid-template-columns: repeat(3, 1fr);
                 gap: 16px;
             }
         }
 
         @media (min-width: 1024px) {
-            .merchant-after-grid {
+            .continuation-after-grid {
                 grid-template-columns: repeat(4, 1fr);
             }
         }
@@ -734,13 +833,14 @@
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 12px;
-            background: linear-gradient(125deg, var(--espresso) 0%, var(--espresso-soft) 65%, var(--caramel-dark) 100%);
+            background: linear-gradient(125deg, var(--espresso) 0%, var(--espresso-soft) 65%, var(--accent-deep) 100%);
             color: #ffffff;
-            border: 1.5px solid rgba(229, 190, 150, 0.55);
+            border: 1.5px solid var(--accent);
             border-radius: 18px;
             padding: 14px 16px;
             margin-bottom: 14px;
             box-shadow: 0 12px 26px -10px rgba(24, 21, 18, 0.28);
+            transition: background 0.35s ease, border-color 0.35s ease;
         }
 
         .merchant-banner.visible {
@@ -756,7 +856,7 @@
         .merchant-banner-kicker {
             font-size: 0.7rem;
             font-weight: 800;
-            color: var(--caramel-light);
+            color: var(--accent-soft);
         }
 
         .merchant-banner-title {
@@ -773,7 +873,7 @@
             font-size: 0.75rem;
             font-weight: 900;
             color: var(--espresso);
-            background: linear-gradient(135deg, var(--caramel-light), var(--caramel));
+            background: linear-gradient(135deg, var(--accent-soft), var(--accent));
             padding: 2px 10px;
             border-radius: 999px;
         }
@@ -784,7 +884,7 @@
             gap: 6px;
             background: #ffffff;
             color: var(--espresso);
-            border: 1px solid var(--caramel-light);
+            border: 1px solid var(--accent-soft);
             padding: 7px 14px;
             border-radius: 11px;
             font-size: 0.8rem;
@@ -794,7 +894,7 @@
 
         .merchant-back-btn:hover {
             transform: translateY(-1px);
-            background: var(--caramel-light);
+            background: var(--accent-soft);
         }
 
         .circles-row-wrapper {
@@ -806,11 +906,12 @@
             -webkit-backdrop-filter: blur(12px);
             padding: 12px 10px;
             border-radius: 20px;
-            border: 1.5px solid var(--border-gold);
-            box-shadow: 0 10px 24px -8px rgba(24, 21, 18, 0.16);
+            border: 1.5px solid var(--accent-glow);
+            box-shadow: 0 10px 24px -8px var(--accent-glow);
             margin-bottom: 10px;
             overflow-x: auto;
             scrollbar-width: none;
+            transition: border-color 0.35s ease, box-shadow 0.35s ease;
         }
 
         .circles-row-wrapper::-webkit-scrollbar {
@@ -832,7 +933,7 @@
             align-items: center;
             text-align: center;
             gap: 5px;
-            width: 74px;
+            width: 78px;
             flex-shrink: 0;
             opacity: 0.78;
             transition: transform 0.22s ease, opacity 0.22s ease;
@@ -853,7 +954,7 @@
             height: 52px;
             border-radius: 50%;
             padding: 2.5px;
-            background: var(--ring-color, var(--caramel));
+            background: var(--ring-color, var(--accent));
             animation: catRingPulse 2.6s infinite ease-in-out;
             transition: transform 0.22s ease, box-shadow 0.22s ease;
         }
@@ -884,11 +985,11 @@
         }
 
         .cat-circle-label {
-            font-size: 0.68rem;
+            font-size: 0.66rem;
             font-weight: 800;
             color: var(--text-main);
             line-height: 1.2;
-            max-width: 74px;
+            max-width: 78px;
             display: inline-flex;
             flex-direction: column;
             align-items: center;
@@ -897,7 +998,7 @@
         }
 
         .cat-circle-item.active .cat-circle-label {
-            color: var(--ring-color, var(--caramel-dark));
+            color: var(--ring-color, var(--accent-deep));
             font-weight: 900;
         }
 
@@ -906,7 +1007,7 @@
             width: 14px;
             height: 3px;
             border-radius: 999px;
-            background: var(--ring-color, var(--caramel-dark));
+            background: var(--ring-color, var(--accent-deep));
             margin-top: 1px;
         }
 
@@ -927,14 +1028,15 @@
             background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1.5px solid var(--border-gold);
+            border: 1.5px solid var(--accent-glow);
             border-radius: 16px;
             padding: 6px 10px 6px 14px;
             margin-bottom: 16px;
-            box-shadow: 0 10px 24px -10px rgba(24, 21, 18, 0.18);
+            box-shadow: 0 10px 24px -10px var(--accent-glow);
             display: flex;
             align-items: center;
             gap: 8px;
+            transition: border-color 0.35s ease, box-shadow 0.35s ease;
         }
 
         .quick-search-box input {
@@ -996,7 +1098,7 @@
             background: var(--bg-card);
             border-radius: 18px;
             overflow: hidden;
-            border: 1px solid rgba(28, 23, 20, 0.08);
+            border: 1.5px solid var(--accent-glow);
             box-shadow: var(--shadow-main);
             display: flex;
             flex-direction: column;
@@ -1005,8 +1107,8 @@
 
         .product-card:hover {
             transform: translateY(-4px);
-            border-color: var(--caramel);
-            box-shadow: 0 16px 32px -12px rgba(28, 23, 20, 0.18);
+            border-color: var(--accent);
+            box-shadow: 0 16px 32px -12px var(--accent-glow);
         }
 
         .product-img-box {
@@ -1039,21 +1141,22 @@
             position: absolute;
             top: 8px;
             right: 8px;
-            background: rgba(24, 21, 18, 0.82);
+            background: rgba(24, 21, 18, 0.85);
             backdrop-filter: blur(6px);
-            color: var(--caramel-light);
+            color: var(--accent-soft);
             font-size: 0.66rem;
             font-weight: 800;
             padding: 2px 8px;
             border-radius: 999px;
-            border: 1px solid rgba(200, 150, 102, 0.35);
+            border: 1px solid var(--accent);
+            transition: color 0.3s ease, border-color 0.3s ease;
         }
 
         .new-for-you-badge {
             position: absolute;
             top: 8px;
             left: 8px;
-            background: linear-gradient(135deg, var(--caramel-light), var(--caramel));
+            background: linear-gradient(135deg, var(--accent-soft), var(--accent));
             color: var(--espresso);
             font-size: 0.62rem;
             font-weight: 900;
@@ -1085,8 +1188,9 @@
         .product-price {
             font-size: 1.08rem;
             font-weight: 900;
-            color: var(--caramel-dark);
+            color: var(--accent-deep);
             margin-top: 4px;
+            transition: color 0.3s ease;
         }
 
         .product-price span {
@@ -1120,9 +1224,9 @@
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            background: #f6efe6;
+            background: var(--accent-tint);
             color: var(--espresso-soft);
-            border: 1px solid var(--border-gold);
+            border: 1px solid var(--accent-glow);
             border-radius: 999px;
             padding: 2px 9px;
             font-size: 0.7rem;
@@ -1133,19 +1237,19 @@
 
         .merchant-tag-btn:hover {
             background: var(--espresso);
-            color: var(--caramel-light);
-            border-color: var(--caramel);
+            color: var(--accent-soft);
+            border-color: var(--accent);
         }
 
         .merchant-tag-name {
-            color: var(--caramel-dark);
+            color: var(--accent-deep);
             font-weight: 900;
             text-decoration: underline;
             text-underline-offset: 2px;
         }
 
         .merchant-tag-btn:hover .merchant-tag-name {
-            color: var(--caramel-light);
+            color: var(--accent-soft);
         }
 
         .card-btns {
@@ -1170,7 +1274,7 @@
         }
 
         .add-cart-btn:hover {
-            background: var(--caramel-dark);
+            background: var(--accent-deep);
         }
 
         .add-cart-btn.added {
@@ -1182,34 +1286,42 @@
             width: 100%;
             padding: 7px 10px;
             border-radius: 11px;
-            background: #f6efe6;
+            background: var(--accent-tint);
             color: var(--espresso-soft);
-            border: 1px solid var(--border-gold);
+            border: 1px solid var(--accent-glow);
             font-size: 0.76rem;
             font-weight: 800;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 5px;
+            transition: background 0.2s ease, border-color 0.2s ease;
+        }
+
+        .direct-wa-link:hover {
+            background: var(--accent);
+            color: #ffffff;
+            border-color: var(--accent);
         }
 
         .special-request-card {
-            background: linear-gradient(150deg, var(--espresso) 0%, var(--espresso-soft) 65%, var(--caramel-dark) 100%);
+            background: linear-gradient(150deg, var(--espresso) 0%, var(--espresso-soft) 65%, var(--accent-deep) 100%);
             color: #ffffff;
             border-radius: 18px;
             padding: 16px 14px;
-            border: 1.5px solid rgba(229, 190, 150, 0.45);
+            border: 1.5px solid var(--accent);
             box-shadow: var(--shadow-main);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             gap: 12px;
+            transition: background 0.35s ease, border-color 0.35s ease;
         }
 
         .special-request-card h3 {
             font-size: 0.96rem;
             font-weight: 900;
-            color: var(--caramel-light);
+            color: var(--accent-soft);
             line-height: 1.35;
         }
 
@@ -1224,7 +1336,7 @@
             width: 100%;
             padding: 9px 10px;
             border-radius: 11px;
-            background: linear-gradient(135deg, var(--caramel-light), var(--caramel));
+            background: linear-gradient(135deg, var(--accent-soft), var(--accent));
             color: var(--espresso);
             font-size: 0.8rem;
             font-weight: 900;
@@ -1255,9 +1367,9 @@
             gap: 8px;
             max-width: min(270px, calc(100vw - 32px));
             padding: 11px 15px;
-            border: 1px solid rgba(229, 190, 150, 0.8);
+            border: 1px solid var(--accent-soft);
             border-radius: 999px;
-            background: linear-gradient(135deg, var(--caramel-light), var(--caramel));
+            background: linear-gradient(135deg, var(--accent-soft), var(--accent));
             color: var(--espresso);
             box-shadow: 0 8px 22px rgba(24, 21, 18, 0.24);
             font-size: 0.82rem;
@@ -1335,18 +1447,18 @@
             height: 54px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--espresso), var(--espresso-soft));
-            color: var(--caramel-light);
-            border: 1.5px solid var(--caramel);
-            box-shadow: 0 12px 26px rgba(24, 21, 18, 0.35), 0 0 18px rgba(200, 150, 102, 0.45);
+            color: var(--accent-soft);
+            border: 1.5px solid var(--accent);
+            box-shadow: 0 12px 26px rgba(24, 21, 18, 0.35), 0 0 18px var(--accent-glow);
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.3s ease, color 0.3s ease;
         }
 
         .floating-cart-pill:hover {
             transform: translateY(-3px) scale(1.04);
-            box-shadow: 0 16px 30px rgba(24, 21, 18, 0.42), 0 0 22px rgba(200, 150, 102, 0.65);
+            box-shadow: 0 16px 30px rgba(24, 21, 18, 0.42), 0 0 22px var(--accent-glow);
         }
 
         .floating-cart-pill.pop {
@@ -1367,8 +1479,8 @@
             position: absolute;
             top: -5px;
             right: -5px;
-            background: var(--caramel);
-            color: var(--espresso);
+            background: var(--accent);
+            color: #ffffff;
             border: 2px solid var(--espresso);
             min-width: 22px;
             height: 22px;
@@ -1380,6 +1492,7 @@
             align-items: center;
             justify-content: center;
             line-height: 1;
+            transition: background 0.3s ease;
         }
 
         .cart-badge-count.visible {
@@ -1393,8 +1506,8 @@
             transform: translateX(-50%) translateY(12px);
             z-index: 350;
             background: var(--espresso);
-            color: var(--caramel-light);
-            border: 1px solid var(--caramel);
+            color: var(--accent-soft);
+            border: 1px solid var(--accent);
             padding: 9px 16px;
             border-radius: 999px;
             font-size: 0.8rem;
@@ -1432,7 +1545,7 @@
             width: min(420px, 95vw);
             background: #ffffff;
             border-radius: 22px;
-            border: 1.5px solid var(--caramel);
+            border: 1.5px solid var(--accent);
             box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
             overflow: hidden;
             animation: modalPopIn 0.24s cubic-bezier(0.22, 1, 0.36, 1);
@@ -1447,13 +1560,13 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid rgba(200, 150, 102, 0.3);
+            border-bottom: 1px solid var(--accent-glow);
         }
 
         .option-modal-header h3 {
             font-size: 0.96rem;
             font-weight: 900;
-            color: var(--caramel-light);
+            color: var(--accent-soft);
         }
 
         .option-modal-close {
@@ -1473,7 +1586,7 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            background: #faf7f2;
+            background: var(--page-mood-bg);
         }
 
         .option-modal-product {
@@ -1483,7 +1596,7 @@
             background: #ffffff;
             padding: 10px;
             border-radius: 14px;
-            border: 1px solid var(--border-gold);
+            border: 1px solid var(--accent-glow);
         }
 
         .option-modal-product img {
@@ -1509,7 +1622,7 @@
         .option-modal-product-price {
             font-size: 0.96rem;
             font-weight: 900;
-            color: var(--caramel-dark);
+            color: var(--accent-deep);
             margin-top: 2px;
         }
 
@@ -1527,7 +1640,7 @@
             background: #ffffff;
             padding: 8px 12px;
             border-radius: 12px;
-            border: 1px solid var(--border-gold);
+            border: 1px solid var(--accent-glow);
         }
 
         .option-field-label {
@@ -1547,7 +1660,7 @@
             height: 30px;
             border-radius: 9px;
             background: var(--espresso);
-            color: var(--caramel-light);
+            color: var(--accent-soft);
             font-weight: 900;
             font-size: 1rem;
             display: inline-flex;
@@ -1557,7 +1670,7 @@
         }
 
         .modal-qty-btn:hover {
-            background: var(--caramel-dark);
+            background: var(--accent-deep);
             color: #ffffff;
         }
 
@@ -1578,7 +1691,7 @@
         .option-pill-btn {
             padding: 6px 12px;
             border-radius: 10px;
-            border: 1.5px solid var(--border-gold);
+            border: 1.5px solid var(--accent-glow);
             background: #ffffff;
             color: var(--text-main);
             font-size: 0.78rem;
@@ -1588,8 +1701,8 @@
 
         .option-pill-btn.selected {
             background: var(--espresso);
-            color: var(--caramel-light);
-            border-color: var(--caramel);
+            color: var(--accent-soft);
+            border-color: var(--accent);
             box-shadow: 0 4px 10px rgba(24, 21, 18, 0.18);
         }
 
@@ -1599,7 +1712,7 @@
             resize: vertical;
             padding: 9px 11px;
             border-radius: 12px;
-            border: 1.5px solid var(--border-gold);
+            border: 1.5px solid var(--accent-glow);
             background: #ffffff;
             color: var(--text-main);
             font-family: 'Cairo', sans-serif;
@@ -1609,7 +1722,7 @@
         }
 
         .option-modal-textarea:focus {
-            border-color: var(--caramel-dark);
+            border-color: var(--accent-deep);
         }
 
         .option-modal-footer {
@@ -1625,15 +1738,15 @@
             padding: 10px 14px;
             border-radius: 12px;
             background: var(--espresso);
-            color: var(--caramel-light);
-            border: 1px solid var(--caramel);
+            color: var(--accent-soft);
+            border: 1px solid var(--accent);
             font-size: 0.86rem;
             font-weight: 900;
             transition: background 0.2s ease;
         }
 
         .option-confirm-btn:hover {
-            background: var(--caramel-dark);
+            background: var(--accent-deep);
             color: #ffffff;
         }
 
@@ -1672,7 +1785,7 @@
             display: flex;
             flex-direction: column;
             box-shadow: 10px 0 35px rgba(0, 0, 0, 0.25);
-            border-right: 2px solid var(--caramel);
+            border-right: 2px solid var(--accent);
         }
 
         .cart-drawer.open {
@@ -1687,13 +1800,13 @@
             align-items: center;
             justify-content: space-between;
             gap: 8px;
-            border-bottom: 1px solid rgba(200, 150, 102, 0.3);
+            border-bottom: 1px solid var(--accent-glow);
         }
 
         .cart-header h3 {
             font-size: 1rem;
             font-weight: 900;
-            color: var(--caramel-light);
+            color: var(--accent-soft);
             flex: 1;
         }
 
@@ -1704,9 +1817,9 @@
         }
 
         .back-from-cart-btn {
-            background: rgba(200, 150, 102, 0.18);
-            color: var(--caramel-light);
-            border: 1px solid rgba(200, 150, 102, 0.4);
+            background: var(--accent-tint);
+            color: var(--accent-soft);
+            border: 1px solid var(--accent-glow);
             padding: 5px 10px;
             border-radius: 9px;
             font-size: 0.76rem;
@@ -1732,7 +1845,7 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
-            background: #faf7f2;
+            background: var(--page-mood-bg);
         }
 
         .cart-empty {
@@ -1786,7 +1899,7 @@
         .cart-item-price {
             font-size: 0.82rem;
             font-weight: 800;
-            color: var(--caramel-dark);
+            color: var(--accent-deep);
         }
 
         .cart-item-options {
@@ -1798,9 +1911,9 @@
         .cart-option-select,
         .cart-item-note-input {
             font-family: 'Cairo', sans-serif;
-            border: 1px solid var(--border-gold);
+            border: 1px solid var(--accent-glow);
             border-radius: 10px;
-            background: #faf7f2;
+            background: var(--page-mood-bg);
             color: var(--text-main);
             font-weight: 700;
             outline: none;
@@ -1809,7 +1922,7 @@
 
         .cart-option-select:focus,
         .cart-item-note-input:focus {
-            border-color: var(--caramel-dark);
+            border-color: var(--accent-deep);
             background: #ffffff;
         }
 
@@ -1869,8 +1982,8 @@
         }
 
         .cart-policy-note {
-            background: #faf7f2;
-            border: 1px solid var(--border-gold);
+            background: var(--page-mood-bg);
+            border: 1px solid var(--accent-glow);
             border-radius: 12px;
             padding: 8px 10px;
             font-size: 0.74rem;
@@ -1889,7 +2002,7 @@
         }
 
         .cart-total-amount {
-            color: var(--caramel-dark);
+            color: var(--accent-deep);
             font-size: 1.15rem;
         }
 
@@ -1937,7 +2050,7 @@
             max-height: 85vh;
             border-radius: 16px;
             object-fit: contain;
-            border: 1.5px solid var(--caramel);
+            border: 1.5px solid var(--accent);
         }
 
         .modal-close {
@@ -1955,12 +2068,13 @@
             padding: 20px 16px;
             font-size: 0.84rem;
             color: var(--text-muted);
-            border-top: 1px solid rgba(28, 23, 20, 0.08);
-            background: #f2ede6;
+            border-top: 1px solid var(--accent-glow);
+            background: var(--accent-tint);
+            transition: background 0.35s ease, border-color 0.35s ease;
         }
     </style>
 </head>
-<body>
+<body class="cat-mode-all">
 
     <header>
         <button type="button" class="logo-pill" onclick="resetHomeFresh()" aria-label="العودة للصفحة الرئيسية">
@@ -2038,48 +2152,48 @@
         <div class="circles-row-wrapper" id="circlesRowWrapper">
             <div class="circles-single-row" id="categoryCircles">
                 <div class="cat-circle-item ring-all active" data-cat="all" onclick="filterByCategory('all', this)">
-                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0032.jpg" alt="الكل" loading="lazy"></div></div>
+                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0032.jpg" alt="الكل" loading="lazy" onerror="this.closest('.cat-circle-item').remove()"></div></div>
                     <span class="cat-circle-label">الكل</span>
                 </div>
 
                 <div class="cat-circle-item ring-home" data-cat="home" onclick="filterByCategory('home', this)">
-                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0036.jpg" alt="المنزل" loading="lazy"></div></div>
+                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0036.jpg" alt="المنزل" loading="lazy" onerror="this.closest('.cat-circle-item').remove()"></div></div>
                     <span class="cat-circle-label">المنزل</span>
                 </div>
 
                 <div class="cat-circle-item ring-school" data-cat="school" onclick="filterByCategory('school', this)">
-                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0040.jpg" alt="المدرسة" loading="lazy"></div></div>
+                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0040.jpg" alt="المدرسة" loading="lazy" onerror="this.closest('.cat-circle-item').remove()"></div></div>
                     <span class="cat-circle-label">المدرسة</span>
                 </div>
 
                 <div class="cat-circle-item ring-tafse" data-cat="tafse" onclick="filterByCategory('tafse', this)">
-                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0042.jpg" alt="هاند ميد" loading="lazy"></div></div>
+                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0042.jpg" alt="هاند ميد" loading="lazy" onerror="this.closest('.cat-circle-item').remove()"></div></div>
                     <span class="cat-circle-label">هاند ميد</span>
                 </div>
 
                 <div class="cat-circle-item ring-kids" data-cat="kids" onclick="filterByCategory('kids', this)">
-                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0038.jpg" alt="الأطفال" loading="lazy"></div></div>
+                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0038.jpg" alt="الأطفال" loading="lazy" onerror="this.closest('.cat-circle-item').remove()"></div></div>
                     <span class="cat-circle-label">الأطفال</span>
                 </div>
 
                 <div class="cat-circle-item ring-women" data-cat="women" onclick="filterByCategory('women', this)">
-                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0035.jpg" alt="النساء" loading="lazy"></div></div>
+                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0035.jpg" alt="النساء" loading="lazy" onerror="this.closest('.cat-circle-item').remove()"></div></div>
                     <span class="cat-circle-label">النساء</span>
                 </div>
 
                 <div class="cat-circle-item ring-men" data-cat="men" onclick="filterByCategory('men', this)">
-                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0037.jpg" alt="الرجال" loading="lazy"></div></div>
+                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0037.jpg" alt="الرجال" loading="lazy" onerror="this.closest('.cat-circle-item').remove()"></div></div>
                     <span class="cat-circle-label">الرجال</span>
                 </div>
 
                 <div class="cat-circle-item ring-gifts" data-cat="gifts" onclick="filterByCategory('gifts', this)">
-                    <div class="cat-ring"><div class="cat-ring-inner"><img src="1794812775286.jpg" alt="الهدايا" loading="lazy"></div></div>
+                    <div class="cat-ring"><div class="cat-ring-inner"><img src="1794812775286.jpg" alt="الهدايا" loading="lazy" onerror="this.closest('.cat-circle-item').remove()"></div></div>
                     <span class="cat-circle-label">الهدايا</span>
                 </div>
 
                 <div class="cat-circle-item ring-perfume" data-cat="perfume" onclick="filterByCategory('perfume', this)">
-                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0039.jpg" alt="البرفانات" loading="lazy"></div></div>
-                    <span class="cat-circle-label">البرفانات</span>
+                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0039.jpg" alt="العناية والعطور" loading="lazy" onerror="this.closest('.cat-circle-item').remove()"></div></div>
+                    <span class="cat-circle-label">العناية والعطور</span>
                 </div>
             </div>
         </div>
@@ -2115,7 +2229,7 @@
         </div>
 
         <section class="products-grid" id="productsGrid"></section>
-        <div id="merchantAfterRecommendations"></div>
+        <div id="continuationAfterRecommendations"></div>
         <div class="feed-sentinel" id="feedSentinel"></div>
     </main>
 
@@ -2149,7 +2263,7 @@
             </div>
             <div class="option-modal-body">
                 <div class="option-modal-product">
-                    <img id="optionModalImg" src="" alt="">
+                    <img id="optionModalImg" src="" alt="" onerror="removeProductById(pendingOptionSelection.productId); closeProductOptionModal();">
                     <div class="option-modal-product-info">
                         <div class="option-modal-product-title" id="optionModalTitle"></div>
                         <div class="option-modal-product-price" id="optionModalPrice"></div>
@@ -2214,7 +2328,7 @@
 
     <div class="image-modal" id="imageModal" onclick="closeImageModal()">
         <button type="button" class="modal-close" onclick="closeImageModal()" aria-label="إغلاق">&times;</button>
-        <img id="modalImagePreview" src="" alt="معاينة المنتج" onclick="event.stopPropagation()">
+        <img id="modalImagePreview" src="" alt="معاينة المنتج" onclick="event.stopPropagation()" onerror="closeImageModal()">
     </div>
 
     <footer>
@@ -2485,10 +2599,19 @@
             women: "النساء",
             men: "الرجال",
             gifts: "الهدايا",
-            perfume: "البرفانات"
+            perfume: "العناية والعطور"
         };
 
-        /* منتجات التاجر: شيرين غريب */
+        function applyCategoryPageMood(category) {
+            const validModes = ["all", "home", "school", "tafse", "kids", "women", "men", "gifts", "perfume"];
+            const mode = validModes.includes(category) ? category : "all";
+            document.body.className = document.body.className
+                .split(/\s+/)
+                .filter(cls => cls && !cls.startsWith("cat-mode-"))
+                .concat(`cat-mode-${mode}`)
+                .join(" ");
+        }
+
         const SHIREEN_PRODUCT_IDS = new Set([
             "hm-1",
             "hm-32", "hm-33", "hm-35", "hm-36", "hm-37", "hm-39",
@@ -2502,10 +2625,9 @@
             "htm-13", "htm-14", "htm-15",
             "libr-29",
             "brf-1", "brf-2", "brf-3", "brf-4", "brf-5", "brf-6", "brf-7", "brf-8",
-            "brf-9", "brf-10", "brf-11", "brf-12", "brf-13", "brf-14", "brf-15", "brf-16"
+            "brf-9", "brf-10", "brf-11", "brf-12", "brf-13", "brf-14", "brf-16"
         ]);
 
-        /* منتجات التاجر: أم وليد */
         const UMM_WALEED_PRODUCT_IDS = new Set([
             "amn-1", "amn-2", "amn-3", "amn-4", "amn-5", "amn-6", "amn-7", "amn-8", "amn-9", "amn-10",
             "hm-2", "hm-3", "hm-4", "hm-5", "hm-6", "hm-7", "hm-8", "hm-19",
@@ -2516,7 +2638,6 @@
             "hm-31"
         ]);
 
-        /* منتجات التاجر: أم عمار */
         const UMM_AMMAR_PRODUCT_IDS = new Set([
             "tafse-6", "tafse-7", "tafse-8", "tafse-9", "tafse-10", "tafse-11", "tafse-12",
             "tafse-13", "tafse-14", "tafse-15", "tafse-16", "tafse-17", "tafse-18",
@@ -2524,7 +2645,7 @@
         ]);
 
         function inferMerchantForProduct(product) {
-            if (!product) return "كارامل ستور";
+            if (!product) return "شيرين غريب";
             if (product.merchant) return product.merchant;
             if (SHIREEN_PRODUCT_IDS.has(product.id)) {
                 return "شيرين غريب";
@@ -2542,7 +2663,7 @@
                 return "كارامل للهاند ميد";
             }
             if (product.id && product.id.startsWith("wmn-")) return "أم عمار";
-            return "كارامل ستور";
+            return "شيرين غريب";
         }
 
         const PRODUCTS = [
@@ -2713,7 +2834,6 @@
             { id: "brf-12", title: "مسمم MUSAMAM", desc: "فخامة ذهبية بتفاصيل ثعبان مميزة تدي حضور قوي وهدية تشرّف.", price: 375, category: "perfume", img: "Prfa/compressed_1794950096662.webp" },
             { id: "brf-13", title: "قصة GISSAH", desc: "لمسة أنثوية ناعمة بلون وردي حالم وعلبة متناسقة مثالية للذوق الراقي.", price: 375, category: "perfume", img: "Prfa/compressed_1794950096748.webp" },
             { id: "brf-14", title: "يارا YARA", desc: "أيقونة الجاذبية والنعومة بلونها الوردي المميز وعلبتها الفخمة.", price: 375, category: "perfume", img: "Prfa/compressed_1794950096833.webp" },
-            { id: "brf-15", title: "LIVELY FOR MEN PARIS", desc: "حضور رجالي أنيق بزجاجة زرقاء مخططة تكمّل إطلالتك في كل خروجة.", price: 175, category: "perfume", img: "Prfa/compressed_17950472010.webp" },
             { id: "brf-16", title: "برفان حريمي", desc: "برفان حريمي بلمسة أنثوية ناعمة ومنعشة للاستخدام اليومي.", price: 100, category: "perfume", img: "Prfa/IMG-20261116-WA0103.jpg" }
         ];
 
@@ -2733,6 +2853,28 @@
             keywords: {},
             seenIds: []
         };
+
+        function removeProductById(productId) {
+            if (!productId) return;
+            const idx = PRODUCTS.findIndex(p => p.id === productId);
+            if (idx === -1) return;
+            PRODUCTS.splice(idx, 1);
+            renderProducts(currentCategory);
+            renderSmartRecommendations();
+        }
+
+        function handleProductImageError(imgEl, productId) {
+            if (imgEl) {
+                const card = imgEl.closest(".product-card");
+                if (card) card.remove();
+            }
+            if (!productId) return;
+            const idx = PRODUCTS.findIndex(p => p.id === productId);
+            if (idx !== -1) {
+                PRODUCTS.splice(idx, 1);
+                renderSmartRecommendations();
+            }
+        }
 
         function loadCartFromStorage() {
             try {
@@ -2931,62 +3073,48 @@
             return scoredList.slice(0, limit).map(entry => entry.product);
         }
 
-        function getMerchantRelatedRecommendations(merchantName, limit = 6) {
-            if (!merchantName) return [];
-            const merchantProducts = PRODUCTS.filter(p => p.merchant === merchantName);
-            const catWeights = {};
-            const kwWeights = {};
+        function getContinuationProducts(limit = 8) {
+            let pool = [];
 
-            merchantProducts.forEach(p => {
-                const cats = [p.category, ...(Array.isArray(p.categories) ? p.categories : [])];
-                cats.forEach(c => {
-                    if (c) catWeights[c] = (catWeights[c] || 0) + 3;
+            if (currentMerchant) {
+                pool = PRODUCTS.filter(p => p.merchant !== currentMerchant);
+            } else if (currentCategory && currentCategory !== "all") {
+                pool = PRODUCTS.filter(p => {
+                    const cats = [p.category, ...(Array.isArray(p.categories) ? p.categories : [])];
+                    return !cats.includes(currentCategory);
                 });
-                extractTokens(`${p.title} ${p.desc || ""}`).filter(t => t.length >= 3).forEach(tok => {
-                    kwWeights[tok] = (kwWeights[tok] || 0) + 1;
-                });
-            });
+            }
 
-            const candidates = PRODUCTS.filter(p => p.merchant !== merchantName).map(p => {
-                const cats = [p.category, ...(Array.isArray(p.categories) ? p.categories : [])];
-                let score = 0;
-                cats.forEach(c => {
-                    score += (catWeights[c] || 0) * 10;
-                });
-                extractTokens(`${p.title} ${p.desc || ""}`).filter(t => t.length >= 3).forEach(tok => {
-                    score += (kwWeights[tok] || 0) * 3;
-                });
-                score += Math.random() * 8;
-                return { product: p, score };
-            });
-
-            candidates.sort((a, b) => b.score - a.score);
-            return candidates.slice(0, limit).map(item => item.product);
+            return shuffleArray(pool).slice(0, limit);
         }
 
-        function renderMerchantAfterRecommendations() {
-            const container = document.getElementById("merchantAfterRecommendations");
+        function renderContinuationAfterSection() {
+            const container = document.getElementById("continuationAfterRecommendations");
             if (!container) return;
 
-            if (!currentMerchant) {
+            if (!currentMerchant && (!currentCategory || currentCategory === "all")) {
                 container.innerHTML = "";
                 return;
             }
 
-            const related = getMerchantRelatedRecommendations(currentMerchant, 6);
-            if (!related.length) {
+            const continuationItems = getContinuationProducts(8);
+            if (!continuationItems.length) {
                 container.innerHTML = "";
                 return;
             }
+
+            const contextLabel = currentMerchant
+                ? `بعد منتجات ${currentMerchant}.. منتجات أخرى متنوعة من المتجر`
+                : `بعد قسم ${CATEGORY_NAMES[currentCategory] || "القسم"}.. منتجات أخرى متنوعة من المتجر`;
 
             container.innerHTML = `
-                <section class="merchant-after-section">
-                    <div class="merchant-after-header">
-                        <h3>بعد منتجات ${escapeHtmlAttr(currentMerchant)}.. ترشيحات من نفس اهتماماتها</h3>
-                        <span class="smart-tag">مقترحات مشابهة</span>
+                <section class="continuation-after-section">
+                    <div class="continuation-after-header">
+                        <h3>${escapeHtmlAttr(contextLabel)}</h3>
+                        <span class="smart-tag">منتجات مختلفة</span>
                     </div>
-                    <div class="merchant-after-grid">
-                        ${related.map(p => buildProductCardHTML(p, false, "mrel")).join("")}
+                    <div class="continuation-after-grid">
+                        ${continuationItems.map(p => buildProductCardHTML(p, false, "cont")).join("")}
                     </div>
                 </section>
             `;
@@ -3001,6 +3129,7 @@
             updateSearchCancelButton();
 
             currentCategory = "all";
+            applyCategoryPageMood("all");
             document.querySelectorAll(".cat-circle-item").forEach(item => {
                 item.classList.toggle("active", item.getAttribute("data-cat") === "all");
             });
@@ -3015,6 +3144,7 @@
 
         function clearMerchantFilter(shouldScroll = true) {
             currentMerchant = "";
+            applyCategoryPageMood(currentCategory);
             renderProducts(currentCategory);
             renderSmartRecommendations();
             if (shouldScroll) {
@@ -3061,17 +3191,17 @@
 
         function buildProductCardHTML(product, isSmartCard = false, instanceTag = "base") {
             const displayPrice = product.priceLabel || product.price;
-            const merchantName = product.merchant || "كارامل ستور";
+            const merchantName = product.merchant || "شيرين غريب";
             const waText = encodeURIComponent(`أريد طلب ${product.title} بسعر ${displayPrice} جنيه (التاجر: ${merchantName}) من متجر كارامل`);
             const isFreshForUser = !interestData.seenIds.includes(product.id);
             const btnId = isSmartCard ? `smart-btn-${product.id}` : `btn-${instanceTag}-${product.id}`;
 
             return `
-                <article class="product-card">
+                <article class="product-card" data-product-id="${escapeHtmlAttr(product.id)}">
                     <div class="product-img-box" onclick="openImageModal('${product.img}', '${product.id}')">
                         <span class="product-cat-badge">${CATEGORY_NAMES[product.category] || "متجر كارامل"}</span>
                         ${isSmartCard && isFreshForUser ? `<span class="new-for-you-badge">جديد ليك</span>` : ""}
-                        <img src="${product.img}" alt="${escapeHtmlAttr(product.title)}" loading="lazy">
+                        <img src="${product.img}" alt="${escapeHtmlAttr(product.title)}" loading="lazy" onerror="handleProductImageError(this, '${product.id}')">
                     </div>
                     <div class="product-details">
                         <div>
@@ -3160,8 +3290,8 @@
             if (currentFeedItems.length === 0) return;
 
             if (renderedCount >= currentFeedItems.length) {
-                if (currentMerchant) {
-                    renderMerchantAfterRecommendations();
+                if (currentMerchant || (currentCategory && currentCategory !== "all")) {
+                    renderContinuationAfterSection();
                     if (sentinel) sentinel.textContent = "";
                     return;
                 }
@@ -3179,8 +3309,8 @@
             grid.insertAdjacentHTML("beforeend", htmlChunk);
             renderedCount += nextSlice.length;
 
-            if (currentMerchant) {
-                renderMerchantAfterRecommendations();
+            if (currentMerchant || (currentCategory && currentCategory !== "all")) {
+                renderContinuationAfterSection();
                 if (sentinel) sentinel.textContent = "";
             } else if (sentinel) {
                 sentinel.textContent = "اكتشف المزيد بالأسفل أو اطلب أي منتج خاص";
@@ -3189,6 +3319,7 @@
 
         function renderProducts(category = currentCategory) {
             currentCategory = category;
+            applyCategoryPageMood(currentMerchant ? "all" : category);
             feedCycle = 0;
             renderedCount = 0;
 
@@ -3209,11 +3340,11 @@
             currentFeedItems = buildFeedPool(category, rawQuery);
 
             if (currentFeedItems.length === 0) {
-                const afterEl = document.getElementById("merchantAfterRecommendations");
+                const afterEl = document.getElementById("continuationAfterRecommendations");
                 if (afterEl) afterEl.innerHTML = "";
                 if (sentinel) sentinel.textContent = "";
                 grid.innerHTML = `
-                    <div style="grid-column: 1 / -1; background: #fff; padding: 26px; border-radius: 18px; text-align: center; border: 1px solid var(--border-gold);">
+                    <div style="grid-column: 1 / -1; background: #fff; padding: 26px; border-radius: 18px; text-align: center; border: 1px solid var(--accent-glow);">
                         <p style="font-weight: 800; margin-bottom: 10px;">ملقيناش نتيجة مطابقة${trimmedQuery ? ` لـ "${trimmedQuery}"` : ""}.. وحتى لو المنتج مش موجود بنجيبهولك!</p>
                         <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
                             <a href="https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("أريد طلب منتج غير موجود في المتجر: " + trimmedQuery)}" class="add-cart-btn" style="max-width: 220px;" target="_blank" rel="noopener noreferrer">طلب خاص على واتساب</a>
@@ -3225,13 +3356,14 @@
             }
 
             grid.innerHTML = "";
-            const afterEl = document.getElementById("merchantAfterRecommendations");
+            const afterEl = document.getElementById("continuationAfterRecommendations");
             if (afterEl) afterEl.innerHTML = "";
             renderMoreFeedItems();
         }
 
         function resetFilters() {
             currentMerchant = "";
+            applyCategoryPageMood("all");
             const input = document.getElementById("homeSearchInput");
             if (input) input.value = "";
             updateSearchCancelButton();
@@ -3266,6 +3398,7 @@
 
         function filterByCategory(category, element, shouldScroll = true) {
             currentMerchant = "";
+            applyCategoryPageMood(category);
             document.querySelectorAll(".cat-circle-item").forEach(item => item.classList.remove("active"));
             if (element) {
                 element.classList.add("active");
@@ -3419,7 +3552,7 @@
             const itemNote = opts.itemNote || "";
             const itemPrice = Number(opts.price) || Number(product.price) || 0;
             const addedQty = Math.max(1, Number(opts.qty) || 1);
-            const merchantName = product.merchant || "كارامل ستور";
+            const merchantName = product.merchant || "شيرين غريب";
 
             const existing = cart.find(item =>
                 item.id === productId &&
@@ -3553,7 +3686,7 @@
                 const p = Number(item.price) || 0;
                 const catalogMatch = PRODUCTS.find(prod => prod.id === item.id);
                 const title = item.title || (catalogMatch ? catalogMatch.title : "منتج كارامل");
-                const merchantName = item.merchant || (catalogMatch ? catalogMatch.merchant : "كارامل ستور");
+                const merchantName = item.merchant || (catalogMatch ? catalogMatch.merchant : "شيرين غريب");
                 const img = item.img || (catalogMatch ? catalogMatch.img : "IMG-20261116-WA0032.jpg");
                 const variantCfg = getProductVariantConfig(catalogMatch);
 
@@ -3584,7 +3717,7 @@
                 return `
                     <div class="cart-item">
                         <div class="cart-item-top">
-                            <img src="${img}" alt="${escapeHtmlAttr(title)}">
+                            <img src="${img}" alt="${escapeHtmlAttr(title)}" onerror="this.style.display='none'">
                             <div class="cart-item-info">
                                 <div class="cart-item-title">${escapeHtmlAttr(title)}</div>
                                 <div class="cart-item-price">${p} جنيه • ${escapeHtmlAttr(merchantName)}</div>
@@ -3619,7 +3752,7 @@
                 total += sub;
 
                 const catalogMatch = PRODUCTS.find(prod => prod.id === item.id);
-                const merchantName = item.merchant || (catalogMatch ? catalogMatch.merchant : "كارامل ستور");
+                const merchantName = item.merchant || (catalogMatch ? catalogMatch.merchant : "شيرين غريب");
 
                 const extras = [`التاجر: ${merchantName}`];
                 if (item.selectedSize) extras.push(`المقاس: ${item.selectedSize}`);
