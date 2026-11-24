@@ -46,12 +46,12 @@
             --espresso-soft: #241e1a;
             --cream-soft: #f5efe6;
             --bg-main: #f6f3ee;
-            --bg-card: rgba(255, 255, 255, 0.97);
+            --bg-card: rgba(255, 255, 255, 0.98);
             --text-main: #181412;
             --text-muted: #675f57;
             --border-gold: rgba(200, 150, 102, 0.24);
             --glow: rgba(200, 150, 102, 0.35);
-            --shadow-main: 0 14px 30px -18px rgba(18, 16, 14, 0.16);
+            --shadow-main: 0 12px 26px -18px rgba(18, 16, 14, 0.16);
         }
 
         body.cat-mode-all { --accent: #c89666; --accent-soft: #ebd0b0; --accent-deep: #996738; --accent-glow: rgba(200, 150, 102, 0.28); --accent-tint: rgba(200, 150, 102, 0.08); --page-mood-bg: #f6f3ee; }
@@ -78,7 +78,7 @@
                 radial-gradient(circle at 10% 6%, var(--accent-tint) 0%, transparent 45%),
                 radial-gradient(circle at 90% 14%, var(--accent-tint) 0%, transparent 48%);
             color: var(--text-main);
-            line-height: 1.65;
+            line-height: 1.6;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -94,16 +94,6 @@
             50% { border-color: var(--accent-soft); box-shadow: 0 0 26px var(--accent-glow), inset 0 0 14px rgba(255, 255, 255, 0.14); }
         }
 
-        @keyframes catRingPulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 var(--ring-glow, rgba(200, 150, 102, 0.4)), 0 8px 16px -6px var(--ring-glow, rgba(200, 150, 102, 0.32)); }
-            50% { transform: scale(1.03); box-shadow: 0 0 0 4px rgba(255, 255, 255, 0), 0 10px 20px -5px var(--ring-glow, rgba(200, 150, 102, 0.5)); }
-        }
-
-        @keyframes activeCatGlow {
-            0%, 100% { box-shadow: 0 0 0 3px #ffffff, 0 0 0 5px var(--ring-color, var(--accent)), 0 0 18px var(--ring-glow, rgba(200, 150, 102, 0.8)); }
-            50% { box-shadow: 0 0 0 3px #ffffff, 0 0 0 6px var(--ring-color, var(--accent)), 0 0 24px var(--ring-glow, rgba(200, 150, 102, 0.95)); }
-        }
-
         @keyframes cartPop {
             0% { transform: scale(1); }
             45% { transform: scale(1.13); }
@@ -116,7 +106,7 @@
         }
 
         .top-app-bar {
-            background: rgba(18, 16, 14, 0.92);
+            background: rgba(18, 16, 14, 0.94);
             backdrop-filter: blur(20px) saturate(150%);
             -webkit-backdrop-filter: blur(20px) saturate(150%);
             padding: 10px 14px 12px;
@@ -269,18 +259,18 @@
 
         .search-cancel-btn.visible { display: inline-flex; align-items: center; justify-content: center; }
 
+        /* Top categories bar: sits right below header and scrolls away naturally when scrolling down */
         .quick-top-tabs {
-            background: rgba(255, 255, 255, 0.92);
+            background: rgba(255, 255, 255, 0.94);
             border-bottom: 1px solid rgba(24, 20, 18, 0.08);
-            padding: 8px 14px;
+            padding: 9px 14px;
             display: flex;
             align-items: center;
             gap: 16px;
             overflow-x: auto;
             scrollbar-width: none;
-            position: sticky;
-            top: 102px;
-            z-index: 112;
+            position: relative;
+            z-index: 105;
         }
 
         .quick-top-tabs::-webkit-scrollbar { display: none; }
@@ -301,8 +291,13 @@
             border-bottom-color: var(--accent-deep);
         }
 
+        /* Category circles row hidden as requested */
+        .circles-row-wrapper {
+            display: none !important;
+        }
+
         .container {
-            max-width: 1200px;
+            max-width: 1220px;
             margin: 0 auto;
             padding: 12px 14px 116px;
             width: 100%;
@@ -310,7 +305,7 @@
         }
 
         .caramel-promo-strip {
-            background: linear-gradient(90deg, var(--accent-tint), rgba(255, 255, 255, 0.92), var(--accent-tint));
+            background: linear-gradient(90deg, var(--accent-tint), rgba(255, 255, 255, 0.94), var(--accent-tint));
             border: 1px solid var(--accent-glow);
             border-radius: 14px;
             padding: 8px 14px;
@@ -333,99 +328,6 @@
             font-size: 0.7rem;
             font-weight: 900;
         }
-
-        .circles-row-wrapper {
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(14px);
-            padding: 12px 10px;
-            border-radius: 22px;
-            border: 1px solid rgba(24, 20, 18, 0.08);
-            box-shadow: var(--shadow-main);
-            margin-bottom: 14px;
-            overflow-x: auto;
-            scrollbar-width: none;
-        }
-
-        .circles-row-wrapper::-webkit-scrollbar { display: none; }
-
-        .circles-single-row {
-            display: flex;
-            flex-direction: row;
-            align-items: flex-start;
-            gap: 12px;
-            min-width: max-content;
-            padding: 2px 6px;
-        }
-
-        .cat-circle-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            gap: 5px;
-            width: 78px;
-            flex-shrink: 0;
-            opacity: 0.85;
-            transition: transform 0.22s ease, opacity 0.22s ease;
-        }
-
-        .cat-circle-item:hover, .cat-circle-item.active {
-            transform: translateY(-2px);
-            opacity: 1;
-        }
-
-        .cat-ring {
-            width: 54px;
-            height: 54px;
-            border-radius: 50%;
-            padding: 2.5px;
-            background: var(--ring-color, var(--accent));
-            animation: catRingPulse 2.6s infinite ease-in-out;
-        }
-
-        .cat-circle-item.active .cat-ring {
-            transform: scale(1.07);
-            animation: activeCatGlow 2s infinite ease-in-out;
-        }
-
-        .cat-ring-inner {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            overflow: hidden;
-            background: #f5efe8;
-            border: 1.5px solid #ffffff;
-        }
-
-        .cat-ring-inner img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .cat-circle-label {
-            font-size: 0.68rem;
-            font-weight: 800;
-            color: var(--text-main);
-            line-height: 1.2;
-            max-width: 78px;
-        }
-
-        .cat-circle-item.active .cat-circle-label {
-            color: var(--ring-color, var(--accent-deep));
-            font-weight: 900;
-        }
-
-        .ring-all { --ring-color: #c89666; --ring-glow: rgba(200, 150, 102, 0.6); }
-        .ring-home { --ring-color: #b88656; --ring-glow: rgba(184, 134, 86, 0.6); }
-        .ring-school { --ring-color: #0284c7; --ring-glow: rgba(2, 132, 199, 0.6); }
-        .ring-tafse { --ring-color: #52624b; --ring-glow: rgba(82, 98, 75, 0.6); }
-        .ring-kids { --ring-color: #0e7490; --ring-glow: rgba(14, 116, 144, 0.6); }
-        .ring-women { --ring-color: #d97706; --ring-glow: rgba(217, 119, 6, 0.6); }
-        .ring-men { --ring-color: #334155; --ring-glow: rgba(51, 65, 85, 0.6); }
-        .ring-gifts { --ring-color: #db2777; --ring-glow: rgba(219, 39, 119, 0.6); }
-        .ring-perfume { --ring-color: #3b82f6; --ring-glow: rgba(59, 130, 246, 0.6); }
 
         .dual-spotlight-row {
             display: grid;
@@ -497,7 +399,7 @@
 
         .mini-spot-img {
             width: 100%;
-            height: 112px;
+            height: 118px;
             background: #efe8df;
             cursor: zoom-in;
             overflow: hidden;
@@ -593,7 +495,7 @@
             gap: 10px;
             margin-bottom: 10px;
             flex-wrap: wrap;
-            scroll-margin-top: 165px;
+            scroll-margin-top: 130px;
         }
 
         .section-heading h2 {
@@ -734,112 +636,118 @@
         .products-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 13px;
+            gap: 12px;
         }
 
-        @media (min-width: 768px) { .products-grid { grid-template-columns: repeat(3, 1fr); gap: 18px; } }
+        @media (min-width: 768px) { .products-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
         @media (min-width: 1024px) { .products-grid { grid-template-columns: repeat(4, 1fr); } }
 
+        /* Clean, spacious, modern product card */
         .product-card {
             background: var(--bg-card);
-            border-radius: 22px;
+            border-radius: 20px;
             overflow: hidden;
-            border: 1px solid rgba(24, 20, 18, 0.08);
+            border: 1px solid rgba(24, 20, 18, 0.07);
             box-shadow: var(--shadow-main);
             display: flex;
             flex-direction: column;
-            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+            transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
         }
 
         .product-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-4px);
             border-color: var(--accent);
         }
 
         .product-img-box {
             width: 100%;
-            height: 174px;
+            height: 186px;
             background: linear-gradient(180deg, #f8f4ef 0%, #efe8df 100%);
             overflow: hidden;
             cursor: zoom-in;
             position: relative;
         }
 
-        @media (min-width: 768px) { .product-img-box { height: 214px; } }
+        @media (min-width: 768px) { .product-img-box { height: 224px; } }
 
         .product-img-box img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.38s ease;
+            transition: transform 0.35s ease;
         }
 
-        .product-card:hover .product-img-box img { transform: scale(1.05); }
+        .product-card:hover .product-img-box img { transform: scale(1.04); }
 
         .product-cat-badge {
             position: absolute;
-            top: 9px;
-            right: 9px;
-            background: rgba(18, 16, 14, 0.8);
+            top: 8px;
+            right: 8px;
+            background: rgba(18, 16, 14, 0.78);
             backdrop-filter: blur(8px);
             color: var(--accent-soft);
-            font-size: 0.65rem;
+            font-size: 0.63rem;
             font-weight: 800;
-            padding: 3px 9px;
+            padding: 2px 8px;
             border-radius: 999px;
         }
 
         .new-for-you-badge {
             position: absolute;
-            top: 9px;
-            left: 9px;
+            top: 8px;
+            left: 8px;
             background: linear-gradient(135deg, var(--accent-soft), var(--accent));
             color: var(--espresso);
-            font-size: 0.62rem;
+            font-size: 0.6rem;
             font-weight: 900;
-            padding: 3px 8px;
+            padding: 2px 8px;
             border-radius: 999px;
         }
 
         .product-details {
-            padding: 13px;
+            padding: 11px 12px 12px;
             display: flex;
             flex-direction: column;
             flex: 1;
             justify-content: space-between;
-            gap: 10px;
+            gap: 9px;
         }
 
         .product-title {
-            font-size: 0.86rem;
+            font-size: 0.85rem;
             font-weight: 800;
             color: var(--text-main);
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
+            white-space: nowrap;
             overflow: hidden;
-            min-height: 2.6em;
-            line-height: 1.3em;
+            text-overflow: ellipsis;
+            line-height: 1.35;
         }
 
-        .product-price { font-size: 1.1rem; font-weight: 900; color: var(--accent-deep); margin-top: 3px; }
-        .product-price span { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); margin-right: 3px; }
-        .product-sub { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); margin-top: 2px; }
+        .product-price-row {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 6px;
+            margin-top: 2px;
+        }
 
+        .product-price { font-size: 1.06rem; font-weight: 900; color: var(--accent-deep); }
+        .product-price span { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); margin-right: 2px; }
+        .product-sub { font-size: 0.68rem; font-weight: 700; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* Single-line brief summary under card; full story appears inside image preview modal */
         .product-desc {
-            font-size: 0.72rem;
+            font-size: 0.71rem;
             font-weight: 700;
             color: var(--text-muted);
-            margin-top: 4px;
-            line-height: 1.4;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
+            margin-top: 2px;
+            white-space: nowrap;
             overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .merchant-tag-btn {
-            margin-top: 7px;
+            margin-top: 5px;
             display: inline-flex;
             align-items: center;
             gap: 4px;
@@ -847,58 +755,80 @@
             color: var(--espresso-soft);
             border: 1px solid var(--accent-glow);
             border-radius: 999px;
-            padding: 3px 10px;
-            font-size: 0.69rem;
+            padding: 2px 9px;
+            font-size: 0.67rem;
             font-weight: 800;
+            max-width: 100%;
             transition: background 0.18s ease, color 0.18s ease;
         }
 
         .merchant-tag-btn:hover { background: var(--espresso); color: var(--accent-soft); }
-        .merchant-tag-name { color: var(--accent-deep); font-weight: 900; text-decoration: underline; text-underline-offset: 2px; }
+        .merchant-tag-name { color: var(--accent-deep); font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .merchant-tag-btn:hover .merchant-tag-name { color: var(--accent-soft); }
 
-        .card-btns { display: flex; flex-direction: column; gap: 6px; }
+        /* Modern, simple, eye-friendly action buttons */
+        .card-btns {
+            display: grid;
+            grid-template-columns: 1.35fr 0.85fr;
+            gap: 6px;
+        }
 
         .add-cart-btn {
             width: 100%;
-            padding: 9px 12px;
-            border-radius: 13px;
-            background: var(--espresso);
+            padding: 8px 10px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--espresso), var(--espresso-soft));
             color: #ffffff;
-            font-size: 0.79rem;
+            border: 1px solid rgba(200, 150, 102, 0.35);
+            font-size: 0.74rem;
             font-weight: 800;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 4px;
+            white-space: nowrap;
             transition: all 0.2s ease;
         }
 
-        .add-cart-btn:hover { background: var(--accent-deep); }
-        .add-cart-btn.added { background: #15803d; color: #ffffff; }
+        .add-cart-btn:hover {
+            background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+            color: #ffffff;
+        }
+
+        .add-cart-btn.added {
+            background: linear-gradient(135deg, #16a34a, #15803d);
+            border-color: #22c55e;
+            color: #ffffff;
+        }
 
         .direct-wa-link {
             width: 100%;
-            padding: 7px 12px;
-            border-radius: 13px;
-            background: rgba(24, 20, 18, 0.03);
-            color: var(--espresso-soft);
-            border: 1px solid rgba(24, 20, 18, 0.1);
-            font-size: 0.75rem;
+            padding: 8px 8px;
+            border-radius: 12px;
+            background: rgba(22, 163, 74, 0.08);
+            color: #15803d;
+            border: 1px solid rgba(22, 163, 74, 0.25);
+            font-size: 0.72rem;
             font-weight: 800;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 5px;
+            gap: 4px;
+            white-space: nowrap;
+            transition: all 0.2s ease;
         }
 
-        .direct-wa-link:hover { background: var(--accent); color: #ffffff; border-color: var(--accent); }
+        .direct-wa-link:hover {
+            background: #16a34a;
+            color: #ffffff;
+            border-color: #16a34a;
+        }
 
         .special-request-card {
             background: linear-gradient(150deg, #100e0c 0%, var(--espresso-soft) 65%, var(--accent-deep) 100%);
             color: #ffffff;
-            border-radius: 22px;
-            padding: 18px 16px;
+            border-radius: 20px;
+            padding: 16px 14px;
             border: 1px solid rgba(255, 255, 255, 0.14);
             box-shadow: var(--shadow-main);
             display: flex;
@@ -907,16 +837,16 @@
             gap: 12px;
         }
 
-        .special-request-card h3 { font-size: 0.96rem; font-weight: 900; color: var(--accent-soft); line-height: 1.35; }
-        .special-request-card p { font-size: 0.77rem; color: rgba(255, 255, 255, 0.9); line-height: 1.45; margin-top: 6px; }
+        .special-request-card h3 { font-size: 0.94rem; font-weight: 900; color: var(--accent-soft); line-height: 1.35; }
+        .special-request-card p { font-size: 0.75rem; color: rgba(255, 255, 255, 0.9); line-height: 1.45; margin-top: 5px; }
 
         .special-request-btn {
             width: 100%;
             padding: 9px 12px;
-            border-radius: 13px;
+            border-radius: 12px;
             background: linear-gradient(135deg, var(--accent-soft), var(--accent));
             color: var(--espresso);
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 900;
             display: flex;
             align-items: center;
@@ -1066,6 +996,83 @@
         }
 
         .caramel-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        /* Side Categories Drawer (like the cart drawer) */
+        .cats-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(16, 13, 10, 0.65);
+            backdrop-filter: blur(6px);
+            z-index: 205;
+        }
+
+        .cats-backdrop.open { display: block; }
+
+        .cats-drawer {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: min(360px, 90vw);
+            background: #ffffff;
+            z-index: 215;
+            transform: translateX(105%);
+            transition: transform 0.28s ease;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -10px 0 35px rgba(0, 0, 0, 0.25);
+            border-left: 2px solid var(--accent);
+        }
+
+        .cats-drawer.open { transform: translateX(0); }
+
+        .cats-drawer-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: var(--page-mood-bg);
+        }
+
+        .side-cat-item {
+            width: 100%;
+            padding: 11px 14px;
+            border-radius: 14px;
+            background: #ffffff;
+            border: 1px solid rgba(24, 20, 18, 0.08);
+            color: var(--text-main);
+            font-size: 0.88rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            text-align: right;
+            transition: all 0.2s ease;
+        }
+
+        .side-cat-item:hover, .side-cat-item.active {
+            background: var(--espresso);
+            color: var(--accent-soft);
+            border-color: var(--accent);
+        }
+
+        .side-cat-count {
+            font-size: 0.72rem;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 999px;
+            background: var(--accent-tint);
+            color: var(--accent-deep);
+        }
+
+        .side-cat-item.active .side-cat-count {
+            background: rgba(255, 255, 255, 0.14);
+            color: var(--accent-soft);
+        }
 
         .option-modal-backdrop {
             display: none;
@@ -1634,14 +1641,16 @@
         </div>
     </header>
 
-    <nav class="quick-top-tabs" aria-label="تنقل سريع">
+    <nav class="quick-top-tabs" aria-label="أقسام المتجر العلوية">
         <button type="button" class="quick-tab-item active" data-quick="all" onclick="selectTopQuickTab('all', this)">الكل</button>
         <button type="button" class="quick-tab-item" data-quick="home" onclick="selectTopQuickTab('home', this)">المنزل</button>
-        <button type="button" class="quick-tab-item" data-quick="perfume" onclick="selectTopQuickTab('perfume', this)">العطور والعناية</button>
+        <button type="button" class="quick-tab-item" data-quick="perfume" onclick="selectTopQuickTab('perfume', this)">العناية والعطور</button>
         <button type="button" class="quick-tab-item" data-quick="gifts" onclick="selectTopQuickTab('gifts', this)">الهدايا</button>
         <button type="button" class="quick-tab-item" data-quick="tafse" onclick="selectTopQuickTab('tafse', this)">هاند ميد</button>
         <button type="button" class="quick-tab-item" data-quick="school" onclick="selectTopQuickTab('school', this)">المدرسة</button>
         <button type="button" class="quick-tab-item" data-quick="women" onclick="selectTopQuickTab('women', this)">النساء</button>
+        <button type="button" class="quick-tab-item" data-quick="men" onclick="selectTopQuickTab('men', this)">الرجال</button>
+        <button type="button" class="quick-tab-item" data-quick="kids" onclick="selectTopQuickTab('kids', this)">الأطفال</button>
     </nav>
 
     <main class="container">
@@ -1650,52 +1659,11 @@
             <a href="https://wa.me/201055436305?text=%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%AA%D9%88%D8%A7%D8%B5%D9%84%20%D9%84%D9%84%D8%B7%D9%84%D8%A8%D8%A7%D8%AA%20%D8%A7%D9%84%D8%AE%D8%A7%D8%B5%D8%A9%20%28%D9%85%D9%86%D8%AA%D8%AC%20%D8%BA%D9%8A%D8%B1%20%D9%85%D9%88%D8%AC%D9%88%D8%AF%29" target="_blank" rel="noopener noreferrer" style="color: var(--accent-deep); text-decoration: underline;">مش لاقي منتج؟ نجيبهولك</a>
         </div>
 
-        <div class="circles-row-wrapper" id="circlesRowWrapper">
-            <div class="circles-single-row" id="categoryCircles">
-                <div class="cat-circle-item ring-all active" data-cat="all" onclick="filterByCategory('all', this)">
-                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0032.jpg" alt="الكل" loading="lazy" onerror="this.closest('.cat-circle-item').remove()"></div></div>
-                    <span class="cat-circle-label">الكل</span>
-                </div>
-                <div class="cat-circle-item ring-home" data-cat="home" onclick="filterByCategory('home', this)">
-                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0036.jpg" alt="المنزل" loading="lazy" onerror="this.closest('.cat-circle-item').remove()"></div></div>
-                    <span class="cat-circle-label">المنزل</span>
-                </div>
-                <div class="cat-circle-item ring-school" data-cat="school" onclick="filterByCategory('school', this)">
-                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0040.jpg" alt="المدرسة" loading="lazy" onerror="this.closest('.cat-circle-item').remove()"></div></div>
-                    <span class="cat-circle-label">المدرسة</span>
-                </div>
-                <div class="cat-circle-item ring-tafse" data-cat="tafse" onclick="filterByCategory('tafse', this)">
-                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0042.jpg" alt="هاند ميد" loading="lazy" onerror="this.closest('.cat-circle-item').remove()"></div></div>
-                    <span class="cat-circle-label">هاند ميد</span>
-                </div>
-                <div class="cat-circle-item ring-kids" data-cat="kids" onclick="filterByCategory('kids', this)">
-                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0038.jpg" alt="الأطفال" loading="lazy" onerror="this.closest('.cat-circle-item').remove()"></div></div>
-                    <span class="cat-circle-label">الأطفال</span>
-                </div>
-                <div class="cat-circle-item ring-women" data-cat="women" onclick="filterByCategory('women', this)">
-                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0035.jpg" alt="النساء" loading="lazy" onerror="this.closest('.cat-circle-item').remove()"></div></div>
-                    <span class="cat-circle-label">النساء</span>
-                </div>
-                <div class="cat-circle-item ring-men" data-cat="men" onclick="filterByCategory('men', this)">
-                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0037.jpg" alt="الرجال" loading="lazy" onerror="this.closest('.cat-circle-item').remove()"></div></div>
-                    <span class="cat-circle-label">الرجال</span>
-                </div>
-                <div class="cat-circle-item ring-gifts" data-cat="gifts" onclick="filterByCategory('gifts', this)">
-                    <div class="cat-ring"><div class="cat-ring-inner"><img src="1794812775286.jpg" alt="الهدايا" loading="lazy" onerror="this.closest('.cat-circle-item').remove()"></div></div>
-                    <span class="cat-circle-label">الهدايا</span>
-                </div>
-                <div class="cat-circle-item ring-perfume" data-cat="perfume" onclick="filterByCategory('perfume', this)">
-                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0039.jpg" alt="العناية والعطور" loading="lazy" onerror="this.closest('.cat-circle-item').remove()"></div></div>
-                    <span class="cat-circle-label">العناية والعطور</span>
-                </div>
-            </div>
-        </div>
-
-        <section class="dual-spotlight-row" aria-label="ترندات وعروض كارامل">
+        <section class="dual-spotlight-row" aria-label="ترندات وعروض كارامل الذكية">
             <div class="spotlight-box">
                 <div class="spotlight-box-header">
                     <span class="spotlight-box-title">ترندات كارامل</span>
-                    <span class="spotlight-box-sub">الأكثر طلباً</span>
+                    <span class="spotlight-box-sub" id="trendsAiBadge">ذكي حسب ذوقك</span>
                 </div>
                 <div class="spotlight-two-cards" id="trendsSpotlightGrid"></div>
             </div>
@@ -1703,7 +1671,7 @@
             <div class="spotlight-box">
                 <div class="spotlight-box-header">
                     <span class="spotlight-box-title">أسعار مميزة</span>
-                    <span class="spotlight-box-sub">توفير ذكي</span>
+                    <span class="spotlight-box-sub" id="dealsAiBadge">مختارة لك</span>
                 </div>
                 <div class="spotlight-two-cards" id="dealsSpotlightGrid"></div>
             </div>
@@ -1759,7 +1727,7 @@
             <span>الرئيسية</span>
         </button>
 
-        <button type="button" class="bottom-nav-btn" id="navCatsBtn" onclick="focusCategoriesBar()">
+        <button type="button" class="bottom-nav-btn" id="navCatsBtn" onclick="openCategoriesDrawer()">
             <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"></rect><rect x="14" y="3" width="7" height="7" rx="2"></rect><rect x="3" y="14" width="7" height="7" rx="2"></rect><rect x="14" y="14" width="7" height="7" rx="2"></rect></svg>
             <span>الفئات</span>
         </button>
@@ -1782,6 +1750,18 @@
     </nav>
 
     <div class="caramel-toast" id="caramelToast" role="status" aria-live="polite"></div>
+
+    <!-- Side Drawer for Categories -->
+    <div class="cats-backdrop" id="catsBackdrop" onclick="closeCategoriesDrawer()"></div>
+    <aside class="cats-drawer" id="catsDrawer" aria-label="قائمة الأقسام">
+        <div class="cart-header">
+            <h3>أقسام متجر كارامل</h3>
+            <div class="cart-header-actions">
+                <button type="button" class="close-cart-btn" onclick="closeCategoriesDrawer()" aria-label="إغلاق الأقسام">&times;</button>
+            </div>
+        </div>
+        <div class="cats-drawer-body" id="sideCategoriesList"></div>
+    </aside>
 
     <div class="option-modal-backdrop" id="productOptionModal" onclick="closeProductOptionModal()">
         <div class="option-modal-card" onclick="event.stopPropagation()">
@@ -2161,6 +2141,7 @@
             return "شيرين غريب";
         }
 
+        /* Ordered so the newest additions appear toward the end of the array (newest-to-oldest when reversed) */
         const PRODUCTS = [
             { id: "hm-1", title: "جوانتي سيليكون حراري للمطبخ", desc: "امسك الصواني السخنة بثبات وأمان تام من أول لمسة بدون قلق من الحرارة.", price: 155, category: "home", img: "Kit/compressed_1795117656213.jpg" },
             { id: "hm-2", title: "شماعة لوكس 3×1", desc: "ضاعف مساحة دولابك في ثوانٍ ورتّب أكثر من قطعة فوق بعض بأناقة.", price: 40, category: "home", img: "Kit/compressed_1794957387150.webp" },
@@ -2178,9 +2159,6 @@
             { id: "hm-14", title: "منشر خير هوم فولاذ مقاوم للصدأ", desc: "هيكل قوي مقاوم للصدأ يتحمل الغسيل اليومي ويطوى بسهولة عند عدم الحاجة.", price: 950, category: "home", img: "Kit/compressed_1794957390685.webp" },
             { id: "hm-15", title: "منشر دهب", desc: "منشر عملي ومتين سهل الطي والتخزين للاستخدام اليومي في البيت.", price: 365, category: "home", img: "Kit/compressed_1794957389681.webp" },
             { id: "hm-16", title: "منشر خير هوم مقاوم للصدأ", desc: "مساحة نشر واسعة وخامة مقاومة للصدأ لراحة بال تدوم طويلاً.", price: 1200, category: "home", img: "Kit/compressed_1794957390318.webp" },
-            { id: "htm-10", title: "فرشة استحمام بيد خشب (ألياف طبيعية)", desc: "فرشاة بألياف طبيعية ويد خشب طويلة حوالي 36 سم قابلة للفك لتنظيف الجسم والظهر وإزالة الجلد الميت والمساج.", price: 70, category: "perfume", img: "Htm/compressed_1795258200283.webp" },
-            { id: "htm-11", title: "مخمرية / بدي باتر مود Mood للجسم", desc: "لوشن ومخمرية وبدي باتر مود معطرة ومرطبة للجسم بروائح متنوعة لتنعيم وترطيب البشرة.", price: 120, category: "perfume", img: "Htm/compressed_1795258200488.webp" },
-            { id: "htm-12", title: "عطر مس جريس من عساف Miss Gris by ASSAF", desc: "عطر مس جريس من عساف بطابع أنثوي فخم وثبات مميز للإطلالات اليومية والمناسبات.", price: 230, category: "perfume", img: "Htm/compressed_1795258200681.webp" },
             { id: "hm-17", title: "منشر حائط حبل استانلس", desc: "وفّر مساحة البلكونة أو الحمام بحبال متينة تثبّت على الحائط بسهولة.", price: 530, category: "home", img: "Kit/compressed_1794957391622.webp" },
             { id: "hm-18", title: "رف زاوية للحمام / المطبخ", desc: "استغل زوايا الحمام أو المطبخ بذكاء ورتّب الشامبوهات والأدوات حواليك.", price: 330, category: "home", img: "Kit/compressed_1794957392279.webp" },
             { id: "hm-19", title: "شماعة أمريكانا ملابس وجزامة 4 دور", desc: "رتّب الجزم والملابس والشنط في وحدة واحدة توفر المساحة وتجمّل المكان.", price: 285, category: "home", img: "Kit/compressed_1794957391035.webp" },
@@ -2223,15 +2201,6 @@
             { id: "hm-56", title: "طقم توابل الوطنية", desc: "يحفظ البهارات والتوابل منظمة وسهلة الاستخدام في متناول إيدك.", price: 225, category: "home", img: "Kit/compressed_1795115045908.webp" },
             { id: "hm-57", title: "مخرطة استانلس", desc: "شفرة استانلس حادة ومريحة لفرم الملوخية والخضرة بسرعة وسلاسة.", price: 200, category: "home", img: "Kit/compressed_1795115046069.webp" },
             { id: "hm-58", title: "هراسة بطاطس", desc: "تهرس البطاطس المسلوقة بقوام ناعم وسريع بدون مجهود.", price: 25, category: "home", img: "Kit/compressed_1795115069644.webp" },
-            { id: "hm-59", title: "زجاجة حراري شي إن (استانلس 304)", desc: "زجاجة حراري من شي إن متاحة بأشكالها، استانلس مختوم درجة 18/304، مانعة للتسريب وتحتفظ بالحرارة والبرودة لأكثر من 6 ساعات للمشروبات الساخنة والباردة.", price: 200, category: "home", img: "Clswmn/compressed_1795215870151.webp" },
-            { id: "hm-60", title: "مج حراري نقش ورد ذهبي", desc: "مج حراري فاخر بغطاء محكم ونقوش ورد ذهبية أنيقة، يحافظ على مشروبك ساخن أو بارد لأطول وقت في البيت أو الشغل، وهدية شيك وعملية في كل المناسبات.", price: 225, category: "home", categories: ["home", "gifts"], img: "Htm/compressed_1795308109261.webp" },
-            { id: "hm-61", title: "مج حراري كوفي COFFEE ألوان", desc: "مج حراري عملي بتصميم عصري وألوان شيك تناسب كل الأذواق، رفيقك المثالي للقهوة والمشروبات اليومية في أي مكان وهدية مميزة لمحبي القهوة.", price: 180, category: "home", categories: ["home", "gifts"], img: "Htm/compressed_1795308109497.webp" },
-            { id: "hm-62", title: "منظم / طبق تسالي ومكسرات مقسم بيد (4 أقسام)", desc: "منظم تسالي ومكسرات مقسم 4 أقسام بيد حمل مريحة للتقديم الأنيق في المناسبات والضيافة.", price: 275, category: "home", categories: ["home", "gifts"], img: "Kit/IMG-20261116-WA0056.jpg" },
-            { id: "hm-63", title: "طقم صواني عبود (3 مقاسات)", desc: "طقم صواني ألومنيوم عبود عملي للفرن والمخبوزات والحلويات بجودة ممتازة.", price: 550, category: "home", img: "Kit/compressed_1795113635223.webp" },
-            { id: "hm-64", title: "منظم تخزين CHEF BOX 3.5L (قطعتين)", desc: "علبتان تخزين شيف بوكس سعة 3.5 لتر لحفظ المواد الجافة والبقوليات بترتيب.", price: 90, category: "home", img: "Kit/compressed_1795113635125.webp" },
-            { id: "hm-65", title: "منظمات تخزين بغطاء ملون (أزرق وأخضر)", desc: "منظمات تخزين مطبخ عملية بغطاء سهل الفتح لحفظ الحبوب والمكسرات.", price: 75, category: "home", img: "Kit/compressed_1795113634977.webp" },
-            { id: "hm-66", title: "طقم كؤوس / أكواب زجاجية في علبة", desc: "طقم كؤوس زجاجية فاخرة في علبة هدايا وتقديم أنيقة.", price: 1250, category: "home", categories: ["home", "gifts"], img: "Kit/IMG-20261116-WA0075.jpg" },
-            { id: "hm-67", title: "طبق فاكهة كريستال بقاعدة من بلانك ماكس", desc: "طبق فاكهة كريستال بقاعدة من بلانك ماكس بتصميم أنيق للسفرة والضيافة.", price: 400, category: "home", categories: ["home", "gifts"], img: "Kit/IMG-20261116-WA0081.jpg" },
             { id: "libr-1", title: "قلم جاف سحري", desc: "كتابة سلسة وممتعة تناسب الملاحظات اليومية والاستخدام المدرسي.", price: 10, category: "school", img: "Libr/compressed_1795160031886.webp" },
             { id: "libr-2", title: "زمزمية مياه رياضية MOT", desc: "عملية وسهلة الحمل للتمارين والمدرسة والخروجات اليومية.", price: 140, category: "school", img: "Libr/compressed_1795160031599.webp" },
             { id: "libr-3", title: "ورق فلوسكاب زاد ZAD", desc: "ورق كتابة مناسب للواجبات والامتحانات والتدوين اليومي.", price: 30, category: "school", img: "Libr/compressed_1795160031301.webp" },
@@ -2260,8 +2229,6 @@
             { id: "libr-26", title: "نوت بوك سلك غلاف أنمي", desc: "غلاف أنمي عصري وأوراق سلك مريحة للدراسة وتدوين الملاحظات.", price: 125, priceLabel: "125 / 100 / 150", category: "school", img: "Libr/compressed_1795160024565.webp" },
             { id: "libr-27", title: "مقلمة Andiosya Group بناتي", desc: "مقلمة بناتي أنيقة لحفظ الأقلام والأدوات المدرسية بشكل مرتب.", price: 65, category: "school", img: "Libr/compressed_1795160024235.webp" },
             { id: "libr-28", title: "ألوان فلوماستر دومس DOMS Aqua 12 لون", desc: "12 لوناً زاهياً للرسم والتلوين والأنشطة المدرسية بوضوح جميل.", price: 50, category: "school", img: "Libr/compressed_1795160023862.webp" },
-            { id: "libr-29", title: "زجاجة حراري شي إن (استانلس 304)", desc: "زجاجة حراري من شي إن متاحة بأشكالها، استانلس مختوم درجة 18/304، مانعة للتسريب وتحتفظ بالحرارة والبرودة لأكثر من 6 ساعات للمشروبات الساخنة والباردة.", price: 200, category: "school", img: "Clswmn/compressed_1795215870151.webp" },
-            { id: "tafse-23", title: "رانر طاولة مكرمية هاند ميد 50×150 سم", desc: "شغل مكرمية يدوي أنيق بمقاس 50 سم في متر ونص مع شراشيب ناعمة، يدي السفرة أو الترابيزة لمسة دافئة وشيك جداً في بيتك.", price: 500, category: "tafse", img: "Htm/compressed_1795351999998.webp" },
             { id: "tafse-1", title: "مكرمية حائط هاند ميد 1×2 متر", desc: "شغل يدوي مميز بمقاس 1×2 متر مع قطعتين رباط لتزيين الحوائط بلمسة دافئة.", price: 900, category: "tafse", img: "Tafse/IMG-20261117-WA0029.jpg" },
             { id: "tafse-2", title: "مكرمية ديكور هاند ميد 1×2 متر مع عصايا", desc: "مقاس 1×2 متر شغل يدوي متقن ومعاها قطعتين رباط وعصايا هدية لتعليق فخم.", price: 1550, category: "tafse", img: "Tafse/IMG-20261117-WA0027.jpg" },
             { id: "tafse-3", title: "مكرمية فاخرة هاند ميد 1×2 متر مع عصايا", desc: "قطعة ديكور يدوية بارزة بمقاس 1×2 متر ومعاها قطعتين رباط وعصايا هدية.", price: 1700, category: "tafse", img: "Tafse/IMG-20261117-WA0024.jpg" },
@@ -2296,6 +2263,9 @@
             { id: "htm-7", title: "صبغة شعر خالية من الأمونيا Godrej Expert", desc: "صبغة كريمية خالية من الأمونيا تلون الشعر في 30 دقيقة (بني داكن وأسود).", price: 65, category: "perfume", img: "Htm/compressed_1795220884252.webp" },
             { id: "htm-8", title: "كريم مرطب لليدين Care Body & Soul", desc: "كريم لليدين بفيتامين E مناسب لجميع أنواع البشرة (50 مل) بروائح متعددة.", price: 80, category: "perfume", img: "Htm/compressed_1795220884341.webp" },
             { id: "htm-9", title: "اسبلش جسم AVUVA Body Splash", desc: "اسبلش جسم منعش وعطري بعدة روائح مميزة للاستخدام اليومي.", price: 130, category: "perfume", img: "Htm/compressed_1795220963492.webp" },
+            { id: "htm-10", title: "فرشة استحمام بيد خشب (ألياف طبيعية)", desc: "فرشاة بألياف طبيعية ويد خشب طويلة حوالي 36 سم قابلة للفك لتنظيف الجسم والظهر وإزالة الجلد الميت والمساج.", price: 70, category: "perfume", img: "Htm/compressed_1795258200283.webp" },
+            { id: "htm-11", title: "مخمرية / بدي باتر مود Mood للجسم", desc: "لوشن ومخمرية وبدي باتر مود معطرة ومرطبة للجسم بروائح متنوعة لتنعيم وترطيب البشرة.", price: 120, category: "perfume", img: "Htm/compressed_1795258200488.webp" },
+            { id: "htm-12", title: "عطر مس جريس من عساف Miss Gris by ASSAF", desc: "عطر مس جريس من عساف بطابع أنثوي فخم وثبات مميز للإطلالات اليومية والمناسبات.", price: 230, category: "perfume", img: "Htm/compressed_1795258200681.webp" },
             { id: "htm-13", title: "شامبو وبلسم للشعر بخلاصة الثوم Nature's (الواحد)", desc: "شامبو وبلسم للشعر بخلاصة الثوم للمساعدة في تقليل تساقط الشعر (سعر العبوة الواحدة).", price: 140, category: "perfume", img: "Htm/compressed_1795220883880.webp" },
             { id: "htm-14", title: "شاور أوبال OPAL 3 لتر وربع", desc: "شاور جل أوبال حجم عائلي 3.25 لتر بروائح منعشة وترطيب يدوم.", price: 175, category: "perfume", img: "Htm/compressed_1795220963492.webp" },
             { id: "htm-15", title: "شاور 2 لتر (روائح متنوعة)", desc: "شاور جل سعة 2 لتر بروائح متعددة لتنظيف وترطيب الجسم.", price: 160, category: "perfume", img: "Htm/compressed_1795220963492.webp" },
@@ -2323,7 +2293,18 @@
             { id: "brf-12", title: "مسمم MUSAMAM", desc: "فخامة ذهبية بتفاصيل ثعبان مميزة تدي حضور قوي وهدية تشرّف.", price: 375, category: "perfume", img: "Prfa/compressed_1794950096662.webp" },
             { id: "brf-13", title: "قصة GISSAH", desc: "لمسة أنثوية ناعمة بلون وردي حالم وعلبة متناسقة مثالية للذوق الراقي.", price: 375, category: "perfume", img: "Prfa/compressed_1794950096748.webp" },
             { id: "brf-14", title: "يارا YARA", desc: "أيقونة الجاذبية والنعومة بلونها الوردي المميز وعلبتها الفخمة.", price: 375, category: "perfume", img: "Prfa/compressed_1794950096833.webp" },
-            { id: "brf-16", title: "برفان حريمي", desc: "برفان حريمي بلمسة أنثوية ناعمة ومنعشة للاستخدام اليومي.", price: 100, category: "perfume", img: "Prfa/IMG-20261116-WA0103.jpg" }
+            { id: "brf-16", title: "برفان حريمي", desc: "برفان حريمي بلمسة أنثوية ناعمة ومنعشة للاستخدام اليومي.", price: 100, category: "perfume", img: "Prfa/IMG-20261116-WA0103.jpg" },
+            { id: "hm-59", title: "زجاجة حراري شي إن (استانلس 304)", desc: "زجاجة حراري من شي إن متاحة بأشكالها، استانلس مختوم درجة 18/304، مانعة للتسريب وتحتفظ بالحرارة والبرودة لأكثر من 6 ساعات للمشروبات الساخنة والباردة.", price: 200, category: "home", img: "Clswmn/compressed_1795215870151.webp" },
+            { id: "libr-29", title: "زجاجة حراري شي إن (استانلس 304)", desc: "زجاجة حراري من شي إن متاحة بأشكالها، استانلس مختوم درجة 18/304، مانعة للتسريب وتحتفظ بالحرارة والبرودة لأكثر من 6 ساعات للمشروبات الساخنة والباردة.", price: 200, category: "school", img: "Clswmn/compressed_1795215870151.webp" },
+            { id: "hm-60", title: "مج حراري نقش ورد ذهبي", desc: "مج حراري فاخر بغطاء محكم ونقوش ورد ذهبية أنيقة، يحافظ على مشروبك ساخن أو بارد لأطول وقت في البيت أو الشغل، وهدية شيك وعملية في كل المناسبات.", price: 225, category: "home", categories: ["home", "gifts"], img: "Htm/compressed_1795308109261.webp" },
+            { id: "hm-61", title: "مج حراري كوفي COFFEE ألوان", desc: "مج حراري عملي بتصميم عصري وألوان شيك تناسب كل الأذواق، رفيقك المثالي للقهوة والمشروبات اليومية في أي مكان وهدية مميزة لمحبي القهوة.", price: 180, category: "home", categories: ["home", "gifts"], img: "Htm/compressed_1795308109497.webp" },
+            { id: "hm-62", title: "منظم / طبق تسالي ومكسرات مقسم بيد (4 أقسام)", desc: "منظم تسالي ومكسرات مقسم 4 أقسام بيد حمل مريحة للتقديم الأنيق في المناسبات والضيافة.", price: 275, category: "home", categories: ["home", "gifts"], img: "Kit/IMG-20261116-WA0056.jpg" },
+            { id: "hm-63", title: "طقم صواني عبود (3 مقاسات)", desc: "طقم صواني ألومنيوم عبود عملي للفرن والمخبوزات والحلويات بجودة ممتازة.", price: 550, category: "home", img: "Kit/compressed_1795113635223.webp" },
+            { id: "hm-64", title: "منظم تخزين CHEF BOX 3.5L (قطعتين)", desc: "علبتان تخزين شيف بوكس سعة 3.5 لتر لحفظ المواد الجافة والبقوليات بترتيب.", price: 90, category: "home", img: "Kit/compressed_1795113635125.webp" },
+            { id: "hm-65", title: "منظمات تخزين بغطاء ملون (أزرق وأخضر)", desc: "منظمات تخزين مطبخ عملية بغطاء سهل الفتح لحفظ الحبوب والمكسرات.", price: 75, category: "home", img: "Kit/compressed_1795113634977.webp" },
+            { id: "hm-66", title: "طقم كؤوس / أكواب زجاجية في علبة", desc: "طقم كؤوس زجاجية فاخرة في علبة هدايا وتقديم أنيقة.", price: 1250, category: "home", categories: ["home", "gifts"], img: "Kit/IMG-20261116-WA0075.jpg" },
+            { id: "hm-67", title: "طبق فاكهة كريستال بقاعدة من بلانك ماكس", desc: "طبق فاكهة كريستال بقاعدة من بلانك ماكس بتصميم أنيق للسفرة والضيافة.", price: 400, category: "home", categories: ["home", "gifts"], img: "Kit/IMG-20261116-WA0081.jpg" },
+            { id: "tafse-23", title: "رانر طاولة مكرمية هاند ميد 50×150 سم", desc: "شغل مكرمية يدوي أنيق بمقاس 50 سم في متر ونص مع شراشيب ناعمة، يدي السفرة أو الترابيزة لمسة دافئة وشيك جداً في بيتك.", price: 500, category: "tafse", img: "Htm/compressed_1795351999998.webp" }
         ];
 
         PRODUCTS.forEach(p => { p.merchant = inferMerchantForProduct(p); });
@@ -2337,7 +2318,7 @@
         let continuationBatchIndex = 0;
         let cart = [];
         let activeOverlayName = null;
-        let interestData = { categories: {}, keywords: {}, seenIds: [] };
+        let interestData = { categories: {}, keywords: {}, seenIds: [], sessionRoll: Math.random() };
 
         function isFullSelectionMode() {
             return Boolean(currentMerchant) || Boolean(currentCategory && currentCategory !== "all");
@@ -2384,7 +2365,8 @@
                 interestData = {
                     categories: parsed.categories || {},
                     keywords: parsed.keywords || {},
-                    seenIds: Array.isArray(parsed.seenIds) ? parsed.seenIds : []
+                    seenIds: Array.isArray(parsed.seenIds) ? parsed.seenIds : [],
+                    sessionRoll: Math.random()
                 };
             }
         } catch (e) {}
@@ -2394,7 +2376,13 @@
         }
 
         function saveInterest() {
-            try { localStorage.setItem(INTEREST_STORAGE_KEY, JSON.stringify(interestData)); } catch (e) {}
+            try {
+                localStorage.setItem(INTEREST_STORAGE_KEY, JSON.stringify({
+                    categories: interestData.categories,
+                    keywords: interestData.keywords,
+                    seenIds: interestData.seenIds
+                }));
+            } catch (e) {}
         }
 
         function shuffleArray(list) {
@@ -2452,6 +2440,7 @@
             if (tokens.length > 0) {
                 tokens.forEach(token => { interestData.keywords[token] = (interestData.keywords[token] || 0) + 0.5; });
                 saveInterest();
+                renderSpotlightBoxes();
             }
             renderProducts(currentCategory);
             renderSmartRecommendations();
@@ -2473,31 +2462,48 @@
 
         function trackProductInterest(product, weight = 1, markSeen = true) {
             if (!product) return;
-            interestData.categories[product.category] = (interestData.categories[product.category] || 0) + weight;
+            const cats = [product.category, ...(Array.isArray(product.categories) ? product.categories : [])];
+            cats.forEach(c => {
+                if (c) interestData.categories[c] = (interestData.categories[c] || 0) + weight;
+            });
             extractTokens(product.title).filter(t => t.length >= 2).forEach(token => {
                 interestData.keywords[token] = (interestData.keywords[token] || 0) + weight;
             });
             if (markSeen && !interestData.seenIds.includes(product.id)) {
                 interestData.seenIds.push(product.id);
-                if (interestData.seenIds.length > 120) interestData.seenIds.shift();
+                if (interestData.seenIds.length > 140) interestData.seenIds.shift();
             }
             saveInterest();
+            renderSpotlightBoxes();
             renderSmartRecommendations();
         }
 
         function scoreProductForUser(product, seedOffset = 0) {
-            const catScore = (interestData.categories[product.category] || 0) * 10;
+            const cats = [product.category, ...(Array.isArray(product.categories) ? product.categories : [])];
+            let catScore = 0;
+            cats.forEach(c => {
+                catScore = Math.max(catScore, (interestData.categories[c] || 0) * 12);
+            });
+
+            // Also boost category if user has items in cart from that category
+            const inCartCat = cart.some(ci => {
+                const match = PRODUCTS.find(p => p.id === ci.id);
+                return match && cats.includes(match.category);
+            });
+            if (inCartCat) catScore += 14;
+
             const tokens = extractTokens(product.title).filter(t => t.length >= 2);
             let kwScore = 0;
-            tokens.forEach(t => { kwScore += (interestData.keywords[t] || 0) * 4; });
+            tokens.forEach(t => { kwScore += (interestData.keywords[t] || 0) * 5; });
+
             const isSeen = interestData.seenIds.includes(product.id);
-            const freshnessBonus = isSeen ? -6 : 12;
-            const waveVariation = ((product.id.charCodeAt(product.id.length - 1) + seedOffset * 7) % 5) * 0.6;
-            return catScore + kwScore + freshnessBonus + waveVariation;
+            const freshnessBonus = isSeen ? -5 : 10;
+            const dynamicJitter = ((product.id.charCodeAt(product.id.length - 1) * 13 + seedOffset * 17 + Math.floor(interestData.sessionRoll * 100)) % 9) * 0.8;
+            return catScore + kwScore + freshnessBonus + dynamicJitter;
         }
 
         function getSmartRecommendations(limit = 4) {
-            const hasAnyInterest = Object.keys(interestData.categories).length > 0 || Object.keys(interestData.keywords).length > 0 || interestData.seenIds.length > 0;
+            const hasAnyInterest = Object.keys(interestData.categories).length > 0 || Object.keys(interestData.keywords).length > 0 || interestData.seenIds.length > 0 || cart.length > 0;
             if (!hasAnyInterest) return [];
             const scoredList = PRODUCTS.map(product => ({
                 product,
@@ -2518,22 +2524,64 @@
             return "قطعة عملية ومفيدة تسهل يومك وتضيف لمسة مرتبة — اطلبها دلوقتي والدفع عند الاستلام.";
         }
 
+        /* Dynamic AI-like Trends & Special Deals tailored to user taste */
         function renderSpotlightBoxes() {
             const trendsGrid = document.getElementById("trendsSpotlightGrid");
             const dealsGrid = document.getElementById("dealsSpotlightGrid");
             if (!trendsGrid || !dealsGrid || !PRODUCTS.length) return;
 
-            const featuredIds = ["hm-59", "tafse-23", "amn-2", "brf-14"];
-            const trendItems = featuredIds
-                .map(id => PRODUCTS.find(p => p.id === id))
-                .filter(Boolean)
-                .slice(0, 2);
-            if (trendItems.length < 2) trendItems.push(...PRODUCTS.slice(0, 2 - trendItems.length));
+            const hasTaste = Object.keys(interestData.categories).length > 0 || Object.keys(interestData.keywords).length > 0 || cart.length > 0;
 
-            const cheapItems = [...PRODUCTS]
+            const trendRanked = [...PRODUCTS].sort((a, b) => {
+                const scoreA = scoreProductForUser(a, 3) + (["hm-59", "tafse-23", "amn-2", "brf-14"].includes(a.id) ? 6 : 0);
+                const scoreB = scoreProductForUser(b, 3) + (["hm-59", "tafse-23", "amn-2", "brf-14"].includes(b.id) ? 6 : 0);
+                return scoreB - scoreA;
+            });
+
+            // Pick top 2 distinct items (avoiding duplicate image if possible for clean variety)
+            const trendItems = [];
+            for (const p of trendRanked) {
+                if (!trendItems.some(x => x.img === p.img)) {
+                    trendItems.push(p);
+                }
+                if (trendItems.length === 2) break;
+            }
+            while (trendItems.length < 2 && trendRanked.length >= 2) {
+                const next = trendRanked.find(x => !trendItems.includes(x));
+                if (next) trendItems.push(next);
+                else break;
+            }
+
+            // Special deals: prioritize user's favorite categories first, then lowest prices for smart value
+            const dealRanked = [...PRODUCTS]
                 .filter(p => Number(p.price) > 0)
-                .sort((a, b) => Number(a.price) - Number(b.price))
-                .slice(0, 2);
+                .sort((a, b) => {
+                    const tasteA = scoreProductForUser(a, 5);
+                    const tasteB = scoreProductForUser(b, 5);
+                    const priceFactorA = 1000 / (Number(a.price) + 15);
+                    const priceFactorB = 1000 / (Number(b.price) + 15);
+                    const totalA = hasTaste ? (tasteA * 1.15 + priceFactorA * 2.2) : (priceFactorA * 3 + (interestData.sessionRoll * 5));
+                    const totalB = hasTaste ? (tasteB * 1.15 + priceFactorB * 2.2) : (priceFactorB * 3 + (interestData.sessionRoll * 5));
+                    return totalB - totalA;
+                });
+
+            const dealItems = [];
+            for (const p of dealRanked) {
+                if (!dealItems.some(x => x.img === p.img)) {
+                    dealItems.push(p);
+                }
+                if (dealItems.length === 2) break;
+            }
+            while (dealItems.length < 2 && dealRanked.length >= 2) {
+                const next = dealRanked.find(x => !dealItems.includes(x));
+                if (next) dealItems.push(next);
+                else break;
+            }
+
+            const trendsBadge = document.getElementById("trendsAiBadge");
+            const dealsBadge = document.getElementById("dealsAiBadge");
+            if (trendsBadge) trendsBadge.textContent = hasTaste ? "متجدد لذوقك" : "الأكثر طلباً";
+            if (dealsBadge) dealsBadge.textContent = hasTaste ? "أفضل قيمة لك" : "توفير ذكي";
 
             const buildMiniCard = p => `
                 <div class="mini-spot-card">
@@ -2543,13 +2591,13 @@
                     <div class="mini-spot-body" onclick="openImageModal('${p.img}', '${p.id}')">
                         <div class="mini-spot-title">${escapeHtmlAttr(p.title)}</div>
                         <div class="mini-spot-price">${p.priceLabel || p.price}<span>جنيه</span></div>
-                        <div class="mini-spot-tag">${escapeHtmlAttr(p.merchant || "كارامل")}</div>
+                        <div class="mini-spot-tag">${escapeHtmlAttr(CATEGORY_NAMES[p.category] || p.merchant || "كارامل")}</div>
                     </div>
                 </div>
             `;
 
             trendsGrid.innerHTML = trendItems.map(buildMiniCard).join("");
-            dealsGrid.innerHTML = cheapItems.map(buildMiniCard).join("");
+            dealsGrid.innerHTML = dealItems.map(buildMiniCard).join("");
         }
 
         function setFeedMode(mode, btnEl) {
@@ -2565,18 +2613,58 @@
             scrollToProductsTop();
         }
 
-        function focusCategoriesBar() {
-            const wrap = document.getElementById("circlesRowWrapper");
-            if (!wrap) return;
-            const rect = wrap.getBoundingClientRect();
-            window.scrollTo({ top: Math.max(0, window.scrollY + rect.top - 150), behavior: "smooth" });
+        /* Side Categories Drawer functions */
+        function renderSideCategoriesList() {
+            const container = document.getElementById("sideCategoriesList");
+            if (!container) return;
+            const keys = Object.keys(CATEGORY_NAMES);
+            container.innerHTML = keys.map(catKey => {
+                const count = catKey === "all"
+                    ? PRODUCTS.length
+                    : PRODUCTS.filter(p => p.category === catKey || (Array.isArray(p.categories) && p.categories.includes(catKey))).length;
+                const isActive = !currentMerchant && currentCategory === catKey;
+                return `
+                    <button type="button" class="side-cat-item ${isActive ? "active" : ""}" onclick="selectCategoryFromDrawer('${catKey}')">
+                        <span>${escapeHtmlAttr(CATEGORY_NAMES[catKey])}</span>
+                        <span class="side-cat-count">${count}</span>
+                    </button>
+                `;
+            }).join("");
+        }
+
+        function selectCategoryFromDrawer(catKey) {
+            closeCategoriesDrawer();
+            const topTab = document.querySelector(`.quick-top-tabs .quick-tab-item[data-quick="${catKey}"]`);
+            document.querySelectorAll(".quick-top-tabs .quick-tab-item").forEach(el => el.classList.remove("active"));
+            if (topTab) topTab.classList.add("active");
+            filterByCategory(catKey, topTab || null, true);
+        }
+
+        function openCategoriesDrawer() {
+            renderSideCategoriesList();
+            const drawer = document.getElementById("catsDrawer");
+            const backdrop = document.getElementById("catsBackdrop");
+            const isAlreadyOpen = drawer && drawer.classList.contains("open");
+            if (drawer) drawer.classList.add("open");
+            if (backdrop) backdrop.classList.add("open");
+            syncBodyScrollLock();
+            if (!isAlreadyOpen) pushOverlayHistoryState("cats");
+        }
+
+        function closeCategoriesDrawer(fromPopState = false) {
+            const drawer = document.getElementById("catsDrawer");
+            const backdrop = document.getElementById("catsBackdrop");
+            if (drawer) drawer.classList.remove("open");
+            if (backdrop) backdrop.classList.remove("open");
+            syncBodyScrollLock();
+            if (!fromPopState) popOverlayHistoryIfNeeded("cats");
+            else if (activeOverlayName === "cats") activeOverlayName = null;
         }
 
         function selectTopQuickTab(cat, tabEl) {
             document.querySelectorAll(".quick-top-tabs .quick-tab-item").forEach(el => el.classList.remove("active"));
             if (tabEl) tabEl.classList.add("active");
-            const circleEl = document.querySelector(`.cat-circle-item[data-cat="${cat}"]`);
-            filterByCategory(cat, circleEl, true);
+            filterByCategory(cat, tabEl, true);
         }
 
         function buildOtherProductsWave(limit = CONTINUATION_STEP) {
@@ -2645,8 +2733,8 @@
             updateSearchCancelButton();
             currentCategory = "all";
             applyCategoryPageMood("all");
-            document.querySelectorAll(".cat-circle-item").forEach(item => {
-                item.classList.toggle("active", item.getAttribute("data-cat") === "all");
+            document.querySelectorAll(".quick-top-tabs .quick-tab-item").forEach(item => {
+                item.classList.toggle("active", item.getAttribute("data-quick") === "all");
             });
             renderProducts("all");
             renderSmartRecommendations();
@@ -2713,8 +2801,10 @@
                     <div class="product-details">
                         <div>
                             <div class="product-title">${escapeHtmlAttr(product.title)}</div>
-                            <div class="product-price">${displayPrice}<span>جنيه</span></div>
-                            ${product.subPrice ? `<div class="product-sub">${escapeHtmlAttr(product.subPrice)}</div>` : ""}
+                            <div class="product-price-row">
+                                <div class="product-price">${displayPrice}<span>جنيه</span></div>
+                                ${product.subPrice ? `<div class="product-sub">${escapeHtmlAttr(product.subPrice)}</div>` : ""}
+                            </div>
                             ${product.desc ? `<div class="product-desc">${escapeHtmlAttr(product.desc)}</div>` : ""}
                             <button type="button" class="merchant-tag-btn" onclick="event.stopPropagation(); filterByMerchant('${escapeHtmlAttr(merchantName)}')" title="عرض منتجات ${escapeHtmlAttr(merchantName)} فقط">
                                 <span>التاجر:</span>
@@ -2723,16 +2813,10 @@
                         </div>
                         <div class="card-btns">
                             <button type="button" class="add-cart-btn" id="${btnId}" onclick="openProductOptionModal('${product.id}', '${btnId}')">
-                                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="M12 5v14M5 12h14"></path>
-                                </svg>
-                                <span>أضف للمشتريات</span>
+                                <span>+ للمشتريات</span>
                             </button>
                             <a href="https://wa.me/${WHATSAPP_NUMBER}?text=${waText}" class="direct-wa-link" target="_blank" rel="noopener noreferrer" onclick="onDirectWhatsAppClick('${product.id}')">
-                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-                                </svg>
-                                <span>طلب سريع واتساب</span>
+                                <span>واتساب</span>
                             </a>
                         </div>
                     </div>
@@ -2756,6 +2840,30 @@
             grid.innerHTML = recs.map(p => buildProductCardHTML(p, true, "smart")).join("");
         }
 
+        /* Economic deals: pick cheapest items evenly across categories so every section is represented */
+        function sortEconomicAcrossCategories(list) {
+            const byPriceAsc = [...list].sort((a, b) => (Number(a.price) || 999999) - (Number(b.price) || 999999));
+            const buckets = new Map();
+            byPriceAsc.forEach(item => {
+                const catKey = item.category || "other";
+                if (!buckets.has(catKey)) buckets.set(catKey, []);
+                buckets.get(catKey).push(item);
+            });
+
+            const interleaved = [];
+            let added = true;
+            while (added) {
+                added = false;
+                for (const [, queue] of buckets.entries()) {
+                    if (queue.length > 0) {
+                        interleaved.push(queue.shift());
+                        added = true;
+                    }
+                }
+            }
+            return interleaved;
+        }
+
         function getFilteredProducts(category, rawQuery) {
             let list = PRODUCTS.filter(p => {
                 const catMatch = category === "all" || p.category === category || (Array.isArray(p.categories) && p.categories.includes(category));
@@ -2764,8 +2872,9 @@
             });
 
             if (currentFeedMode === "deals") {
-                list = [...list].sort((a, b) => (Number(a.price) || 999999) - (Number(b.price) || 999999));
+                list = sortEconomicAcrossCategories(list);
             } else if (currentFeedMode === "new") {
+                // Newest to oldest according to addition order in PRODUCTS
                 list = [...list].reverse();
             }
 
@@ -2788,7 +2897,7 @@
             const sourcePool = getFilteredProducts(category, rawQuery);
             if (sourcePool.length === 0) return;
             feedCycle += 1;
-            const waveSorted = shuffleArray(sourcePool);
+            const waveSorted = currentFeedMode === "for-you" ? shuffleArray(sourcePool) : sourcePool;
             const waveItems = waveSorted.map(product => ({ type: "product", product, tag: `w${feedCycle}` }));
             waveItems.push({ type: "special", id: `special-${feedCycle}` });
             currentFeedItems.push(...waveItems);
@@ -2839,7 +2948,7 @@
             const filteredList = getFilteredProducts(category, rawQuery);
             updateMerchantBanner(filteredList);
 
-            const modeSuffix = currentFeedMode === "new" ? " — مدخلات جديدة" : (currentFeedMode === "deals" ? " — أسعار اقتصادية" : "");
+            const modeSuffix = currentFeedMode === "new" ? " — مدخلات جديدة (من الأحدث للأقدم)" : (currentFeedMode === "deals" ? " — أسعار اقتصادية من كل قسم" : "");
             const baseCatTitle = currentMerchant ? `منتجات التاجر: ${currentMerchant}` : `${CATEGORY_NAMES[category] || "المنتجات"}${modeSuffix}`;
             titleEl.textContent = trimmedQuery ? `${baseCatTitle} — نتائج البحث عن: "${trimmedQuery}"` : baseCatTitle;
 
@@ -2876,14 +2985,16 @@
             const input = document.getElementById("homeSearchInput");
             if (input) input.value = "";
             updateSearchCancelButton();
-            const allCircle = document.querySelector('[data-cat="all"]');
-            filterByCategory("all", allCircle, false);
+            const allTab = document.querySelector('.quick-top-tabs [data-quick="all"]');
+            filterByCategory("all", allTab, false);
         }
 
         function resetHomeFresh() {
             closeProductOptionModal();
+            closeCategoriesDrawer();
             closeCart();
             closeImageModal();
+            interestData.sessionRoll = Math.random();
             resetFilters();
             renderSpotlightBoxes();
             renderSmartRecommendations();
@@ -2894,29 +3005,19 @@
             const heading = currentMerchant ? document.getElementById("activeMerchantBanner") : document.getElementById("productsSectionHeading");
             if (!heading) return;
             const rect = heading.getBoundingClientRect();
-            window.scrollTo({ top: Math.max(0, window.scrollY + rect.top - 165), behavior: "smooth" });
-        }
-
-        function centerActiveCategoryCircle(element) {
-            const wrapper = document.getElementById("circlesRowWrapper");
-            if (!wrapper || !element || typeof element.scrollIntoView !== "function") return;
-            element.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+            window.scrollTo({ top: Math.max(0, window.scrollY + rect.top - 130), behavior: "smooth" });
         }
 
         function filterByCategory(category, element, shouldScroll = true) {
             currentMerchant = "";
             applyCategoryPageMood(category);
-            document.querySelectorAll(".cat-circle-item").forEach(item => item.classList.remove("active"));
-            if (element) {
-                element.classList.add("active");
-                centerActiveCategoryCircle(element);
-            }
             document.querySelectorAll(".quick-top-tabs .quick-tab-item").forEach(tab => {
                 tab.classList.toggle("active", tab.getAttribute("data-quick") === category);
             });
             if (category !== "all") {
                 interestData.categories[category] = (interestData.categories[category] || 0) + 1;
                 saveInterest();
+                renderSpotlightBoxes();
             }
             renderProducts(category);
             renderSmartRecommendations();
@@ -3232,9 +3333,10 @@
 
         function syncBodyScrollLock() {
             const cartOpen = document.getElementById("cartDrawer")?.classList.contains("open");
+            const catsOpen = document.getElementById("catsDrawer")?.classList.contains("open");
             const imgOpen = document.getElementById("imageModal")?.classList.contains("open");
             const optOpen = document.getElementById("productOptionModal")?.classList.contains("open");
-            document.body.style.overflow = (cartOpen || imgOpen || optOpen) ? "hidden" : "";
+            document.body.style.overflow = (cartOpen || catsOpen || imgOpen || optOpen) ? "hidden" : "";
         }
 
         function openCart() {
@@ -3342,12 +3444,14 @@
 
         window.addEventListener("popstate", () => {
             const cartOpen = document.getElementById("cartDrawer")?.classList.contains("open");
+            const catsOpen = document.getElementById("catsDrawer")?.classList.contains("open");
             const imgOpen = document.getElementById("imageModal")?.classList.contains("open");
             const optOpen = document.getElementById("productOptionModal")?.classList.contains("open");
             activeOverlayName = null;
             if (optOpen) closeProductOptionModal(true);
             else if (imgOpen) closeImageModal(true);
             else if (cartOpen) closeCart(true);
+            else if (catsOpen) closeCategoriesDrawer(true);
         });
 
         document.addEventListener("keydown", e => {
@@ -3355,6 +3459,7 @@
                 if (document.getElementById("productOptionModal")?.classList.contains("open")) closeProductOptionModal();
                 else if (document.getElementById("imageModal")?.classList.contains("open")) closeImageModal();
                 else if (document.getElementById("cartDrawer")?.classList.contains("open")) closeCart();
+                else if (document.getElementById("catsDrawer")?.classList.contains("open")) closeCategoriesDrawer();
             }
         });
 
