@@ -685,7 +685,6 @@
             }
         }
 
-        /* شريط تعريفي بارز عند اختيار تاجر محدد */
         .merchant-banner {
             display: none;
             align-items: center;
@@ -1073,7 +1072,6 @@
             overflow: hidden;
         }
 
-        /* زر اسم التاجر أسفل تفاصيل المنتج */
         .merchant-tag-btn {
             margin-top: 7px;
             display: inline-flex;
@@ -2056,7 +2054,6 @@
             <div class="smart-grid" id="smartRecommendationsGrid"></div>
         </section>
 
-        <!-- شريط تعريفي بارز يظهر عند اختيار تاجر محدد -->
         <section class="merchant-banner" id="activeMerchantBanner" aria-live="polite">
             <div class="merchant-banner-info">
                 <span class="merchant-banner-kicker">عرض منتجات التاجر</span>
@@ -2100,7 +2097,6 @@
 
     <div class="caramel-toast" id="caramelToast" role="status" aria-live="polite"></div>
 
-    <!-- نافذة تحديد المقاس والعدد والتفاصيل قبل الإضافة للسلة -->
     <div class="option-modal-backdrop" id="productOptionModal" onclick="closeProductOptionModal()">
         <div class="option-modal-card" onclick="event.stopPropagation()">
             <div class="option-modal-header">
@@ -2448,21 +2444,36 @@
             perfume: "العناية والعطور"
         };
 
-        /* ربط كل منتج بتاجره المنفصل */
+        /* توزيع واضح ومكتمل للتجار: أم وليد، أم عمار، محمد غريب، شيرين غريب، كارامل للهاند ميد، كارامل ستور */
+        const SHIREEN_PRODUCT_IDS = new Set([
+            "libr-2", "libr-4", "libr-6", "libr-8", "libr-10", "libr-12", "libr-14",
+            "libr-16", "libr-18", "libr-20", "libr-22", "libr-24", "libr-26", "libr-28"
+        ]);
+
+        const UMM_WALEED_PRODUCT_IDS = new Set([
+            "amn-1", "amn-2", "amn-3", "amn-4", "amn-5", "amn-6", "amn-7", "amn-8", "amn-9", "amn-10",
+            "tafse-20", "tafse-21", "tafse-22",
+            "hm-60", "hm-61"
+        ]);
+
         function inferMerchantForProduct(product) {
             if (!product) return "كارامل ستور";
             if (product.merchant) return product.merchant;
-            if (product.id && product.id.startsWith("amn-")) return "أم وليد";
+            if (UMM_WALEED_PRODUCT_IDS.has(product.id) || (product.id && product.id.startsWith("amn-"))) {
+                return "أم وليد";
+            }
+            if (SHIREEN_PRODUCT_IDS.has(product.id)) {
+                return "شيرين غريب";
+            }
+            if (product.id && product.id.startsWith("libr-")) {
+                return "محمد غريب";
+            }
             if (product.id && product.id.startsWith("tafse-")) {
                 const num = Number(product.id.replace("tafse-", ""));
                 if (num >= 6 && num <= 18) return "أم عمار";
                 return "كارامل للهاند ميد";
             }
             if (product.id && product.id.startsWith("wmn-")) return "أم عمار";
-            if (product.id && product.id.startsWith("libr-")) {
-                const num = Number(product.id.replace("libr-", ""));
-                return (num % 2 === 1) ? "محمد غريب" : "شيرين غريب";
-            }
             return "كارامل ستور";
         }
 
@@ -2842,7 +2853,6 @@
             return scoredList.slice(0, limit).map(entry => entry.product);
         }
 
-        /* فلترة المنتجات حسب التاجر وعرض الشريط التعريفي */
         function filterByMerchant(merchantName, shouldScroll = true) {
             if (!merchantName) return;
             currentMerchant = merchantName;
