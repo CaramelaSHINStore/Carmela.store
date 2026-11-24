@@ -14,7 +14,7 @@
     <meta property="og:title" content="متجر كارامل - Caramel Store">
     <meta property="og:description" content="كل حاجة تحتاجها عند كارامل بأرخص الأسعار والتوصيل لباب المنزل في أسرع وقت، وحتى لو المنتج مش موجود بنجيبهولك.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://caramelashinstore.github.io/Carmela.store/">
+    <meta property="og:url" content="https://caramelstoresuez.github.io/Carmelastore/">
     <meta property="og:image" content="https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg">
     <meta property="og:image:secure_url" content="https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg">
     <meta property="og:image:type" content="image/jpeg">
@@ -2223,7 +2223,7 @@
             </div>
             <div class="option-modal-body">
                 <div class="option-modal-product">
-                    <img id="optionModalImg" src="" alt="" onerror="removeProductById(pendingOptionSelection.productId); closeProductOptionModal();">
+                    <img id="optionModalImg" src="" alt="" onerror="this.src='https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg'">
                     <div class="option-modal-product-info">
                         <div class="option-modal-product-title" id="optionModalTitle"></div>
                         <div class="option-modal-product-price" id="optionModalPrice"></div>
@@ -2290,7 +2290,7 @@
         <div class="preview-detail-sheet" onclick="event.stopPropagation()">
             <div class="preview-top-media">
                 <button type="button" class="preview-close-btn" onclick="closeImageModal()" aria-label="إغلاق">&times;</button>
-                <img id="modalImagePreview" src="" alt="معاينة المنتج" onerror="closeImageModal()">
+                <img id="modalImagePreview" src="" alt="معاينة المنتج" onerror="this.src='https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg'">
             </div>
             <div class="preview-detail-body">
                 <div class="preview-gallery-bar" id="previewGalleryBar">
@@ -2332,7 +2332,10 @@
 
     <script>
         const WHATSAPP_NUMBER = "201055436305";
-        const STORE_URL = "https://caramelashinstore.github.io/Carmela.store/";
+        const STORE_URL = "https://caramelstoresuez.github.io/Carmelastore/";
+        const MERCHANT_DATA_FILES = [
+            "merchants/umm-ammar.json"
+        ];
         const CART_STORAGE_KEY = "caramel_store_cart_v1";
         const INTEREST_STORAGE_KEY = "caramel_smart_interest_v1";
         const BATCH_SIZE = 12;
@@ -2853,70 +2856,6 @@
             { id: "tafse-3", title: "مكرمية فاخرة هاند ميد 1×2 متر مع عصايا", desc: "قطعة ديكور يدوية بارزة بمقاس 1×2 متر ومعاها قطعتين رباط وعصايا هدية.", price: 1700, category: "tafse", categories: ["tafse", "home"], img: "Tafse/IMG-20261117-WA0024.jpg" },
             { id: "tafse-4", title: "مكرمية يدوية 1×2 متر مع رباط هدية", desc: "تصميم بوهيمي أنيق بمقاس 1×2 متر يضيف روحاً مميزة للريسبشن أو الغرف.", price: 900, category: "tafse", categories: ["tafse", "home"], img: "Tafse/IMG-20261117-WA0023.jpg" },
             { id: "tafse-5", title: "مكرمية ديكور 1×2 متر مع عصايا ورباط", desc: "شغل هاند ميد متكامل بمقاس 1×2 متر ومعاها قطعتين رباط وعصايا هدية.", price: 1600, category: "tafse", categories: ["tafse", "home"], img: "Tafse/IMG-20261117-WA0034.jpg" },
-            { id: "tafse-6", title: "موديل أسود بقصة كشكشة", desc: "إطلالة أنثوية راقية باللون الأسود مع تفاصيل كشكشة ناعمة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", categories: ["tafse", "women"], img: "Tafse/compressed_1795094044923.webp" },
-            { id: "tafse-7", title: "عباية بشت قطيفة موف مع طرحة", desc: "خامة قطيفة دافئة بلون موف جذاب مع طرحة متناسقة لإطلالة شتوية أنيقة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", categories: ["tafse", "women"], img: "Tafse/compressed_1795094044497.webp" },
-            { id: "tafse-8", title: "فستان لبني بكشكشة وأكمام", desc: "لون لبني هادئ مع كشكشة وأكمام تمنحك حضوراً رقيقاً ومميزاً.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", categories: ["tafse", "women"], img: "Tafse/compressed_1795094044682.webp" },
-            { id: "tafse-9", title: "عباية قطيفة نبيتي ببروش", desc: "قطيفة نبيتي غنية مع لمسة بروش تضيف فخامة واضحة للإطلالة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", categories: ["tafse", "women"], img: "Tafse/compressed_1795094044361.webp" },
-            { id: "tafse-10", title: "عباية بني قماش بليسيه بأكمام واسعة", desc: "خامة بليسيه انسيابية باللون البني مع أكمام واسعة مريحة وأنيقة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", categories: ["tafse", "women"], img: "Tafse/compressed_1795094044174.webp" },
-            { id: "tafse-11", title: "عباية سوداء قماش جاكار مموج", desc: "قماش جاكار مموج يمنح العباية السوداء ملمساً غنياً وحضوراً مميزاً.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", categories: ["tafse", "women"], img: "Tafse/compressed_1795094044287.webp" },
-            { id: "tafse-12", title: "فستان أصفر فاتح برباط جانبي", desc: "لون أصفر فاتح مشرق مع رباط جانبي يحدد القصة بأناقة ناعمة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", categories: ["tafse", "women"], img: "Tafse/compressed_1795094043951.webp" },
-            { id: "tafse-13", title: "عباية قطيفة موف غامق مع طرحة", desc: "درجة موف غامق أنيقة بخامة قطيفة مريحة ودافئة مع طرحتها.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", categories: ["tafse", "women"], img: "Tafse/compressed_1795094043669.webp" },
-            { id: "tafse-14", title: "عباية قطيفة بني برباط على الأكمام", desc: "قطيفة بنية ناعمة مزينة برباط على الأكمام لإطلالة متوازنة ومريحة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", categories: ["tafse", "women"], img: "Tafse/compressed_1795094043790.webp" },
-            { id: "tafse-15", title: "فستان أزرق بليسيه برباط جانبي", desc: "قصة بليسيه جذابة باللون الأزرق مع رباط جانبي لإطلالة عصرية أنيقة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", categories: ["tafse", "women"], img: "Tafse/compressed_1795094043481.webp" },
-            { id: "tafse-16", title: "عباية كحلي بأزرار أمامية وأكمام واسعة", desc: "لون كحلي كلاسيكي عملي بأزرار أمامية وأكمام واسعة تمنحك حرية حركة.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", categories: ["tafse", "women"], img: "Tafse/compressed_1795094043346.webp" },
-            { id: "tafse-17", title: "عباية قطيفة موف مطرزة مع طرحة", desc: "تطريز أنيق على قطيفة موف فخمة مع طرحة متناسقة للمناسبات والخروجات.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", categories: ["tafse", "women"], img: "Tafse/compressed_1795094043197.webp" },
-            { id: "tafse-18", title: "عباية سوداء قماش مضلع بأكمام واسعة", desc: "قماش مضلع عملي بلون أسود أنيق وأكمام واسعة تناسب اللبس اليومي.", price: 850, subPrice: "السن المحير: 650 جنيه", category: "tafse", categories: ["tafse", "women"], img: "Tafse/compressed_1795094042876.webp" },
-            { id: "tafse-19", title: "شنطة هاند ميد خرز", desc: "شنطة يدوية مشغولة بالخرز بلمسة مميزة تناسب الخروجات والهدايا.", price: 50, category: "tafse", categories: ["tafse", "gifts"], img: "Tafse/compressed_1795180558469.webp" },
-            { id: "tafse-20", title: "مراية هاند ميد حسب الطلب (أسماء وورد)", desc: "تنفيذ خاص حسب الطلب بتصميم أسماء وورد لهدية شخصية مميزة.", price: 500, category: "tafse", categories: ["tafse", "gifts"], img: "Tafse/compressed_1795180558100.webp" },
-            { id: "tafse-21", title: "مراية هاند ميد حسب الطلب (ذهبي وفراشات)", desc: "تصميم يدوي حسب الطلب بلمسات ذهبية وفراشات لديكور أنيق ولافت.", price: 500, category: "tafse", categories: ["tafse", "gifts", "home"], img: "Tafse/compressed_1795180558884.webp" },
-            { id: "tafse-22", title: "مراية هاند ميد حسب الطلب (قلوب وصور)", desc: "قطعة هاند ميد مخصصة حسب الطلب بقلوب وصور لتخليد الذكريات.", price: 500, category: "tafse", categories: ["tafse", "gifts"], img: "Tafse/compressed_1795180558694.webp" },
-            {
-                id: "htm-bag-1",
-                title: "شنط خرز كريستال وشفاف هاند ميد",
-                desc: "تشكيلة شنط هاند ميد خرز كريستال وشفاف بلمسات أنيقة للمناسبات والخروجات.",
-                price: 350,
-                merchant: "أم عمار",
-                category: "tafse",
-                categories: ["tafse", "women", "gifts"],
-                img: "Htm/IMG-20261120-WA0039.jpg",
-                gallery: [
-                    { label: "أسود لامع - سلسلة خرز", img: "Htm/IMG-20261120-WA0039.jpg" },
-                    { label: "أسود لامع - يد خرز", img: "Htm/IMG-20261120-WA0030.jpg" },
-                    { label: "شفاف ثلجي - سلسلة ذهبية", img: "Htm/IMG-20261120-WA0044.jpg" }
-                ]
-            },
-            {
-                id: "htm-bag-2",
-                title: "شنط لؤلؤ ورد وبطانة هاند ميد",
-                desc: "شنط لؤلؤ هاند ميد بتفاصيل ورد بارز وبطانة داخلية وخيارات يد وسلسلة ذهبية.",
-                price: 350,
-                merchant: "أم عمار",
-                category: "tafse",
-                categories: ["tafse", "women", "gifts"],
-                img: "Htm/IMG-20261120-WA0021.jpg",
-                gallery: [
-                    { label: "لؤلؤ ورد بارز - سلسلة ذهبية", img: "Htm/IMG-20261120-WA0021.jpg" },
-                    { label: "لؤلؤ ورد بارز - يد لؤلؤ وذهبي", img: "Htm/IMG-20261120-WA0003.jpg" },
-                    { label: "لؤلؤ ببطانة - سلسلة ذهبية", img: "Htm/IMG-20261120-WA0028.jpg" },
-                    { label: "لؤلؤ بحزام لؤلؤ", img: "Htm/IMG-20261120-WA0013.jpg" }
-                ]
-            },
-            {
-                id: "htm-bag-3",
-                title: "شنط لؤلؤ أسطوانية وكروس هاند ميد",
-                desc: "شنط لؤلؤ هاند ميد بقصات أسطوانية وكروس أنيقة وعملية.",
-                price: 350,
-                merchant: "أم عمار",
-                category: "tafse",
-                categories: ["tafse", "women", "gifts"],
-                img: "Htm/IMG-20261120-WA0008.jpg",
-                gallery: [
-                    { label: "أسطوانية لؤلؤ (شكل 1)", img: "Htm/IMG-20261120-WA0008.jpg" },
-                    { label: "أسطوانية لؤلؤ (شكل 2)", img: "Htm/IMG-20261120-WA0002.jpg" },
-                    { label: "أسطوانية لؤلؤ (شكل 3)", img: "Htm/IMG-20261120-WA0000.jpg" },
-                    { label: "لؤلؤ كروس - سلسلة ذهبية", img: "Htm/IMG-20261120-WA0001.jpg" }
-                ]
-            },
             { id: "wmn-1", title: "أندر نسائي مشجر دباغ / كاندي", desc: "خامة ناعمة ومريحة بتصميم مشجر أنيق للاستخدام اليومي.", price: 65, category: "women", img: "Clswmn/compressed_1795114616012.webp" },
             { id: "wmn-2", title: "بدي دباغ ألوان", desc: "بدي دباغ بألوان متنوعة متاحة، مريح وعملي للاستخدام اليومي.", price: 130, category: "women", img: "Clswmn/compressed_1795214411055.webp" },
             { id: "wmn-3", title: "بدي عجينة سلسله تريكو", desc: "خامة تريكو عجينة ناعمة ومريحة، فري سايز يلبس لحد 85 ك.", price: 230, category: "women", img: "Clswmn/compressed_1795214411279.webp" },
@@ -2990,25 +2929,10 @@
             return Boolean(currentMerchant) || Boolean(currentCategory && currentCategory !== "all");
         }
 
-        function removeProductById(productId) {
-            if (!productId) return;
-            const idx = PRODUCTS.findIndex(p => p.id === productId);
-            if (idx === -1) return;
-            PRODUCTS.splice(idx, 1);
-            renderSpotlightBoxes();
-            renderProducts(currentCategory);
-        }
-
         function handleProductImageError(imgEl, productId) {
-            if (imgEl) {
-                const card = imgEl.closest(".product-card");
-                if (card) card.remove();
-            }
-            if (!productId) return;
-            const idx = PRODUCTS.findIndex(p => p.id === productId);
-            if (idx !== -1) {
-                PRODUCTS.splice(idx, 1);
-            }
+            if (!imgEl) return;
+            imgEl.onerror = null;
+            imgEl.src = "https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg";
         }
 
         function loadCartFromStorage() {
@@ -3339,7 +3263,7 @@
             container.innerHTML = `
                 <div class="rotating-showcase-card">
                     <div class="showcase-photo-wrap" onclick="openImageModal('${p.img}', '${p.id}')">
-                        <img key="${p.id}-${idx}" src="${p.img}" alt="${escapeHtmlAttr(p.title)}" onerror="removeProductById('${p.id}')">
+                        <img key="${p.id}-${idx}" src="${p.img}" alt="${escapeHtmlAttr(p.title)}" onerror="handleProductImageError(this, '${p.id}')">
                     </div>
                     <div class="showcase-info-panel" onclick="openImageModal('${p.img}', '${p.id}')">
                         <div class="showcase-prod-title">${escapeHtmlAttr(p.title)}</div>
@@ -4358,11 +4282,11 @@
                 if (item.selectedColor) details.push(`الشكل/اللون: ${item.selectedColor}`);
                 if (item.selectedSize) details.push(`المقاس: ${item.selectedSize}`);
                 if (item.itemNote && item.itemNote.trim()) details.push(`ملاحظة: ${item.itemNote.trim()}`);
-                const detailsStr = details.length ? ` (${details.join(" • ")})` : "";
-                return `${idx + 1}. ${item.title}${detailsStr} — العدد: ${qty} — التاجر: ${merchantName} — السعر: ${linePrice} جنيه`;
+                const detailsText = details.length ? ` (${details.join(" - ")})` : "";
+                return `${idx + 1}. ${item.title}${detailsText} — التاجر: ${merchantName} × ${qty} = ${linePrice} جنيه`;
             });
-            const msg = ["مرحباً متجر كارامل، أريد إتمام الطلب التالي:", ...lines, `الإجمالي: ${total} جنيه`, "الدفع عند الاستلام"].join("\n");
-            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank", "noopener,noreferrer");
+            const message = `مرحباً متجر كارامل، أريد إتمام الطلب التالي:\n\n${lines.join("\n")}\n\nالإجمالي: ${total} جنيه\nالدفع عند الاستلام`;
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
         }
 
         window.addEventListener("popstate", () => {
@@ -4372,149 +4296,145 @@
                 else if (top === "preview") closeImageModal(true);
                 else if (top === "cart") closeCart(true);
                 else if (top === "cats") closeCategoriesDrawer(true);
-                else closeAllOverlays();
-            } else {
-                const optOpen = document.getElementById("productOptionModal")?.classList.contains("open");
-                const imgOpen = document.getElementById("imageModal")?.classList.contains("open");
-                const cartOpen = document.getElementById("cartDrawer")?.classList.contains("open");
-                const catsOpen = document.getElementById("catsDrawer")?.classList.contains("open");
-                if (optOpen || imgOpen || cartOpen || catsOpen) closeAllOverlays();
             }
         });
 
-        document.addEventListener("keydown", e => {
+        window.addEventListener("keydown", e => {
             if (e.key === "Escape") {
-                if (overlayStack.length > 0) {
-                    const top = overlayStack.pop();
-                    if (top === "options") closeProductOptionModal(true);
-                    else if (top === "preview") closeImageModal(true);
-                    else if (top === "cart") closeCart(true);
-                    else if (top === "cats") closeCategoriesDrawer(true);
-                    else closeAllOverlays();
-                } else {
-                    closeAllOverlays();
-                }
-            } else if (e.key === "ArrowRight" && document.getElementById("imageModal")?.classList.contains("open")) {
-                stepPreviewGallery(-1);
-            } else if (e.key === "ArrowLeft" && document.getElementById("imageModal")?.classList.contains("open")) {
-                stepPreviewGallery(1);
+                if (document.getElementById("productOptionModal")?.classList.contains("open")) closeProductOptionModal();
+                else if (document.getElementById("imageModal")?.classList.contains("open")) closeImageModal();
+                else if (document.getElementById("cartDrawer")?.classList.contains("open")) closeCart();
+                else if (document.getElementById("catsDrawer")?.classList.contains("open")) closeCategoriesDrawer();
             }
         });
 
         const sentinelEl = document.getElementById("feedSentinel");
         if ("IntersectionObserver" in window && sentinelEl) {
-            const feedObserver = new IntersectionObserver(entries => {
+            const observer = new IntersectionObserver(entries => {
                 if (entries.some(entry => entry.isIntersecting)) renderMoreFeedItems();
-            }, { rootMargin: "220px 0px" });
-            feedObserver.observe(sentinelEl);
+            }, { rootMargin: "260px" });
+            observer.observe(sentinelEl);
         }
 
         window.addEventListener("scroll", () => {
-            if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 280)) renderMoreFeedItems();
+            if (!sentinelEl) return;
+            const rect = sentinelEl.getBoundingClientRect();
+            if (rect.top < window.innerHeight + 240) renderMoreFeedItems();
         }, { passive: true });
 
-        (function initCaramelPushNotifications() {
-            const ONESIGNAL_APP_ID = "89166bf8-cf08-4f6a-a731-67e7b31a5f42";
-            const PUSH_CONNECTED_KEY = "caramel_push_connected_v1";
-            const PUSH_COLLAPSED_KEY = "caramel_push_circle_collapsed_v1";
+        (function initCaramelOneSignalPush() {
             const btn = document.getElementById("caramelPushBtn");
-            const txt = document.getElementById("caramelPushBtnText");
-            const icon = document.getElementById("caramelPushIcon");
-            if (!btn || !txt || !icon) return;
-
-            let isProcessingPush = false;
-            let isSubscribedState = false;
+            const btnText = document.getElementById("caramelPushBtnText");
+            const iconBox = document.getElementById("caramelPushIcon");
             let hideTimer = null;
 
-            function setBellIcon() {
-                icon.innerHTML = `<svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg>`;
-            }
-
-            function setCheckIcon() {
-                icon.innerHTML = `<svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg>`;
-            }
-
-            function hideNotificationPillSmoothly() {
-                if (hideTimer) clearTimeout(hideTimer);
-                btn.classList.add("hiding-smooth");
-                hideTimer = setTimeout(() => { btn.classList.remove("visible"); btn.classList.remove("hiding-smooth"); }, 280);
-            }
-
-            function setAlreadySubscribedUI(showWelcomeToast = false) {
-                isSubscribedState = true;
-                try { localStorage.setItem(PUSH_CONNECTED_KEY, "1"); } catch (e) {}
-                setCheckIcon();
-                txt.textContent = "تم تفعيل الإشعارات";
-                btn.classList.add("visible");
-                const alreadyCollapsed = (() => { try { return localStorage.getItem(PUSH_COLLAPSED_KEY) === "1"; } catch (e) { return false; } })();
-                if (alreadyCollapsed) {
-                    btn.classList.add("circle-check-only");
-                    hideNotificationPillSmoothly();
-                } else {
-                    btn.classList.remove("circle-check-only");
-                    setTimeout(() => {
-                        btn.classList.add("circle-check-only");
-                        try { localStorage.setItem(PUSH_COLLAPSED_KEY, "1"); } catch (e) {}
-                        hideNotificationPillSmoothly();
-                    }, 1800);
+            function setCircleCheckOnlyState() {
+                if (!btn) return;
+                btn.classList.add("visible", "circle-check-only");
+                btn.disabled = true;
+                btn.title = "الإشعارات مفعّلة";
+                btn.setAttribute("aria-label", "الإشعارات مفعّلة");
+                if (iconBox) {
+                    iconBox.innerHTML = `<svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg>`;
                 }
-                if (showWelcomeToast) showCaramelToast("تم تفعيل إشعارات متجر كارامل بنجاح!");
+                clearTimeout(hideTimer);
+                hideTimer = setTimeout(() => {
+                    btn.classList.add("hiding-smooth");
+                    setTimeout(() => { btn.classList.remove("visible"); }, 300);
+                }, 2500);
             }
-
-            function setDefaultOfferUI() {
-                isSubscribedState = false;
-                try { localStorage.removeItem(PUSH_CONNECTED_KEY); } catch (e) {}
-                setBellIcon();
-                txt.textContent = "فعّل إشعارات العروض";
-                btn.classList.remove("circle-check-only");
-                btn.classList.remove("hiding-smooth");
-                btn.classList.add("visible");
-            }
-
-            const alreadyConnected = (() => { try { return localStorage.getItem(PUSH_CONNECTED_KEY) === "1"; } catch (e) { return false; } })();
-            if (alreadyConnected) { setAlreadySubscribedUI(false); return; }
-            setDefaultOfferUI();
-
-            window.OneSignalDeferred = window.OneSignalDeferred || [];
-            OneSignalDeferred.push(async function(OneSignal) {
-                try {
-                    await OneSignal.init({ appId: ONESIGNAL_APP_ID, serviceWorkerPath: "OneSignalSDKWorker.js", serviceWorkerParam: { scope: "/" }, allowLocalhostAsSecureOrigin: true });
-                    if (OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.optedIn) {
-                        setAlreadySubscribedUI(false);
-                    }
-                } catch (e) {}
-            });
 
             window.enableCaramelPush = async function() {
-                if (isProcessingPush || isSubscribedState) return;
-                if (!("Notification" in window)) { showCaramelToast("متصفحك الحالي لا يدعم الإشعارات."); return; }
-                isProcessingPush = true;
-                txt.textContent = "جاري التفعيل...";
+                if (!("Notification" in window)) return;
                 try {
                     const perm = await Notification.requestPermission();
                     if (perm === "granted") {
-                        window.OneSignalDeferred = window.OneSignalDeferred || [];
-                        OneSignalDeferred.push(async function(OneSignal) {
-                            try {
-                                if (OneSignal.User && OneSignal.User.PushSubscription) await OneSignal.User.PushSubscription.optIn();
-                            } catch (e) {}
-                        });
-                        setAlreadySubscribedUI(true);
-                    } else {
-                        setDefaultOfferUI();
-                        showCaramelToast("يرجى السماح بالإشعارات لتصلك أحدث العروض.");
+                        setCircleCheckOnlyState();
+                        if (window.OneSignalDeferred) {
+                            window.OneSignalDeferred.push(async function(OneSignal) {
+                                try {
+                                    if (OneSignal.User && OneSignal.User.PushSubscription) {
+                                        await OneSignal.User.PushSubscription.optIn();
+                                    }
+                                } catch (e) {}
+                            });
+                        }
                     }
-                } catch (e) {
-                    setDefaultOfferUI();
-                } finally {
-                    isProcessingPush = false;
-                }
+                } catch (e) {}
             };
+
+            function evaluatePushVisibility() {
+                if (!btn) return;
+                if (!("Notification" in window) || Notification.permission === "denied") {
+                    btn.classList.remove("visible");
+                    return;
+                }
+                if (Notification.permission === "granted") {
+                    setCircleCheckOnlyState();
+                    return;
+                }
+                btn.classList.remove("circle-check-only", "hiding-smooth");
+                btn.disabled = false;
+                btn.classList.add("visible");
+                if (btnText) btnText.textContent = "فعّل إشعارات العروض";
+            }
+
+            evaluatePushVisibility();
+            if ("permissions" in navigator && navigator.permissions.query) {
+                navigator.permissions.query({ name: "notifications" }).then(status => {
+                    status.onchange = evaluatePushVisibility;
+                }).catch(() => {});
+            }
+
+            const osScript = document.createElement("script");
+            osScript.src = "https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js";
+            osScript.defer = true;
+            document.head.appendChild(osScript);
+
+            window.OneSignalDeferred = window.OneSignalDeferred || [];
+            window.OneSignalDeferred.push(async function(OneSignal) {
+                try {
+                    await OneSignal.init({ appId: "59686f56-314d-443d-a316-a03d85b027b6", allowLocalhostAsSecureOrigin: true });
+                    evaluatePushVisibility();
+                } catch (e) {}
+            });
         })();
+
+        async function loadExternalMerchantCatalogs() {
+            for (const filePath of MERCHANT_DATA_FILES) {
+                try {
+                    const resp = await fetch(`${filePath}?v=${Date.now()}`, { cache: "no-store" });
+                    if (!resp.ok) continue;
+                    const items = await resp.json();
+                    if (!Array.isArray(items)) continue;
+
+                    items.forEach(item => {
+                        if (!item || !item.id) return;
+                        const normalized = {
+                            ...item,
+                            merchant: item.merchant || inferMerchantForProduct(item)
+                        };
+                        const idx = PRODUCTS.findIndex(p => p.id === normalized.id);
+                        if (idx !== -1) {
+                            PRODUCTS[idx] = { ...PRODUCTS[idx], ...normalized };
+                        } else {
+                            PRODUCTS.push(normalized);
+                        }
+                    });
+                } catch (err) {
+                    console.warn("تعذر تحميل ملف التاجر:", filePath, err);
+                }
+            }
+
+            updateCartUI();
+            renderSpotlightBoxes();
+            renderProducts(currentCategory);
+        }
 
         updateCartUI();
         renderSpotlightBoxes();
         renderProducts("all");
+        loadExternalMerchantCatalogs();
     </script>
 </body>
 </html>
