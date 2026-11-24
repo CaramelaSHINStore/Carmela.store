@@ -685,6 +685,49 @@
             }
         }
 
+        .merchant-after-section {
+            margin-top: 24px;
+            background: linear-gradient(180deg, #fffdf9 0%, #f6efe6 100%);
+            border: 1.5px solid var(--border-gold);
+            border-radius: 20px;
+            padding: 16px 14px;
+            box-shadow: var(--shadow-main);
+        }
+
+        .merchant-after-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .merchant-after-header h3 {
+            font-size: 1.04rem;
+            font-weight: 900;
+            color: var(--espresso);
+        }
+
+        .merchant-after-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        @media (min-width: 768px) {
+            .merchant-after-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 16px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .merchant-after-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
         .merchant-banner {
             display: none;
             align-items: center;
@@ -2010,8 +2053,8 @@
                 </div>
 
                 <div class="cat-circle-item ring-tafse" data-cat="tafse" onclick="filterByCategory('tafse', this)">
-                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0042.jpg" alt="التفصيل" loading="lazy"></div></div>
-                    <span class="cat-circle-label">التفصيل</span>
+                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0042.jpg" alt="هاند ميد" loading="lazy"></div></div>
+                    <span class="cat-circle-label">هاند ميد</span>
                 </div>
 
                 <div class="cat-circle-item ring-kids" data-cat="kids" onclick="filterByCategory('kids', this)">
@@ -2072,6 +2115,7 @@
         </div>
 
         <section class="products-grid" id="productsGrid"></section>
+        <div id="merchantAfterRecommendations"></div>
         <div class="feed-sentinel" id="feedSentinel"></div>
     </main>
 
@@ -2436,7 +2480,7 @@
             all: "كل المنتجات",
             home: "المنزل",
             school: "المدرسة",
-            tafse: "التفصيل",
+            tafse: "هاند ميد",
             kids: "الأطفال",
             women: "النساء",
             men: "الرجال",
@@ -2464,7 +2508,6 @@
         /* منتجات التاجر: أم وليد */
         const UMM_WALEED_PRODUCT_IDS = new Set([
             "amn-1", "amn-2", "amn-3", "amn-4", "amn-5", "amn-6", "amn-7", "amn-8", "amn-9", "amn-10",
-            "tafse-20", "tafse-21", "tafse-22",
             "hm-2", "hm-3", "hm-4", "hm-5", "hm-6", "hm-7", "hm-8", "hm-19",
             "hm-9", "hm-10", "hm-11", "hm-12", "hm-34", "hm-38",
             "hm-14", "hm-15", "hm-16", "hm-17",
@@ -2473,11 +2516,21 @@
             "hm-31"
         ]);
 
+        /* منتجات التاجر: أم عمار */
+        const UMM_AMMAR_PRODUCT_IDS = new Set([
+            "tafse-6", "tafse-7", "tafse-8", "tafse-9", "tafse-10", "tafse-11", "tafse-12",
+            "tafse-13", "tafse-14", "tafse-15", "tafse-16", "tafse-17", "tafse-18",
+            "tafse-20", "tafse-21", "tafse-22"
+        ]);
+
         function inferMerchantForProduct(product) {
             if (!product) return "كارامل ستور";
             if (product.merchant) return product.merchant;
             if (SHIREEN_PRODUCT_IDS.has(product.id)) {
                 return "شيرين غريب";
+            }
+            if (UMM_AMMAR_PRODUCT_IDS.has(product.id)) {
+                return "أم عمار";
             }
             if (UMM_WALEED_PRODUCT_IDS.has(product.id) || (product.id && product.id.startsWith("amn-"))) {
                 return "أم وليد";
@@ -2486,8 +2539,6 @@
                 return "محمد غريب";
             }
             if (product.id && product.id.startsWith("tafse-")) {
-                const num = Number(product.id.replace("tafse-", ""));
-                if (num >= 6 && num <= 18) return "أم عمار";
                 return "كارامل للهاند ميد";
             }
             if (product.id && product.id.startsWith("wmn-")) return "أم عمار";
@@ -2880,6 +2931,67 @@
             return scoredList.slice(0, limit).map(entry => entry.product);
         }
 
+        function getMerchantRelatedRecommendations(merchantName, limit = 6) {
+            if (!merchantName) return [];
+            const merchantProducts = PRODUCTS.filter(p => p.merchant === merchantName);
+            const catWeights = {};
+            const kwWeights = {};
+
+            merchantProducts.forEach(p => {
+                const cats = [p.category, ...(Array.isArray(p.categories) ? p.categories : [])];
+                cats.forEach(c => {
+                    if (c) catWeights[c] = (catWeights[c] || 0) + 3;
+                });
+                extractTokens(`${p.title} ${p.desc || ""}`).filter(t => t.length >= 3).forEach(tok => {
+                    kwWeights[tok] = (kwWeights[tok] || 0) + 1;
+                });
+            });
+
+            const candidates = PRODUCTS.filter(p => p.merchant !== merchantName).map(p => {
+                const cats = [p.category, ...(Array.isArray(p.categories) ? p.categories : [])];
+                let score = 0;
+                cats.forEach(c => {
+                    score += (catWeights[c] || 0) * 10;
+                });
+                extractTokens(`${p.title} ${p.desc || ""}`).filter(t => t.length >= 3).forEach(tok => {
+                    score += (kwWeights[tok] || 0) * 3;
+                });
+                score += Math.random() * 8;
+                return { product: p, score };
+            });
+
+            candidates.sort((a, b) => b.score - a.score);
+            return candidates.slice(0, limit).map(item => item.product);
+        }
+
+        function renderMerchantAfterRecommendations() {
+            const container = document.getElementById("merchantAfterRecommendations");
+            if (!container) return;
+
+            if (!currentMerchant) {
+                container.innerHTML = "";
+                return;
+            }
+
+            const related = getMerchantRelatedRecommendations(currentMerchant, 6);
+            if (!related.length) {
+                container.innerHTML = "";
+                return;
+            }
+
+            container.innerHTML = `
+                <section class="merchant-after-section">
+                    <div class="merchant-after-header">
+                        <h3>بعد منتجات ${escapeHtmlAttr(currentMerchant)}.. ترشيحات من نفس اهتماماتها</h3>
+                        <span class="smart-tag">مقترحات مشابهة</span>
+                    </div>
+                    <div class="merchant-after-grid">
+                        ${related.map(p => buildProductCardHTML(p, false, "mrel")).join("")}
+                    </div>
+                </section>
+            `;
+        }
+
         function filterByMerchant(merchantName, shouldScroll = true) {
             if (!merchantName) return;
             currentMerchant = merchantName;
@@ -3013,7 +3125,7 @@
             const base = getFilteredProducts(category, rawQuery);
             if (base.length === 0) return [];
 
-            const orderedBase = (category === "perfume" || currentMerchant) ? [...base] : shuffleArray(base);
+            const orderedBase = shuffleArray(base);
             const items = orderedBase.map(product => ({ type: "product", product, tag: "p0" }));
             if (!currentMerchant) {
                 items.splice(Math.min(7, items.length), 0, { type: "special", id: "special-0" });
@@ -3028,7 +3140,7 @@
             if (sourcePool.length === 0) return;
 
             feedCycle += 1;
-            const waveSorted = category === "perfume" ? [...sourcePool] : shuffleArray(sourcePool);
+            const waveSorted = shuffleArray(sourcePool);
             const waveItems = waveSorted.map(product => ({
                 type: "product",
                 product,
@@ -3049,6 +3161,7 @@
 
             if (renderedCount >= currentFeedItems.length) {
                 if (currentMerchant) {
+                    renderMerchantAfterRecommendations();
                     if (sentinel) sentinel.textContent = "";
                     return;
                 }
@@ -3066,10 +3179,11 @@
             grid.insertAdjacentHTML("beforeend", htmlChunk);
             renderedCount += nextSlice.length;
 
-            if (sentinel) {
-                sentinel.textContent = currentMerchant
-                    ? `جميع منتجات ${currentMerchant} معروضة`
-                    : "اكتشف المزيد بالأسفل أو اطلب أي منتج خاص";
+            if (currentMerchant) {
+                renderMerchantAfterRecommendations();
+                if (sentinel) sentinel.textContent = "";
+            } else if (sentinel) {
+                sentinel.textContent = "اكتشف المزيد بالأسفل أو اطلب أي منتج خاص";
             }
         }
 
@@ -3095,6 +3209,8 @@
             currentFeedItems = buildFeedPool(category, rawQuery);
 
             if (currentFeedItems.length === 0) {
+                const afterEl = document.getElementById("merchantAfterRecommendations");
+                if (afterEl) afterEl.innerHTML = "";
                 if (sentinel) sentinel.textContent = "";
                 grid.innerHTML = `
                     <div style="grid-column: 1 / -1; background: #fff; padding: 26px; border-radius: 18px; text-align: center; border: 1px solid var(--border-gold);">
@@ -3109,6 +3225,8 @@
             }
 
             grid.innerHTML = "";
+            const afterEl = document.getElementById("merchantAfterRecommendations");
+            if (afterEl) afterEl.innerHTML = "";
             renderMoreFeedItems();
         }
 
