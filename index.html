@@ -2585,7 +2585,8 @@
         const UMM_AMMAR_PRODUCT_IDS = new Set([
             "tafse-6", "tafse-7", "tafse-8", "tafse-9", "tafse-10", "tafse-11", "tafse-12",
             "tafse-13", "tafse-14", "tafse-15", "tafse-16", "tafse-17", "tafse-18", "tafse-19",
-            "tafse-20", "tafse-21", "tafse-22"
+            "tafse-20", "tafse-21", "tafse-22",
+            "om-ammar-1", "om-ammar-2", "om-ammar-3"
         ]);
 
         function inferMerchantForProduct(product, fallbackMerchant = "") {
@@ -2710,6 +2711,9 @@
             { id: "tafse-20", title: "مراية هاند ميد حسب الطلب (أسماء وورد)", desc: "تنفيذ خاص حسب الطلب بتصميم أسماء وورد لهدية شخصية مميزة.", price: 500, category: "tafse", categories: ["tafse", "gifts"], img: "Tafse/compressed_1795180558100.webp" },
             { id: "tafse-21", title: "مراية هاند ميد حسب الطلب (ذهبي وفراشات)", desc: "تصميم يدوي حسب الطلب بلمسات ذهبية وفراشات لديكور أنيق ولافت.", price: 500, category: "tafse", categories: ["tafse", "gifts", "home"], img: "Tafse/compressed_1795180558884.webp" },
             { id: "tafse-22", title: "مراية هاند ميد حسب الطلب (قلوب وصور)", desc: "قطعة هاند ميد مخصصة حسب الطلب بقلوب وصور لتخليد الذكريات.", price: 500, category: "tafse", categories: ["tafse", "gifts"], img: "Tafse/compressed_1795180558694.webp" },
+            { id: "om-ammar-1", title: "شنطة خرز كريستال وأسود هاند ميد", desc: "شنطة هاند ميد أنيقة من الخرز اللامع بتفاصيل متقنة ولمسة فخامة تناسب السهرات والمناسبات والخروجات المميزة.", price: 350, category: "tafse", categories: ["tafse", "women", "gifts"], img: "Htm/IMG-20261120-WA0044.jpg" },
+            { id: "om-ammar-2", title: "شنطة لولي أبيض هاند ميد", desc: "تصميم يدوي راقٍ من اللولي الأبيض بلمعة جذابة وتفاصيل دقيقة تضيف حضورًا ناعمًا وفخمًا لإطلالتك.", price: 350, category: "tafse", categories: ["tafse", "women", "gifts"], img: "Htm/IMG-20261120-WA0028.jpg" },
+            { id: "om-ammar-3", title: "شنطة لولي أبيض بسلسلة ذهبية", desc: "قطعة هاند ميد مميزة تجمع بين نعومة اللولي الأبيض وفخامة السلسلة الذهبية لتمنحك إطلالة متكاملة في كل مناسبة.", price: 350, category: "tafse", categories: ["tafse", "women", "gifts"], img: "Htm/IMG-20261120-WA0008.jpg" },
             { id: "wmn-1", title: "أندر نسائي مشجر دباغ / كاندي", desc: "خامة ناعمة ومريحة بتصميم مشجر أنيق للاستخدام اليومي.", price: 65, category: "women", img: "Clswmn/compressed_1795114616012.webp" },
             { id: "wmn-2", title: "بدي دباغ ألوان", desc: "بدي دباغ بألوان متنوعة متاحة، مريح وعملي للاستخدام اليومي.", price: 130, category: "women", img: "Clswmn/compressed_1795214411055.webp" },
             { id: "wmn-3", title: "بدي عجينة سلسله تريكو", desc: "خامة تريكو عجينة ناعمة ومريحة، فري سايز يلبس لحد 85 ك.", price: 230, category: "women", img: "Clswmn/compressed_1795214411279.webp" },
@@ -4130,164 +4134,126 @@
             }
         });
 
-        window.addEventListener("storage", e => {
-            if (!e.key || e.key === CART_STORAGE_KEY) {
-                cart = loadCartFromStorage();
-                updateCartUI();
-            }
-        });
-
         const sentinelEl = document.getElementById("feedSentinel");
         if (sentinelEl && "IntersectionObserver" in window) {
             const observer = new IntersectionObserver(entries => {
                 if (entries.some(entry => entry.isIntersecting)) renderMoreFeedItems();
-            }, { rootMargin: "320px" });
+            }, { rootMargin: "420px 0px" });
             observer.observe(sentinelEl);
         }
 
+        window.addEventListener("scroll", () => {
+            if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 620)) renderMoreFeedItems();
+        }, { passive: true });
+
+        (function initOneSignalNotifications() {
+            const ONESIGNAL_APP_ID = "d39b1684-55d7-4f88-be7e-a29f2d8011fb";
+            const PUSH_STATE_STORAGE_KEY = "caramel_push_subscribed_v1";
+            const pushBtn = document.getElementById("caramelPushBtn");
+            const pushBtnText = document.getElementById("caramelPushBtnText");
+            const pushIcon = document.getElementById("caramelPushIcon");
+            let hideCircleTimer = null;
+
+            window.OneSignalDeferred = window.OneSignalDeferred || [];
+
+            function setBellIcon() {
+                if (pushIcon) {
+                    pushIcon.innerHTML = `<svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg>`;
+                }
+            }
+
+            function setCheckIcon() {
+                if (pushIcon) {
+                    pushIcon.innerHTML = `<svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg>`;
+                }
+            }
+
+            function showPill(text) {
+                if (!pushBtn) return;
+                clearTimeout(hideCircleTimer);
+                pushBtn.classList.remove("circle-check-only", "hiding-smooth");
+                setBellIcon();
+                if (pushBtnText && text) pushBtnText.textContent = text;
+                pushBtn.classList.add("visible");
+            }
+
+            function hidePillCompletely() {
+                if (!pushBtn) return;
+                clearTimeout(hideCircleTimer);
+                pushBtn.classList.remove("visible", "circle-check-only", "hiding-smooth");
+            }
+
+            function turnIntoSmallCheckAndFadeOut() {
+                if (!pushBtn) return;
+                clearTimeout(hideCircleTimer);
+                setCheckIcon();
+                pushBtn.classList.add("visible", "circle-check-only");
+                pushBtn.classList.remove("hiding-smooth");
+                hideCircleTimer = setTimeout(() => {
+                    pushBtn.classList.add("hiding-smooth");
+                    setTimeout(() => { hidePillCompletely(); }, 350);
+                }, 2600);
+            }
+
+            function markSubscribedLocally() {
+                try { localStorage.setItem(PUSH_STATE_STORAGE_KEY, "1"); } catch (e) {}
+            }
+
+            function isAlreadySubscribedLocally() {
+                try { return localStorage.getItem(PUSH_STATE_STORAGE_KEY) === "1"; } catch (e) { return false; }
+            }
+
+            async function syncSubscriptionStatus(os) {
+                try {
+                    if (isAlreadySubscribedLocally()) { hidePillCompletely(); return; }
+                    const optedIn = Boolean(os?.User?.PushSubscription?.optedIn);
+                    const token = os?.User?.PushSubscription?.token;
+                    if (optedIn && token) { markSubscribedLocally(); hidePillCompletely(); }
+                    else showPill("فعّل إشعارات العروض");
+                } catch (e) { showPill("فعّل إشعارات العروض"); }
+            }
+
+            window.enableCaramelPush = async function() {
+                showPill("جاري التفعيل...");
+                window.OneSignalDeferred.push(async function(OneSignal) {
+                    try {
+                        await OneSignal.Notifications.requestPermission();
+                        if (OneSignal.User?.PushSubscription?.optIn) await OneSignal.User.PushSubscription.optIn();
+                        setTimeout(async () => {
+                            const optedIn = Boolean(OneSignal?.User?.PushSubscription?.optedIn);
+                            if (optedIn || Notification.permission === "granted") {
+                                markSubscribedLocally();
+                                turnIntoSmallCheckAndFadeOut();
+                                showCaramelToast("تم تفعيل إشعارات عروض متجر كارامل بنجاح!");
+                            } else {
+                                showPill("فعّل إشعارات العروض");
+                            }
+                        }, 600);
+                    } catch (err) { showPill("فعّل إشعارات العروض"); }
+                });
+            };
+
+            if (isAlreadySubscribedLocally()) { hidePillCompletely(); return; }
+            showPill("فعّل إشعارات العروض");
+
+            window.OneSignalDeferred.push(async function(OneSignal) {
+                try {
+                    await OneSignal.init({ appId: ONESIGNAL_APP_ID, allowLocalhostAsSecureOrigin: true });
+                    await syncSubscriptionStatus(OneSignal);
+                    OneSignal.User?.PushSubscription?.addEventListener?.("change", event => {
+                        const current = event?.current || event;
+                        if (current?.optedIn) { markSubscribedLocally(); turnIntoSmallCheckAndFadeOut(); }
+                    });
+                } catch (e) { showPill("فعّل إشعارات العروض"); }
+            });
+        })();
+
+        updateSearchCancelButton();
         renderSpotlightBoxes();
         renderProducts("all");
+        renderSideCategoriesList();
         updateCartUI();
-        updateSearchCancelButton();
         loadMerchantProductsFromJson();
-    </script>
-
-    <!-- OneSignal Web Push v16 - Caramel Store -->
-    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-    <script>
-        window.OneSignalDeferred = window.OneSignalDeferred || [];
-
-        const CARAMEL_PUSH_HIDDEN_KEY = "caramel_push_pill_hidden_v1";
-        let caramelOneSignalReady = false;
-        let caramelPushAutoHideTimer = null;
-
-        function isCaramelPushPillHidden() {
-            try { return localStorage.getItem(CARAMEL_PUSH_HIDDEN_KEY) === "1"; } catch (e) { return false; }
-        }
-
-        function markCaramelPushPillHidden() {
-            try { localStorage.setItem(CARAMEL_PUSH_HIDDEN_KEY, "1"); } catch (e) {}
-        }
-
-        function setCaramelPushPillUI(state, customText = "") {
-            const btn = document.getElementById("caramelPushBtn");
-            const textEl = document.getElementById("caramelPushBtnText");
-            const iconEl = document.getElementById("caramelPushIcon");
-            if (!btn || !textEl || !iconEl) return;
-
-            if (isCaramelPushPillHidden()) {
-                btn.classList.remove("visible");
-                return;
-            }
-
-            btn.classList.add("visible");
-            btn.classList.remove("circle-check-only", "hiding-smooth");
-
-            if (state === "subscribed") {
-                btn.classList.add("circle-check-only");
-                iconEl.innerHTML = `<svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg>`;
-                textEl.textContent = customText || "مفعّل";
-                clearTimeout(caramelPushAutoHideTimer);
-                caramelPushAutoHideTimer = setTimeout(() => {
-                    btn.classList.add("hiding-smooth");
-                    setTimeout(() => {
-                        markCaramelPushPillHidden();
-                        btn.classList.remove("visible", "hiding-smooth", "circle-check-only");
-                    }, 350);
-                }, 4000);
-            } else if (state === "loading") {
-                iconEl.innerHTML = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-dasharray="42" stroke-dashoffset="12"></circle></svg>`;
-                textEl.textContent = customText || "جاري التفعيل...";
-            } else {
-                iconEl.innerHTML = `<svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg>`;
-                textEl.textContent = customText || "فعّل إشعارات العروض";
-            }
-        }
-
-        function syncCaramelPushState() {
-            try {
-                if (typeof OneSignal !== "undefined" && OneSignal.User && OneSignal.User.PushSubscription) {
-                    if (OneSignal.User.PushSubscription.optedIn) {
-                        setCaramelPushPillUI("subscribed", "مفعّل");
-                        return;
-                    }
-                }
-            } catch (e) {}
-            if ("Notification" in window && Notification.permission === "granted") {
-                setCaramelPushPillUI("subscribed", "مفعّل");
-                return;
-            }
-            setCaramelPushPillUI("default", "فعّل إشعارات العروض");
-        }
-
-        OneSignalDeferred.push(async function(OneSignal) {
-            try {
-                await OneSignal.init({
-                    appId: "58893c82-22b9-40c5-8f30-a1181931b1c9",
-                    allowLocalhostAsSecureOrigin: true,
-                    notifyButton: { enable: false },
-                    promptOptions: {
-                        slidedown: {
-                            prompts: [{
-                                type: "push",
-                                autoPrompt: false,
-                                text: {
-                                    actionMessage: "فعّل إشعارات متجر كارامل عشان توصلك أحدث العروض والمنتجات الجديدة أول بأول.",
-                                    acceptButton: "تفعيل",
-                                    cancelButton: "لاحقًا"
-                                }
-                            }]
-                        }
-                    }
-                });
-
-                caramelOneSignalReady = true;
-                syncCaramelPushState();
-
-                if (OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.addEventListener) {
-                    OneSignal.User.PushSubscription.addEventListener("change", () => syncCaramelPushState());
-                }
-            } catch (err) {
-                setCaramelPushPillUI("default", "فعّل إشعارات العروض");
-            }
-        });
-
-        async function enableCaramelPush() {
-            if (!("Notification" in window)) {
-                showCaramelToast("متصفحك الحالي لا يدعم إشعارات الويب المباشرة.");
-                return;
-            }
-            if (Notification.permission === "denied") {
-                showCaramelToast("الإشعارات محظورة من إعدادات المتصفح؛ فعّلها من رمز القفل أعلى الصفحة.");
-                return;
-            }
-            setCaramelPushPillUI("loading", "جاري التفعيل...");
-            try {
-                if (caramelOneSignalReady && typeof OneSignal !== "undefined" && OneSignal.Notifications && typeof OneSignal.Notifications.requestPermission === "function") {
-                    await OneSignal.Notifications.requestPermission();
-                } else {
-                    const perm = await Notification.requestPermission();
-                    if (perm === "granted") {
-                        setCaramelPushPillUI("subscribed", "مفعّل");
-                        showCaramelToast("تم تفعيل إشعارات متجر كارامل بنجاح!");
-                        return;
-                    }
-                }
-                syncCaramelPushState();
-                if (Notification.permission === "granted") {
-                    showCaramelToast("تم تفعيل إشعارات متجر كارامل بنجاح!");
-                } else {
-                    showCaramelToast("لم يتم تفعيل الإشعارات بعد.");
-                }
-            } catch (e) {
-                syncCaramelPushState();
-                showCaramelToast("تعذر تفعيل الإشعارات الآن، حاول مرة أخرى.");
-            }
-        }
-
-        window.addEventListener("load", () => {
-            setTimeout(() => { syncCaramelPushState(); }, 700);
-        });
     </script>
 </body>
 </html>
