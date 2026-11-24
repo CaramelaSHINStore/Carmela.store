@@ -105,8 +105,13 @@
             100% { opacity: 1; transform: translateY(0) scale(1); }
         }
 
+        @keyframes slidePhotoFade {
+            0% { opacity: 0.45; transform: scale(1.03); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
         .top-app-bar {
-            background: rgba(18, 16, 14, 0.94);
+            background: rgba(18, 16, 14, 0.95);
             backdrop-filter: blur(20px) saturate(150%);
             -webkit-backdrop-filter: blur(20px) saturate(150%);
             padding: 10px 14px 12px;
@@ -120,20 +125,29 @@
             box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
         }
 
+        /* 3-column grid so CARAMEL + slogan sits cleanly centered in the middle, and Share sits at the top */
         .top-brand-row {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-left-slot {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 10px;
+            justify-content: flex-start;
+            gap: 6px;
         }
 
         .logo-pill {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 9px;
-            padding: 4px 12px 4px 8px;
+            padding: 5px 15px 5px 11px;
             border-radius: 999px;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(36, 30, 26, 0.92));
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(36, 30, 26, 0.94));
             border: 1.5px solid var(--accent);
             animation: logoPulse 3s infinite ease-in-out;
             cursor: pointer;
@@ -143,18 +157,43 @@
         .logo-pill:hover { transform: scale(1.02); }
 
         .header-brand-img {
-            width: 31px;
-            height: 31px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             object-fit: cover;
             border: 1.5px solid var(--accent-soft);
+            flex-shrink: 0;
         }
 
-        .logo-text-group { display: flex; flex-direction: column; align-items: flex-start; }
-        .logo { font-size: 1rem; font-weight: 900; color: #ffffff; letter-spacing: 1.5px; line-height: 1.05; }
-        .logo-sub { font-size: 0.56rem; font-weight: 700; color: var(--accent-soft); letter-spacing: 0.8px; }
+        .logo-text-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
 
-        .header-actions { display: inline-flex; align-items: center; gap: 7px; flex-shrink: 0; }
+        .logo {
+            font-size: 1.04rem;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: 2px;
+            line-height: 1.1;
+        }
+
+        .logo-sub {
+            font-size: 0.58rem;
+            font-weight: 700;
+            color: var(--accent-soft);
+            letter-spacing: 0.4px;
+            line-height: 1.2;
+        }
+
+        .header-actions {
+            display: inline-flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 7px;
+        }
 
         .install-app-btn {
             display: none;
@@ -162,9 +201,9 @@
             gap: 5px;
             background: linear-gradient(135deg, var(--accent-soft), var(--accent));
             color: var(--espresso);
-            padding: 6px 11px;
+            padding: 6px 10px;
             border-radius: 999px;
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             font-weight: 900;
             white-space: nowrap;
         }
@@ -304,31 +343,79 @@
             flex: 1;
         }
 
+        /* Modern Description Strip with crisp icons */
         .caramel-promo-strip {
-            background: linear-gradient(90deg, var(--accent-tint), rgba(255, 255, 255, 0.94), var(--accent-tint));
+            background: linear-gradient(120deg, #ffffff 0%, var(--accent-tint) 55%, #ffffff 100%);
             border: 1px solid var(--accent-glow);
-            border-radius: 14px;
-            padding: 8px 14px;
-            margin-bottom: 12px;
+            border-radius: 18px;
+            padding: 10px 14px;
+            margin-bottom: 14px;
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
-            gap: 8px;
-            font-size: 0.78rem;
+            gap: 10px;
+            box-shadow: 0 8px 20px -14px rgba(18, 16, 14, 0.22);
+        }
+
+        .promo-features-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px 14px;
+        }
+
+        .promo-feature-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.77rem;
             font-weight: 800;
             color: var(--espresso-soft);
         }
 
-        .promo-badge-tag {
+        .promo-icon-box {
+            width: 24px;
+            height: 24px;
+            border-radius: 8px;
             background: var(--espresso);
             color: var(--accent-soft);
-            padding: 2px 9px;
-            border-radius: 999px;
-            font-size: 0.7rem;
-            font-weight: 900;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
         }
 
+        .promo-icon-box svg {
+            width: 13px;
+            height: 13px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2.2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .promo-special-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--espresso);
+            color: var(--accent-soft);
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 0.74rem;
+            font-weight: 900;
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+
+        .promo-special-link:hover {
+            transform: translateY(-1px);
+            background: var(--accent-deep);
+            color: #ffffff;
+        }
+
+        /* Rotating Photo Spotlight Cards for Trends & Special Deals */
         .dual-spotlight-row {
             display: grid;
             grid-template-columns: 1fr;
@@ -346,16 +433,19 @@
         .spotlight-box {
             background: #ffffff;
             border: 1px solid rgba(24, 20, 18, 0.08);
-            border-radius: 20px;
-            padding: 12px;
+            border-radius: 22px;
+            padding: 13px;
             box-shadow: var(--shadow-main);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
         .spotlight-box-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 10px;
+            gap: 8px;
         }
 
         .spotlight-box-title {
@@ -364,7 +454,15 @@
             color: var(--espresso);
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 7px;
+        }
+
+        .spotlight-title-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-deep);
+            display: inline-block;
         }
 
         .spotlight-box-sub {
@@ -372,89 +470,122 @@
             font-weight: 800;
             color: var(--accent-deep);
             background: var(--accent-tint);
-            padding: 2px 9px;
+            padding: 2px 10px;
             border-radius: 999px;
         }
 
-        .spotlight-two-cards {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .mini-spot-card {
-            background: var(--page-mood-bg);
-            border: 1px solid rgba(24, 20, 18, 0.06);
-            border-radius: 15px;
+        .rotating-showcase-card {
+            position: relative;
+            border-radius: 18px;
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.2s ease, border-color 0.2s ease;
+            background: var(--page-mood-bg);
+            border: 1px solid rgba(24, 20, 18, 0.07);
+            display: grid;
+            grid-template-columns: 132px 1fr;
+            min-height: 136px;
+            transition: border-color 0.25s ease, transform 0.25s ease;
         }
 
-        .mini-spot-card:hover {
-            transform: translateY(-2px);
+        @media (min-width: 480px) {
+            .rotating-showcase-card {
+                grid-template-columns: 152px 1fr;
+                min-height: 146px;
+            }
+        }
+
+        .rotating-showcase-card:hover {
             border-color: var(--accent);
+            transform: translateY(-2px);
         }
 
-        .mini-spot-img {
+        .showcase-photo-wrap {
+            position: relative;
             width: 100%;
-            height: 118px;
-            background: #efe8df;
+            height: 100%;
+            min-height: 136px;
+            background: #ece4da;
             cursor: zoom-in;
             overflow: hidden;
         }
 
-        .mini-spot-img img {
+        .showcase-photo-wrap img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
+            animation: slidePhotoFade 0.45s ease;
         }
 
-        .mini-spot-body {
-            padding: 8px;
+        .showcase-info-panel {
+            padding: 10px 12px;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            justify-content: space-between;
+            gap: 6px;
             cursor: pointer;
         }
 
-        .mini-spot-title {
-            font-size: 0.74rem;
+        .showcase-cat-pill {
+            font-size: 0.66rem;
             font-weight: 800;
-            color: var(--text-main);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            color: var(--accent-deep);
+            background: #ffffff;
+            border: 1px solid var(--accent-glow);
+            border-radius: 999px;
+            padding: 1px 8px;
+            width: fit-content;
         }
 
-        .mini-spot-price {
-            font-size: 0.88rem;
+        .showcase-prod-title {
+            font-size: 0.86rem;
+            font-weight: 900;
+            color: var(--espresso);
+            line-height: 1.35;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .showcase-bottom-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-top: 2px;
+        }
+
+        .showcase-prod-price {
+            font-size: 1rem;
             font-weight: 900;
             color: var(--accent-deep);
         }
 
-        .mini-spot-price span {
-            font-size: 0.66rem;
+        .showcase-prod-price span {
+            font-size: 0.68rem;
             font-weight: 700;
             color: var(--text-muted);
             margin-right: 2px;
         }
 
-        .mini-spot-tag {
-            font-size: 0.66rem;
-            font-weight: 800;
-            color: var(--text-muted);
-            background: #ffffff;
-            border: 1px solid rgba(24, 20, 18, 0.07);
-            border-radius: 8px;
-            padding: 2px 6px;
-            width: fit-content;
-            max-width: 100%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        .showcase-dots-row {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .showcase-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: rgba(24, 20, 18, 0.18);
+            transition: all 0.25s ease;
+            padding: 0;
+        }
+
+        .showcase-dot.active {
+            width: 18px;
+            background: var(--accent-deep);
         }
 
         .feed-filter-pills {
@@ -642,7 +773,6 @@
         @media (min-width: 768px) { .products-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
         @media (min-width: 1024px) { .products-grid { grid-template-columns: repeat(4, 1fr); } }
 
-        /* Clean, spacious, modern product card */
         .product-card {
             background: var(--bg-card);
             border-radius: 20px;
@@ -735,7 +865,6 @@
         .product-price span { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); margin-right: 2px; }
         .product-sub { font-size: 0.68rem; font-weight: 700; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* Single-line brief summary under card; full story appears inside image preview modal */
         .product-desc {
             font-size: 0.71rem;
             font-weight: 700;
@@ -766,7 +895,6 @@
         .merchant-tag-name { color: var(--accent-deep); font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .merchant-tag-btn:hover .merchant-tag-name { color: var(--accent-soft); }
 
-        /* Modern, simple, eye-friendly action buttons */
         .card-btns {
             display: grid;
             grid-template-columns: 1.35fr 0.85fr;
@@ -997,7 +1125,6 @@
 
         .caramel-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-        /* Side Categories Drawer (like the cart drawer) */
         .cats-backdrop {
             display: none;
             position: fixed;
@@ -1039,12 +1166,12 @@
 
         .side-cat-item {
             width: 100%;
-            padding: 11px 14px;
+            padding: 12px 15px;
             border-radius: 14px;
             background: #ffffff;
             border: 1px solid rgba(24, 20, 18, 0.08);
             color: var(--text-main);
-            font-size: 0.88rem;
+            font-size: 0.9rem;
             font-weight: 800;
             display: flex;
             align-items: center;
@@ -1058,20 +1185,6 @@
             background: var(--espresso);
             color: var(--accent-soft);
             border-color: var(--accent);
-        }
-
-        .side-cat-count {
-            font-size: 0.72rem;
-            font-weight: 800;
-            padding: 2px 8px;
-            border-radius: 999px;
-            background: var(--accent-tint);
-            color: var(--accent-deep);
-        }
-
-        .side-cat-item.active .side-cat-count {
-            background: rgba(255, 255, 255, 0.14);
-            color: var(--accent-soft);
         }
 
         .option-modal-backdrop {
@@ -1401,7 +1514,6 @@
             font-weight: 800;
         }
 
-        /* Enhanced Image + Full Story Details Modal */
         .image-modal {
             display: none;
             position: fixed;
@@ -1601,6 +1713,10 @@
 
     <header class="top-app-bar">
         <div class="top-brand-row">
+            <div class="header-left-slot">
+                <button type="button" class="install-app-btn" id="headerInstallBtn" onclick="triggerInstallApp()">تثبيت</button>
+            </div>
+
             <button type="button" class="logo-pill" onclick="resetHomeFresh()" aria-label="العودة للصفحة الرئيسية">
                 <img src="https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg" alt="لوجو متجر كارامل" class="header-brand-img">
                 <div class="logo-text-group">
@@ -1610,7 +1726,6 @@
             </button>
 
             <div class="header-actions">
-                <button type="button" class="install-app-btn" id="headerInstallBtn" onclick="triggerInstallApp()">تثبيت</button>
                 <button type="button" class="icon-circle-btn" onclick="shareStoreApp()" aria-label="مشاركة المتجر" title="مشاركة المتجر">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <circle cx="18" cy="5" r="2.7"></circle>
@@ -1619,13 +1734,6 @@
                         <path d="M8.5 13.4l6.9 4.2M15.4 6.4l-6.9 4.2"></path>
                     </svg>
                 </button>
-                <a href="https://wa.me/201112348224?text=%D8%AA%D9%88%D8%A7%D8%B5%D9%84%20%D8%A8%D8%AE%D8%B5%D9%88%D8%B5%20%D8%B4%D9%83%D9%88%D9%89%20%D9%81%D9%8A%20%D9%85%D8%AA%D8%AC%D8%B1%20%D9%83%D8%A7%D8%B1%D8%A7%D9%85%D9%84" class="icon-circle-btn" target="_blank" rel="noopener noreferrer" aria-label="الشكاوى والاقتراحات" title="الشكاوى والاقتراحات">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9l-4 3v-3H6a2 2 0 0 1-2-2V6z"></path>
-                        <path d="M12 7.5v4.5"></path>
-                        <circle cx="12" cy="15" r="0.9" fill="currentColor" stroke="none"></circle>
-                    </svg>
-                </a>
             </div>
         </div>
 
@@ -1655,25 +1763,53 @@
 
     <main class="container">
         <div class="caramel-promo-strip">
-            <span><span class="promo-badge-tag">كارامل السويس</span> الدفع عند الاستلام • استرجاع خلال أسبوع لو المنتج غير التفاصيل</span>
-            <a href="https://wa.me/201055436305?text=%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%AA%D9%88%D8%A7%D8%B5%D9%84%20%D9%84%D9%84%D8%B7%D9%84%D8%A8%D8%A7%D8%AA%20%D8%A7%D9%84%D8%AE%D8%A7%D8%B5%D8%A9%20%28%D9%85%D9%86%D8%AA%D8%AC%20%D8%BA%D9%8A%D8%B1%20%D9%85%D9%88%D8%AC%D9%88%D8%AF%29" target="_blank" rel="noopener noreferrer" style="color: var(--accent-deep); text-decoration: underline;">مش لاقي منتج؟ نجيبهولك</a>
+            <div class="promo-features-group">
+                <span class="promo-feature-chip">
+                    <span class="promo-icon-box" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg>
+                    </span>
+                    <span>الدفع عند الاستلام</span>
+                </span>
+                <span class="promo-feature-chip">
+                    <span class="promo-icon-box" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+                    </span>
+                    <span>استرجاع خلال أسبوع لو المنتج غير التفاصيل</span>
+                </span>
+                <span class="promo-feature-chip">
+                    <span class="promo-icon-box" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M12 2l2.2 6.8L21 11l-6.8 2.2L12 20l-2.2-6.8L3 11l6.8-2.2z"></path></svg>
+                    </span>
+                    <span>توصيل سريع وأرخص الأسعار</span>
+                </span>
+            </div>
+
+            <a href="https://wa.me/201055436305?text=%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%AA%D9%88%D8%A7%D8%B5%D9%84%20%D9%84%D9%84%D8%B7%D9%84%D8%A8%D8%A7%D8%AA%20%D8%A7%D9%84%D8%AE%D8%A7%D8%B5%D8%A9%20%28%D9%85%D9%86%D8%AA%D8%AC%20%D8%BA%D9%8A%D8%B1%20%D9%85%D9%88%D8%AC%D9%88%D8%AF%29" target="_blank" rel="noopener noreferrer" class="promo-special-link">
+                <span>مش لاقي منتج؟ نجيبهولك</span>
+            </a>
         </div>
 
-        <section class="dual-spotlight-row" aria-label="ترندات وعروض كارامل الذكية">
+        <section class="dual-spotlight-row" aria-label="ترندات وأسعار مميزة متغيرة">
             <div class="spotlight-box">
                 <div class="spotlight-box-header">
-                    <span class="spotlight-box-title">ترندات كارامل</span>
-                    <span class="spotlight-box-sub" id="trendsAiBadge">ذكي حسب ذوقك</span>
+                    <span class="spotlight-box-title">
+                        <span class="spotlight-title-dot"></span>
+                        <span>ترندات كارامل</span>
+                    </span>
+                    <span class="spotlight-box-sub" id="trendsAiBadge">متجدد حسب ذوقك</span>
                 </div>
-                <div class="spotlight-two-cards" id="trendsSpotlightGrid"></div>
+                <div id="trendsSpotlightGrid"></div>
             </div>
 
             <div class="spotlight-box">
                 <div class="spotlight-box-header">
-                    <span class="spotlight-box-title">أسعار مميزة</span>
+                    <span class="spotlight-box-title">
+                        <span class="spotlight-title-dot"></span>
+                        <span>أسعار مميزة</span>
+                    </span>
                     <span class="spotlight-box-sub" id="dealsAiBadge">مختارة لك</span>
                 </div>
-                <div class="spotlight-two-cards" id="dealsSpotlightGrid"></div>
+                <div id="dealsSpotlightGrid"></div>
             </div>
         </section>
 
@@ -1743,15 +1879,15 @@
             <span>المشتريات</span>
         </button>
 
-        <a href="https://wa.me/201055436305?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D9%85%D8%AA%D8%AC%D8%B1%20%D9%83%D8%A7%D8%B1%D8%A7%D9%85%D9%84" target="_blank" rel="noopener noreferrer" class="bottom-nav-btn">
-            <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-            <span>تواصل</span>
+        <a href="https://wa.me/201112348224?text=%D8%AA%D9%88%D8%A7%D8%B5%D9%84%20%D8%A8%D8%AE%D8%B5%D9%88%D8%B5%20%D8%B4%D9%83%D9%88%D9%89%20%D9%81%D9%8A%20%D9%85%D8%AA%D8%AC%D8%B1%20%D9%83%D8%A7%D8%B1%D8%A7%D9%85%D9%84" target="_blank" rel="noopener noreferrer" class="bottom-nav-btn">
+            <svg viewBox="0 0 24 24"><path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9l-4 3v-3H6a2 2 0 0 1-2-2V6z"></path><path d="M12 7.5v4.5"></path><circle cx="12" cy="15" r="0.9" fill="currentColor" stroke="none"></circle></svg>
+            <span>الشكاوى</span>
         </a>
     </nav>
 
     <div class="caramel-toast" id="caramelToast" role="status" aria-live="polite"></div>
 
-    <!-- Side Drawer for Categories -->
+    <!-- Side Drawer for Categories (without counts) -->
     <div class="cats-backdrop" id="catsBackdrop" onclick="closeCategoriesDrawer()"></div>
     <aside class="cats-drawer" id="catsDrawer" aria-label="قائمة الأقسام">
         <div class="cart-header">
@@ -1830,7 +1966,6 @@
         </div>
     </aside>
 
-    <!-- Modal: Image on Top + Full Engaging Product Details Below -->
     <div class="image-modal" id="imageModal" onclick="closeImageModal()">
         <div class="preview-detail-sheet" onclick="event.stopPropagation()">
             <div class="preview-top-media">
@@ -1911,6 +2046,11 @@
             currentPrice: 0,
             qty: 1
         };
+
+        let trendSlideList = [];
+        let dealSlideList = [];
+        let trendSlideIdx = 0;
+        let dealSlideIdx = 0;
 
         function escapeHtmlAttr(str) {
             return String(str || "")
@@ -2141,7 +2281,6 @@
             return "شيرين غريب";
         }
 
-        /* Ordered so the newest additions appear toward the end of the array (newest-to-oldest when reversed) */
         const PRODUCTS = [
             { id: "hm-1", title: "جوانتي سيليكون حراري للمطبخ", desc: "امسك الصواني السخنة بثبات وأمان تام من أول لمسة بدون قلق من الحرارة.", price: 155, category: "home", img: "Kit/compressed_1795117656213.jpg" },
             { id: "hm-2", title: "شماعة لوكس 3×1", desc: "ضاعف مساحة دولابك في ثوانٍ ورتّب أكثر من قطعة فوق بعض بأناقة.", price: 40, category: "home", img: "Kit/compressed_1794957387150.webp" },
@@ -2485,7 +2624,6 @@
                 catScore = Math.max(catScore, (interestData.categories[c] || 0) * 12);
             });
 
-            // Also boost category if user has items in cart from that category
             const inCartCat = cart.some(ci => {
                 const match = PRODUCTS.find(p => p.id === ci.id);
                 return match && cats.includes(match.category);
@@ -2524,12 +2662,46 @@
             return "قطعة عملية ومفيدة تسهل يومك وتضيف لمسة مرتبة — اطلبها دلوقتي والدفع عند الاستلام.";
         }
 
-        /* Dynamic AI-like Trends & Special Deals tailored to user taste */
-        function renderSpotlightBoxes() {
-            const trendsGrid = document.getElementById("trendsSpotlightGrid");
-            const dealsGrid = document.getElementById("dealsSpotlightGrid");
-            if (!trendsGrid || !dealsGrid || !PRODUCTS.length) return;
+        /* Build rotating slide lists and paint the active slide for Trends & Special Deals */
+        function paintSpotlightSlide(kind) {
+            const list = kind === "trends" ? trendSlideList : dealSlideList;
+            const containerId = kind === "trends" ? "trendsSpotlightGrid" : "dealsSpotlightGrid";
+            const container = document.getElementById(containerId);
+            if (!container || !list.length) return;
 
+            const idx = (kind === "trends" ? trendSlideIdx : dealSlideIdx) % list.length;
+            const p = list[idx];
+            const displayPrice = p.priceLabel || p.price;
+
+            const dotsHTML = list.map((_, i) =>
+                `<button type="button" class="showcase-dot ${i === idx ? "active" : ""}" onclick="event.stopPropagation(); jumpSpotlightSlide('${kind}', ${i})" aria-label="صورة ${i + 1}"></button>`
+            ).join("");
+
+            container.innerHTML = `
+                <div class="rotating-showcase-card">
+                    <div class="showcase-photo-wrap" onclick="openImageModal('${p.img}', '${p.id}')">
+                        <img src="${p.img}" alt="${escapeHtmlAttr(p.title)}" onerror="removeProductById('${p.id}')">
+                    </div>
+                    <div class="showcase-info-panel" onclick="openImageModal('${p.img}', '${p.id}')">
+                        <span class="showcase-cat-pill">${escapeHtmlAttr(CATEGORY_NAMES[p.category] || "متجر كارامل")}</span>
+                        <div class="showcase-prod-title">${escapeHtmlAttr(p.title)}</div>
+                        <div class="showcase-bottom-row">
+                            <div class="showcase-prod-price">${displayPrice}<span>جنيه</span></div>
+                            <div class="showcase-dots-row" onclick="event.stopPropagation()">${dotsHTML}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function jumpSpotlightSlide(kind, idx) {
+            if (kind === "trends") trendSlideIdx = idx;
+            else dealSlideIdx = idx;
+            paintSpotlightSlide(kind);
+        }
+
+        function renderSpotlightBoxes() {
+            if (!PRODUCTS.length) return;
             const hasTaste = Object.keys(interestData.categories).length > 0 || Object.keys(interestData.keywords).length > 0 || cart.length > 0;
 
             const trendRanked = [...PRODUCTS].sort((a, b) => {
@@ -2538,21 +2710,14 @@
                 return scoreB - scoreA;
             });
 
-            // Pick top 2 distinct items (avoiding duplicate image if possible for clean variety)
-            const trendItems = [];
+            const pickedTrends = [];
             for (const p of trendRanked) {
-                if (!trendItems.some(x => x.img === p.img)) {
-                    trendItems.push(p);
-                }
-                if (trendItems.length === 2) break;
+                if (!pickedTrends.some(x => x.img === p.img)) pickedTrends.push(p);
+                if (pickedTrends.length === 5) break;
             }
-            while (trendItems.length < 2 && trendRanked.length >= 2) {
-                const next = trendRanked.find(x => !trendItems.includes(x));
-                if (next) trendItems.push(next);
-                else break;
-            }
+            trendSlideList = pickedTrends.length ? pickedTrends : trendRanked.slice(0, 5);
+            trendSlideIdx = trendSlideIdx % Math.max(1, trendSlideList.length);
 
-            // Special deals: prioritize user's favorite categories first, then lowest prices for smart value
             const dealRanked = [...PRODUCTS]
                 .filter(p => Number(p.price) > 0)
                 .sort((a, b) => {
@@ -2565,40 +2730,35 @@
                     return totalB - totalA;
                 });
 
-            const dealItems = [];
+            const pickedDeals = [];
             for (const p of dealRanked) {
-                if (!dealItems.some(x => x.img === p.img)) {
-                    dealItems.push(p);
-                }
-                if (dealItems.length === 2) break;
+                if (!pickedDeals.some(x => x.img === p.img)) pickedDeals.push(p);
+                if (pickedDeals.length === 5) break;
             }
-            while (dealItems.length < 2 && dealRanked.length >= 2) {
-                const next = dealRanked.find(x => !dealItems.includes(x));
-                if (next) dealItems.push(next);
-                else break;
-            }
+            dealSlideList = pickedDeals.length ? pickedDeals : dealRanked.slice(0, 5);
+            dealSlideIdx = dealSlideIdx % Math.max(1, dealSlideList.length);
 
             const trendsBadge = document.getElementById("trendsAiBadge");
             const dealsBadge = document.getElementById("dealsAiBadge");
             if (trendsBadge) trendsBadge.textContent = hasTaste ? "متجدد لذوقك" : "الأكثر طلباً";
             if (dealsBadge) dealsBadge.textContent = hasTaste ? "أفضل قيمة لك" : "توفير ذكي";
 
-            const buildMiniCard = p => `
-                <div class="mini-spot-card">
-                    <div class="mini-spot-img" onclick="openImageModal('${p.img}', '${p.id}')">
-                        <img src="${p.img}" alt="${escapeHtmlAttr(p.title)}" loading="lazy" onerror="this.closest('.mini-spot-card').remove()">
-                    </div>
-                    <div class="mini-spot-body" onclick="openImageModal('${p.img}', '${p.id}')">
-                        <div class="mini-spot-title">${escapeHtmlAttr(p.title)}</div>
-                        <div class="mini-spot-price">${p.priceLabel || p.price}<span>جنيه</span></div>
-                        <div class="mini-spot-tag">${escapeHtmlAttr(CATEGORY_NAMES[p.category] || p.merchant || "كارامل")}</div>
-                    </div>
-                </div>
-            `;
-
-            trendsGrid.innerHTML = trendItems.map(buildMiniCard).join("");
-            dealsGrid.innerHTML = dealItems.map(buildMiniCard).join("");
+            paintSpotlightSlide("trends");
+            paintSpotlightSlide("deals");
         }
+
+        // Rotate spotlight photos every 3.4 seconds
+        setInterval(() => {
+            if (document.visibilityState !== "visible") return;
+            if (trendSlideList.length > 1) {
+                trendSlideIdx = (trendSlideIdx + 1) % trendSlideList.length;
+                paintSpotlightSlide("trends");
+            }
+            if (dealSlideList.length > 1) {
+                dealSlideIdx = (dealSlideIdx + 1) % dealSlideList.length;
+                paintSpotlightSlide("deals");
+            }
+        }, 3400);
 
         function setFeedMode(mode, btnEl) {
             currentFeedMode = mode || "for-you";
@@ -2613,20 +2773,16 @@
             scrollToProductsTop();
         }
 
-        /* Side Categories Drawer functions */
+        /* Side Categories Drawer without counts */
         function renderSideCategoriesList() {
             const container = document.getElementById("sideCategoriesList");
             if (!container) return;
             const keys = Object.keys(CATEGORY_NAMES);
             container.innerHTML = keys.map(catKey => {
-                const count = catKey === "all"
-                    ? PRODUCTS.length
-                    : PRODUCTS.filter(p => p.category === catKey || (Array.isArray(p.categories) && p.categories.includes(catKey))).length;
                 const isActive = !currentMerchant && currentCategory === catKey;
                 return `
                     <button type="button" class="side-cat-item ${isActive ? "active" : ""}" onclick="selectCategoryFromDrawer('${catKey}')">
                         <span>${escapeHtmlAttr(CATEGORY_NAMES[catKey])}</span>
-                        <span class="side-cat-count">${count}</span>
                     </button>
                 `;
             }).join("");
@@ -2840,7 +2996,6 @@
             grid.innerHTML = recs.map(p => buildProductCardHTML(p, true, "smart")).join("");
         }
 
-        /* Economic deals: pick cheapest items evenly across categories so every section is represented */
         function sortEconomicAcrossCategories(list) {
             const byPriceAsc = [...list].sort((a, b) => (Number(a.price) || 999999) - (Number(b.price) || 999999));
             const buckets = new Map();
@@ -2874,7 +3029,6 @@
             if (currentFeedMode === "deals") {
                 list = sortEconomicAcrossCategories(list);
             } else if (currentFeedMode === "new") {
-                // Newest to oldest according to addition order in PRODUCTS
                 list = [...list].reverse();
             }
 
