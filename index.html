@@ -685,6 +685,76 @@
             }
         }
 
+        /* شريط تعريفي بارز عند اختيار تاجر محدد */
+        .merchant-banner {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            background: linear-gradient(125deg, var(--espresso) 0%, var(--espresso-soft) 65%, var(--caramel-dark) 100%);
+            color: #ffffff;
+            border: 1.5px solid rgba(229, 190, 150, 0.55);
+            border-radius: 18px;
+            padding: 14px 16px;
+            margin-bottom: 14px;
+            box-shadow: 0 12px 26px -10px rgba(24, 21, 18, 0.28);
+        }
+
+        .merchant-banner.visible {
+            display: flex;
+        }
+
+        .merchant-banner-info {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .merchant-banner-kicker {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: var(--caramel-light);
+        }
+
+        .merchant-banner-title {
+            font-size: 1.08rem;
+            font-weight: 900;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .merchant-count-pill {
+            font-size: 0.75rem;
+            font-weight: 900;
+            color: var(--espresso);
+            background: linear-gradient(135deg, var(--caramel-light), var(--caramel));
+            padding: 2px 10px;
+            border-radius: 999px;
+        }
+
+        .merchant-back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #ffffff;
+            color: var(--espresso);
+            border: 1px solid var(--caramel-light);
+            padding: 7px 14px;
+            border-radius: 11px;
+            font-size: 0.8rem;
+            font-weight: 900;
+            transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease;
+        }
+
+        .merchant-back-btn:hover {
+            transform: translateY(-1px);
+            background: var(--caramel-light);
+        }
+
         .circles-row-wrapper {
             position: sticky;
             top: 66px;
@@ -1003,6 +1073,40 @@
             overflow: hidden;
         }
 
+        /* زر اسم التاجر أسفل تفاصيل المنتج */
+        .merchant-tag-btn {
+            margin-top: 7px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #f6efe6;
+            color: var(--espresso-soft);
+            border: 1px solid var(--border-gold);
+            border-radius: 999px;
+            padding: 2px 9px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+            max-width: 100%;
+        }
+
+        .merchant-tag-btn:hover {
+            background: var(--espresso);
+            color: var(--caramel-light);
+            border-color: var(--caramel);
+        }
+
+        .merchant-tag-name {
+            color: var(--caramel-dark);
+            font-weight: 900;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        .merchant-tag-btn:hover .merchant-tag-name {
+            color: var(--caramel-light);
+        }
+
         .card-btns {
             display: flex;
             flex-direction: column;
@@ -1267,7 +1371,6 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        /* نافذة اختيار المقاس والعدد والتفاصيل قبل الإضافة للسلة */
         .option-modal-backdrop {
             display: none;
             position: fixed;
@@ -1941,7 +2044,7 @@
         </div>
 
         <div class="quick-search-box">
-            <input type="text" id="homeSearchInput" placeholder="اكتب للبحث الفوري بالاسم أو السعر أو القسم..." oninput="handleSearchInput()" onkeydown="handleSearchKeyDown(event)">
+            <input type="text" id="homeSearchInput" placeholder="اكتب للبحث الفوري بالاسم أو التاجر أو السعر أو القسم..." oninput="handleSearchInput()" onkeydown="handleSearchKeyDown(event)">
             <button type="button" class="search-cancel-btn" id="searchCancelBtn" onclick="cancelSearchMode()">إلغاء</button>
         </div>
 
@@ -1951,6 +2054,20 @@
                 <span class="smart-tag">جديد من ذوقك</span>
             </div>
             <div class="smart-grid" id="smartRecommendationsGrid"></div>
+        </section>
+
+        <!-- شريط تعريفي بارز يظهر عند اختيار تاجر محدد -->
+        <section class="merchant-banner" id="activeMerchantBanner" aria-live="polite">
+            <div class="merchant-banner-info">
+                <span class="merchant-banner-kicker">عرض منتجات التاجر</span>
+                <div class="merchant-banner-title">
+                    <span id="merchantBannerName"></span>
+                    <span class="merchant-count-pill" id="merchantBannerCount"></span>
+                </div>
+            </div>
+            <button type="button" class="merchant-back-btn" onclick="clearMerchantFilter()">
+                <span>العودة لكل المنتجات</span>
+            </button>
         </section>
 
         <div class="section-heading" id="productsSectionHeading">
@@ -2331,6 +2448,24 @@
             perfume: "العناية والعطور"
         };
 
+        /* ربط كل منتج بتاجره المنفصل */
+        function inferMerchantForProduct(product) {
+            if (!product) return "كارامل ستور";
+            if (product.merchant) return product.merchant;
+            if (product.id && product.id.startsWith("amn-")) return "أم وليد";
+            if (product.id && product.id.startsWith("tafse-")) {
+                const num = Number(product.id.replace("tafse-", ""));
+                if (num >= 6 && num <= 18) return "أم عمار";
+                return "كارامل للهاند ميد";
+            }
+            if (product.id && product.id.startsWith("wmn-")) return "أم عمار";
+            if (product.id && product.id.startsWith("libr-")) {
+                const num = Number(product.id.replace("libr-", ""));
+                return (num % 2 === 1) ? "محمد غريب" : "شيرين غريب";
+            }
+            return "كارامل ستور";
+        }
+
         const PRODUCTS = [
             { id: "hm-1", title: "جوانتي سيليكون حراري للمطبخ", desc: "امسك الصواني السخنة بثبات وأمان تام من أول لمسة بدون قلق من الحرارة.", price: 155, category: "home", img: "Kit/compressed_1795117656213.jpg" },
             { id: "hm-2", title: "شماعة لوكس 3×1", desc: "ضاعف مساحة دولابك في ثوانٍ ورتّب أكثر من قطعة فوق بعض بأناقة.", price: 40, category: "home", img: "Kit/compressed_1794957387150.webp" },
@@ -2490,10 +2625,15 @@
             { id: "brf-12", title: "مسمم MUSAMAM", desc: "فخامة ذهبية بتفاصيل ثعبان مميزة تدي حضور قوي وهدية تشرّف.", price: 375, category: "perfume", img: "Prfa/compressed_1794950096662.webp" },
             { id: "brf-13", title: "قصة GISSAH", desc: "لمسة أنثوية ناعمة بلون وردي حالم وعلبة متناسقة مثالية للذوق الراقي.", price: 375, category: "perfume", img: "Prfa/compressed_1794950096748.webp" },
             { id: "brf-14", title: "يارا YARA", desc: "أيقونة الجاذبية والنعومة بلونها الوردي المميز وعلبتها الفخمة.", price: 375, category: "perfume", img: "Prfa/compressed_1794950096833.webp" },
-            { id: "brf-15", title: "LIVELY FOR MEN PARIS", desc: "حضور رجالي أنيق بزجاجة زرقاء مخططة تكمّل إطلالتك في كل خروجة.", price: 175, category: "perfume", img: "Prfa/compressed_1794950472010.webp" }
+            { id: "brf-15", title: "LIVELY FOR MEN PARIS", desc: "حضور رجالي أنيق بزجاجة زرقاء مخططة تكمّل إطلالتك في كل خروجة.", price: 175, category: "perfume", img: "Prfa/compressed_17950472010.webp" }
         ];
 
+        PRODUCTS.forEach(p => {
+            p.merchant = inferMerchantForProduct(p);
+        });
+
         let currentCategory = "all";
+        let currentMerchant = "";
         let currentFeedItems = [];
         let renderedCount = 0;
         let feedCycle = 0;
@@ -2586,8 +2726,9 @@
             if (!normalizedQuery) return true;
 
             const catLabel = CATEGORY_NAMES[product.category] || "";
+            const merchantLabel = product.merchant || "";
             const searchableHaystack = normalizeText(
-                `${product.title} ${product.desc || ""} ${product.price} ${product.priceLabel || ""} ${product.subPrice || ""} ${catLabel} ${product.category}`
+                `${product.title} ${product.desc || ""} ${merchantLabel} ${product.price} ${product.priceLabel || ""} ${product.subPrice || ""} ${catLabel} ${product.category}`
             );
 
             const terms = normalizedQuery.split(" ").filter(Boolean);
@@ -2701,6 +2842,59 @@
             return scoredList.slice(0, limit).map(entry => entry.product);
         }
 
+        /* فلترة المنتجات حسب التاجر وعرض الشريط التعريفي */
+        function filterByMerchant(merchantName, shouldScroll = true) {
+            if (!merchantName) return;
+            currentMerchant = merchantName;
+
+            const input = document.getElementById("homeSearchInput");
+            if (input) input.value = "";
+            updateSearchCancelButton();
+
+            currentCategory = "all";
+            document.querySelectorAll(".cat-circle-item").forEach(item => {
+                item.classList.toggle("active", item.getAttribute("data-cat") === "all");
+            });
+
+            renderProducts("all");
+            renderSmartRecommendations();
+
+            if (shouldScroll) {
+                scrollToProductsTop();
+            }
+        }
+
+        function clearMerchantFilter(shouldScroll = true) {
+            currentMerchant = "";
+            renderProducts(currentCategory);
+            renderSmartRecommendations();
+            if (shouldScroll) {
+                scrollToProductsTop();
+            }
+        }
+
+        function updateMerchantBanner(merchantProductsList) {
+            const banner = document.getElementById("activeMerchantBanner");
+            const nameEl = document.getElementById("merchantBannerName");
+            const countEl = document.getElementById("merchantBannerCount");
+            if (!banner || !nameEl || !countEl) return;
+
+            if (!currentMerchant) {
+                banner.classList.remove("visible");
+                nameEl.textContent = "";
+                countEl.textContent = "";
+                return;
+            }
+
+            const totalForMerchant = PRODUCTS.filter(p => p.merchant === currentMerchant).length;
+            const visibleCount = Array.isArray(merchantProductsList) ? merchantProductsList.length : totalForMerchant;
+            nameEl.textContent = currentMerchant;
+            countEl.textContent = visibleCount === totalForMerchant
+                ? `${totalForMerchant} منتج`
+                : `${visibleCount} من ${totalForMerchant} منتج`;
+            banner.classList.add("visible");
+        }
+
         function buildSpecialRequestCardHTML() {
             const waSpecial = encodeURIComponent("أريد طلب منتج غير موجود في المتجر أو طلب خاص");
             return `
@@ -2718,7 +2912,8 @@
 
         function buildProductCardHTML(product, isSmartCard = false, instanceTag = "base") {
             const displayPrice = product.priceLabel || product.price;
-            const waText = encodeURIComponent(`أريد طلب ${product.title} بسعر ${displayPrice} جنيه من متجر كارامل`);
+            const merchantName = product.merchant || "كارامل ستور";
+            const waText = encodeURIComponent(`أريد طلب ${product.title} بسعر ${displayPrice} جنيه (التاجر: ${merchantName}) من متجر كارامل`);
             const isFreshForUser = !interestData.seenIds.includes(product.id);
             const btnId = isSmartCard ? `smart-btn-${product.id}` : `btn-${instanceTag}-${product.id}`;
 
@@ -2735,6 +2930,10 @@
                             <div class="product-price">${displayPrice}<span>جنيه</span></div>
                             ${product.subPrice ? `<div class="product-sub">${escapeHtmlAttr(product.subPrice)}</div>` : ""}
                             ${product.desc ? `<div class="product-desc">${escapeHtmlAttr(product.desc)}</div>` : ""}
+                            <button type="button" class="merchant-tag-btn" onclick="event.stopPropagation(); filterByMerchant('${escapeHtmlAttr(merchantName)}')" title="عرض منتجات ${escapeHtmlAttr(merchantName)} فقط">
+                                <span>التاجر:</span>
+                                <span class="merchant-tag-name">${escapeHtmlAttr(merchantName)}</span>
+                            </button>
                         </div>
                         <div class="card-btns">
                             <button type="button" class="add-cart-btn" id="${btnId}" onclick="openProductOptionModal('${product.id}', '${btnId}')">
@@ -2768,7 +2967,8 @@
         function getFilteredProducts(category, rawQuery) {
             return PRODUCTS.filter(p => {
                 const catMatch = category === "all" || p.category === category || (Array.isArray(p.categories) && p.categories.includes(category));
-                return catMatch && matchesSearchQuery(p, rawQuery);
+                const merchantMatch = !currentMerchant || p.merchant === currentMerchant;
+                return catMatch && merchantMatch && matchesSearchQuery(p, rawQuery);
             });
         }
 
@@ -2776,14 +2976,17 @@
             const base = getFilteredProducts(category, rawQuery);
             if (base.length === 0) return [];
 
-            const orderedBase = category === "perfume" ? [...base] : shuffleArray(base);
+            const orderedBase = (category === "perfume" || currentMerchant) ? [...base] : shuffleArray(base);
             const items = orderedBase.map(product => ({ type: "product", product, tag: "p0" }));
-            items.splice(Math.min(7, items.length), 0, { type: "special", id: "special-0" });
+            if (!currentMerchant) {
+                items.splice(Math.min(7, items.length), 0, { type: "special", id: "special-0" });
+            }
 
             return items;
         }
 
         function appendContinuationWave(category, rawQuery) {
+            if (currentMerchant) return;
             const sourcePool = getFilteredProducts(category, rawQuery);
             if (sourcePool.length === 0) return;
 
@@ -2808,6 +3011,10 @@
             if (currentFeedItems.length === 0) return;
 
             if (renderedCount >= currentFeedItems.length) {
+                if (currentMerchant) {
+                    if (sentinel) sentinel.textContent = "";
+                    return;
+                }
                 appendContinuationWave(currentCategory, rawQuery);
             }
 
@@ -2823,7 +3030,9 @@
             renderedCount += nextSlice.length;
 
             if (sentinel) {
-                sentinel.textContent = "اكتشف المزيد بالأسفل أو اطلب أي منتج خاص";
+                sentinel.textContent = currentMerchant
+                    ? `جميع منتجات ${currentMerchant} معروضة`
+                    : "اكتشف المزيد بالأسفل أو اطلب أي منتج خاص";
             }
         }
 
@@ -2838,7 +3047,12 @@
             const rawQuery = document.getElementById("homeSearchInput")?.value || "";
             const trimmedQuery = rawQuery.trim();
 
-            const baseCatTitle = CATEGORY_NAMES[category] || "المنتجات";
+            const filteredList = getFilteredProducts(category, rawQuery);
+            updateMerchantBanner(filteredList);
+
+            const baseCatTitle = currentMerchant
+                ? `منتجات التاجر: ${currentMerchant}`
+                : (CATEGORY_NAMES[category] || "المنتجات");
             titleEl.textContent = trimmedQuery ? `${baseCatTitle} — نتائج البحث عن: "${trimmedQuery}"` : baseCatTitle;
 
             currentFeedItems = buildFeedPool(category, rawQuery);
@@ -2850,7 +3064,7 @@
                         <p style="font-weight: 800; margin-bottom: 10px;">ملقيناش نتيجة مطابقة${trimmedQuery ? ` لـ "${trimmedQuery}"` : ""}.. وحتى لو المنتج مش موجود بنجيبهولك!</p>
                         <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
                             <a href="https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("أريد طلب منتج غير موجود في المتجر: " + trimmedQuery)}" class="add-cart-btn" style="max-width: 220px;" target="_blank" rel="noopener noreferrer">طلب خاص على واتساب</a>
-                            <button type="button" class="direct-wa-link" style="max-width: 170px;" onclick="cancelSearchMode()">إلغاء البحث والعودة</button>
+                            <button type="button" class="direct-wa-link" style="max-width: 170px;" onclick="${currentMerchant ? "clearMerchantFilter()" : "cancelSearchMode()"}">العودة لكل المنتجات</button>
                         </div>
                     </div>
                 `;
@@ -2862,6 +3076,7 @@
         }
 
         function resetFilters() {
+            currentMerchant = "";
             const input = document.getElementById("homeSearchInput");
             if (input) input.value = "";
             updateSearchCancelButton();
@@ -2879,7 +3094,9 @@
         }
 
         function scrollToProductsTop() {
-            const heading = document.getElementById("productsSectionHeading");
+            const heading = currentMerchant
+                ? document.getElementById("activeMerchantBanner")
+                : document.getElementById("productsSectionHeading");
             if (!heading) return;
             const rect = heading.getBoundingClientRect();
             const targetTop = Math.max(0, window.scrollY + rect.top - 215);
@@ -2893,6 +3110,7 @@
         }
 
         function filterByCategory(category, element, shouldScroll = true) {
+            currentMerchant = "";
             document.querySelectorAll(".cat-circle-item").forEach(item => item.classList.remove("active"));
             if (element) {
                 element.classList.add("active");
@@ -2925,7 +3143,6 @@
             pill.classList.add("pop");
         }
 
-        /* نافذة اختيار المقاس والعدد والتفاصيل قبل الإضافة للسلة */
         function openProductOptionModal(productId, clickedBtnId = null) {
             const product = PRODUCTS.find(p => p.id === productId);
             if (!product) return;
@@ -3047,6 +3264,7 @@
             const itemNote = opts.itemNote || "";
             const itemPrice = Number(opts.price) || Number(product.price) || 0;
             const addedQty = Math.max(1, Number(opts.qty) || 1);
+            const merchantName = product.merchant || "كارامل ستور";
 
             const existing = cart.find(item =>
                 item.id === productId &&
@@ -3057,10 +3275,12 @@
 
             if (existing) {
                 existing.qty = (Number(existing.qty) || 1) + addedQty;
+                existing.merchant = existing.merchant || merchantName;
             } else {
                 cart.push({
                     id: product.id,
                     title: product.title,
+                    merchant: merchantName,
                     price: itemPrice,
                     img: product.img,
                     qty: addedQty,
@@ -3178,6 +3398,7 @@
                 const p = Number(item.price) || 0;
                 const catalogMatch = PRODUCTS.find(prod => prod.id === item.id);
                 const title = item.title || (catalogMatch ? catalogMatch.title : "منتج كارامل");
+                const merchantName = item.merchant || (catalogMatch ? catalogMatch.merchant : "كارامل ستور");
                 const img = item.img || (catalogMatch ? catalogMatch.img : "IMG-20261116-WA0032.jpg");
                 const variantCfg = getProductVariantConfig(catalogMatch);
 
@@ -3211,7 +3432,7 @@
                             <img src="${img}" alt="${escapeHtmlAttr(title)}">
                             <div class="cart-item-info">
                                 <div class="cart-item-title">${escapeHtmlAttr(title)}</div>
-                                <div class="cart-item-price">${p} جنيه</div>
+                                <div class="cart-item-price">${p} جنيه • ${escapeHtmlAttr(merchantName)}</div>
                             </div>
                             <div class="qty-controls">
                                 <button type="button" class="qty-btn" onclick="changeQtyByIndex(${idx}, 1)">+</button>
@@ -3242,7 +3463,10 @@
                 const sub = p * q;
                 total += sub;
 
-                const extras = [];
+                const catalogMatch = PRODUCTS.find(prod => prod.id === item.id);
+                const merchantName = item.merchant || (catalogMatch ? catalogMatch.merchant : "كارامل ستور");
+
+                const extras = [`التاجر: ${merchantName}`];
                 if (item.selectedSize) extras.push(`المقاس: ${item.selectedSize}`);
                 if (item.selectedColor) extras.push(`اللون: ${item.selectedColor}`);
                 if (item.itemNote && item.itemNote.trim()) extras.push(`تفاصيل: ${item.itemNote.trim()}`);
