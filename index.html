@@ -1168,7 +1168,6 @@
             background: #f5efe6;
         }
 
-        /* Category cards matching screenshot design */
         .bento-cat-card {
             position: relative;
             background: #ffffff;
@@ -1293,26 +1292,6 @@
         .bento-cat-card.featured-all .bento-cat-sub {
             color: rgba(235, 208, 176, 0.88);
             font-size: 0.74rem;
-        }
-
-        .bento-cat-count-pill {
-            font-size: 0.65rem;
-            font-weight: 800;
-            color: var(--cat-top-bar, var(--accent-deep));
-            background: var(--cat-art-bg, #f7efe4);
-            padding: 1px 8px;
-            border-radius: 999px;
-            align-self: center;
-            margin-top: 2px;
-        }
-
-        .bento-cat-card.featured-all .bento-cat-count-pill {
-            align-self: center;
-            margin-top: 0;
-            background: rgba(200, 150, 102, 0.22);
-            color: var(--caramel-light);
-            font-size: 0.7rem;
-            padding: 3px 10px;
         }
 
         .option-modal-backdrop {
@@ -2132,7 +2111,7 @@
             </div>
             <div class="option-modal-body">
                 <div class="option-modal-product">
-                    <img id="optionModalImg" src="" alt="" onerror="removeProductById(pendingOptionSelection.productId); closeProductOptionModal();">
+                    <img id="optionModalImg" src="" alt="" onerror="this.style.visibility='hidden'">
                     <div class="option-modal-product-info">
                         <div class="option-modal-product-title" id="optionModalTitle"></div>
                         <div class="option-modal-product-price" id="optionModalPrice"></div>
@@ -2306,6 +2285,17 @@
                 .replace(/>/g, "&gt;");
         }
 
+        function normalizeProductImageUrl(rawImg) {
+            if (!rawImg || typeof rawImg !== "string") return "";
+            let cleaned = rawImg.trim().replace(/\\/g, "/");
+            if (!cleaned) return "";
+            if (/^https?:\/\//i.test(cleaned) || cleaned.startsWith("data:") || cleaned.startsWith("blob:")) {
+                return cleaned;
+            }
+            cleaned = cleaned.replace(/^\.\//, "").replace(/^\/+/, "");
+            return encodeURI(cleaned);
+        }
+
         function isApparelProduct(product) {
             if (!product) return false;
             if (PRODUCT_VARIANTS[product.id] && Array.isArray(PRODUCT_VARIANTS[product.id].sizes)) return true;
@@ -2465,7 +2455,6 @@
             });
         })();
 
-        /* ترتيب الفئات المطابق للصورة تماماً */
         const CATEGORY_NAMES = {
             all: "كل المنتجات",
             school: "المدرسة",
@@ -2777,7 +2766,11 @@
             { id: "tafse-23", title: "رانر طاولة مكرمية هاند ميد 50×150 سم", desc: "شغل مكرمية يدوي أنيق بمقاس 50 سم في متر ونص مع شراشيب ناعمة، يدي السفرة أو الترابيزة لمسة دافئة وشيك جداً في بيتك.", price: 500, category: "tafse", categories: ["tafse", "home"], img: "Htm/compressed_1795351999998.webp" }
         ];
 
-        const PRODUCTS = FALLBACK_PRODUCTS.map(p => ({ ...p, merchant: inferMerchantForProduct(p) }));
+        const PRODUCTS = FALLBACK_PRODUCTS.map(p => ({
+            ...p,
+            img: normalizeProductImageUrl(p.img),
+            merchant: inferMerchantForProduct(p)
+        }));
 
         async function loadMerchantProductsFromJson() {
             if (!Array.isArray(MERCHANT_JSON_FILES) || !MERCHANT_JSON_FILES.length) return;
@@ -2796,9 +2789,14 @@
                         const itemId = rawItem.id || `${entry.url.replace(/[^a-z0-9]/gi, "-")}-${i}`;
                         if (seenIds.has(itemId)) return;
                         seenIds.add(itemId);
+
+                        const rawImg = rawItem.img || rawItem.image || rawItem.photo || rawItem.imgUrl || "";
+                        const normalizedImg = normalizeProductImageUrl(rawImg);
+
                         loadedFromFiles.push({
                             ...rawItem,
                             id: itemId,
+                            img: normalizedImg,
                             price: Number(rawItem.price) || 0,
                             category: rawItem.category || "home",
                             merchant: inferMerchantForProduct(rawItem, entry.defaultMerchant || "")
@@ -2833,25 +2831,22 @@
             return Boolean(currentMerchant) || Boolean(currentCategory && currentCategory !== "all");
         }
 
-        function removeProductById(productId) {
-            if (!productId) return;
-            const idx = PRODUCTS.findIndex(p => p.id === productId);
-            if (idx === -1) return;
-            PRODUCTS.splice(idx, 1);
-            renderSpotlightBoxes();
-            renderProducts(currentCategory);
-        }
-
         function handleProductImageError(imgEl, productId) {
-            if (imgEl) {
-                const card = imgEl.closest(".product-card");
-                if (card) card.remove();
+            if (!imgEl) return;
+            const currentSrc = imgEl.getAttribute("src") || "";
+            const retryStep = Number(imgEl.getAttribute("data-retry-step") || "0");
+
+            if (retryStep === 0 && currentSrc && !/^https?:\/\//i.test(currentSrc)) {
+                imgEl.setAttribute("data-retry-step", "1");
+                const altSrc = currentSrc.startsWith("./") ? currentSrc.slice(2) : `./${currentSrc}`;
+                if (altSrc !== currentSrc) {
+                    imgEl.src = altSrc;
+                    return;
+                }
             }
-            if (!productId) return;
-            const idx = PRODUCTS.findIndex(p => p.id === productId);
-            if (idx !== -1) {
-                PRODUCTS.splice(idx, 1);
-            }
+
+            imgEl.style.opacity = "0.18";
+            imgEl.setAttribute("data-broken", "1");
         }
 
         function loadCartFromStorage() {
@@ -3170,6 +3165,7 @@
 
             const p = list[idx];
             const displayPrice = p.priceLabel || p.price;
+            const imgSrc = normalizeProductImageUrl(p.img);
 
             const dotsHTML = list.map((_, i) =>
                 `<button type="button" class="showcase-dot ${i === idx ? "active" : ""}" onclick="event.stopPropagation(); jumpSpotlightSlide('${kind}', ${i})" aria-label="صورة ${i + 1}"></button>`
@@ -3177,10 +3173,10 @@
 
             container.innerHTML = `
                 <div class="rotating-showcase-card">
-                    <div class="showcase-photo-wrap" onclick="openImageModal('${p.img}', '${p.id}')">
-                        <img key="${p.id}-${idx}" src="${p.img}" alt="${escapeHtmlAttr(p.title)}" onerror="removeProductById('${p.id}')">
+                    <div class="showcase-photo-wrap" onclick="openImageModal('${escapeHtmlAttr(imgSrc)}', '${escapeHtmlAttr(p.id)}')">
+                        <img key="${escapeHtmlAttr(p.id)}-${idx}" src="${escapeHtmlAttr(imgSrc)}" alt="${escapeHtmlAttr(p.title)}" onerror="handleProductImageError(this, '${escapeHtmlAttr(p.id)}')">
                     </div>
-                    <div class="showcase-info-panel" onclick="openImageModal('${p.img}', '${p.id}')">
+                    <div class="showcase-info-panel" onclick="openImageModal('${escapeHtmlAttr(imgSrc)}', '${escapeHtmlAttr(p.id)}')">
                         <div class="showcase-prod-title">${escapeHtmlAttr(p.title)}</div>
                         <div class="showcase-merchant-mini">التاجر: ${escapeHtmlAttr(p.merchant || "شيرين غريب")}</div>
                         <div class="showcase-bottom-row">
@@ -3274,20 +3270,12 @@
             scrollToProductsTop();
         }
 
-        function getCategoryCount(catKey) {
-            const matching = catKey === "all"
-                ? PRODUCTS
-                : PRODUCTS.filter(p => p.category === catKey || (Array.isArray(p.categories) && p.categories.includes(catKey)));
-            return matching.length;
-        }
-
         function renderSideCategoriesList() {
             const container = document.getElementById("sideCategoriesList");
             if (!container) return;
             const keys = Object.keys(CATEGORY_NAMES);
             container.innerHTML = keys.map(catKey => {
                 const isActive = !currentMerchant && currentCategory === catKey;
-                const count = getCategoryCount(catKey);
                 const subText = CATEGORY_SUBTITLES[catKey] || "تشكيلة مميزة من كارامل";
                 const featuredClass = catKey === "all" ? "featured-all" : "";
                 const theme = CATEGORY_THEME_META[catKey] || CATEGORY_THEME_META.all;
@@ -3302,7 +3290,6 @@
                             <div class="bento-cat-title">${escapeHtmlAttr(CATEGORY_NAMES[catKey])}</div>
                             <div class="bento-cat-sub">${escapeHtmlAttr(subText)}</div>
                         </div>
-                        <span class="bento-cat-count-pill">${count} منتج</span>
                     </button>
                 `;
             }).join("");
@@ -3459,13 +3446,14 @@
         function buildProductCardHTML(product, instanceTag = "base") {
             const displayPrice = product.priceLabel || product.price;
             const merchantName = product.merchant || "شيرين غريب";
+            const imgSrc = normalizeProductImageUrl(product.img);
             const waText = encodeURIComponent(`أريد طلب ${product.title} بسعر ${displayPrice} جنيه (التاجر: ${merchantName}) من متجر كارامل`);
             const btnId = `btn-${instanceTag}-${product.id}`;
 
             return `
                 <article class="product-card" data-product-id="${escapeHtmlAttr(product.id)}" data-merchant="${escapeHtmlAttr(merchantName)}">
-                    <div class="product-img-box" onclick="openImageModal('${product.img}', '${product.id}')">
-                        <img src="${product.img}" alt="${escapeHtmlAttr(product.title)}" loading="lazy" onerror="handleProductImageError(this, '${product.id}')">
+                    <div class="product-img-box" onclick="openImageModal('${escapeHtmlAttr(imgSrc)}', '${escapeHtmlAttr(product.id)}')">
+                        <img src="${escapeHtmlAttr(imgSrc)}" alt="${escapeHtmlAttr(product.title)}" loading="lazy" onerror="handleProductImageError(this, '${escapeHtmlAttr(product.id)}')">
                     </div>
                     <div class="product-details">
                         <div>
@@ -3481,10 +3469,10 @@
                             </button>
                         </div>
                         <div class="card-btns">
-                            <button type="button" class="add-cart-btn" id="${btnId}" onclick="openProductOptionModal('${product.id}', '${btnId}')">
+                            <button type="button" class="add-cart-btn" id="${btnId}" onclick="openProductOptionModal('${escapeHtmlAttr(product.id)}', '${btnId}')">
                                 <span>+ للمشتريات</span>
                             </button>
-                            <a href="https://wa.me/${WHATSAPP_NUMBER}?text=${waText}" class="direct-wa-link" target="_blank" rel="noopener noreferrer" onclick="onDirectWhatsAppClick('${product.id}')">
+                            <a href="https://wa.me/${WHATSAPP_NUMBER}?text=${waText}" class="direct-wa-link" target="_blank" rel="noopener noreferrer" onclick="onDirectWhatsAppClick('${escapeHtmlAttr(product.id)}')">
                                 <span>واتساب</span>
                             </a>
                         </div>
@@ -3746,8 +3734,10 @@
 
             pendingOptionSelection = { productId: product.id, clickedBtnId, selectedSize: defaultSize, selectedColor: defaultColor, currentPrice: initialPrice, qty: 1 };
 
-            document.getElementById("optionModalImg").src = product.img;
-            document.getElementById("optionModalImg").alt = product.title;
+            const modalImg = document.getElementById("optionModalImg");
+            modalImg.style.visibility = "visible";
+            modalImg.src = normalizeProductImageUrl(product.img);
+            modalImg.alt = product.title;
             document.getElementById("optionModalTitle").textContent = product.title;
             document.getElementById("optionModalPrice").textContent = `${initialPrice} جنيه`;
             document.getElementById("optionModalQtyVal").textContent = "1";
@@ -3832,6 +3822,7 @@
             const itemPrice = Number(opts.price) || Number(product.price) || 0;
             const addedQty = Math.max(1, Number(opts.qty) || 1);
             const merchantName = product.merchant || "شيرين غريب";
+            const imgSrc = normalizeProductImageUrl(product.img);
 
             const existing = cart.find(item =>
                 item.id === productId &&
@@ -3843,8 +3834,9 @@
             if (existing) {
                 existing.qty = (Number(existing.qty) || 1) + addedQty;
                 existing.merchant = existing.merchant || merchantName;
+                existing.img = imgSrc || existing.img;
             } else {
-                cart.push({ id: product.id, title: product.title, merchant: merchantName, price: itemPrice, img: product.img, qty: addedQty, selectedColor, selectedSize, itemNote });
+                cart.push({ id: product.id, title: product.title, merchant: merchantName, price: itemPrice, img: imgSrc, qty: addedQty, selectedColor, selectedSize, itemNote });
             }
 
             saveCart();
@@ -3950,7 +3942,7 @@
                 const catalogMatch = PRODUCTS.find(prod => prod.id === item.id);
                 const title = item.title || (catalogMatch ? catalogMatch.title : "منتج كارامل");
                 const merchantName = item.merchant || (catalogMatch ? catalogMatch.merchant : "شيرين غريب");
-                const img = item.img || (catalogMatch ? catalogMatch.img : "IMG-20261116-WA0032.jpg");
+                const img = normalizeProductImageUrl(item.img || (catalogMatch ? catalogMatch.img : ""));
                 const variantCfg = getProductVariantConfig(catalogMatch);
 
                 let variantSelectorsHTML = "";
@@ -3976,7 +3968,7 @@
                 return `
                     <div class="cart-item">
                         <div class="cart-item-top">
-                            <img src="${img}" alt="${escapeHtmlAttr(title)}" onerror="this.style.display='none'">
+                            <img src="${escapeHtmlAttr(img)}" alt="${escapeHtmlAttr(title)}" onerror="this.style.display='none'">
                             <div class="cart-item-info">
                                 <div class="cart-item-title">${escapeHtmlAttr(title)}</div>
                                 <div class="cart-item-meta-line">
@@ -4044,10 +4036,11 @@
                 trackProductInterest(product, 2, true);
             }
 
+            const finalSrc = normalizeProductImageUrl(src || (product ? product.img : ""));
             const modal = document.getElementById("imageModal");
             const imgEl = document.getElementById("modalImagePreview");
             if (imgEl) {
-                imgEl.src = src;
+                imgEl.src = finalSrc;
                 imgEl.alt = product ? product.title : "معاينة المنتج";
             }
 
@@ -4182,12 +4175,7 @@
             const iconEl = document.getElementById("caramelPushIcon");
             if (!btn || !textEl || !iconEl) return;
 
-            if (isCaramelPushPillHidden() && state !== "circle-check") {
-                btn.classList.remove("visible");
-                return;
-            }
-
-            if (state === "hidden") {
+            if (isCaramelPushPillHidden()) {
                 btn.classList.remove("visible");
                 return;
             }
@@ -4195,100 +4183,110 @@
             btn.classList.add("visible");
             btn.classList.remove("circle-check-only", "hiding-smooth");
 
-            if (state === "circle-check") {
-                markCaramelPushPillHidden();
+            if (state === "subscribed") {
                 btn.classList.add("circle-check-only");
                 iconEl.innerHTML = `<svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg>`;
-                textEl.textContent = "";
+                textEl.textContent = customText || "مفعّل";
                 clearTimeout(caramelPushAutoHideTimer);
                 caramelPushAutoHideTimer = setTimeout(() => {
                     btn.classList.add("hiding-smooth");
-                    setTimeout(() => { btn.classList.remove("visible", "circle-check-only", "hiding-smooth"); }, 280);
-                }, 1100);
-                return;
+                    setTimeout(() => {
+                        markCaramelPushPillHidden();
+                        btn.classList.remove("visible", "hiding-smooth", "circle-check-only");
+                    }, 350);
+                }, 4000);
+            } else if (state === "loading") {
+                iconEl.innerHTML = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-dasharray="42" stroke-dashoffset="12"></circle></svg>`;
+                textEl.textContent = customText || "جاري التفعيل...";
+            } else {
+                iconEl.innerHTML = `<svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg>`;
+                textEl.textContent = customText || "فعّل إشعارات العروض";
             }
-
-            iconEl.innerHTML = `<svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg>`;
-            if (state === "loading") textEl.textContent = customText || "جاري التفعيل...";
-            else textEl.textContent = customText || "فعّل إشعارات العروض";
         }
 
-        async function syncCaramelPushState() {
-            if (!("Notification" in window) || isCaramelPushPillHidden()) {
-                setCaramelPushPillUI("hidden");
-                return;
-            }
+        function syncCaramelPushState() {
             try {
-                if (Notification.permission === "granted") {
-                    markCaramelPushPillHidden();
-                    setCaramelPushPillUI("hidden");
-                    return;
-                }
-                if (window.OneSignal && caramelOneSignalReady) {
-                    const optedIn = Boolean(window.OneSignal.User && window.OneSignal.User.PushSubscription && window.OneSignal.User.PushSubscription.optedIn);
-                    if (optedIn) {
-                        markCaramelPushPillHidden();
-                        setCaramelPushPillUI("hidden");
+                if (typeof OneSignal !== "undefined" && OneSignal.User && OneSignal.User.PushSubscription) {
+                    if (OneSignal.User.PushSubscription.optedIn) {
+                        setCaramelPushPillUI("subscribed", "مفعّل");
                         return;
                     }
                 }
             } catch (e) {}
-            setCaramelPushPillUI("default");
+            if ("Notification" in window && Notification.permission === "granted") {
+                setCaramelPushPillUI("subscribed", "مفعّل");
+                return;
+            }
+            setCaramelPushPillUI("default", "فعّل إشعارات العروض");
         }
+
+        OneSignalDeferred.push(async function(OneSignal) {
+            try {
+                await OneSignal.init({
+                    appId: "58893c82-22b9-40c5-8f30-a1181931b1c9",
+                    allowLocalhostAsSecureOrigin: true,
+                    notifyButton: { enable: false },
+                    promptOptions: {
+                        slidedown: {
+                            prompts: [{
+                                type: "push",
+                                autoPrompt: false,
+                                text: {
+                                    actionMessage: "فعّل إشعارات متجر كارامل عشان توصلك أحدث العروض والمنتجات الجديدة أول بأول.",
+                                    acceptButton: "تفعيل",
+                                    cancelButton: "لاحقًا"
+                                }
+                            }]
+                        }
+                    }
+                });
+
+                caramelOneSignalReady = true;
+                syncCaramelPushState();
+
+                if (OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.addEventListener) {
+                    OneSignal.User.PushSubscription.addEventListener("change", () => syncCaramelPushState());
+                }
+            } catch (err) {
+                setCaramelPushPillUI("default", "فعّل إشعارات العروض");
+            }
+        });
 
         async function enableCaramelPush() {
             if (!("Notification" in window)) {
-                showCaramelToast("متصفحك لا يدعم إشعارات الويب المباشرة.");
+                showCaramelToast("متصفحك الحالي لا يدعم إشعارات الويب المباشرة.");
                 return;
             }
             if (Notification.permission === "denied") {
                 showCaramelToast("الإشعارات محظورة من إعدادات المتصفح؛ فعّلها من رمز القفل أعلى الصفحة.");
                 return;
             }
-
             setCaramelPushPillUI("loading", "جاري التفعيل...");
             try {
-                if (window.OneSignal && caramelOneSignalReady) {
-                    if (window.OneSignal.Notifications && typeof window.OneSignal.Notifications.requestPermission === "function") {
-                        await window.OneSignal.Notifications.requestPermission();
-                    } else if (window.OneSignal.Slidedown && typeof window.OneSignal.Slidedown.promptPush === "function") {
-                        await window.OneSignal.Slidedown.promptPush();
-                    }
-                    if (window.OneSignal.User && window.OneSignal.User.PushSubscription && typeof window.OneSignal.User.PushSubscription.optIn === "function") {
-                        await window.OneSignal.User.PushSubscription.optIn();
-                    }
+                if (caramelOneSignalReady && typeof OneSignal !== "undefined" && OneSignal.Notifications && typeof OneSignal.Notifications.requestPermission === "function") {
+                    await OneSignal.Notifications.requestPermission();
                 } else {
-                    await Notification.requestPermission();
+                    const perm = await Notification.requestPermission();
+                    if (perm === "granted") {
+                        setCaramelPushPillUI("subscribed", "مفعّل");
+                        showCaramelToast("تم تفعيل إشعارات متجر كارامل بنجاح!");
+                        return;
+                    }
                 }
-
+                syncCaramelPushState();
                 if (Notification.permission === "granted") {
-                    setCaramelPushPillUI("circle-check");
                     showCaramelToast("تم تفعيل إشعارات متجر كارامل بنجاح!");
                 } else {
-                    setCaramelPushPillUI("default");
+                    showCaramelToast("لم يتم تفعيل الإشعارات بعد.");
                 }
-            } catch (err) {
-                setCaramelPushPillUI("default");
-                showCaramelToast("تعذر إتمام التفعيل الآن، حاول مرة أخرى.");
+            } catch (e) {
+                syncCaramelPushState();
+                showCaramelToast("تعذر تفعيل الإشعارات الآن، حاول مرة أخرى.");
             }
         }
 
-        OneSignalDeferred.push(async function(OneSignal) {
-            await OneSignal.init({
-                appId: "b31f2777-288b-4bb7-b680-3f739a00676c",
-                serviceWorkerParam: { scope: "/" },
-                serviceWorkerPath: "/OneSignalSDKWorker.js",
-                allowLocalhostAsSecureOrigin: true
-            });
-            caramelOneSignalReady = true;
-            await syncCaramelPushState();
-            if (OneSignal.User && OneSignal.User.PushSubscription && typeof OneSignal.User.PushSubscription.addEventListener === "function") {
-                OneSignal.User.PushSubscription.addEventListener("change", () => { syncCaramelPushState(); });
-            }
-        });
-
         window.addEventListener("load", () => {
-            setTimeout(() => { syncCaramelPushState(); }, 400);
+            setTimeout(() => { syncCaramelPushState(); }, 700);
         });
     </script>
 </body>
