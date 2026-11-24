@@ -4,14 +4,89 @@
     "title": "صواني تقديم فضية موديلات متنوعة",
     "desc": "صواني تقديم فضية أنيقة (صينية مستطيلة بنقش زخرفي في المنتصف، صينية مستطيلة بإطار منقوش وسطح أملس، وصينية بيضاوية بحافة مزخرفة) بسعر 1600 جنيه. يرجى تحديد الموديل المطلوب عند الطلب.",
     "price": 1600,
-    "category": "home",
-    "categories": ["home"],
+    "category": "tafse",
+    "categories": ["tafse", "home"],
     "merchant": "شيرين",
     "img": "Shren/compressed_1795518358072.webp",
     "images": [
       "Shren/compressed_1795518358072.webp",
       "Shren/compressed_1795518358135.webp",
       "Shren/compressed_1795518357923.webp"
+    ]
+  },
+  {
+    "id": "shireen-macrame-curtain-tie-900",
+    "title": "ستارة مكرمية ورباط هاند ميد",
+    "desc": "ستارة مكرمية هاند ميد ومعاها رباط بدون العصاية بسعر 900 جنيه.",
+    "price": 900,
+    "category": "tafse",
+    "categories": ["tafse", "home"],
+    "merchant": "شيرين",
+    "img": "Shren/compressed_1795519763404.webp",
+    "images": [
+      "Shren/compressed_1795519763404.webp",
+      "Shren/compressed_1795519763064.webp",
+      "Shren/compressed_1795519762714.webp"
+    ]
+  },
+  {
+    "id": "shireen-macrame-curtain-1x2-rod-ties-1700",
+    "title": "ستارة مكرمية 1×2 متر برباطين وعصاية",
+    "desc": "ستارة مكرمية هاند ميد مقاس متر في مترين ومعاها قطعتين رباط وعصاية بسعر 1700 جنيه.",
+    "price": 1700,
+    "category": "tafse",
+    "categories": ["tafse", "home"],
+    "merchant": "شيرين",
+    "img": "Shren/compressed_1795519762430.webp",
+    "images": [
+      "Shren/compressed_1795519762430.webp"
+    ]
+  },
+  {
+    "id": "shireen-macrame-curtain-1x2-gift-rod-1600",
+    "title": "ستارة مكرمية 1×2 متر برباطين هدية وعصاية",
+    "desc": "ستارة مكرمية هاند ميد مقاس متر في مترين ومعاها قطعتين رباط هدية وعصاية بسعر 1600 جنيه.",
+    "price": 1600,
+    "category": "tafse",
+    "categories": ["tafse", "home"],
+    "merchant": "شيرين",
+    "img": "Shren/compressed_1795519710564.webp",
+    "images": [
+      "Shren/compressed_1795519710564.webp",
+      "Shren/compressed_1795519710244.webp",
+      "Shren/compressed_1795519709939.webp",
+      "Shren/compressed_1795519709577.webp"
+    ]
+  },
+  {
+    "id": "shireen-macrame-curtain-1x2-ties-900",
+    "title": "ستارة مكرمية 1×2 متر برباطين هاند ميد",
+    "desc": "ستارة مكرمية هاند ميد مقاس متر في مترين ومعاها قطعتين رباط بسعر 900 جنيه.",
+    "price": 900,
+    "category": "tafse",
+    "categories": ["tafse", "home"],
+    "merchant": "شيرين",
+    "img": "Shren/compressed_1795519637653.webp",
+    "images": [
+      "Shren/compressed_1795519637653.webp",
+      "Shren/compressed_1795519635838.webp",
+      "Shren/compressed_1795519633699.webp"
+    ]
+  },
+  {
+    "id": "shireen-macrame-curtain-1x2-gift-rod-1550",
+    "title": "ستارة مكرمية 1×2 متر برباطين هدية وعصاية (موديل 1550)",
+    "desc": "ستارة مكرمية هاند ميد مقاس متر في مترين ومعاها قطعتين رباط هدية وعصاية بسعر 1550 جنيه.",
+    "price": 1550,
+    "category": "tafse",
+    "categories": ["tafse", "home"],
+    "merchant": "شيرين",
+    "img": "Shren/compressed_1795519558642.webp",
+    "images": [
+      "Shren/compressed_1795519558642.webp",
+      "Shren/compressed_1795519558295.webp",
+      "Shren/compressed_1795519557951.webp",
+      "Shren/compressed_1795519557554.webp"
     ]
   }
 ]
