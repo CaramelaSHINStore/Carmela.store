@@ -1,1 +1,50 @@
+[
+  {
+    "id": "om-waleed-watches-collection-250",
+    "name": "ساعات معدنية موديلات متنوعة",
+    "merchant": "أم وليد",
+    "category": "gifts",
+    "categories": ["gifts", "accessories"],
+    "price": 250,
+    "img": "Omwaled/compressed_1795517021993.webp",
+    "images": [
+      "Omwaled/compressed_1795517021993.webp",
+      "Omwaled/compressed_1795517010110.webp",
+      "Omwaled/compressed_1795517024344.webp",
+      "Omwaled/compressed_1795517014913.webp"
+    ],
+    "description": "ساعات معدنية أنيقة متوفرة بعدة أشكال وألوان للميناء (ذهبي، أزرق، وأرقام رومانية) بسعر 250 جنيه. يرجى تحديد اللون أو الموديل المطلوب عند الطلب."
+  },
+  {
+    "id": "om-waleed-watches-collection-200",
+    "name": "ساعات معدنية موديلات متنوعة",
+    "merchant": "أم وليد",
+    "category": "gifts",
+    "categories": ["gifts", "accessories"],
+    "price": 200,
+    "img": "Omwaled/compressed_1795517033781.webp",
+    "images": [
+      "Omwaled/compressed_1795517033781.webp",
+      "Omwaled/compressed_1795517031412.webp",
+      "Omwaled/compressed_1795517029070.webp",
+      "Omwaled/compressed_1795517026716.webp",
+      "Omwaled/compressed_1795517019607.webp"
+    ],
+    "description": "ساعات معدنية أنيقة متوفرة بعدة أشكال وألوان للميناء (أسود، أزرق، ذهبي، وفضي) بسعر 200 جنيه. يرجى تحديد اللون أو الموديل المطلوب عند الطلب."
+  },
+  {
+    "id": "om-waleed-leather-watches-collection-150",
+    "name": "ساعات جلد موديلات متنوعة",
+    "merchant": "أم وليد",
+    "category": "gifts",
+    "categories": ["gifts", "accessories"],
+    "price": 150,
+    "img": "Omwaled/compressed_1795517007729.webp",
+    "images": [
+      "Omwaled/compressed_1795517007729.webp",
+      "Omwaled/compressed_1795517012472.webp"
+    ],
+    "description": "ساعات بحزام جلد أنيق وميناء أسود بتفاصيل كرونوغراف وأرقام رومانية متوفرة بألوان (حزام أسود بإطار ذهبي وحزام بيج بإطار فضي) بسعر 150 جنيه. يرجى تحديد اللون أو الموديل المطلوب عند الطلب."
+  }
+]
 
