@@ -2931,6 +2931,10 @@
             seenIds: []
         };
 
+        function isFullSelectionMode() {
+            return Boolean(currentMerchant) || Boolean(currentCategory && currentCategory !== "all");
+        }
+
         function removeProductById(productId) {
             if (!productId) return;
             const idx = PRODUCTS.findIndex(p => p.id === productId);
@@ -3169,7 +3173,7 @@
             const container = document.getElementById("continuationAfterRecommendations");
             if (!container) return;
 
-            if (!currentMerchant && (!currentCategory || currentCategory === "all")) {
+            if (!isFullSelectionMode()) {
                 container.innerHTML = "";
                 return;
             }
@@ -3348,7 +3352,7 @@
         }
 
         function appendContinuationWave(category, rawQuery) {
-            if (currentMerchant) return;
+            if (isFullSelectionMode()) return;
             const sourcePool = getFilteredProducts(category, rawQuery);
             if (sourcePool.length === 0) return;
 
@@ -3372,12 +3376,23 @@
             const rawQuery = document.getElementById("homeSearchInput")?.value || "";
             if (currentFeedItems.length === 0) return;
 
-            if (renderedCount >= currentFeedItems.length) {
-                if (currentMerchant || (currentCategory && currentCategory !== "all")) {
-                    renderContinuationAfterSection();
-                    if (sentinel) sentinel.textContent = "";
-                    return;
+            // عند اختيار قسم محدد أو تاجر محدد: اعرض كل منتجاته كاملة دفعة واحدة بدون تقطيع
+            if (isFullSelectionMode()) {
+                if (renderedCount < currentFeedItems.length) {
+                    const remainingSlice = currentFeedItems.slice(renderedCount);
+                    const htmlChunk = remainingSlice.map(entry => {
+                        if (entry.type === "special") return buildSpecialRequestCardHTML();
+                        return buildProductCardHTML(entry.product, false, entry.tag);
+                    }).join("");
+                    grid.insertAdjacentHTML("beforeend", htmlChunk);
+                    renderedCount = currentFeedItems.length;
                 }
+                renderContinuationAfterSection();
+                if (sentinel) sentinel.textContent = "";
+                return;
+            }
+
+            if (renderedCount >= currentFeedItems.length) {
                 appendContinuationWave(currentCategory, rawQuery);
             }
 
@@ -3392,12 +3407,7 @@
             grid.insertAdjacentHTML("beforeend", htmlChunk);
             renderedCount += nextSlice.length;
 
-            if (currentMerchant || (currentCategory && currentCategory !== "all")) {
-                renderContinuationAfterSection();
-                if (sentinel) sentinel.textContent = "";
-            } else if (sentinel) {
-                sentinel.textContent = "اكتشف المزيد بالأسفل أو اطلب أي منتج خاص";
-            }
+            if (sentinel) sentinel.textContent = "اكتشف المزيد بالأسفل أو اطلب أي منتج خاص";
         }
 
         function renderProducts(category = currentCategory) {
