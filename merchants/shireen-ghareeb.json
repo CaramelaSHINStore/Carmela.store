@@ -90,3 +90,110 @@
     ]
   }
 ]
+[
+  {
+    "id": "shireen-natures-garlic-shampoo-conditioner-140",
+    "title": "شامبو وبلسم للشعر بخلاصة الثوم Nature's",
+    "desc": "شامبو وبلسم للشعر بخلاصة الثوم من Nature's لتقليل تساقط الشعر بسعر 140 جنيه للواحد.",
+    "price": 140,
+    "category": "perfume",
+    "categories": ["perfume"],
+    "merchant": "شيرين",
+    "img": "Shren/compressed_1795523068619.webp",
+    "images": [
+      "Shren/compressed_1795523068619.webp"
+    ]
+  },
+  {
+    "id": "shireen-morano-cloud-bedsheet-set-1800",
+    "title": "لحاف / طقم سرير MORANO CLOUD",
+    "desc": "لحاف / طقم سرير MORANO CLOUD من الفؤاد للمفروشات بسعر 1800 جنيه.",
+    "price": 1800,
+    "category": "home",
+    "categories": ["home"],
+    "merchant": "شيرين",
+    "img": "Shren/compressed_1795523069014.webp",
+    "images": [
+      "Shren/compressed_1795523069014.webp",
+      "Shren/compressed_1795523069305.webp"
+    ]
+  },
+  {
+    "id": "shireen-shower-gel-2l-160",
+    "title": "شاور جل 2 لتر",
+    "desc": "شاور جل حجم 2 لتر بروائح متنوعة بسعر 160 جنيه.",
+    "price": 160,
+    "category": "perfume",
+    "categories": ["perfume"],
+    "merchant": "شيرين",
+    "img": "Shren/compressed_1795523069201.webp",
+    "images": [
+      "Shren/compressed_1795523069201.webp"
+    ]
+  },
+  {
+    "id": "shireen-opal-shower-gel-3-25l-175",
+    "title": "شاور جل أوبال OPAL 3 لتر وربع",
+    "desc": "شاور جل أوبال OPAL حجم 3.25 لتر بروائح متنوعة بسعر 175 جنيه.",
+    "price": 175,
+    "category": "perfume",
+    "categories": ["perfume"],
+    "merchant": "شيرين",
+    "img": "Shren/compressed_1795523069992.webp",
+    "images": [
+      "Shren/compressed_1795523069992.webp"
+    ]
+  },
+  {
+    "id": "shireen-eldahhan-original-set-1300",
+    "title": "طقم الدهان الأصلي",
+    "desc": "طقم الدهان الأصلي (3 قطع بأحجام متدرجة) بسعر 1300 جنيه.",
+    "price": 1300,
+    "category": "home",
+    "categories": ["home"],
+    "merchant": "شيرين",
+    "img": "Shren/compressed_1795523069519.webp",
+    "images": [
+      "Shren/compressed_1795523069519.webp"
+    ]
+  },
+  {
+    "id": "shireen-decorated-glass-cups-set-1300",
+    "title": "طقم كاسات زجاج مزخرف (6 قطع)",
+    "desc": "طقم كاسات زجاج مزخرف 6 قطع في علبة بسعر 1300 جنيه.",
+    "price": 1300,
+    "category": "home",
+    "categories": ["home"],
+    "merchant": "شيرين",
+    "img": "Shren/compressed_1795523069610.webp",
+    "images": [
+      "Shren/compressed_1795523069610.webp"
+    ]
+  },
+  {
+    "id": "shireen-tall-glass-cups-set-1250",
+    "title": "طقم كاسات زجاج طويلة (6 قطع)",
+    "desc": "طقم كاسات زجاج طويلة 6 قطع في علبة بسعر 1250 جنيه.",
+    "price": 1250,
+    "category": "home",
+    "categories": ["home"],
+    "merchant": "شيرين",
+    "img": "Shren/compressed_1795523069912.webp",
+    "images": [
+      "Shren/compressed_1795523069912.webp"
+    ]
+  },
+  {
+    "id": "shireen-blinkma-ribbed-glass-cups-6pcs-250",
+    "title": "طقم 6 كبايات زجاج مضلع شفاف BLINKMA",
+    "desc": "طقم 6 كبايات / مجات زجاج مضلع شفاف ماركة BLINKMA بسعر 250 جنيه.",
+    "price": 250,
+    "category": "home",
+    "categories": ["home"],
+    "merchant": "شيرين",
+    "img": "Shren/compressed_1795523069771.webp",
+    "images": [
+      "Shren/compressed_1795523069771.webp"
+    ]
+  }
+]
