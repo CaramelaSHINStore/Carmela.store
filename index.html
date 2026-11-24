@@ -1144,7 +1144,7 @@
             top: 0;
             right: 0;
             bottom: 0;
-            width: min(385px, 92vw);
+            width: min(392px, 93vw);
             background: #ffffff;
             z-index: 215;
             transform: translateX(105%);
@@ -1175,26 +1175,40 @@
         .cats-drawer-body {
             flex: 1;
             overflow-y: auto;
-            padding: 10px 14px 18px;
+            padding: 10px 14px 20px;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 11px;
             align-content: start;
-            background: var(--page-mood-bg);
+            background: linear-gradient(180deg, #faf7f2 0%, #f1ebe2 100%);
         }
 
+        /* Refined elegant category cards with expressive artwork */
         .bento-cat-card {
             position: relative;
-            background: rgba(255, 255, 255, 0.96);
+            background: linear-gradient(165deg, #ffffff 0%, #fdfaf6 100%);
             border: 1px solid rgba(24, 20, 18, 0.08);
-            border-radius: 18px;
-            padding: 10px;
+            border-radius: 20px;
+            padding: 11px;
             display: flex;
             flex-direction: column;
             gap: 8px;
             text-align: right;
-            box-shadow: 0 8px 18px -14px rgba(18, 16, 14, 0.24);
-            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 10px 22px -15px rgba(18, 16, 14, 0.26);
+            transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
+            overflow: hidden;
+        }
+
+        .bento-cat-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--cat-accent, var(--accent));
+            opacity: 0.75;
+            transition: opacity 0.2s ease, height 0.2s ease;
         }
 
         .bento-cat-card.featured-all {
@@ -1202,19 +1216,25 @@
             flex-direction: row;
             align-items: center;
             justify-content: space-between;
-            background: linear-gradient(125deg, #ffffff 0%, var(--accent-tint) 100%);
+            padding: 12px 14px;
+            background: linear-gradient(125deg, #fffdf9 0%, #f5ece0 100%);
         }
 
         .bento-cat-card:hover {
-            transform: translateY(-2px);
-            border-color: var(--accent);
-            box-shadow: 0 12px 22px -14px var(--accent-glow);
+            transform: translateY(-3px);
+            border-color: var(--cat-accent, var(--accent));
+            box-shadow: 0 14px 26px -14px rgba(18, 16, 14, 0.28);
+        }
+
+        .bento-cat-card:hover::before {
+            opacity: 1;
+            height: 4px;
         }
 
         .bento-cat-card.active {
-            background: linear-gradient(145deg, var(--espresso) 0%, var(--espresso-soft) 100%);
-            border-color: var(--accent);
-            box-shadow: 0 12px 24px -12px rgba(18, 16, 14, 0.45);
+            background: linear-gradient(145deg, #161310 0%, #27201a 100%);
+            border-color: var(--cat-accent, var(--accent-soft));
+            box-shadow: 0 14px 28px -12px rgba(18, 16, 14, 0.48);
         }
 
         .bento-cat-top {
@@ -1225,35 +1245,49 @@
             width: 100%;
         }
 
-        .bento-cat-thumb {
-            width: 44px;
-            height: 44px;
-            border-radius: 13px;
-            object-fit: cover;
-            border: 1.5px solid var(--accent-glow);
-            background: #f0e8de;
+        .bento-cat-art-frame {
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             flex-shrink: 0;
+            background: var(--cat-art-bg, #f7efe4);
+            border: 1px solid rgba(24, 20, 18, 0.06);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 6px 12px -8px rgba(18, 16, 14, 0.22);
+        }
+
+        .bento-cat-card.active .bento-cat-art-frame {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.16);
+        }
+
+        .bento-cat-art-frame svg {
+            width: 34px;
+            height: 34px;
+            display: block;
         }
 
         .bento-cat-count-pill {
             font-size: 0.66rem;
             font-weight: 900;
-            color: var(--accent-deep);
-            background: var(--accent-tint);
-            border: 1px solid var(--accent-glow);
-            padding: 2px 8px;
+            color: var(--cat-accent-deep, var(--accent-deep));
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(24, 20, 18, 0.09);
+            padding: 2px 9px;
             border-radius: 999px;
             white-space: nowrap;
         }
 
         .bento-cat-card.active .bento-cat-count-pill {
-            background: rgba(255, 255, 255, 0.14);
-            color: var(--accent-soft);
-            border-color: rgba(235, 208, 176, 0.35);
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.25);
         }
 
         .bento-cat-title {
-            font-size: 0.88rem;
+            font-size: 0.9rem;
             font-weight: 900;
             color: var(--espresso);
             line-height: 1.25;
@@ -1267,11 +1301,12 @@
             font-size: 0.68rem;
             font-weight: 700;
             color: var(--text-muted);
-            line-height: 1.25;
+            line-height: 1.3;
+            margin-top: 2px;
         }
 
         .bento-cat-card.active .bento-cat-sub {
-            color: var(--accent-soft);
+            color: rgba(255, 255, 255, 0.82);
         }
 
         .option-modal-backdrop {
@@ -1512,7 +1547,6 @@
             color: var(--espresso-soft);
         }
 
-        /* Compact cart body to display maximum order items at once */
         .cart-body {
             flex: 1;
             overflow-y: auto;
@@ -1931,7 +1965,7 @@
         </div>
 
         <div class="app-search-bar">
-            <input type="text" id="homeSearchInput" placeholder="ابحث عن منتج، تاجر، سعر، أو قسم..." oninput="handleSearchInput()" onkeydown="handleSearchKeyDown(event)">
+            <input type="text" id="homeSearchInput" placeholder="ابحث بذكاء عن منتج، كوبايات، عطر، تاجر، أو قسم..." oninput="handleSearchInput()" onkeydown="handleSearchKeyDown(event)">
             <button type="button" class="search-cancel-btn" id="searchCancelBtn" onclick="cancelSearchMode()">إلغاء</button>
             <button type="button" class="app-search-btn" onclick="handleSearchInput(); scrollToProductsTop();" aria-label="بحث">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -2082,7 +2116,7 @@
             </div>
         </div>
         <div class="cats-drawer-subbar">
-            <span class="cats-drawer-kicker">اختر القسم لاستعراض المنتجات مباشرة</span>
+            <span class="cats-drawer-kicker">أيقونات تعبيرية لكل قسم • اختر للانتقال الفوري</span>
         </div>
         <div class="cats-drawer-body" id="sideCategoriesList"></div>
     </aside>
@@ -2443,6 +2477,82 @@
             perfume: "عطور، سبراي، وعناية شخصية"
         };
 
+        const CATEGORY_THEME_META = {
+            all:     { accent: "#c89666", deep: "#996738", bg: "#f9f1e6" },
+            home:    { accent: "#b88656", deep: "#89592c", bg: "#fbf3ea" },
+            perfume: { accent: "#3b82f6", deep: "#1d4ed8", bg: "#eff6ff" },
+            gifts:   { accent: "#db2777", deep: "#9d174d", bg: "#fdf2f8" },
+            tafse:   { accent: "#52624b", deep: "#384532", bg: "#f2f7f0" },
+            school:  { accent: "#0284c7", deep: "#0369a1", bg: "#f0f9ff" },
+            women:   { accent: "#d97706", deep: "#b45309", bg: "#fffbeb" },
+            men:     { accent: "#334155", deep: "#1e293b", bg: "#f1f5f9" },
+            kids:    { accent: "#0e7490", deep: "#155e75", bg: "#ecfeff" }
+        };
+
+        /* Expressive custom SVG artwork per category */
+        function buildCategoryGraphicSvg(catKey) {
+            switch (catKey) {
+                case "home":
+                    return `<svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                        <path d="M8 22L24 9l16 13v17a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2V22z" fill="#e6c6a5" stroke="#89592c" stroke-width="2.4" stroke-linejoin="round"/>
+                        <path d="M19 41V29h10v12" fill="#fffaf3" stroke="#89592c" stroke-width="2.2" stroke-linejoin="round"/>
+                        <circle cx="24" cy="19" r="2.5" fill="#89592c"/>
+                    </svg>`;
+                case "perfume":
+                    return `<svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                        <rect x="20" y="7" width="8" height="5" rx="1.5" fill="#93c5fd" stroke="#1d4ed8" stroke-width="2"/>
+                        <rect x="13" y="15" width="22" height="24" rx="7" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2.3"/>
+                        <path d="M18 27h12" stroke="#2563eb" stroke-width="2.2" stroke-linecap="round"/>
+                        <path d="M38 11l1.5 3L42 15.5l-2.5 1.5L38 20l-1.5-3L34 15.5l2.5-1.5z" fill="#3b82f6"/>
+                    </svg>`;
+                case "gifts":
+                    return `<svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                        <rect x="10" y="20" width="28" height="19" rx="3" fill="#fbcfe8" stroke="#9d174d" stroke-width="2.3"/>
+                        <rect x="8" y="15" width="32" height="6" rx="2" fill="#f472b6" stroke="#9d174d" stroke-width="2.2"/>
+                        <path d="M24 15v24" stroke="#9d174d" stroke-width="2.4"/>
+                        <path d="M24 15c-2.5-5-9-5.5-9-1.5 0 2.5 5 2 9 1.5zm0 0c2.5-5 9-5.5 9-1.5 0 2.5-5 2-9 1.5z" stroke="#9d174d" stroke-width="2.1" stroke-linejoin="round"/>
+                    </svg>`;
+                case "tafse":
+                    return `<svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                        <line x1="10" y1="12" x2="38" y2="12" stroke="#384532" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M15 12v14c0 5 4 7 9 7s9-2 9-7V12" stroke="#52624b" stroke-width="2.2" stroke-linecap="round"/>
+                        <path d="M17 33v7M22 33v8M26 33v8M31 33v7" stroke="#384532" stroke-width="2.2" stroke-linecap="round"/>
+                        <circle cx="24" cy="21" r="3" fill="#b2c7a8" stroke="#384532" stroke-width="1.8"/>
+                    </svg>`;
+                case "school":
+                    return `<svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                        <rect x="11" y="9" width="21" height="30" rx="3" fill="#bae6fd" stroke="#0369a1" stroke-width="2.3"/>
+                        <path d="M16 16h11M16 22h9" stroke="#0369a1" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M35 12l4 4-11 11-5 1 1-5 11-11z" fill="#7dd3fc" stroke="#0369a1" stroke-width="2" stroke-linejoin="round"/>
+                    </svg>`;
+                case "women":
+                    return `<svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                        <circle cx="24" cy="20" r="9.5" fill="#fde68a" stroke="#b45309" stroke-width="2.3"/>
+                        <path d="M24 29.5v11M18.5 36h11" stroke="#b45309" stroke-width="2.4" stroke-linecap="round"/>
+                    </svg>`;
+                case "men":
+                    return `<svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                        <path d="M16 11l8 5 8-5 6 7-5 5v15H15V23l-5-5 6-7z" fill="#cbd5e1" stroke="#1e293b" stroke-width="2.2" stroke-linejoin="round"/>
+                        <path d="M24 16v22" stroke="#475569" stroke-width="1.8" stroke-dasharray="2 2"/>
+                    </svg>`;
+                case "kids":
+                    return `<svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                        <circle cx="24" cy="24" r="14" fill="#a5f3fc" stroke="#155e75" stroke-width="2.3"/>
+                        <circle cx="19.5" cy="21.5" r="1.8" fill="#155e75"/>
+                        <circle cx="28.5" cy="21.5" r="1.8" fill="#155e75"/>
+                        <path d="M18.5 27.5c1.6 2.3 3.5 3.3 5.5 3.3s3.9-1 5.5-3.3" stroke="#155e75" stroke-width="2.2" stroke-linecap="round"/>
+                        <path d="M24 10c2-3 5-3 6-1" stroke="#0e7490" stroke-width="2.2" stroke-linecap="round"/>
+                    </svg>`;
+                default:
+                    return `<svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                        <rect x="9" y="9" width="13" height="13" rx="4" fill="#ebd0b0" stroke="#996738" stroke-width="2.2"/>
+                        <rect x="26" y="9" width="13" height="13" rx="4" fill="#f7e6d2" stroke="#996738" stroke-width="2.2"/>
+                        <rect x="9" y="26" width="13" height="13" rx="4" fill="#f7e6d2" stroke="#996738" stroke-width="2.2"/>
+                        <rect x="26" y="26" width="13" height="13" rx="4" fill="#c89666" stroke="#996738" stroke-width="2.2"/>
+                    </svg>`;
+            }
+        }
+
         function applyCategoryPageMood(category) {
             const validModes = ["all", "home", "school", "tafse", "kids", "women", "men", "gifts", "perfume"];
             const mode = validModes.includes(category) ? category : "all";
@@ -2493,7 +2603,6 @@
             return "شيرين غريب";
         }
 
-        /* Clean, accurately categorized catalog */
         const PRODUCTS = [
             { id: "hm-1", title: "جوانتي سيليكون حراري للمطبخ", desc: "امسك الصواني السخنة بثبات وأمان تام من أول لمسة بدون قلق من الحرارة.", price: 155, category: "home", img: "Kit/compressed_1795117656213.jpg" },
             { id: "hm-2", title: "شماعة لوكس 3×1", desc: "ضاعف مساحة دولابك في ثوانٍ ورتّب أكثر من قطعة فوق بعض بأناقة.", price: 40, category: "home", img: "Kit/compressed_1794957387150.webp" },
@@ -2761,12 +2870,39 @@
             return result;
         }
 
+        /* Smart Arabic normalization, synonyms & fuzzy matching */
+        const SEARCH_SYNONYMS = {
+            "كوبايات": ["كوب", "اكواب", "كاس", "كاسات", "مج", "مجات"],
+            "كوب": ["كوبايات", "اكواب", "كاس", "كاسات", "مج", "مجات"],
+            "اكواب": ["كوب", "كوبايات", "كاس", "كاسات", "مج", "مجات"],
+            "كاسات": ["كاس", "كوب", "كوبايات", "اكواب", "مج"],
+            "مجات": ["مج", "كوب", "كوبايات", "اكواب"],
+            "برفان": ["عطر", "عطور", "اسبلش", "سبلاش", "معطر", "مخمرية", "بادي"],
+            "عطر": ["برفان", "عطور", "اسبلش", "سبلاش", "مخمرية"],
+            "عطور": ["برفان", "عطر", "اسبلش", "سبلاش", "مخمرية"],
+            "سبلاش": ["اسبلش", "برفان", "عطر", "معطر"],
+            "اسبلش": ["سبلاش", "برفان", "عطر", "معطر"],
+            "كشكول": ["كشاكيل", "نوت بوك", "دفتر", "كراسة", "ورق"],
+            "كشاكيل": ["كشكول", "نوت بوك", "دفتر", "كراسة"],
+            "نوت": ["نوت بوك", "كشكول", "دفتر", "كراسة"],
+            "هاند": ["هاند ميد", "يدوي", "مكرمية", "خرز"],
+            "مكرميه": ["مكرمية", "هاند ميد", "يدوي"],
+            "صينيه": ["صواني", "صينية", "فرن", "خبز", "تقديم"],
+            "صواني": ["صينية", "صينيه", "فرن", "خبز", "تقديم"],
+            "حراري": ["حرارية", "حفظ", "ثرموس", "زمزمية", "مج حراري"],
+            "شماعه": ["شماعة", "شماعات", "تعليقة", "دولاب"],
+            "منشر": ["نشير", "غسيل", "فولاذ", "استانلس"],
+            "هديه": ["هدية", "هدايا", "مفاجاة", "صورة", "طباعة"],
+            "هدايا": ["هدية", "هديه", "مفاجاة", "صورة", "طباعة"],
+            "مرايه": ["مرايا", "مراية", "مرآة", "سحرية"],
+            "مرايا": ["مراية", "مرايه", "مرآة", "سحرية"]
+        };
+
         function normalizeArabicDigits(str) {
             const arabicMap = { "٠": "0", "١": "1", "٢": "2", "٣": "3", "٤": "4", "٥": "5", "٦": "6", "٧": "7", "٨": "8", "٩": "9", "۰": "0", "۱": "1", "۲": "2", "۳": "3", "۴": "4", "۵": "5", "۶": "6", "۷": "7", "۸": "8", "۹": "9" };
             return String(str || "").replace(/[٠-٩۰-۹]/g, ch => arabicMap[ch] || ch);
         }
 
-        /* Enhanced Arabic & token normalization for reliable search */
         function normalizeText(str) {
             return normalizeArabicDigits(str || "")
                 .toLowerCase()
@@ -2776,26 +2912,108 @@
                 .replace(/ى/g, "ي")
                 .replace(/ؤ/g, "و")
                 .replace(/ئ/g, "ي")
-                .replace(/[-_×*\/\\()\[\]{}.,،:؛!؟]+/g, " ")
+                .replace(/[-_×*\/\\()\[\]{}.,،:؛!؟+]+/g, " ")
                 .replace(/\s+/g, " ")
                 .trim();
         }
 
-        function extractTokens(text) {
-            return normalizeText(text).split(/\s+/).map(t => t.trim()).filter(t => t.length >= 1);
+        function boundedLevenshtein(a, b, maxDist = 2) {
+            if (a === b) return 0;
+            const lenA = a.length;
+            const lenB = b.length;
+            if (Math.abs(lenA - lenB) > maxDist) return maxDist + 1;
+            const prev = new Array(lenB + 1);
+            const curr = new Array(lenB + 1);
+            for (let j = 0; j <= lenB; j++) prev[j] = j;
+
+            for (let i = 1; i <= lenA; i++) {
+                curr[0] = i;
+                let rowMin = curr[0];
+                for (let j = 1; j <= lenB; j++) {
+                    const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+                    curr[j] = Math.min(
+                        prev[j] + 1,
+                        curr[j - 1] + 1,
+                        prev[j - 1] + cost
+                    );
+                    if (curr[j] < rowMin) rowMin = curr[j];
+                }
+                if (rowMin > maxDist) return maxDist + 1;
+                for (let j = 0; j <= lenB; j++) prev[j] = curr[j];
+            }
+            return prev[lenB];
+        }
+
+        function termMatchesWord(term, word) {
+            if (!term || !word) return false;
+            if (word.includes(term) || term.includes(word)) return true;
+            if (term.length >= 4 && word.length >= 4) {
+                const maxAllowed = term.length >= 6 ? 2 : 1;
+                if (boundedLevenshtein(term, word, maxAllowed) <= maxAllowed) return true;
+            }
+            return false;
+        }
+
+        function expandTermVariants(term) {
+            const set = new Set([term]);
+            const synList = SEARCH_SYNONYMS[term] || [];
+            synList.forEach(s => {
+                const ns = normalizeText(s);
+                if (ns) set.add(ns);
+            });
+            return Array.from(set);
+        }
+
+        function getProductSearchScore(product, rawQuery) {
+            const normalizedQuery = normalizeText(rawQuery);
+            if (!normalizedQuery) return 1;
+
+            const normTitle = normalizeText(product.title || "");
+            const normDesc = normalizeText(product.desc || "");
+            const normMerchant = normalizeText(product.merchant || "");
+            const allCats = [product.category, ...(Array.isArray(product.categories) ? product.categories : [])];
+            const normCats = normalizeText(allCats.map(c => CATEGORY_NAMES[c] || c || "").join(" "));
+            const normPrice = normalizeText(`${product.price || ""} ${product.priceLabel || ""} ${product.subPrice || ""}`);
+            const fullHaystack = `${normTitle} ${normDesc} ${normMerchant} ${normCats} ${normPrice}`;
+            const words = fullHaystack.split(" ").filter(Boolean);
+            const titleWords = normTitle.split(" ").filter(Boolean);
+
+            const queryTerms = normalizedQuery.split(" ").filter(Boolean);
+            let totalScore = 0;
+
+            for (const term of queryTerms) {
+                const variants = expandTermVariants(term);
+                let termBestScore = 0;
+
+                if (normTitle.includes(term)) {
+                    termBestScore = Math.max(termBestScore, normTitle.startsWith(term) ? 100 : 80);
+                }
+
+                for (const v of variants) {
+                    if (titleWords.some(tw => tw === v)) {
+                        termBestScore = Math.max(termBestScore, 75);
+                    } else if (titleWords.some(tw => tw.startsWith(v) || v.startsWith(tw))) {
+                        termBestScore = Math.max(termBestScore, 60);
+                    } else if (words.some(w => termMatchesWord(v, w))) {
+                        termBestScore = Math.max(termBestScore, 42);
+                    } else if (fullHaystack.includes(v)) {
+                        termBestScore = Math.max(termBestScore, 35);
+                    }
+                }
+
+                if (termBestScore === 0) return 0;
+                totalScore += termBestScore;
+            }
+
+            return totalScore;
         }
 
         function matchesSearchQuery(product, rawQuery) {
-            const normalizedQuery = normalizeText(rawQuery);
-            if (!normalizedQuery) return true;
-            const allCats = [product.category, ...(Array.isArray(product.categories) ? product.categories : [])];
-            const catLabels = allCats.map(c => CATEGORY_NAMES[c] || c || "").join(" ");
-            const merchantLabel = product.merchant || "";
-            const searchableHaystack = normalizeText(
-                `${product.title} ${product.desc || ""} ${merchantLabel} ${product.price} ${product.priceLabel || ""} ${product.subPrice || ""} ${catLabels}`
-            );
-            const terms = normalizedQuery.split(" ").filter(Boolean);
-            return terms.every(term => searchableHaystack.includes(term));
+            return getProductSearchScore(product, rawQuery) > 0;
+        }
+
+        function extractTokens(text) {
+            return normalizeText(text).split(/\s+/).map(t => t.trim()).filter(t => t.length >= 1);
         }
 
         function updateSearchCancelButton() {
@@ -3009,12 +3227,11 @@
             scrollToProductsTop();
         }
 
-        function getCategoryCountAndThumb(catKey) {
+        function getCategoryCount(catKey) {
             const matching = catKey === "all"
                 ? PRODUCTS
                 : PRODUCTS.filter(p => p.category === catKey || (Array.isArray(p.categories) && p.categories.includes(catKey)));
-            const thumb = matching.length ? matching[0].img : "https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg";
-            return { count: matching.length, thumb };
+            return matching.length;
         }
 
         function renderSideCategoriesList() {
@@ -3023,13 +3240,18 @@
             const keys = Object.keys(CATEGORY_NAMES);
             container.innerHTML = keys.map(catKey => {
                 const isActive = !currentMerchant && currentCategory === catKey;
-                const { count, thumb } = getCategoryCountAndThumb(catKey);
+                const count = getCategoryCount(catKey);
                 const subText = CATEGORY_SUBTITLES[catKey] || "تشكيلة مميزة من كارامل";
                 const featuredClass = catKey === "all" ? "featured-all" : "";
+                const theme = CATEGORY_THEME_META[catKey] || CATEGORY_THEME_META.all;
+                const svgArt = buildCategoryGraphicSvg(catKey);
                 return `
-                    <button type="button" class="bento-cat-card ${featuredClass} ${isActive ? "active" : ""}" onclick="selectCategoryFromDrawer('${catKey}')">
+                    <button type="button"
+                        class="bento-cat-card ${featuredClass} ${isActive ? "active" : ""}"
+                        style="--cat-accent:${theme.accent};--cat-accent-deep:${theme.deep};--cat-art-bg:${theme.bg};"
+                        onclick="selectCategoryFromDrawer('${catKey}')">
                         <div class="bento-cat-top">
-                            <img src="${escapeHtmlAttr(thumb)}" alt="${escapeHtmlAttr(CATEGORY_NAMES[catKey])}" class="bento-cat-thumb" onerror="this.style.display='none'">
+                            <span class="bento-cat-art-frame">${svgArt}</span>
                             <span class="bento-cat-count-pill">${count} منتج</span>
                         </div>
                         <div style="flex:1;">
@@ -3250,11 +3472,16 @@
         }
 
         function getFilteredProducts(category, rawQuery) {
+            const hasSearch = Boolean(normalizeText(rawQuery));
             let list = PRODUCTS.filter(p => {
                 const catMatch = category === "all" || p.category === category || (Array.isArray(p.categories) && p.categories.includes(category));
                 const merchantMatch = !currentMerchant || p.merchant === currentMerchant;
                 return catMatch && merchantMatch && matchesSearchQuery(p, rawQuery);
             });
+
+            if (hasSearch) {
+                return [...list].sort((a, b) => getProductSearchScore(b, rawQuery) - getProductSearchScore(a, rawQuery));
+            }
 
             if (currentFeedMode === "deals") {
                 list = sortEconomicAcrossCategories(list);
@@ -3342,7 +3569,7 @@
                 ? " — مدخلات جديدة"
                 : (currentFeedMode === "deals" ? " — أسعار اقتصادية" : " — من أجلك");
             const baseCatTitle = currentMerchant ? `منتجات التاجر: ${currentMerchant}` : `${CATEGORY_NAMES[category] || "المنتجات"}${modeSuffix}`;
-            titleEl.textContent = trimmedQuery ? `${baseCatTitle} — بحث: "${trimmedQuery}"` : baseCatTitle;
+            titleEl.textContent = trimmedQuery ? `${baseCatTitle} — بحث ذكي: "${trimmedQuery}"` : baseCatTitle;
 
             if (countBadgeEl) {
                 countBadgeEl.textContent = `${filteredList.length} منتج`;
@@ -3428,7 +3655,6 @@
             btn.classList.add("pop");
         }
 
-        /* Clean stack-based overlay state management to prevent history.back() conflicts */
         function pushOverlayState(name) {
             if (!overlayStack.includes(name)) {
                 overlayStack.push(name);
@@ -3899,137 +4125,104 @@
         function setCaramelPushButtonDefault() {
             const button = document.getElementById("caramelPushBtn");
             const iconEl = document.getElementById("caramelPushIcon");
-            const label = document.getElementById("caramelPushBtnText");
-            if (!button || !label) return;
+            const textEl = document.getElementById("caramelPushBtnText");
+            if (!button || !iconEl || !textEl) return;
             clearTimeout(caramelPushHideTimer);
-            button.disabled = false;
             button.classList.remove("circle-check-only", "hiding-smooth");
             button.classList.add("visible");
-            if (iconEl) {
-                iconEl.innerHTML = `<svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg>`;
-            }
-            label.textContent = "فعّل إشعارات العروض";
+            iconEl.innerHTML = `<svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg>`;
+            textEl.textContent = "فعّل إشعارات العروض";
         }
 
-        function hideCaramelPushButtonImmediately() {
-            const button = document.getElementById("caramelPushBtn");
-            if (!button) return;
-            clearTimeout(caramelPushHideTimer);
-            button.classList.remove("visible", "circle-check-only", "hiding-smooth");
-        }
-
-        function showGreenCircleAndHidePushBtn(delayBeforeHideMs = 1500) {
+        function setCaramelPushButtonCircleCheck() {
             const button = document.getElementById("caramelPushBtn");
             const iconEl = document.getElementById("caramelPushIcon");
-            const label = document.getElementById("caramelPushBtnText");
-            if (!button) return;
-            try { localStorage.setItem(CARAMEL_PUSH_SUBSCRIBED_KEY, "true"); } catch (e) {}
-            button.disabled = true;
-            button.classList.add("visible");
+            const textEl = document.getElementById("caramelPushBtnText");
+            if (!button || !iconEl || !textEl) return;
             button.classList.remove("hiding-smooth");
-            button.classList.add("circle-check-only");
-            if (label) label.textContent = "";
-            if (iconEl) iconEl.innerHTML = `<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+            button.classList.add("visible", "circle-check-only");
+            button.setAttribute("aria-label", "الإشعارات مفعلة");
+            iconEl.innerHTML = `<svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg>`;
+            textEl.textContent = "الإشعارات مفعلة";
             clearTimeout(caramelPushHideTimer);
             caramelPushHideTimer = setTimeout(() => {
                 button.classList.add("hiding-smooth");
-                setTimeout(() => hideCaramelPushButtonImmediately(), 360);
-            }, delayBeforeHideMs);
+                setTimeout(() => { button.classList.remove("visible", "hiding-smooth"); }, 350);
+            }, 3500);
         }
 
-        (function initCaramelPushButtonState() {
-            let savedSubscribed = false;
-            try { savedSubscribed = localStorage.getItem(CARAMEL_PUSH_SUBSCRIBED_KEY) === "true"; } catch (e) {}
-            const browserDenied = typeof Notification !== "undefined" && Notification.permission === "denied";
-            if (browserDenied) {
-                setCaramelPushButtonDefault();
-                const label = document.getElementById("caramelPushBtnText");
-                if (label) label.textContent = "إشعارات المتجر محظورة";
-                return;
-            }
-            if (savedSubscribed) hideCaramelPushButtonImmediately();
+        function markCaramelPushSubscribed() {
+            try { localStorage.setItem(CARAMEL_PUSH_SUBSCRIBED_KEY, "1"); } catch (e) {}
+            setCaramelPushButtonCircleCheck();
+        }
+
+        function isCaramelPushAlreadySubscribed(osInstance) {
+            try { if (localStorage.getItem(CARAMEL_PUSH_SUBSCRIBED_KEY) === "1") return true; } catch (e) {}
+            try { if (osInstance && osInstance.User && osInstance.User.PushSubscription && osInstance.User.PushSubscription.optedIn === true) return true; } catch (e) {}
+            try { if (typeof Notification !== "undefined" && Notification.permission === "granted") return true; } catch (e) {}
+            return false;
+        }
+
+        function syncCaramelPushButtonState(osInstance) {
+            const activeOs = osInstance || window.OneSignalCaramel;
+            if (isCaramelPushAlreadySubscribed(activeOs)) markCaramelPushSubscribed();
             else setCaramelPushButtonDefault();
-        })();
-
-        async function ensureOneSignalOptedIn(OneSignal) {
-            if (!OneSignal) return false;
-            try {
-                const subId = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.id;
-                const optedIn = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.optedIn === true;
-                if (subId && optedIn) return true;
-                if (OneSignal.User && OneSignal.User.PushSubscription && typeof OneSignal.User.PushSubscription.optIn === "function") {
-                    await OneSignal.User.PushSubscription.optIn();
-                }
-                const newSubId = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.id;
-                const newOptedIn = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.optedIn === true;
-                return Boolean(newSubId && newOptedIn);
-            } catch (e) { return false; }
         }
 
-        function updateCaramelPushButton(OneSignal) {
-            const button = document.getElementById("caramelPushBtn");
-            const label = document.getElementById("caramelPushBtnText");
-            if (!button || !OneSignal) return;
-            try {
-                const subId = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.id;
-                const optedIn = OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.optedIn === true;
-                const permission = (OneSignal.Notifications && OneSignal.Notifications.permissionNative) || (typeof Notification !== "undefined" ? Notification.permission : "default");
-
-                if (permission === "denied") {
-                    try { localStorage.removeItem(CARAMEL_PUSH_SUBSCRIBED_KEY); } catch (e) {}
-                    setCaramelPushButtonDefault();
-                    if (label) label.textContent = "إشعارات المتجر محظورة";
-                } else if (optedIn && subId) {
-                    const alreadyHid = !button.classList.contains("visible");
-                    if (!alreadyHid && !button.classList.contains("circle-check-only")) showGreenCircleAndHidePushBtn(1300);
-                    else if (alreadyHid) { try { localStorage.setItem(CARAMEL_PUSH_SUBSCRIBED_KEY, "true"); } catch (e) {} }
-                } else if (permission === "granted") {
-                    ensureOneSignalOptedIn(OneSignal).then(ok => {
-                        if (ok) showGreenCircleAndHidePushBtn(1300);
-                        else { try { localStorage.removeItem(CARAMEL_PUSH_SUBSCRIBED_KEY); } catch (e) {} setCaramelPushButtonDefault(); }
-                    });
-                } else {
-                    try { localStorage.removeItem(CARAMEL_PUSH_SUBSCRIBED_KEY); } catch (e) {}
-                    setCaramelPushButtonDefault();
-                }
-            } catch (e) {}
-        }
-
-        window.enableCaramelPush = async function () {
-            const OneSignal = window.OneSignalCaramel;
-            if (!OneSignal) return;
-            try {
-                if (OneSignal.Notifications && OneSignal.Notifications.permissionNative === "denied") return;
-                if (OneSignal.Notifications && typeof OneSignal.Notifications.requestPermission === "function") await OneSignal.Notifications.requestPermission();
-                await ensureOneSignalOptedIn(OneSignal);
-                setTimeout(async () => {
-                    const ok = await ensureOneSignalOptedIn(OneSignal);
-                    const nativeGranted = typeof Notification !== "undefined" && Notification.permission === "granted";
-                    if (ok || nativeGranted) showGreenCircleAndHidePushBtn(1500);
-                }, 1000);
-            } catch (error) {}
-        };
+        setCaramelPushButtonDefault();
 
         OneSignalDeferred.push(async function (OneSignal) {
+            window.OneSignalCaramel = OneSignal;
             try {
                 await OneSignal.init({
-                    appId: "19f76037-4f5a-41b4-ada5-20e0abb2b1a7",
-                    serviceWorkerPath: "OneSignalSDKWorker.js",
-                    serviceWorkerParam: { scope: "./" }
+                    appId: "28d3fb88-b981-4034-8028-4bb10fc50a69",
+                    allowLocalhostAsOrigin: true,
+                    notifyButton: { enable: false }
                 });
-                window.OneSignalCaramel = OneSignal;
+                syncCaramelPushButtonState(OneSignal);
                 if (OneSignal.User && OneSignal.User.PushSubscription && typeof OneSignal.User.PushSubscription.addEventListener === "function") {
-                    OneSignal.User.PushSubscription.addEventListener("change", function (event) {
-                        const currentOptedIn = event && event.current ? event.current.optedIn === true : false;
-                        const currentId = event && event.current ? event.current.id : null;
-                        if (currentOptedIn && currentId) showGreenCircleAndHidePushBtn(1500);
-                        else updateCaramelPushButton(OneSignal);
+                    OneSignal.User.PushSubscription.addEventListener("change", event => {
+                        const isOptedIn = event && event.current ? Boolean(event.current.optedIn) : Boolean(OneSignal.User.PushSubscription.optedIn);
+                        if (isOptedIn) markCaramelPushSubscribed();
+                        else {
+                            try { localStorage.removeItem(CARAMEL_PUSH_SUBSCRIBED_KEY); } catch (e) {}
+                            setCaramelPushButtonDefault();
+                        }
                     });
                 }
-                updateCaramelPushButton(OneSignal);
-            } catch (error) {}
+            } catch (err) {
+                syncCaramelPushButtonState(OneSignal);
+            }
+        });
+
+        async function enableCaramelPush() {
+            const os = window.OneSignalCaramel || window.OneSignal;
+            if (!os) {
+                if (typeof Notification !== "undefined" && Notification.permission === "granted") markCaramelPushSubscribed();
+                else showCaramelToast("جارٍ تجهيز خدمة الإشعارات، حاول مرة أخرى خلال ثوانٍ.");
+                return;
+            }
+            try {
+                if (os.Notifications && typeof os.Notifications.requestPermission === "function") {
+                    await os.Notifications.requestPermission();
+                } else if (typeof os.showSlidedownPrompt === "function") {
+                    await os.showSlidedownPrompt();
+                }
+                if (os.User && os.User.PushSubscription && typeof os.User.PushSubscription.optIn === "function") {
+                    await os.User.PushSubscription.optIn();
+                }
+                if (isCaramelPushAlreadySubscribed(os)) markCaramelPushSubscribed();
+                else setCaramelPushButtonDefault();
+            } catch (err) {
+                if (isCaramelPushAlreadySubscribed(os)) markCaramelPushSubscribed();
+                else setCaramelPushButtonDefault();
+            }
+        }
+
+        window.addEventListener("load", () => {
+            syncCaramelPushButtonState(window.OneSignalCaramel);
+            setTimeout(() => syncCaramelPushButtonState(window.OneSignalCaramel), 1500);
         });
     </script>
-
 </body>
 </html>
