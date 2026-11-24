@@ -2005,13 +2005,13 @@
                 </div>
 
                 <div class="cat-circle-item ring-school" data-cat="school" onclick="filterByCategory('school', this)">
-                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0040.jpg" alt="الدراسة" loading="lazy"></div></div>
-                    <span class="cat-circle-label">الدراسة</span>
+                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0040.jpg" alt="المدرسة" loading="lazy"></div></div>
+                    <span class="cat-circle-label">المدرسة</span>
                 </div>
 
                 <div class="cat-circle-item ring-tafse" data-cat="tafse" onclick="filterByCategory('tafse', this)">
-                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0042.jpg" alt="هاند ميد" loading="lazy"></div></div>
-                    <span class="cat-circle-label">هاند ميد</span>
+                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0042.jpg" alt="التفصيل" loading="lazy"></div></div>
+                    <span class="cat-circle-label">التفصيل</span>
                 </div>
 
                 <div class="cat-circle-item ring-kids" data-cat="kids" onclick="filterByCategory('kids', this)">
@@ -2035,8 +2035,8 @@
                 </div>
 
                 <div class="cat-circle-item ring-perfume" data-cat="perfume" onclick="filterByCategory('perfume', this)">
-                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0039.jpg" alt="العناية" loading="lazy"></div></div>
-                    <span class="cat-circle-label">العناية</span>
+                    <div class="cat-ring"><div class="cat-ring-inner"><img src="IMG-20261116-WA0039.jpg" alt="البرفانات" loading="lazy"></div></div>
+                    <span class="cat-circle-label">البرفانات</span>
                 </div>
             </div>
         </div>
@@ -2434,35 +2434,43 @@
 
         const CATEGORY_NAMES = {
             all: "كل المنتجات",
-            home: "مستلزمات المنزل",
-            school: "المكتبة والمدارس",
-            tafse: "هاند ميد",
+            home: "المنزل",
+            school: "المدرسة",
+            tafse: "التفصيل",
             kids: "الأطفال",
-            women: "أزياء وموضة النساء",
+            women: "النساء",
             men: "الرجال",
-            gifts: "الإكسسوارات والهدايا",
-            perfume: "العناية والعطور"
+            gifts: "الهدايا",
+            perfume: "البرفانات"
         };
 
-        /* جميع منتجات التاجر: شيرين غريب */
+        /* منتجات التاجر: شيرين غريب */
         const SHIREEN_PRODUCT_IDS = new Set([
             "hm-1",
-            "hm-32", "hm-33", "hm-34", "hm-35", "hm-36", "hm-37", "hm-38", "hm-39",
+            "hm-32", "hm-33", "hm-35", "hm-36", "hm-37", "hm-39",
             "hm-40", "hm-41", "hm-42", "hm-43", "hm-44", "hm-45", "hm-46", "hm-47",
             "hm-48", "hm-49", "hm-50", "hm-51", "hm-52", "hm-53", "hm-54", "hm-55",
-            "hm-56", "hm-57", "hm-58", "hm-60", "hm-61",
+            "hm-56", "hm-57", "hm-58", "hm-59", "hm-60", "hm-61",
             "hm-62", "hm-63", "hm-64", "hm-65", "hm-66", "hm-67",
-            "tafse-5",
-            "wmn-2", "wmn-3",
+            "tafse-1", "tafse-2", "tafse-3", "tafse-4", "tafse-5", "tafse-23",
+            "wmn-1", "wmn-2", "wmn-3",
             "htm-5", "htm-6", "htm-7", "htm-8", "htm-9", "htm-10", "htm-11", "htm-12",
             "htm-13", "htm-14", "htm-15",
-            "brf-2", "brf-3", "brf-7", "brf-9", "brf-15",
-            "brf-16"
+            "libr-29",
+            "brf-1", "brf-2", "brf-3", "brf-4", "brf-5", "brf-6", "brf-7", "brf-8",
+            "brf-9", "brf-10", "brf-11", "brf-12", "brf-13", "brf-14", "brf-15", "brf-16"
         ]);
 
+        /* منتجات التاجر: أم وليد */
         const UMM_WALEED_PRODUCT_IDS = new Set([
             "amn-1", "amn-2", "amn-3", "amn-4", "amn-5", "amn-6", "amn-7", "amn-8", "amn-9", "amn-10",
-            "tafse-20", "tafse-21", "tafse-22"
+            "tafse-20", "tafse-21", "tafse-22",
+            "hm-2", "hm-3", "hm-4", "hm-5", "hm-6", "hm-7", "hm-8", "hm-19",
+            "hm-9", "hm-10", "hm-11", "hm-12", "hm-34", "hm-38",
+            "hm-14", "hm-15", "hm-16", "hm-17",
+            "hm-22", "hm-23", "hm-26",
+            "hm-28", "hm-29", "hm-30",
+            "hm-31"
         ]);
 
         function inferMerchantForProduct(product) {
