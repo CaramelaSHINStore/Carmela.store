@@ -1,88 +1,39 @@
-function normalizeStoreAssetPath(rawPath = "") {
-    if (!rawPath || typeof rawPath !== "string") return "";
-    let clean = rawPath.trim().replace(/\\/g, "/");
-    if (!clean) return "";
-    if (/^https?:\/\//i.test(clean) || clean.startsWith("data:") || clean.startsWith("blob:")) {
-        return clean;
-    }
-    clean = clean.replace(/^\.\//, "").replace(/^\/+/, "");
-    return encodeURI(clean);
-}
-
-function extractProductImages(rawItem) {
-    if (!rawItem || typeof rawItem !== "object") return [];
-    const list = [];
-
-    if (Array.isArray(rawItem.images)) {
-        rawItem.images.forEach((p) => {
-            const norm = normalizeStoreAssetPath(p);
-            if (norm && !list.includes(norm)) list.push(norm);
-        });
-    }
-
-    const singleKeys = ["img", "image", "photo", "imgUrl", "src", "pic", "thumbnail"];
-    singleKeys.forEach((key) => {
-        if (typeof rawItem[key] === "string" && rawItem[key].trim()) {
-            const norm = normalizeStoreAssetPath(rawItem[key]);
-            if (norm && !list.includes(norm)) list.push(norm);
-        }
-    });
-
-    return list;
-}
-
-async function loadMerchantProductsFromJson() {
-    if (!Array.isArray(MERCHANT_JSON_FILES) || !MERCHANT_JSON_FILES.length) return;
-    const loadedFromFiles = [];
-    const seenIds = new Set();
-
-    for (const entry of MERCHANT_JSON_FILES) {
-        if (!entry || !entry.url) continue;
-        try {
-            const resp = await fetch(`${entry.url}?ts=${Date.now()}`, { cache: "no-store" });
-            if (!resp || !resp.ok) continue;
-
-            const data = await resp.json();
-            const list = Array.isArray(data)
-                ? data
-                : (Array.isArray(data.products) ? data.products : []);
-
-            list.forEach((rawItem, i) => {
-                if (!rawItem || typeof rawItem !== "object") return;
-
-                const productTitle = (rawItem.title || rawItem.name || "").trim();
-                if (!productTitle) return;
-
-                const itemId = rawItem.id || `${entry.url.replace(/[^a-z0-9]/gi, "-")}-${i}`;
-                if (seenIds.has(itemId)) return;
-                seenIds.add(itemId);
-
-                const allImages = extractProductImages(rawItem);
-                const mainImg = allImages[0] || "";
-                const merchantName = inferMerchantForProduct(rawItem, entry.defaultMerchant || "");
-
-                loadedFromFiles.push({
-                    ...rawItem,
-                    id: itemId,
-                    title: productTitle,
-                    name: productTitle,
-                    img: mainImg,
-                    images: allImages,
-                    price: Number(rawItem.price) || 0,
-                    category: rawItem.category || (merchantName === "أم عمار" ? "handmade" : "home"),
-                    merchant: merchantName
-                });
-            });
-        } catch (err) {
-            console.warn("تعذر تحميل ملف التاجر:", entry.url, err);
-        }
-    }
-
-    if (loadedFromFiles.length > 0) {
-        PRODUCTS.splice(0, PRODUCTS.length, ...loadedFromFiles);
-        if (typeof renderSpotlightBoxes === "function") renderSpotlightBoxes();
-        if (typeof renderProducts === "function") renderProducts(currentCategory);
-        if (typeof renderSideCategoriesList === "function") renderSideCategoriesList();
-        if (typeof updateCartUI === "function") updateCartUI();
-    }
-    }
+[
+  {
+    "id": "om-ammar-1",
+    "name": "شنطة خرز كريستال وأسود هاند ميد",
+    "merchant": "أم عمار - هاند ميد",
+    "price": 350,
+    "description": "شنطة هاند ميد أنيقة من الخرز اللامع بتفاصيل متقنة ولمسة فخامة تناسب السهرات والمناسبات والخروجات المميزة.",
+    "images": [
+      "Htm/IMG-20261120-WA0044.jpg",
+      "Htm/IMG-20261120-WA0039.jpg",
+      "Htm/IMG-20261120-WA0030.jpg"
+    ]
+  },
+  {
+    "id": "om-ammar-2",
+    "name": "شنطة لولي أبيض هاند ميد",
+    "merchant": "أم عمار - هاند ميد",
+    "price": 350,
+    "description": "تصميم يدوي راقٍ من اللولي الأبيض بلمعة جذابة وتفاصيل دقيقة تضيف حضورًا ناعمًا وفخمًا لإطلالتك.",
+    "images": [
+      "Htm/IMG-20261120-WA0028.jpg",
+      "Htm/IMG-20261120-WA0013.jpg",
+      "Htm/IMG-20261120-WA0021.jpg"
+    ]
+  },
+  {
+    "id": "om-ammar-3",
+    "name": "شنطة لولي أبيض بسلسلة ذهبية",
+    "merchant": "أم عمار - هاند ميد",
+    "price": 350,
+    "description": "قطعة هاند ميد مميزة تجمع بين نعومة اللولي الأبيض وفخامة السلسلة الذهبية لتمنحك إطلالة متكاملة في كل مناسبة.",
+    "images": [
+      "Htm/IMG-20261120-WA0008.jpg",
+      "Htm/IMG-20261120-WA0003.jpg",
+      "Htm/IMG-20261120-WA0002.jpg",
+      "Htm/IMG-20261120-WA0001.jpg"
+    ]
+  }
+]
