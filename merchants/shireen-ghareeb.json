@@ -88,9 +88,7 @@
       "Shren/compressed_1795519557951.webp",
       "Shren/compressed_1795519557554.webp"
     ]
-  }
-]
-[
+  },
   {
     "id": "shireen-natures-garlic-shampoo-conditioner-140",
     "title": "شامبو وبلسم للشعر بخلاصة الثوم Nature's",
@@ -98,7 +96,7 @@
     "price": 140,
     "category": "perfume",
     "categories": ["perfume"],
-    "merchant": "شيرين",
+    "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795523068619.webp",
     "images": [
       "Shren/compressed_1795523068619.webp"
@@ -111,7 +109,7 @@
     "price": 1800,
     "category": "home",
     "categories": ["home"],
-    "merchant": "شيرين",
+    "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795523069014.webp",
     "images": [
       "Shren/compressed_1795523069014.webp",
@@ -125,7 +123,7 @@
     "price": 160,
     "category": "perfume",
     "categories": ["perfume"],
-    "merchant": "شيرين",
+    "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795523069201.webp",
     "images": [
       "Shren/compressed_1795523069201.webp"
@@ -138,7 +136,7 @@
     "price": 175,
     "category": "perfume",
     "categories": ["perfume"],
-    "merchant": "شيرين",
+    "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795523069992.webp",
     "images": [
       "Shren/compressed_1795523069992.webp"
@@ -151,7 +149,7 @@
     "price": 1300,
     "category": "home",
     "categories": ["home"],
-    "merchant": "شيرين",
+    "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795523069519.webp",
     "images": [
       "Shren/compressed_1795523069519.webp"
@@ -164,7 +162,7 @@
     "price": 1300,
     "category": "home",
     "categories": ["home"],
-    "merchant": "شيرين",
+    "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795523069610.webp",
     "images": [
       "Shren/compressed_1795523069610.webp"
@@ -177,7 +175,7 @@
     "price": 1250,
     "category": "home",
     "categories": ["home"],
-    "merchant": "شيرين",
+    "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795523069912.webp",
     "images": [
       "Shren/compressed_1795523069912.webp"
@@ -190,7 +188,7 @@
     "price": 250,
     "category": "home",
     "categories": ["home"],
-    "merchant": "شيرين",
+    "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795523069771.webp",
     "images": [
       "Shren/compressed_1795523069771.webp"
