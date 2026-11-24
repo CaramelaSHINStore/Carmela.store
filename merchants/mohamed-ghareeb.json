@@ -1,1 +1,305 @@
 
+[
+  {
+    "id": "libr-1",
+    "title": "قلم جاف سحري",
+    "desc": "كتابة سلسة وممتعة تناسب الملاحظات اليومية والاستخدام المدرسي.",
+    "category": "school",
+    "img": "Libr/compressed_1795160031886.webp",
+    "price": 10,
+    "merchant": "محمد غريب"
+  },
+  {
+    "id": "libr-2",
+    "title": "زمزمية مياه رياضية MOT",
+    "desc": "عملية وسهلة الحمل للتمارين والمدرسة والخروجات اليومية.",
+    "category": "school",
+    "img": "Libr/compressed_1795160031599.webp",
+    "price": 140,
+    "merchant": "محمد غريب"
+  },
+  {
+    "id": "libr-3",
+    "title": "ورق فلوسكاب زاد ZAD",
+    "desc": "ورق كتابة مناسب للواجبات والامتحانات والتدوين اليومي.",
+    "category": "school",
+    "img": "Libr/compressed_1795160031301.webp",
+    "price": 30,
+    "merchant": "محمد غريب"
+  },
+  {
+    "id": "libr-4",
+    "title": "نوت بوك سلك 100 ورقة",
+    "desc": "تجليد سلك مريح يفتح بالكامل لكتابة المحاضرات والمذاكرة بسهولة.",
+    "priceLabel": "100 / 120 / 150",
+    "category": "school",
+    "img": "Libr/compressed_1795160031025.webp",
+    "price": 100,
+    "merchant": "محمد غريب"
+  },
+  {
+    "id": "libr-5",
+    "title": "مقلمة أميرات ديزني",
+    "desc": "تصميم بناتي جذاب يجمع الأقلام والأدوات المدرسية في مكان واحد.",
+    "category": "school",
+    "img": "Libr/compressed_1795160030736.webp",
+    "price": 120,
+    "categories": [
+      "school",
+      "kids"
+    ],
+    "merchant": "محمد غريب"
+  },
+  {
+    "id": "libr-6",
+    "title": "لانش بوكس ملون",
+    "desc": "يحفظ ساندويتشات وفواكه المدرسة بشكل مرتب ومبهج للأطفال.",
+    "category": "school",
+    "img": "Libr/compressed_1795160030424.webp",
+    "price": 120,
+    "categories": [
+      "school",
+      "kids"
+    ],
+    "merchant": "محمد غريب"
+  },
+  {
+    "id": "libr-7",
+    "title": "سبورة كتابة LCD PANEL",
+    "desc": "لوح رسم وكتابة إلكتروني خفيف وممتع للأطفال والطلاب مع زر مسح فوري.",
+    "category": "school",
+    "img": "Libr/compressed_1795160030099.webp",
+    "price": 65,
+    "categories": [
+      "school",
+      "kids"
+    ],
+    "merchant": "محمد غريب"
+  },
+  {
+    "id": "libr-8",
+    "title": "نوت بوك سلك 80 / 100 ورقة",
+    "desc": "دفتر سلك عملي وخفيف للمذاكرة وتدوين الأفكار اليومية.",
+    "category": "school",
+    "img": "Libr/compressed_1795160029820.webp",
+    "price": 65,
+    "merchant": "محمد غريب"
+  },
+  {
+    "id": "libr-9",
+    "title": "زمزمية مياه متدرجة بمؤشر ساعات",
+    "desc": "ألوان متدرجة مع علامات زمنية تشجع على شرب المياه بانتظام طوال اليوم.",
+    "category": "school",
+    "img": "Libr/compressed_1795160029544.webp",
+    "price": 140,
+    "merchant": "محمد غريب"
+  },
+  {
+    "id": "libr-10",
+    "title": "باكو كشاكيل 10 كشاكيل",
+    "desc": "توفير عملي بـ 10 كشاكيل جاهزة للمدرسة والدروس والمذاكرة.",
+    "category": "school",
+    "img": "Libr/compressed_1795160029204.webp",
+    "price": 70,
+    "merchant": "محمد غريب"
+  },
+  {
+    "id": "libr-11",
+    "title": "زمزمية مياه متدرجة بينك وأزرق",
+    "desc": "تدرج لوني جذاب وشكل عصري مناسب للمدرسة والنادي والجامعة.",
+    "category": "school",
+    "img": "Libr/compressed_1795160028924.webp",
+    "price": 140,
+    "merchant": "محمد غريب"
+  },
+  {
+    "id": "libr-12",
+    "title": "رش ثلج للأفراح GALA",
+    "desc": "يضيف أجواء احتفالية ومبهجة لأعياد الميلاد والحفلات والمناسبات.",
+    "category": "gifts",
+    "img": "Libr/compressed_1795160028621.webp",
+    "price": 30,
+    "merchant": "محمد غريب"
+  },
+  {
+    "id": "libr-13",
+    "title": "مقلمة Kawai وردية",
+    "desc": "تصميم لطيف باللون الوردي لحفظ الأقلام والمسطرة والممحاة بترتيب.",
+    "category": "school",
+    "img": "Libr/compressed_1795160028347.webp",
+    "price": 50,
+    "categories": [
+      "school",
+      "kids"
+    ],
+    "merchant": "محمد غريب"
+  },
+  {
+    "id": "libr-14",
+    "title": "زمزمية مياه متدرجة Winning",
+    "desc": "شكل رياضي عملي وتدرج ألوان مميز لاصطحابها في كل مكان.",
+    "category": "school",
+    "img": "Libr/compressed_1795160028072.webp",
+    "price": 140,
+    "merchant": "محمد غريب"
+  },
+  {
+    "id": "libr-15",
+    "title": "دبل فيس Mounting Tape",
+    "desc": "شريط لاصق مزدوج الوجه لتثبيت البوسترات والأدوات الخفيفة بسهولة.",
+    "category": "school",
+    "img": "Libr/compressed_1795160027793.webp",
+    "price": 30,
+    "categories": [
+      "school",
+      "home"
+    ],
+    "merchant": "محمد غريب"
+  },
+  {
+    "id": "libr-16",
+    "title": "منظم / مقلمة SUN GROUP",
+    "desc": "يجمع الأدوات المكتبية أو المدرسية بشكل منظم وسهل الوصول.",
+    "category": "school",
+    "img": "Libr/compressed_1795160027493.webp",
+    "price": 70,
+    "merchant": "محمد غريب"
+  },
+  {
+    "id": "libr-17",
+    "title": "زمزميات أطفال فضاء قطعتين",
+    "desc": "قطعتان برسومات فضاء محببة للأطفال للمدرسة والخروجات.",
+    "category": "kids",
+    "img": "Libr/compressed_1795160027187.webp",
+    "price": 100,
+    "categories": [
+      "kids",
+      "school"
+    ],
+    "merchant": "محمد غريب"
+  },
+  {
+    "id": "libr-18",
+    "title": "كيس بالونات 100 قطعة",
+    "desc": "100 بالونة لتزيين حفلات أعياد الميلاد والمفاجآت والمناسبات السعيدة.",
+    "category": "gifts",
+    "img": "Libr/compressed_1795160026903.webp",
+    "price": 85,
+    "categories": [
+      "gifts",
+      "kids"
+    ],
+    "merchant": "محمد غريب"
+  },
+  {
+    "id": "libr-19",
+    "title": "صلصال أطفال NARA",
+    "desc": "يشجع الأطفال على الإبداع وتشكيل المجسمات وتنمية المهارات اليدوية.",
+    "category": "kids",
+    "img": "Libr/compressed_1795160026583.webp",
+    "price": 45,
+    "categories": [
+      "kids",
+      "school"
+    ],
+    "merchant": "محمد غريب"
+  },
+  {
+    "id": "libr-20",
+    "title": "قلم جاف شكل باندا",
+    "desc": "قلم بتصميم باندا يضيف لمسة مرحة للكتابة والمذاكرة.",
+    "category": "school",
+    "img": "Libr/compressed_1795160026304.webp",
+    "price": 10,
+    "merchant": "محمد غريب"
+  },
+  {
+    "id": "libr-21",
+    "title": "ورق كوخ باكو",
+    "desc": "باكو ورق مناسب للأنشطة المدرسية والأعمال الفنية والتطبيقات.",
+    "category": "school",
+    "img": "Libr/compressed_1795160026004.webp",
+    "price": 65,
+    "merchant": "محمد غريب"
+  },
+  {
+    "id": "libr-22",
+    "title": "لانش بوكس CAMEL LUNCH BOX",
+    "desc": "علبة طعام عملية للمدرسة تحافظ على وجبة طفلك منظمة وسهلة الفتح.",
+    "category": "school",
+    "img": "Libr/compressed_1795160025726.webp",
+    "price": 120,
+    "categories": [
+      "school",
+      "kids"
+    ],
+    "merchant": "محمد غريب"
+  },
+  {
+    "id": "libr-23",
+    "title": "مقص أطفال SCISSORS",
+    "desc": "تصميم مريح ليد الأطفال لقص الورق والأعمال الفنية بأمان.",
+    "category": "kids",
+    "img": "Libr/compressed_1795160025453.webp",
+    "price": 20,
+    "categories": [
+      "kids",
+      "school"
+    ],
+    "merchant": "محمد غريب"
+  },
+  {
+    "id": "libr-24",
+    "title": "فوم جليتر باكو ألوان",
+    "desc": "ألوان لامعة جذابة للأشغال اليدوية والوسائل التعليمية وتزيين اللوحات.",
+    "category": "school",
+    "img": "Libr/compressed_1795160025160.webp",
+    "price": 65,
+    "merchant": "محمد غريب"
+  },
+  {
+    "id": "libr-25",
+    "title": "شريط لاصق سيلتيب Falcon",
+    "desc": "رول لاصق شفاف عملي لتغليف الأوراق والرسائل والأعمال اليومية.",
+    "category": "school",
+    "img": "Libr/compressed_1795160024869.webp",
+    "price": 20,
+    "merchant": "محمد غريب"
+  },
+  {
+    "id": "libr-26",
+    "title": "نوت بوك سلك غلاف أنمي",
+    "desc": "غلاف أنمي عصري وأوراق سلك مريحة للدراسة وتدوين الملاحظات.",
+    "priceLabel": "125 / 100 / 150",
+    "category": "school",
+    "img": "Libr/compressed_1795160024565.webp",
+    "price": 125,
+    "merchant": "محمد غريب"
+  },
+  {
+    "id": "libr-27",
+    "title": "مقلمة Andiosya Group بناتي",
+    "desc": "مقلمة بناتي أنيقة لحفظ الأقلام والأدوات المدرسية بشكل مرتب.",
+    "category": "school",
+    "img": "Libr/compressed_1795160024235.webp",
+    "price": 65,
+    "categories": [
+      "school",
+      "kids"
+    ],
+    "merchant": "محمد غريب"
+  },
+  {
+    "id": "libr-28",
+    "title": "ألوان فلوماستر دومس DOMS Aqua 12 لون",
+    "desc": "12 لوناً زاهياً للرسم والتلوين والأنشطة المدرسية بوضوح جميل.",
+    "category": "school",
+    "img": "Libr/compressed_1795160023862.webp",
+    "price": 50,
+    "categories": [
+      "school",
+      "kids"
+    ],
+    "merchant": "محمد غريب"
+  }
+]
