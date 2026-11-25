@@ -139,7 +139,48 @@
             100% { transform: translateX(-220%) skewX(-18deg); }
         }
 
-        /* هيدر ثابت + شريط فئات ثابت + انكماش البحث لأيقونة عند التمرير */
+        @keyframes skeletonPulse {
+            0% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .soft-loading-bar {
+            height: 3px;
+            width: 100%;
+            background: linear-gradient(90deg, transparent, var(--accent), var(--accent-soft), var(--accent-deep), transparent);
+            background-size: 220% 100%;
+            animation: skeletonPulse 1.3s linear infinite;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            pointer-events: none;
+        }
+
+        .soft-loading-bar.active { opacity: 1; }
+
+        .skeleton-card {
+            background: #ffffff;
+            border-radius: 20px;
+            border: 1px solid rgba(24, 20, 18, 0.07);
+            overflow: hidden;
+            box-shadow: var(--shadow-main);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .skeleton-shimmer {
+            background: linear-gradient(90deg, #f3ede6 25%, #faf6f0 50%, #f3ede6 75%);
+            background-size: 220% 100%;
+            animation: skeletonPulse 1.35s ease-in-out infinite;
+        }
+
+        .skeleton-img { width: 100%; height: 186px; }
+        @media (min-width: 768px) { .skeleton-img { height: 224px; } }
+
+        .skeleton-body { padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+        .skeleton-line { height: 12px; border-radius: 999px; }
+        .skeleton-line.short { width: 55%; }
+        .skeleton-line.btn-bar { height: 32px; border-radius: 12px; margin-top: 4px; }
+
         .sticky-header-shell {
             position: sticky;
             top: 0;
@@ -198,11 +239,7 @@
             transition: transform 0.2s ease, padding 0.2s ease;
         }
 
-        .sticky-header-shell.compact .logo-pill {
-            padding: 3px 11px 3px 8px;
-            gap: 6px;
-        }
-
+        .sticky-header-shell.compact .logo-pill { padding: 3px 11px 3px 8px; gap: 6px; }
         .logo-pill:hover { transform: scale(1.02); }
 
         .header-brand-img {
@@ -215,10 +252,7 @@
             transition: width 0.2s ease, height 0.2s ease;
         }
 
-        .sticky-header-shell.compact .header-brand-img {
-            width: 24px;
-            height: 24px;
-        }
+        .sticky-header-shell.compact .header-brand-img { width: 24px; height: 24px; }
 
         .logo-text-group {
             display: flex;
@@ -235,9 +269,7 @@
             line-height: 1.1;
         }
 
-        .sticky-header-shell.compact .logo {
-            font-size: 0.88rem;
-        }
+        .sticky-header-shell.compact .logo { font-size: 0.88rem; }
 
         .logo-sub {
             font-size: 0.56rem;
@@ -247,9 +279,7 @@
             line-height: 1.2;
         }
 
-        .sticky-header-shell.compact .logo-sub {
-            display: none;
-        }
+        .sticky-header-shell.compact .logo-sub { display: none; }
 
         .header-actions {
             display: inline-flex;
@@ -286,11 +316,7 @@
             transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
         }
 
-        .sticky-header-shell.compact .icon-circle-btn {
-            width: 30px;
-            height: 30px;
-            border-radius: 9px;
-        }
+        .sticky-header-shell.compact .icon-circle-btn { width: 30px; height: 30px; border-radius: 9px; }
 
         .icon-circle-btn:hover {
             transform: translateY(-1px);
@@ -308,7 +334,6 @@
             stroke-linejoin: round;
         }
 
-        /* شريط البحث الكامل + وضع الأيقونة المصغرة عند التمرير */
         .app-search-bar {
             display: flex;
             align-items: center;
@@ -338,9 +363,7 @@
         }
 
         .sticky-header-shell.compact:not(.search-expanded) .app-search-bar input,
-        .sticky-header-shell.compact:not(.search-expanded) .search-cancel-btn {
-            display: none !important;
-        }
+        .sticky-header-shell.compact:not(.search-expanded) .search-cancel-btn { display: none !important; }
 
         .sticky-header-shell.compact:not(.search-expanded) .app-search-btn {
             width: 28px;
@@ -397,7 +420,6 @@
 
         .search-cancel-btn.visible { display: inline-flex; align-items: center; justify-content: center; }
 
-        /* شريط الفئات الثابت */
         .quick-top-tabs {
             background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, var(--accent-tint) 100%);
             border-top: 1px solid rgba(200, 150, 102, 0.22);
@@ -426,10 +448,7 @@
             transition: all 0.2s ease;
         }
 
-        .quick-tab-item:hover {
-            border-color: var(--accent);
-            transform: translateY(-1px);
-        }
+        .quick-tab-item:hover { border-color: var(--accent); transform: translateY(-1px); }
 
         .quick-tab-item.active {
             background: linear-gradient(135deg, var(--espresso), var(--espresso-soft));
@@ -447,7 +466,6 @@
             flex: 1;
         }
 
-        /* شريط مزايا مكثف لتقليل المساحة الرأسية */
         .caramel-promo-strip {
             background: linear-gradient(120deg, #ffffff 0%, var(--accent-tint) 55%, #ffffff 100%);
             border: 1px solid var(--accent-glow);
@@ -468,7 +486,7 @@
         .promo-features-group {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             flex-shrink: 0;
         }
 
@@ -480,6 +498,15 @@
             font-weight: 800;
             color: var(--espresso-soft);
             white-space: nowrap;
+            padding: 2px 6px;
+            border-radius: 999px;
+            transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+        }
+
+        .promo-feature-chip:hover {
+            background: rgba(200, 150, 102, 0.16);
+            color: var(--espresso);
+            transform: translateY(-1px);
         }
 
         .promo-icon-box {
@@ -533,10 +560,7 @@
         }
 
         @media (min-width: 820px) {
-            .dual-spotlight-row {
-                grid-template-columns: 1fr 1fr;
-                gap: 14px;
-            }
+            .dual-spotlight-row { grid-template-columns: 1fr 1fr; gap: 14px; }
         }
 
         .spotlight-box {
@@ -619,11 +643,7 @@
             grid-template-columns: 142px 1fr;
         }
 
-        @media (min-width: 480px) {
-            .rotating-showcase-card {
-                grid-template-columns: 156px 1fr;
-            }
-        }
+        @media (min-width: 480px) { .rotating-showcase-card { grid-template-columns: 156px 1fr; } }
 
         .showcase-photo-wrap {
             position: relative;
@@ -682,40 +702,12 @@
             flex-shrink: 0;
         }
 
-        .showcase-prod-price {
-            font-size: 1rem;
-            font-weight: 900;
-            color: var(--accent-deep);
-            white-space: nowrap;
-        }
+        .showcase-prod-price { font-size: 1rem; font-weight: 900; color: var(--accent-deep); white-space: nowrap; }
+        .showcase-prod-price span { font-size: 0.68rem; font-weight: 700; color: var(--text-muted); margin-right: 2px; }
 
-        .showcase-prod-price span {
-            font-size: 0.68rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            margin-right: 2px;
-        }
-
-        .showcase-dots-row {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            flex-shrink: 0;
-        }
-
-        .showcase-dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 999px;
-            background: rgba(24, 20, 18, 0.18);
-            transition: all 0.25s ease;
-            padding: 0;
-        }
-
-        .showcase-dot.active {
-            width: 18px;
-            background: var(--accent-deep);
-        }
+        .showcase-dots-row { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+        .showcase-dot { width: 7px; height: 7px; border-radius: 999px; background: rgba(24, 20, 18, 0.18); transition: all 0.25s ease; padding: 0; }
+        .showcase-dot.active { width: 18px; background: var(--accent-deep); }
 
         .feed-filter-pills {
             display: flex;
@@ -998,10 +990,7 @@
             transition: all 0.2s ease;
         }
 
-        .card-img-dot.active {
-            width: 12px;
-            background: var(--accent-soft);
-        }
+        .card-img-dot.active { width: 12px; background: var(--accent-soft); }
 
         .product-details {
             padding: 11px 12px 12px;
@@ -1161,7 +1150,6 @@
             font-weight: 700;
         }
 
-        /* زر واتساب عائم + زر إشعارات عائم بدون تزاحم */
         .floating-wa-fab {
             position: fixed;
             left: 14px;
@@ -1185,11 +1173,7 @@
             box-shadow: 0 14px 28px rgba(21, 128, 61, 0.52);
         }
 
-        .floating-wa-fab svg {
-            width: 24px;
-            height: 24px;
-            fill: currentColor;
-        }
+        .floating-wa-fab svg { width: 24px; height: 24px; fill: currentColor; }
 
         .floating-notification-pill {
             position: fixed;
@@ -1238,7 +1222,6 @@
             stroke-linejoin: round;
         }
 
-        /* شريط تنقل سفلي مميز كراميلي داكن */
         .bottom-app-nav {
             position: fixed;
             bottom: 0;
@@ -1278,11 +1261,7 @@
             font-weight: 900;
         }
 
-        .bottom-nav-btn:hover {
-            color: #ffffff;
-            background: rgba(255, 255, 255, 0.06);
-        }
-
+        .bottom-nav-btn:hover { color: #ffffff; background: rgba(255, 255, 255, 0.06); }
         .bottom-nav-btn.pop { animation: cartPop 0.3s ease; }
 
         .bottom-nav-btn svg {
@@ -2111,29 +2090,31 @@
             <button type="button" class="quick-tab-item" data-quick="men" onclick="selectTopQuickTab('men', this)">الرجال</button>
             <button type="button" class="quick-tab-item" data-quick="kids" onclick="selectTopQuickTab('kids', this)">الأطفال</button>
         </nav>
+
+        <div class="soft-loading-bar" id="softLoadingBar" aria-hidden="true"></div>
     </div>
 
     <main class="container">
-        <div class="caramel-promo-strip" aria-label="مزايا متجر كارامل">
+        <div class="caramel-promo-strip" aria-label="مزايا متجر كارامل التفاعلية">
             <div class="promo-features-group">
-                <span class="promo-feature-chip">
+                <button type="button" class="promo-feature-chip" onclick="openPolicyInfoModal('cod')">
                     <span class="promo-icon-box" aria-hidden="true">
                         <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M2 10h20"></path></svg>
                     </span>
                     <span>دفع عند الاستلام</span>
-                </span>
-                <span class="promo-feature-chip">
+                </button>
+                <button type="button" class="promo-feature-chip" onclick="openPolicyInfoModal('return')">
                     <span class="promo-icon-box" aria-hidden="true">
                         <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
                     </span>
                     <span>استرجاع خلال أسبوع</span>
-                </span>
-                <span class="promo-feature-chip">
+                </button>
+                <button type="button" class="promo-feature-chip" onclick="openPolicyInfoModal('delivery')">
                     <span class="promo-icon-box" aria-hidden="true">
                         <svg viewBox="0 0 24 24"><path d="M12 2l2.2 6.8L21 11l-6.8 2.2L12 20l-2.2-6.8L3 11l6.8-2.2z"></path></svg>
                     </span>
                     <span>توصيل سريع وأرخص سعر</span>
-                </span>
+                </button>
             </div>
 
             <a href="https://wa.me/201055436305?text=%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%AA%D9%88%D8%A7%D8%B5%D9%84%20%D9%84%D9%84%D8%B7%D9%84%D8%A8%D8%A7%D8%AA%20%D8%A7%D9%84%D8%AE%D8%A7%D8%B5%D8%A9%20%28%D9%85%D9%86%D8%AA%D8%AC%20%D8%BA%D9%8A%D8%B1%20%D9%85%D9%88%D8%AC%D9%88%D8%AF%29" target="_blank" rel="noopener noreferrer" class="promo-special-link">
@@ -2192,7 +2173,6 @@
         <div class="feed-sentinel" id="feedSentinel"></div>
     </main>
 
-    <!-- زر واتساب عائم للتواصل السريع -->
     <a href="https://wa.me/201055436305?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D9%85%D8%AA%D8%AC%D8%B1%20%D9%83%D8%A7%D8%B1%D8%A7%D9%85%D9%84%D8%8C%20%D9%84%D8%AF%D9%8A%20%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%A8%D8%AE%D8%B5%D9%88%D8%B5%20%D8%A7%D9%84%D8%B7%D9%84%D8%A8%D8%A7%D8%AA"
        target="_blank" rel="noopener noreferrer"
        class="floating-wa-fab"
@@ -2242,6 +2222,25 @@
     </nav>
 
     <div class="caramel-toast" id="caramelToast" role="status" aria-live="polite"></div>
+
+    <div class="option-modal-backdrop" id="policyInfoModal" onclick="closePolicyInfoModal()">
+        <div class="option-modal-card" onclick="event.stopPropagation()">
+            <div class="option-modal-header">
+                <h3 id="policyModalTitle">سياسة متجر كارامل</h3>
+                <button type="button" class="option-modal-close" onclick="closePolicyInfoModal()" aria-label="إغلاق">&times;</button>
+            </div>
+            <div class="option-modal-body">
+                <div class="preview-story-card">
+                    <span class="preview-story-label" id="policyModalBadge">مزايا كارامل ستور</span>
+                    <p class="preview-story-text" id="policyModalDesc"></p>
+                    <div class="preview-hook-note" id="policyModalExtra"></div>
+                </div>
+            </div>
+            <div class="option-modal-footer">
+                <button type="button" class="option-confirm-btn" onclick="closePolicyInfoModal()">تمام، فهمت</button>
+            </div>
+        </div>
+    </div>
 
     <div class="cats-backdrop" id="catsBackdrop" onclick="closeCategoriesDrawer()"></div>
     <aside class="cats-drawer" id="catsDrawer" aria-label="قائمة الأقسام">
@@ -2421,6 +2420,27 @@
             "tafse-18": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] }
         };
 
+        const POLICY_DETAILS = {
+            cod: {
+                badge: "راحة وأمان في الشراء",
+                title: "الدفع عند الاستلام",
+                desc: "اطلب منتجاتك من متجر كارامل وادفع نقداً عند استلام طلبك والتأكد منه، بدون أي تعقيدات أو دفع مسبق إجباري.",
+                extra: "تقدر تراجع تفاصيل طلبك وقت الاستلام بكل اطمئنان."
+            },
+            return: {
+                badge: "ضمان جودة ومطابقة",
+                title: "استرجاع خلال أسبوع",
+                desc: "لو وصلتك القطعة وكانت مختلفة عن التفاصيل الموضحة في المتجر أو فيها أي ملاحظة، تقدر تتواصل معانا خلال أسبوع من الاستلام.",
+                extra: "فريق كارامل وتجارنا بيراجعوا الحالة فوراً لخدمتك بأفضل شكل."
+            },
+            delivery: {
+                badge: "سرعة وأفضل قيمة",
+                title: "توصيل سريع وأرخص سعر",
+                desc: "بنوفرلك تشكيلة مختارة مباشرة من التجار والحرفيين بأقل تكلفة ممكنة مع سرعة في تجهيز وتوصيل الطلبات.",
+                extra: "ولو في منتج معين مش ظاهر قدامك، اطلبه بالاسم أو الصورة وهنحاول نوفرهولك."
+            }
+        };
+
         let deferredInstallPrompt = null;
         let toastTimer = null;
         let currentFeedMode = "for-you";
@@ -2441,9 +2461,50 @@
         let dealSlideIdx = 0;
         let autoHoverSlideTimer = null;
         let activeHoveredCard = null;
+        let cardCarouselTimer = null;
         let previewModalState = { productId: null, imgs: [], idx: 0 };
 
-        // إدارة التمرير لتصغير البحث لأيقونة عند النزول وتثبيت الفئات
+        function setSoftLoadingState(isActive) {
+            const bar = document.getElementById("softLoadingBar");
+            if (bar) bar.classList.toggle("active", Boolean(isActive));
+        }
+
+        function buildSkeletonGridHTML(count = 8) {
+            return Array.from({ length: count }, () => `
+                <div class="skeleton-card" aria-hidden="true">
+                    <div class="skeleton-img skeleton-shimmer"></div>
+                    <div class="skeleton-body">
+                        <div class="skeleton-line skeleton-shimmer"></div>
+                        <div class="skeleton-line short skeleton-shimmer"></div>
+                        <div class="skeleton-line btn-bar skeleton-shimmer"></div>
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        function openPolicyInfoModal(policyKey) {
+            const info = POLICY_DETAILS[policyKey] || POLICY_DETAILS.cod;
+            const titleEl = document.getElementById("policyModalTitle");
+            const badgeEl = document.getElementById("policyModalBadge");
+            const descEl = document.getElementById("policyModalDesc");
+            const extraEl = document.getElementById("policyModalExtra");
+            const modal = document.getElementById("policyInfoModal");
+            if (titleEl) titleEl.textContent = info.title;
+            if (badgeEl) badgeEl.textContent = info.badge;
+            if (descEl) descEl.textContent = info.desc;
+            if (extraEl) extraEl.textContent = info.extra;
+            if (modal) modal.classList.add("open");
+            syncBodyScrollLock();
+            pushOverlayState("policy");
+        }
+
+        function closePolicyInfoModal(fromPopState = false) {
+            const modal = document.getElementById("policyInfoModal");
+            if (modal) modal.classList.remove("open");
+            syncBodyScrollLock();
+            if (!fromPopState) removeOverlayState("policy");
+        }
+
         function updateStickySearchCompactState() {
             const shell = document.getElementById("stickyHeaderShell");
             const input = document.getElementById("homeSearchInput");
@@ -2667,6 +2728,32 @@
                 autoHoverSlideTimer = null;
             }
             activeHoveredCard = null;
+        }
+
+        function startAutomaticMultiImageCycling() {
+            if (cardCarouselTimer) clearInterval(cardCarouselTimer);
+            cardCarouselTimer = setInterval(() => {
+                if (document.visibilityState !== "visible") return;
+                const multiCards = Array.from(document.querySelectorAll(".product-card[data-has-multi='1']"));
+                if (!multiCards.length) return;
+                const viewportH = window.innerHeight || 800;
+                const visibleCards = multiCards.filter(c => {
+                    if (c === activeHoveredCard) return false;
+                    const r = c.getBoundingClientRect();
+                    return r.bottom > 40 && r.top < viewportH - 40;
+                });
+                const pool = visibleCards.length ? visibleCards : multiCards.slice(0, 4);
+                const pick = pool[Math.floor(Math.random() * pool.length)];
+                if (!pick) return;
+                const pid = pick.getAttribute("data-product-id");
+                const product = PRODUCTS.find(p => p.id === pid);
+                if (!product) return;
+                const imgs = getProductImagesList(product);
+                if (imgs.length <= 1) return;
+                const imgEl = pick.querySelector(".product-img-box img");
+                const curIdx = Number(imgEl?.getAttribute("data-img-idx") || "0");
+                setCardImageByIndex(pick, product, curIdx + 1);
+            }, 3200);
         }
 
         function isApparelProduct(product) {
@@ -2931,7 +3018,6 @@
                 .replace(/\b\w/g, ch => ch.toUpperCase());
         }
 
-        // محرك تصنيف وترتيب ذكي يعتمد على تحليل البيانات والصور والوسوم
         function classifyProductSmartly(rawCat, title = "", desc = "", imagesList = [], numericPrice = 0) {
             const validKeys = Object.keys(CATEGORY_NAMES).filter(k => k !== "all");
             const normCat = normalizeText(rawCat || "");
@@ -2984,7 +3070,6 @@
                 };
             }
 
-            // ترتيب احتياطي ذكي حسب السعر وعدد الصور إذا لم تتطابق الكلمات المفتاحية
             if (numericPrice > 0 && numericPrice <= 120) {
                 return { category: "school", confidence: 0.55, aiTag: "ترتيب ذكي" };
             }
@@ -3071,7 +3156,6 @@
             const rawCategory = rawItem.category || rawItem.section || rawItem.department || rawItem.type || "";
             const smartClass = classifyProductSmartly(rawCategory, itemTitle, itemDesc, extractedImgs, numericPrice);
 
-            // درجة جودة/أولوية ذكية تعتمد على وضوح الوصف والصور والسعر
             const richnessScore =
                 (extractedImgs.length ? 3 : 0) +
                 (extractedImgs.length > 1 ? 1.5 : 0) +
@@ -3162,34 +3246,39 @@
 
         async function loadMerchantProductsFromJson() {
             isLoadingJsonProducts = true;
+            setSoftLoadingState(true);
             renderProducts(currentCategory);
 
-            const merchantSources = await discoverMerchantJsonSources();
-            const jsonProductsById = new Map();
+            try {
+                const merchantSources = await discoverMerchantJsonSources();
+                const jsonProductsById = new Map();
 
-            const fetchedPayloads = await Promise.all(
-                merchantSources.map(async source => ({
-                    source,
-                    payload: await fetchJsonWithFallback(source)
-                }))
-            );
+                const fetchedPayloads = await Promise.all(
+                    merchantSources.map(async source => ({
+                        source,
+                        payload: await fetchJsonWithFallback(source)
+                    }))
+                );
 
-            fetchedPayloads.forEach(({ source, payload }) => {
-                if (!payload) return;
-                const { items, fileMerchant, fileStyle } = extractRawItemsFromJsonPayload(payload, source.defaultMerchant);
-                const slugPrefix = source.slug.replace(/[^a-z0-9\u0600-\u06FF]/gi, "-");
+                fetchedPayloads.forEach(({ source, payload }) => {
+                    if (!payload) return;
+                    const { items, fileMerchant, fileStyle } = extractRawItemsFromJsonPayload(payload, source.defaultMerchant);
+                    const slugPrefix = source.slug.replace(/[^a-z0-9\u0600-\u06FF]/gi, "-");
 
-                items.forEach((rawItem, idx) => {
-                    const normalized = normalizeRawJsonProduct(rawItem, idx, slugPrefix, fileMerchant, fileStyle);
-                    if (!normalized) return;
-                    const uniqueKey = `${slugPrefix}::${normalized.id}`;
-                    jsonProductsById.set(uniqueKey, normalized);
+                    items.forEach((rawItem, idx) => {
+                        const normalized = normalizeRawJsonProduct(rawItem, idx, slugPrefix, fileMerchant, fileStyle);
+                        if (!normalized) return;
+                        const uniqueKey = `${slugPrefix}::${normalized.id}`;
+                        jsonProductsById.set(uniqueKey, normalized);
+                    });
                 });
-            });
 
-            const loadedList = Array.from(jsonProductsById.values());
-            PRODUCTS.splice(0, PRODUCTS.length, ...loadedList);
-            isLoadingJsonProducts = false;
+                const loadedList = Array.from(jsonProductsById.values());
+                PRODUCTS.splice(0, PRODUCTS.length, ...loadedList);
+            } finally {
+                isLoadingJsonProducts = false;
+                setSoftLoadingState(false);
+            }
 
             renderSpotlightBoxes();
             renderProducts(currentCategory);
@@ -3871,7 +3960,7 @@
             ` : "";
 
             return `
-                <article class="product-card ${styleClass}" data-product-id="${escapeHtmlAttr(product.id)}" data-merchant="${escapeHtmlAttr(merchantName)}">
+                <article class="product-card ${styleClass}" data-product-id="${escapeHtmlAttr(product.id)}" data-merchant="${escapeHtmlAttr(merchantName)}" data-has-multi="${hasMultiImgs ? "1" : "0"}">
                     ${badgeHtml}
                     <div class="product-img-box"
                          onmouseenter="startCardAutoSlide(this.closest('.product-card'), '${escapeHtmlAttr(product.id)}')"
@@ -4043,11 +4132,7 @@
                 if (sentinel) sentinel.textContent = "";
 
                 if (isLoadingJsonProducts && !PRODUCTS.length) {
-                    grid.innerHTML = `
-                        <div style="grid-column: 1 / -1; background: #fff; padding: 26px; border-radius: 20px; text-align: center; border: 1px solid var(--accent-glow);">
-                            <p style="font-weight: 800; color: var(--espresso-soft);">جاري تحميل منتجات التجار وتصنيفها من ملفات الـ JSON...</p>
-                        </div>
-                    `;
+                    grid.innerHTML = buildSkeletonGridHTML(8);
                     return;
                 }
 
@@ -4150,11 +4235,13 @@
             const catsOpen = document.getElementById("catsDrawer")?.classList.contains("open");
             const imgOpen = document.getElementById("imageModal")?.classList.contains("open");
             const optOpen = document.getElementById("productOptionModal")?.classList.contains("open");
-            document.body.style.overflow = (cartOpen || catsOpen || imgOpen || optOpen) ? "hidden" : "";
+            const polOpen = document.getElementById("policyInfoModal")?.classList.contains("open");
+            document.body.style.overflow = (cartOpen || catsOpen || imgOpen || optOpen || polOpen) ? "hidden" : "";
         }
 
         function closeAllOverlays() {
             overlayStack = [];
+            document.getElementById("policyInfoModal")?.classList.remove("open");
             document.getElementById("productOptionModal")?.classList.remove("open");
             document.getElementById("imageModal")?.classList.remove("open");
             document.getElementById("cartDrawer")?.classList.remove("open");
@@ -4648,7 +4735,8 @@
         window.addEventListener("popstate", () => {
             if (overlayStack.length > 0) {
                 const top = overlayStack.pop();
-                if (top === "options") closeProductOptionModal(true);
+                if (top === "policy") closePolicyInfoModal(true);
+                else if (top === "options") closeProductOptionModal(true);
                 else if (top === "preview") closeImageModal(true);
                 else if (top === "cart") closeCart(true);
                 else if (top === "cats") closeCategoriesDrawer(true);
@@ -4660,6 +4748,7 @@
 
         window.addEventListener("keydown", e => {
             if (e.key === "Escape") {
+                if (document.getElementById("policyInfoModal")?.classList.contains("open")) { closePolicyInfoModal(); return; }
                 if (document.getElementById("productOptionModal")?.classList.contains("open")) { closeProductOptionModal(); return; }
                 if (document.getElementById("imageModal")?.classList.contains("open")) { closeImageModal(); return; }
                 if (document.getElementById("cartDrawer")?.classList.contains("open")) { closeCart(); return; }
@@ -4827,6 +4916,7 @@
         renderSideCategoriesList();
         updateCartUI();
         initFeedSentinelObserver();
+        startAutomaticMultiImageCycling();
         loadMerchantProductsFromJson();
     </script>
 </body>
