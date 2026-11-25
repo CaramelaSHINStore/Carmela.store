@@ -7,7 +7,8 @@
     "category": "tafse",
     "categories": [
       "tafse",
-      "home"
+      "home",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795518358072.webp",
@@ -59,7 +60,8 @@
     "category": "tafse",
     "categories": [
       "tafse",
-      "home"
+      "home",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795519710564.webp",
@@ -96,7 +98,8 @@
     "category": "tafse",
     "categories": [
       "tafse",
-      "home"
+      "home",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795519558642.webp",
@@ -129,7 +132,8 @@
     "price": 1800,
     "category": "home",
     "categories": [
-      "home"
+      "home",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795523069014.webp",
@@ -190,7 +194,8 @@
     "price": 1300,
     "category": "home",
     "categories": [
-      "home"
+      "home",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795523069610.webp",
@@ -205,7 +210,8 @@
     "price": 1250,
     "category": "home",
     "categories": [
-      "home"
+      "home",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795523069912.webp",
@@ -236,7 +242,8 @@
     "category": "tafse",
     "categories": [
       "tafse",
-      "home"
+      "home",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525683537.webp",
@@ -281,7 +288,8 @@
     "price": 225,
     "category": "home",
     "categories": [
-      "home"
+      "home",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525683211.webp",
@@ -296,7 +304,8 @@
     "price": 150,
     "category": "perfume",
     "categories": [
-      "perfume"
+      "perfume",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525683381.webp",
@@ -386,7 +395,8 @@
     "price": 240,
     "category": "home",
     "categories": [
-      "home"
+      "home",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525682338.webp",
@@ -416,7 +426,8 @@
     "price": 150,
     "category": "perfume",
     "categories": [
-      "perfume"
+      "perfume",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525682015.webp",
@@ -431,7 +442,8 @@
     "price": 230,
     "category": "perfume",
     "categories": [
-      "perfume"
+      "perfume",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525682101.webp",
@@ -446,7 +458,8 @@
     "price": 100,
     "category": "perfume",
     "categories": [
-      "perfume"
+      "perfume",
+      "home"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525681936.webp",
@@ -521,7 +534,8 @@
     "price": 180,
     "category": "home",
     "categories": [
-      "home"
+      "home",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525681467.webp",
@@ -536,7 +550,8 @@
     "price": 250,
     "category": "perfume",
     "categories": [
-      "perfume"
+      "perfume",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525681338.webp",
@@ -551,7 +566,8 @@
     "price": 120,
     "category": "perfume",
     "categories": [
-      "perfume"
+      "perfume",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525681083.webp",
@@ -566,7 +582,8 @@
     "price": 850,
     "category": "home",
     "categories": [
-      "home"
+      "home",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525681283.webp",
@@ -641,7 +658,8 @@
     "price": 230,
     "category": "home",
     "categories": [
-      "home"
+      "home",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525680554.webp",
@@ -761,7 +779,8 @@
     "price": 375,
     "category": "perfume",
     "categories": [
-      "perfume"
+      "perfume",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525679513.webp",
@@ -776,7 +795,8 @@
     "price": 375,
     "category": "perfume",
     "categories": [
-      "perfume"
+      "perfume",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525679587.webp",
@@ -791,7 +811,8 @@
     "price": 175,
     "category": "perfume",
     "categories": [
-      "perfume"
+      "perfume",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525679436.webp",
@@ -836,7 +857,8 @@
     "price": 375,
     "category": "perfume",
     "categories": [
-      "perfume"
+      "perfume",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525679120.webp",
@@ -851,7 +873,8 @@
     "price": 200,
     "category": "perfume",
     "categories": [
-      "perfume"
+      "perfume",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525678955.webp",
@@ -881,7 +904,8 @@
     "price": 275,
     "category": "home",
     "categories": [
-      "home"
+      "home",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525678854.webp",
@@ -926,7 +950,8 @@
     "price": 1500,
     "category": "home",
     "categories": [
-      "home"
+      "home",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525678541.webp",
@@ -956,7 +981,8 @@
     "price": 400,
     "category": "home",
     "categories": [
-      "home"
+      "home",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525678042.webp",
@@ -971,7 +997,8 @@
     "price": 500,
     "category": "home",
     "categories": [
-      "home"
+      "home",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525678207.webp",
@@ -1001,7 +1028,8 @@
     "price": 350,
     "category": "home",
     "categories": [
-      "home"
+      "home",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525677806.webp",
@@ -1031,7 +1059,8 @@
     "price": 200,
     "category": "perfume",
     "categories": [
-      "perfume"
+      "perfume",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525677659.webp",
@@ -1046,7 +1075,8 @@
     "price": 375,
     "category": "perfume",
     "categories": [
-      "perfume"
+      "perfume",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525677310.webp",
@@ -1091,7 +1121,8 @@
     "price": 160,
     "category": "perfume",
     "categories": [
-      "perfume"
+      "perfume",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525676515.webp",
@@ -1136,7 +1167,8 @@
     "price": 200,
     "category": "perfume",
     "categories": [
-      "perfume"
+      "perfume",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525676873.webp",
