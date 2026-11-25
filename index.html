@@ -1755,6 +1755,28 @@
         .cart-total-row { display: flex; align-items: center; justify-content: space-between; font-size: 0.94rem; font-weight: 900; }
         .cart-total-amount { color: var(--accent-deep); font-size: 1.08rem; }
 
+        
+        .checkout-wa-direct-btn {
+            width: 100%;
+            padding: 8px 14px;
+            border-radius: 12px;
+            background: var(--surface-soft);
+            color: #15803d;
+            border: 1.5px solid rgba(22, 163, 74, 0.35);
+            font-size: 0.82rem;
+            font-weight: 800;
+            transition: all 0.2s ease;
+        }
+        body.dark-theme .checkout-wa-direct-btn {
+            color: #4ade80;
+            background: rgba(22, 163, 74, 0.12);
+        }
+        .checkout-wa-direct-btn:hover {
+            background: #16a34a;
+            color: #ffffff;
+            border-color: #16a34a;
+        }
+
         .checkout-wa-btn {
             width: 100%;
             padding: 9px 14px;
@@ -2260,7 +2282,8 @@
                 <span>الإجمالي:</span>
                 <span class="cart-total-amount" id="cartTotalAmount">0 جنيه</span>
             </div>
-            <button type="button" class="checkout-wa-btn" onclick="checkoutOnWhatsApp()">إتمام الطلب عبر واتساب</button>
+                        <button type="button" class="checkout-wa-btn" onclick="checkoutOnWhatsApp()">إتمام الطلب عبر واتساب</button>
+            <button type="button" class="checkout-wa-direct-btn" onclick="openWhatsAppChatDirect()">الدخول إلى واتساب</button>
             <button type="button" class="clear-cart-btn" onclick="clearCart()">تفريغ المشتريات</button>
         </div>
     </aside>
@@ -2496,7 +2519,7 @@
                 titleEl.textContent = "سياسة الاسترجاع";
                 bodyEl.innerHTML = `
                     <div class="service-info-list">
-                        <div class="service-info-item"><strong>سياسة الاسترجاع:</strong>   تالف / به عيوب / أو غير الوصف.</div>
+                        <div class="service-info-item"><strong>سياسة الاسترجاع:</strong> خلال أسبوع لو المنتج تالف / به عيوب / أو غير الوصف.</div>
                     </div>
                 `;
             }
@@ -4666,15 +4689,9 @@
             message += `الإجمالي الكلي: ${total} جنيه\n`;
             message += `الدفع: السويس الدفع عند الاستلام — المحافظات الأخرى إنستا باي أو فوري أو كاش\n`;
             message += `التوصيل: خلال يوم عمل\n`;
-            message += `الاسترجاع: منك / تالف / به عيوب / أو غير الوصف.`;
+            message += `الاسترجاع: خلال أسبوع لو المنتج تالف / به عيوب / أو غير الوصف.`;
 
-            const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-            const waWin = window.open(waUrl, "_blank", "noopener,noreferrer");
-            if (!waWin) {
-                window.location.href = waUrl;
-            }
-
-            await sendOrderToGoogleSheet({
+            const payload = {
                 orderId,
                 customerName,
                 phone,
@@ -4682,8 +4699,57 @@
                 items: itemsSummaryParts.join(" | "),
                 total,
                 status: "جديد"
-            });
+            };
+
+            if (GOOGLE_SCRIPT_URL) {
+                try {
+                    await fetch(GOOGLE_SCRIPT_URL, {
+                        method: "POST",
+                        mode: "no-cors",
+                        keepalive: true,
+                        headers: {
+                            "Content-Type": "text/plain;charset=utf-8"
+                        },
+                        body: JSON.stringify(payload)
+                    });
+                } catch (err) {
+                    console.error("Failed to record order in Google Sheet:", err);
+                }
+            }
+
+            const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+            const waWin = window.open(waUrl, "_blank", "noopener,noreferrer");
+            if (!waWin) {
+                window.location.href = waUrl;
+            }
         }
+
+        function openWhatsAppChatDirect() {
+            const nameEl = document.getElementById("checkoutCustomerName");
+            const phoneEl = document.getElementById("checkoutCustomerPhone");
+            const addrEl = document.getElementById("checkoutCustomerAddress");
+            const customerName = (nameEl?.value || "").trim();
+            const phone = (phoneEl?.value || "").trim();
+            const address = (addrEl?.value || "").trim();
+            if (customerName || phone || address) {
+                saveCustomerInfo(customerName, phone, address);
+            }
+
+            let greeting = "مرحباً متجر كارامل، أريد التواصل معكم.";
+            if (customerName || phone || address) {
+                greeting += "\n";
+                if (customerName) greeting += `الاسم: ${customerName}\n`;
+                if (phone) greeting += `الواتساب: ${phone}\n`;
+                if (address) greeting += `العنوان: ${address}\n`;
+            }
+
+            const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(greeting)}`;
+            const waWin = window.open(waUrl, "_blank", "noopener,noreferrer");
+            if (!waWin) {
+                window.location.href = waUrl;
+            }
+        }
+
 
         function renderPreviewMediaGallery() {
             const modalImg = document.getElementById("modalImagePreview");
