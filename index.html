@@ -2681,20 +2681,57 @@
     <script>
         const WHATSAPP_NUMBER = "201055436305";
 
+        function buildWhatsAppDeepLink(url) {
+            try {
+                const parsed = new URL(url);
+                const pathPhone = parsed.pathname.replace(/^\/+/, "").trim();
+                const queryPhone = (parsed.searchParams.get("phone") || "").trim();
+                const phone = (pathPhone || queryPhone || WHATSAPP_NUMBER || "").replace(/\D/g, "");
+                const text = parsed.searchParams.get("text") || "";
+
+                const apiParams = new URLSearchParams();
+                if (phone) apiParams.set("phone", phone);
+                if (text) apiParams.set("text", text);
+                const apiUrl = `https://api.whatsapp.com/send?${apiParams.toString()}`;
+
+                const schemeParams = new URLSearchParams();
+                if (phone) schemeParams.set("phone", phone);
+                if (text) schemeParams.set("text", text);
+                const schemeUrl = `whatsapp://send?${schemeParams.toString()}`;
+
+                const intentQuery = schemeParams.toString() ? `?${schemeParams.toString()}` : "";
+                const intentUrl = `intent://send${intentQuery}#Intent;scheme=whatsapp;package=com.whatsapp;S.browser_fallback_url=${encodeURIComponent(apiUrl)};end`;
+
+                return { phone, text, apiUrl, schemeUrl, intentUrl };
+            } catch (e) {
+                return {
+                    phone: WHATSAPP_NUMBER,
+                    text: "",
+                    apiUrl: url,
+                    schemeUrl: url,
+                    intentUrl: url
+                };
+            }
+        }
+
         function launchWhatsAppTarget(url) {
+            const { intentUrl, schemeUrl, apiUrl } = buildWhatsAppDeepLink(url);
             const isAndroid = /Android/i.test(navigator.userAgent || "");
+
             if (isAndroid) {
                 try {
-                    const parsed = new URL(url);
-                    const queryPart = parsed.search || "";
-                    const intentUrl = `intent://send${queryPart}#Intent;scheme=whatsapp;package=com.whatsapp;S.browser_fallback_url=${encodeURIComponent(url)};end`;
                     window.location.href = intentUrl;
                     return;
                 } catch (e) {}
+                try {
+                    window.location.href = schemeUrl;
+                    return;
+                } catch (e) {}
             }
-            const waWin = window.open(url, "_blank", "noopener,noreferrer");
+
+            const waWin = window.open(apiUrl, "_blank", "noopener,noreferrer");
             if (!waWin) {
-                window.location.href = url;
+                window.location.href = apiUrl;
             }
         }
 
