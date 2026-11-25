@@ -2288,14 +2288,19 @@
             "mohamed-ghareeb": "محمد غريب",
             "shireen-ghareeb": "شيرين غريب",
             "umm-ammar": "أم عمار",
-            "umm-waleed": "أم وليد"
+            "umm-waleed": "أم وليد",
+            "products": "متجر كارامل",
+            "catalog": "متجر كارامل",
+            "store": "متجر كارامل"
         };
 
         const FALLBACK_MERCHANT_FILES = [
             "merchants/mohamed-ghareeb.json",
             "merchants/shireen-ghareeb.json",
             "merchants/umm-ammar.json",
-            "merchants/umm-waleed.json"
+            "merchants/umm-waleed.json",
+            "products.json",
+            "data/products.json"
         ];
 
         const DEFAULT_APPAREL_SIZES = ["S", "M", "L", "XL", "XXL"];
@@ -2628,6 +2633,81 @@
             return false;
         }
 
+        function normalizePriceChoiceItem(entry, fallbackPrice = 0) {
+            if (!entry) return null;
+            if (typeof entry === "string") {
+                const label = entry.trim();
+                if (!label) return null;
+                const extractedPrice = parseNumericPrice(label);
+                return { label, price: extractedPrice > 0 ? extractedPrice : (Number(fallbackPrice) || 0) };
+            }
+            if (typeof entry === "object") {
+                const rawLabel = entry.label || entry.name || entry.title || entry.value || entry.size || "";
+                const label = String(rawLabel).trim();
+                if (!label) return null;
+                const p = entry.price ?? entry.cost ?? entry.amount ?? entry.salePrice ?? fallbackPrice;
+                const numPrice = parseNumericPrice(p);
+                return { label, price: numPrice > 0 ? numPrice : (Number(fallbackPrice) || 0) };
+            }
+            return null;
+        }
+
+        function extractJsonPriceOptions(product) {
+            if (!product || typeof product !== "object") return [];
+            const fallbackPrice = Number(product.price) || 0;
+            const collected = [];
+
+            const pushChoice = (lbl, prc) => {
+                const label = String(lbl || "").trim();
+                if (!label) return;
+                const parsedP = parseNumericPrice(prc);
+                const finalPrice = parsedP > 0 ? parsedP : fallbackPrice;
+                const formattedLabel = /جنيه|\bج\b|EGP/i.test(label)
+                    ? label
+                    : (finalPrice > 0 ? `${label} (${finalPrice} جنيه)` : label);
+                collected.push({ label: formattedLabel, price: finalPrice });
+            };
+
+            if (Array.isArray(product.priceOptions)) {
+                product.priceOptions.forEach(item => {
+                    if (typeof item === "string") pushChoice(item, item);
+                    else if (item && typeof item === "object") {
+                        pushChoice(item.label || item.name || item.title || item.value, item.price ?? item.cost ?? item.amount);
+                    }
+                });
+            }
+
+            if (!collected.length && Array.isArray(product.variants)) {
+                product.variants.forEach(item => {
+                    if (typeof item === "string") pushChoice(item, item);
+                    else if (item && typeof item === "object") {
+                        pushChoice(item.label || item.name || item.title || item.value, item.price ?? item.cost ?? item.amount);
+                    }
+                });
+            }
+
+            if (!collected.length && Array.isArray(product.options)) {
+                product.options.forEach(opt => {
+                    if (!opt || typeof opt !== "object") return;
+                    const priceMap = (opt.prices && typeof opt.prices === "object") ? opt.prices : null;
+                    if (Array.isArray(opt.values)) {
+                        opt.values.forEach(v => {
+                            if (typeof v === "string") {
+                                const mappedPrice = priceMap && v in priceMap ? priceMap[v] : v;
+                                pushChoice(v, mappedPrice);
+                            } else if (v && typeof v === "object") {
+                                pushChoice(v.label || v.name || v.value, v.price ?? v.cost ?? v.amount);
+                            }
+                        });
+                    } else if (priceMap) {
+                        Object.entries(priceMap).forEach(([k, val]) => pushChoice(k, val));
+                    }
+                });
+            }
+
+            return collected;
+        }
+
         function getProductVariantConfig(product) {
             if (!product) return null;
             const explicit = PRODUCT_VARIANTS[product.id] || {};
@@ -2639,7 +2719,10 @@
                 config.colors = product.colors;
             }
 
-            if (Array.isArray(explicit.sizes) && explicit.sizes.length) {
+            const jsonPriceOpts = extractJsonPriceOptions(product);
+            if (jsonPriceOpts.length) {
+                config.sizes = jsonPriceOpts;
+            } else if (Array.isArray(explicit.sizes) && explicit.sizes.length) {
                 config.sizes = explicit.sizes;
             } else if (Array.isArray(product.sizes) && product.sizes.length) {
                 config.sizes = product.sizes;
@@ -3055,6 +3138,38 @@
         async function discoverMerchantJsonSources() {
             const sourcesMap = new Map();
 
+            const registerJsonPath = (relPath, customDownloadUrl = "") => {
+                const normalizedPath = String(relPath || "").replace(/^\.?\/+/, "").trim();
+                if (!normalizedPath || !/\.json$/i.test(normalizedPath)) return;
+                const key = normalizedPath.toLowerCase();
+                if (!sourcesMap.has(key)) {
+                    const fileName = normalizedPath.split("/").pop();
+                    const slug = fileName.replace(/\.json$/i, "");
+                    sourcesMap.set(key, {
+                        slug,
+                        localUrl: normalizedPath,
+                        rawUrl: customDownloadUrl || `https://raw.githubusercontent.com/${GITHUB_MERCHANTS_CONFIG.owner}/${GITHUB_MERCHANTS_CONFIG.repo}/${GITHUB_MERCHANTS_CONFIG.branch}/${normalizedPath}`,
+                        defaultMerchant: resolveMerchantNameFromFile(fileName)
+                    });
+                }
+            };
+
+            try {
+                const indexJsonResp = await fetch(`./merchants/index.json?ts=${Date.now()}`, { cache: "no-store" });
+                if (indexJsonResp && indexJsonResp.ok) {
+                    const idxData = await indexJsonResp.json();
+                    const fileEntries = Array.isArray(idxData) ? idxData : (Array.isArray(idxData?.files) ? idxData.files : []);
+                    fileEntries.forEach(entry => {
+                        if (typeof entry === "string") {
+                            registerJsonPath(entry.includes("/") ? entry : `${GITHUB_MERCHANTS_CONFIG.folder}/${entry}`);
+                        } else if (entry && typeof entry === "object") {
+                            const p = entry.path || entry.file || entry.name || "";
+                            if (p) registerJsonPath(p.includes("/") ? p : `${GITHUB_MERCHANTS_CONFIG.folder}/${p}`, entry.url || "");
+                        }
+                    });
+                }
+            } catch (e) {}
+
             try {
                 const apiUrl = `https://api.github.com/repos/${GITHUB_MERCHANTS_CONFIG.owner}/${GITHUB_MERCHANTS_CONFIG.repo}/contents/${GITHUB_MERCHANTS_CONFIG.folder}?ref=${GITHUB_MERCHANTS_CONFIG.branch}&ts=${Date.now()}`;
                 const apiResp = await fetch(apiUrl, { cache: "no-store" });
@@ -3062,33 +3177,15 @@
                     const filesList = await apiResp.json();
                     if (Array.isArray(filesList)) {
                         filesList.forEach(f => {
-                            if (f && f.type === "file" && /\.json$/i.test(f.name)) {
-                                const slug = f.name.replace(/\.json$/i, "");
-                                sourcesMap.set(f.name.toLowerCase(), {
-                                    slug,
-                                    localUrl: `${GITHUB_MERCHANTS_CONFIG.folder}/${f.name}`,
-                                    rawUrl: f.download_url || `https://raw.githubusercontent.com/${GITHUB_MERCHANTS_CONFIG.owner}/${GITHUB_MERCHANTS_CONFIG.repo}/${GITHUB_MERCHANTS_CONFIG.branch}/${GITHUB_MERCHANTS_CONFIG.folder}/${encodeURIComponent(f.name)}`,
-                                    defaultMerchant: resolveMerchantNameFromFile(f.name)
-                                });
+                            if (f && f.type === "file" && /\.json$/i.test(f.name) && f.name.toLowerCase() !== "index.json") {
+                                registerJsonPath(`${GITHUB_MERCHANTS_CONFIG.folder}/${f.name}`, f.download_url || "");
                             }
                         });
                     }
                 }
             } catch (e) {}
 
-            FALLBACK_MERCHANT_FILES.forEach(path => {
-                const fileName = path.split("/").pop();
-                const key = fileName.toLowerCase();
-                if (!sourcesMap.has(key)) {
-                    const slug = fileName.replace(/\.json$/i, "");
-                    sourcesMap.set(key, {
-                        slug,
-                        localUrl: path,
-                        rawUrl: `https://raw.githubusercontent.com/${GITHUB_MERCHANTS_CONFIG.owner}/${GITHUB_MERCHANTS_CONFIG.repo}/${GITHUB_MERCHANTS_CONFIG.branch}/${path}`,
-                        defaultMerchant: resolveMerchantNameFromFile(fileName)
-                    });
-                }
-            });
+            FALLBACK_MERCHANT_FILES.forEach(path => registerJsonPath(path));
 
             return Array.from(sourcesMap.values());
         }
@@ -4340,10 +4437,10 @@
                     : "";
 
                 const sizeSelectHtml = variantCfg && Array.isArray(variantCfg.sizes) && variantCfg.sizes.length
-                    ? `<select class="cart-option-select" aria-label="المقاس" onchange="updateCartItemOption(${idx}, 'selectedSize', this.value)">
+                    ? `<select class="cart-option-select" aria-label="الخيار / المقاس" onchange="updateCartItemOption(${idx}, 'selectedSize', this.value)">
                         ${variantCfg.sizes.map(s => {
                             const lbl = typeof s === "string" ? s : s.label;
-                            return `<option value="${escapeHtmlAttr(lbl)}" ${item.selectedSize === lbl ? "selected" : ""}>مقاس: ${escapeHtmlAttr(lbl)}</option>`;
+                            return `<option value="${escapeHtmlAttr(lbl)}" ${item.selectedSize === lbl ? "selected" : ""}>${escapeHtmlAttr(lbl)}</option>`;
                         }).join("")}
                        </select>`
                     : "";
