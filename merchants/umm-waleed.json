@@ -481,8 +481,6 @@
   },
   {
     "id": "om-waleed-potato-skimmer-variants",
-      {
-    "id": "om-waleed-potato-skimmer-variants",
     "name": "شيالة بطاطس",
     "merchant": "أم وليد",
     "category": "home",
@@ -544,8 +542,8 @@
         "price": 75
       }
     ]
-  }
-
+  },
+  {
     "id": "om-waleed-pyrex-engraved-mug-150",
     "name": "مج بايركس محفور عليه",
     "merchant": "أم وليد",
