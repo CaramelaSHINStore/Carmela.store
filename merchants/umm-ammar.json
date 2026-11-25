@@ -15,3 +15,274 @@
     ]
   }
 ]
+[
+  {
+    "id": "om-ammar-pearl-bag-350",
+    "title": "شنطة لولي أبيض وردات بسلسلة ذهبية هاند ميد 350 جنيه",
+    "desc": "شنطة يد هاند ميد من اللولي الأبيض مزينة بوردات وسلسلة ذهبية أنيقة تناسب السهرات والمناسبات والخروجات المميزة بسعر 350 جنيه.",
+    "price": 350,
+    "category": "tafse",
+    "categories": ["tafse", "women", "gifts"],
+    "merchant": "أم عمار",
+    "img": "Htm/IMG-20261120-WA0028.jpg",
+    "images": [
+      "Htm/IMG-20261120-WA0028.jpg",
+      "Htm/IMG-20261120-WA0021.jpg",
+      "Htm/IMG-20261120-WA0003.jpg"
+    ]
+  },
+  {
+    "id": "om-ammar-crystal-light-blue-beaded-bag-350",
+    "title": "شنطة هاند ميد خرز كريستال أزرق فاتح بيد خرز وسلسلة ذهبية 350 جنيه",
+    "desc": "شنطة يد هاند ميد مصنوعة يدوياً من الخرز الكريستال الشفاف والأزرق الفاتح بتصميم شبكي ويد خرز وسلسلة ذهبية للسهرات والمناسبات بسعر 350 جنيه.",
+    "price": 350,
+    "category": "tafse",
+    "categories": ["tafse", "women", "gifts"],
+    "merchant": "أم عمار",
+    "img": "Htm/87584.webp",
+    "images": [
+      "Htm/87584.webp",
+      "Htm/87630.webp"
+    ]
+  },
+  {
+    "id": "om-ammar-white-pearl-bag-with-accessory-350",
+    "title": "شنطة هاند ميد لولي أبيض مع إكسسوار لولي متناسق 350 جنيه",
+    "desc": "شنطة يد هاند ميد من اللولي الأبيض الفاخر مرفق معها عقد أو إكسسوار لولي متناسق للخطوبة والسهرات والمناسبات الخاصة بسعر 350 جنيه.",
+    "price": 350,
+    "category": "tafse",
+    "categories": ["tafse", "women", "gifts"],
+    "merchant": "أم عمار",
+    "img": "Htm/87625.webp",
+    "images": [
+      "Htm/87625.webp",
+      "Htm/87585.webp",
+      "Htm/87575.webp"
+    ]
+  },
+  {
+    "id": "om-ammar-black-crystal-beaded-bag-350",
+    "title": "شنطة هاند ميد خرز كريستال أسود بيد وحزام خرز 350 جنيه",
+    "desc": "شنطة يد هاند ميد من الخرز الكريستال الأسود اللامع بتصميم أنيق ويد خرز وحزام خرز للسهرات والمناسبات والحفلات بسعر 350 جنيه.",
+    "price": 350,
+    "category": "tafse",
+    "categories": ["tafse", "women", "gifts"],
+    "merchant": "أم عمار",
+    "img": "Htm/87591.webp",
+    "images": [
+      "Htm/87591.webp",
+      "Htm/87582.webp"
+    ]
+  },
+  {
+    "id": "om-ammar-cylinder-pearl-bag-gold-chain-350",
+    "title": "شنطة هاند ميد لولي أبيض أسطوانية بسلسلة ذهبية وحزام لولي 350 جنيه",
+    "desc": "شنطة هاند ميد من اللولي الأبيض بتصميم أسطواني طولي مزودة بسلسلة ذهبية وحزام لولي لإطلالة أنيقة في السهرات والمناسبات بسعر 350 جنيه.",
+    "price": 350,
+    "category": "tafse",
+    "categories": ["tafse", "women", "gifts"],
+    "merchant": "أم عمار",
+    "img": "Htm/87579.webp",
+    "images": [
+      "Htm/87579.webp"
+    ]
+  },
+  {
+    "id": "om-ammar-mini-pearl-red-beaded-bag-50",
+    "title": "شنطة هاند ميد صغيرة ميني لولي أبيض وخرز أحمر 50 جنيه",
+    "desc": "شنطة ميني صغيرة هاند ميد من اللولي الأبيض وخرز أحمر بيد خرز عملية ومناسبة للهدايا والتوزيعات والمناسبات بسعر 50 جنيه.",
+    "price": 50,
+    "category": "tafse",
+    "categories": ["tafse", "women", "gifts"],
+    "merchant": "أم عمار",
+    "img": "Htm/87576.webp",
+    "images": [
+      "Htm/87576.webp"
+    ]
+  },
+  {
+    "id": "om-ammar-custom-engagement-mirror-tray-500",
+    "title": "صينية ومرايا هاند ميد حسب الطلب للخطوبة والكتب الكتاب 500 جنيه",
+    "desc": "صينية ومرايا دائرية ومزخرفة هاند ميد تنفذ حسب الطلب للخطوبة وكتب الكتاب والمناسبات مزينة باللولي والورود والفراشات مع كتابة الأسماء والتواريخ والتهاني بسعر 500 جنيه.",
+    "price": 500,
+    "category": "tafse",
+    "categories": ["tafse", "women", "gifts"],
+    "merchant": "أم عمار",
+    "img": "Htm/87618.webp",
+    "images": [
+      "Htm/87618.webp",
+      "Htm/87616.webp",
+      "Htm/87620.webp",
+      "Htm/87619.webp"
+    ]
+  },
+  {
+    "id": "om-ammar-black-wavy-abaya-800",
+    "title": "عباية سوداء واسعة منقوشة متموجة 800 جنيه والسن المحير 650 جنيه",
+    "desc": "عباية سوداء واسعة بقماش منقوش ومتموج بتصميم مريح وأنيق للخروجات والمناسبات، السعر 800 جنيه والسن المحير 650 جنيه.",
+    "price": 800,
+    "category": "tafse",
+    "categories": ["tafse", "women", "gifts"],
+    "merchant": "أم عمار",
+    "img": "Htm/87626.webp",
+    "images": [
+      "Htm/87626.webp"
+    ]
+  },
+  {
+    "id": "om-ammar-sky-blue-ruffle-sleeve-dress-800",
+    "title": "عباية وفستان سماوي بأكمام كشكشة وأزرار 800 جنيه والسن المحير 650 جنيه",
+    "desc": "عباية وفستان طويل باللون السماوي بأكمام كشكشة وتفاصيل أزرار أنيقة، السعر 800 جنيه والسن المحير 650 جنيه.",
+    "price": 800,
+    "category": "tafse",
+    "categories": ["tafse", "women", "gifts"],
+    "merchant": "أم عمار",
+    "img": "Htm/87623.webp",
+    "images": [
+      "Htm/87623.webp"
+    ]
+  },
+  {
+    "id": "om-ammar-petrol-blue-tie-waist-dress-800",
+    "title": "عباية وفستان أزرق بترولي بأربطة جانبية وكشكشة 800 جنيه والسن المحير 650 جنيه",
+    "desc": "عباية وفستان طويل باللون الأزرق البترولي بقماش متموج وكشكشة وأربطة جانبية لإطلالة عصرية ومحتشمة، السعر 800 جنيه والسن المحير 650 جنيه.",
+    "price": 800,
+    "category": "tafse",
+    "categories": ["tafse", "women", "gifts"],
+    "merchant": "أم عمار",
+    "img": "Htm/87624.webp",
+    "images": [
+      "Htm/87624.webp"
+    ]
+  },
+  {
+    "id": "om-ammar-black-gathered-loose-abaya-800",
+    "title": "عباية سوداء واسعة بقصة صدر وكشكشة وأكمام واسعة 800 جنيه والسن المحير 650 جنيه",
+    "desc": "عباية سوداء واسعة بقصة صدر وكشكشة ناعمة وأكمام واسعة مريحة، السعر 800 جنيه والسن المحير 650 جنيه.",
+    "price": 800,
+    "category": "tafse",
+    "categories": ["tafse", "women", "gifts"],
+    "merchant": "أم عمار",
+    "img": "Htm/87614.webp",
+    "images": [
+      "Htm/87614.webp"
+    ]
+  },
+  {
+    "id": "om-ammar-brown-ribbed-wide-sleeve-abaya-800",
+    "title": "عباية بنية مضلعة مخططة بأكمام واسعة 800 جنيه والسن المحير 650 جنيه",
+    "desc": "عباية باللون البني بقماش مضلع مخطط وأكمام واسعة أنيقة للخروجات اليومية والمناسبات، السعر 800 جنيه والسن المحير 650 جنيه.",
+    "price": 800,
+    "category": "tafse",
+    "categories": ["tafse", "women", "gifts"],
+    "merchant": "أم عمار",
+    "img": "Htm/87615.webp",
+    "images": [
+      "Htm/87615.webp"
+    ]
+  },
+  {
+    "id": "om-ammar-light-yellow-tie-waist-dress-800",
+    "title": "عباية وفستان أصفر فاتح بأربطة جانبية 800 جنيه والسن المحير 650 جنيه",
+    "desc": "عباية وفستان طويل باللون الأصفر الفاتح بقصة أنيقة وأربطة جانبية، السعر 800 جنيه والسن المحير 650 جنيه.",
+    "price": 800,
+    "category": "tafse",
+    "categories": ["tafse", "women", "gifts"],
+    "merchant": "أم عمار",
+    "img": "Htm/87617.webp",
+    "images": [
+      "Htm/87617.webp"
+    ]
+  },
+  {
+    "id": "om-ammar-burgundy-velvet-abaya-scarf-800",
+    "title": "عباية قطيفة عنابي برغندي بطرحة 800 جنيه والسن المحير 650 جنيه",
+    "desc": "عباية قطيفة فخمة باللون العنابي البرغندي بقماش ناعم ولامع مع طرحة متناسقة للشتاء والمناسبات، السعر 800 جنيه والسن المحير 650 جنيه.",
+    "price": 800,
+    "category": "tafse",
+    "categories": ["tafse", "women", "gifts"],
+    "merchant": "أم عمار",
+    "img": "Htm/87611.webp",
+    "images": [
+      "Htm/87611.webp"
+    ]
+  },
+  {
+    "id": "om-ammar-navy-button-front-abaya-800",
+    "title": "عباية كحلي بأزرار أمامية وأكمام واسعة 800 جنيه والسن المحير 650 جنيه",
+    "desc": "عباية باللون الكحلي الداكن بتصميم عملي وأنيق مع أزرار أمامية وأكمام واسعة، السعر 800 جنيه والسن المحير 650 جنيه.",
+    "price": 800,
+    "category": "tafse",
+    "categories": ["tafse", "women", "gifts"],
+    "merchant": "أم عمار",
+    "img": "Htm/87612.webp",
+    "images": [
+      "Htm/87612.webp"
+    ]
+  },
+  {
+    "id": "om-ammar-maroon-velvet-brooch-abaya-800",
+    "title": "عباية قطيفة نبيتي ببروش فضي 800 جنيه والسن المحير 650 جنيه",
+    "desc": "عباية قطيفة نبيتي فخمة مزينة ببروش وحلية فضية أنيقة عند الوسط للسهرات والمناسبات، السعر 800 جنيه والسن المحير 650 جنيه.",
+    "price": 800,
+    "category": "tafse",
+    "categories": ["tafse", "women", "gifts"],
+    "merchant": "أم عمار",
+    "img": "Htm/87605.webp",
+    "images": [
+      "Htm/87605.webp"
+    ]
+  },
+  {
+    "id": "om-ammar-plum-velvet-abaya-scarf-800",
+    "title": "عباية قطيفة موف بنفسجي غامق بطرحة 800 جنيه والسن المحير 650 جنيه",
+    "desc": "عباية قطيفة باللون الموف البنفسجي الغامق مع طرحة متناسقة للخروجات والسهرات، السعر 800 جنيه والسن المحير 650 جنيه.",
+    "price": 800,
+    "category": "tafse",
+    "categories": ["tafse", "women", "gifts"],
+    "merchant": "أم عمار",
+    "img": "Htm/87613.webp",
+    "images": [
+      "Htm/87613.webp"
+    ]
+  },
+  {
+    "id": "om-ammar-crimson-ribbed-gathered-dress-800",
+    "title": "عباية وفستان عنابي مضلع بكشكشة وسط 800 جنيه والسن المحير 650 جنيه",
+    "desc": "عباية وفستان طويل باللون العنابي النبيتي بقماش مضلع وكشكشة عند الوسط وأكمام طويلة، السعر 800 جنيه والسن المحير 650 جنيه.",
+    "price": 800,
+    "category": "tafse",
+    "categories": ["tafse", "women", "gifts"],
+    "merchant": "أم عمار",
+    "img": "Htm/87604.webp",
+    "images": [
+      "Htm/87604.webp"
+    ]
+  },
+  {
+    "id": "om-ammar-plum-patterned-velvet-abaya-scarf-800",
+    "title": "عباية قطيفة موف منقوشة بنقشة شرقية بطرحة 800 جنيه والسن المحير 650 جنيه",
+    "desc": "عباية قطيفة فخمة باللون الموف الباذنجاني منقوشة بنقشة شرقية مزخرفة مع طرحة متناسقة للسهرات والمناسبات، السعر 800 جنيه والسن المحير 650 جنيه.",
+    "price": 800,
+    "category": "tafse",
+    "categories": ["tafse", "women", "gifts"],
+    "merchant": "أم عمار",
+    "img": "Htm/87598.webp",
+    "images": [
+      "Htm/87598.webp"
+    ]
+  },
+  {
+    "id": "om-ammar-dark-ribbed-wide-sleeve-abaya-800",
+    "title": "عباية كحلي غامق مضلعة بأكمام واسعة 800 جنيه والسن المحير 650 جنيه",
+    "desc": "عباية باللون الكحلي الغامق بقماش مضلع وأكمام واسعة بتصميم أنيق ومريح، السعر 800 جنيه والسن المحير 650 جنيه.",
+    "price": 800,
+    "category": "tafse",
+    "categories": ["tafse", "women", "gifts"],
+    "merchant": "أم عمار",
+    "img": "Htm/87587.webp",
+    "images": [
+      "Htm/87587.webp"
+    ]
+  }
+]
