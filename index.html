@@ -4783,6 +4783,42 @@
             } catch (e) {}
         }
 
+        function openWhatsAppWithText(text) {
+            const encoded = encodeURIComponent(text);
+            const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || "");
+            if (isMobile) {
+                const appUrl = `whatsapp://send?phone=${WHATSAPP_NUMBER}&text=${encoded}`;
+                const webUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;
+                let fallbackTimer = null;
+                const clearFallback = () => {
+                    if (fallbackTimer) {
+                        clearTimeout(fallbackTimer);
+                        fallbackTimer = null;
+                    }
+                    document.removeEventListener("visibilitychange", onVisChange);
+                };
+                const onVisChange = () => {
+                    if (document.visibilityState === "hidden") {
+                        clearFallback();
+                    }
+                };
+                document.addEventListener("visibilitychange", onVisChange);
+                fallbackTimer = setTimeout(() => {
+                    clearFallback();
+                    if (document.visibilityState === "visible") {
+                        window.location.href = webUrl;
+                    }
+                }, 1400);
+                window.location.href = appUrl;
+                return;
+            }
+            const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;
+            const waWin = window.open(waUrl, "_blank", "noopener,noreferrer");
+            if (!waWin) {
+                window.location.href = waUrl;
+            }
+        }
+
         function checkoutOnWhatsApp() {
             if (cart.length === 0) {
                 showCaramelToast("سلة المشتريات فاضية! أضف منتجات أولاً.");
@@ -4846,20 +4882,12 @@
             message += "التوصيل: خلال يوم عمل\n";
             message += "الاسترجاع: خلال أسبوع لو المنتج تالف / به عيوب / أو غير الوصف.";
 
-            const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-            const waWin = window.open(waUrl, "_blank", "noopener,noreferrer");
-            if (!waWin) {
-                window.location.href = waUrl;
-            }
+            openWhatsAppWithText(message);
         }
 
         function openWhatsAppChatDirect() {
             const greeting = "مرحباً متجر كارامل، أريد التواصل معكم.";
-            const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(greeting)}`;
-            const waWin = window.open(waUrl, "_blank", "noopener,noreferrer");
-            if (!waWin) {
-                window.location.href = waUrl;
-            }
+            openWhatsAppWithText(greeting);
         }
 
         function renderPreviewMediaGallery() {
