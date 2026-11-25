@@ -2068,6 +2068,138 @@
 
         .preview-actions-row { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 8px; padding-top: 2px; }
 
+
+        .confirmed-orders-section {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1.5px dashed var(--accent-glow);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .confirmed-orders-heading {
+            font-size: 0.76rem;
+            font-weight: 900;
+            color: var(--accent-deep);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .confirmed-order-card {
+            background: var(--surface-elevated);
+            border: 1.5px solid var(--accent-glow);
+            border-radius: 12px;
+            padding: 8px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+            transition: transform 0.18s ease, border-color 0.18s ease;
+        }
+        .confirmed-order-card:hover {
+            transform: translateY(-1px);
+            border-color: var(--accent);
+        }
+        .confirmed-order-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+        }
+        .confirmed-order-code {
+            font-size: 0.82rem;
+            font-weight: 900;
+            color: var(--text-main);
+        }
+        .confirmed-order-status {
+            font-size: 0.67rem;
+            font-weight: 900;
+            padding: 2px 8px;
+            border-radius: 999px;
+            background: rgba(22, 163, 74, 0.14);
+            color: #15803d;
+        }
+        body.dark-theme .confirmed-order-status {
+            color: #4ade80;
+        }
+        .confirmed-order-status.cancelled {
+            background: rgba(185, 28, 28, 0.14);
+            color: #b91c1c;
+        }
+        body.dark-theme .confirmed-order-status.cancelled {
+            color: #f87171;
+        }
+        .confirmed-order-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--text-muted);
+        }
+        .confirmed-order-total {
+            color: var(--accent-deep);
+            font-weight: 900;
+        }
+        .order-detail-item {
+            background: var(--surface-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: 13px;
+            padding: 9px 11px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .order-detail-item.cancelled-item {
+            opacity: 0.62;
+            background: var(--surface-soft);
+        }
+        .order-detail-item-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        .order-detail-item-title {
+            font-size: 0.84rem;
+            font-weight: 900;
+            color: var(--text-main);
+        }
+        .order-detail-item-sub {
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+        .order-detail-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .order-action-mini-btn {
+            padding: 4px 10px;
+            border-radius: 9px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            background: var(--surface-soft);
+            color: var(--text-main);
+            border: 1px solid var(--border-subtle);
+        }
+        .order-action-mini-btn.cancel {
+            background: #fef2f2;
+            color: #b91c1c;
+            border-color: rgba(185, 28, 28, 0.25);
+        }
+        .order-cancel-full-btn {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 12px;
+            background: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid rgba(185, 28, 28, 0.28);
+            font-size: 0.78rem;
+            font-weight: 900;
+        }
+
         footer {
             text-align: center;
             padding: 20px 16px 86px;
@@ -2173,7 +2305,7 @@
                 </button>
             </div>
 
-            <a href="https://wa.me/201055436305?text=%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%AA%D9%88%D8%A7%D8%B5%D9%84%20%D9%84%D9%84%D8%B7%D9%84%D8%A8%D8%A7%D8%AA%20%D8%A7%D9%84%D8%AE%D8%A7%D8%B5%D8%A9%20%28%D9%85%D9%86%D8%AA%D8%AC%20%D8%BA%D9%8A%D8%B1%20%D9%85%D9%88%D8%AC%D9%88%D8%AF%29" target="_blank" rel="noopener noreferrer" class="promo-special-link">
+            <a href="whatsapp://send?phone=201055436305&text=%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%AA%D9%88%D8%A7%D8%B5%D9%84%20%D9%84%D9%84%D8%B7%D9%84%D8%A8%D8%A7%D8%AA%20%D8%A7%D9%84%D8%AE%D8%A7%D8%B5%D8%A9%20%28%D9%85%D9%86%D8%AA%D8%AC%20%D8%BA%D9%8A%D8%B1%20%D9%85%D9%88%D8%AC%D9%88%D8%AF%29" target="_blank" rel="noopener noreferrer" class="promo-special-link">
                 <span>مش لاقي منتج؟ نجيبهولك</span>
             </a>
         </div>
@@ -2412,6 +2544,21 @@
                     <button type="button" class="add-cart-btn" id="previewAddToCartBtn">أضف للمشتريات</button>
                     <a href="#" class="direct-wa-link" id="previewWhatsAppBtn" target="_blank" rel="noopener noreferrer">طلب سريع واتساب</a>
                 </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="option-modal-backdrop" id="orderDetailsModal" onclick="closeOrderDetailsModal()">
+        <div class="option-modal-card" onclick="event.stopPropagation()">
+            <div class="option-modal-header">
+                <h3 id="orderDetailsTitle">تفاصيل الأوردر</h3>
+                <button type="button" class="option-modal-close" onclick="closeOrderDetailsModal()" aria-label="إغلاق">&times;</button>
+            </div>
+            <div class="option-modal-body" id="orderDetailsBody"></div>
+            <div class="option-modal-footer" style="flex-direction:column;">
+                <button type="button" class="order-cancel-full-btn" id="cancelFullOrderBtn" onclick="cancelEntireOrder()">إلغاء الأوردر بالكامل وإرسال واتساب</button>
+                <button type="button" class="option-confirm-btn" onclick="closeOrderDetailsModal()">إغلاق</button>
             </div>
         </div>
     </div>
@@ -2668,7 +2815,7 @@
                 ? ` — الصورة المختارة${imgIndex >= 0 && imgs.length > 1 ? ` (${imgIndex + 1}/${imgs.length})` : ""}: ${chosenImg}`
                 : "";
             const waText = encodeURIComponent(`أريد طلب ${product.title} بسعر ${displayPrice} جنيه (التاجر: ${merchantName})${imgLabel} من متجر كارامل`);
-            return `https://wa.me/${WHATSAPP_NUMBER}?text=${waText}`;
+            return `whatsapp://send?phone=${WHATSAPP_NUMBER}&text=${waText}`;
         }
 
         function setCardImageByIndex(card, product, targetIdx) {
@@ -3900,6 +4047,7 @@
                     </button>
                 `;
             }).join("");
+            renderConfirmedOrdersInsideCart();
         }
 
         function selectCategoryFromDrawer(catKey) {
@@ -4044,7 +4192,7 @@
                         <h3>حتى لو المنتج مش موجود بنجيبهولك</h3>
                         <p>لو لفيت ومالقيتش اللي في بالك، ابعتلنا اسم المنتج أو صورته واحنا نوفرهولك بأفضل سعر.</p>
                     </div>
-                    <a href="https://wa.me/${WHATSAPP_NUMBER}?text=${waSpecial}" class="special-request-btn" target="_blank" rel="noopener noreferrer">
+                    <a href="whatsapp://send?phone=${WHATSAPP_NUMBER}&text=${waSpecial}" class="special-request-btn" target="_blank" rel="noopener noreferrer">
                         اطلب منتجك الخاص دلوقتي
                     </a>
                 </article>
@@ -4265,7 +4413,7 @@
                     <div style="grid-column: 1 / -1; background: var(--surface-elevated); padding: 26px; border-radius: 20px; text-align: center; border: 1px solid var(--accent-glow);">
                         <p style="font-weight: 800; margin-bottom: 10px;">${escapeHtmlAttr(emptyMsg)}</p>
                         <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
-                            <a href="https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("أريد طلب منتج غير موجود في المتجر: " + trimmedQuery)}" class="add-cart-btn" style="max-width: 220px;" target="_blank" rel="noopener noreferrer">طلب خاص على واتساب</a>
+                            <a href="whatsapp://send?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent("أريد طلب منتج غير موجود في المتجر: " + trimmedQuery)}" class="add-cart-btn" style="max-width: 220px;" target="_blank" rel="noopener noreferrer">طلب خاص على واتساب</a>
                             <button type="button" class="direct-wa-link" style="max-width: 170px;" onclick="${currentMerchant ? "clearMerchantFilter()" : "cancelSearchMode()"}">العودة لكل المنتجات</button>
                         </div>
                     </div>
@@ -4357,11 +4505,13 @@
             const imgOpen = document.getElementById("imageModal")?.classList.contains("open");
             const optOpen = document.getElementById("productOptionModal")?.classList.contains("open");
             const srvOpen = document.getElementById("serviceInfoModal")?.classList.contains("open");
-            document.body.style.overflow = (cartOpen || catsOpen || imgOpen || optOpen || srvOpen) ? "hidden" : "";
+            const ordOpen = document.getElementById("orderDetailsModal")?.classList.contains("open");
+            document.body.style.overflow = (cartOpen || catsOpen || imgOpen || optOpen || srvOpen || ordOpen) ? "hidden" : "";
         }
 
         function closeAllOverlays() {
             overlayStack = [];
+            document.getElementById("orderDetailsModal")?.classList.remove("open");
             document.getElementById("serviceInfoModal")?.classList.remove("open");
             document.getElementById("productOptionModal")?.classList.remove("open");
             document.getElementById("imageModal")?.classList.remove("open");
@@ -4584,6 +4734,7 @@
 
             if (cart.length === 0) {
                 container.innerHTML = `<div class="cart-empty">سلة المشتريات فاضية حالياً.<br>اختار المنتجات اللي تعجبك وابدأ طلبك!</div>`;
+                renderConfirmedOrdersInsideCart();
                 return;
             }
 
@@ -4640,6 +4791,7 @@
                     </div>
                 `;
             }).join("");
+            renderConfirmedOrdersInsideCart();
         }
 
         function changeCartQty(index, delta) {
@@ -4685,8 +4837,30 @@
         }
 
         const CUSTOMER_INFO_STORAGE_KEY = "caramel_customer_info_v2";
-        let currentOrderSequence = 1;
+        const CONFIRMED_ORDERS_STORAGE_KEY = "caramel_confirmed_orders_v1";
+        const ORDER_WHATSAPP_NUMBER = "201055439305";
+        let currentOrderSequence = 100;
         let capturedCustomerLocation = null;
+        let activeOrderModalId = null;
+
+        function loadConfirmedOrders() {
+            try {
+                const raw = localStorage.getItem(CONFIRMED_ORDERS_STORAGE_KEY);
+                if (!raw) return [];
+                const parsed = JSON.parse(raw);
+                return Array.isArray(parsed) ? parsed : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveConfirmedOrders(orders) {
+            try {
+                localStorage.setItem(CONFIRMED_ORDERS_STORAGE_KEY, JSON.stringify(orders));
+            } catch (e) {}
+        }
+
+        let confirmedOrders = loadConfirmedOrders();
 
         function getNextOrderNumber() {
             try {
@@ -4699,6 +4873,220 @@
                 currentOrderSequence += 1;
                 return `CRM-${currentOrderSequence}`;
             }
+        }
+
+        function computeOrderTotal(order) {
+            if (!order || !Array.isArray(order.items)) return 0;
+            return order.items.reduce((sum, item) => {
+                if (!item || item.cancelled) return sum;
+                const qty = Math.max(0, Number(item.qty) || 0);
+                const price = Number(item.price) || 0;
+                return sum + (price * qty);
+            }, 0);
+        }
+
+        function syncOrderStatus(order) {
+            if (!order) return;
+            const activeItems = (order.items || []).filter(i => !i.cancelled && (Number(i.qty) || 0) > 0);
+            order.total = computeOrderTotal(order);
+            if (!activeItems.length) {
+                order.status = "ملغي";
+            } else if (order.hasPartialCancellation) {
+                order.status = "تم التأكيد (معدّل)";
+            } else {
+                order.status = "تم التأكيد";
+            }
+        }
+
+        function renderConfirmedOrdersInsideCart() {
+            const container = document.getElementById("cartItemsContainer");
+            if (!container) return;
+
+            const existingSection = container.querySelector(".confirmed-orders-section");
+            if (existingSection) existingSection.remove();
+
+            if (!confirmedOrders.length) return;
+
+            const section = document.createElement("div");
+            section.className = "confirmed-orders-section";
+            section.innerHTML = `
+                <div class="confirmed-orders-heading">
+                    <span>الطلبات المؤكدة (${confirmedOrders.length})</span>
+                    <span>اضغط للتفاصيل</span>
+                </div>
+                ${confirmedOrders.map(ord => {
+                    const isCancelled = ord.status === "ملغي";
+                    const activeCount = (ord.items || []).filter(i => !i.cancelled).reduce((s, i) => s + (Number(i.qty) || 0), 0);
+                    return `
+                        <div class="confirmed-order-card" onclick="openOrderDetailsModal('${escapeHtmlAttr(ord.orderId)}')">
+                            <div class="confirmed-order-top">
+                                <span class="confirmed-order-code">كود الأوردر: ${escapeHtmlAttr(ord.orderId)}</span>
+                                <span class="confirmed-order-status ${isCancelled ? "cancelled" : ""}">${escapeHtmlAttr(ord.status || "تم التأكيد")}</span>
+                            </div>
+                            <div class="confirmed-order-meta">
+                                <span>العميل: ${escapeHtmlAttr(ord.customerName || "عميل")} • ${activeCount} قطعة</span>
+                                <span class="confirmed-order-total">${Number(ord.total) || 0} جنيه</span>
+                            </div>
+                        </div>
+                    `;
+                }).join("")}
+            `;
+            container.appendChild(section);
+        }
+
+        function openOrderDetailsModal(orderId) {
+            const order = confirmedOrders.find(o => o.orderId === orderId);
+            if (!order) return;
+            activeOrderModalId = orderId;
+            syncOrderStatus(order);
+            saveConfirmedOrders(confirmedOrders);
+
+            const titleEl = document.getElementById("orderDetailsTitle");
+            const bodyEl = document.getElementById("orderDetailsBody");
+            const cancelFullBtn = document.getElementById("cancelFullOrderBtn");
+            const modal = document.getElementById("orderDetailsModal");
+            if (!titleEl || !bodyEl || !modal) return;
+
+            titleEl.textContent = `أوردر ${order.orderId} — ${order.status}`;
+
+            const itemsHtml = (order.items || []).map((item, idx) => {
+                const qty = Number(item.qty) || 0;
+                const price = Number(item.price) || 0;
+                const lineTotal = item.cancelled ? 0 : (qty * price);
+                const variantText = [
+                    item.selectedSize ? `المقاس: ${item.selectedSize}` : "",
+                    item.selectedColor ? `اللون: ${item.selectedColor}` : "",
+                    item.itemNote ? `ملاحظة: ${item.itemNote}` : ""
+                ].filter(Boolean).join(" • ");
+
+                return `
+                    <div class="order-detail-item ${item.cancelled ? "cancelled-item" : ""}">
+                        <div class="order-detail-item-top">
+                            <span class="order-detail-item-title">${escapeHtmlAttr(item.title)}</span>
+                            <span class="confirmed-order-total">${item.cancelled ? "ملغي" : `${lineTotal} جنيه`}</span>
+                        </div>
+                        <div class="order-detail-item-sub">
+                            العدد: ${item.cancelled ? 0 : qty} × ${price} جنيه${variantText ? ` • ${escapeHtmlAttr(variantText)}` : ""}
+                        </div>
+                        ${!item.cancelled && qty > 0 ? `
+                            <div class="order-detail-actions">
+                                ${qty > 1 ? `<button type="button" class="order-action-mini-btn" onclick="decreaseOrderItemQty('${escapeHtmlAttr(order.orderId)}', ${idx})">تقليل العدد (-1)</button>` : ""}
+                                <button type="button" class="order-action-mini-btn cancel" onclick="cancelOrderItem('${escapeHtmlAttr(order.orderId)}', ${idx})">إلغاء المنتج</button>
+                            </div>
+                        ` : ""}
+                    </div>
+                `;
+            }).join("");
+
+            bodyEl.innerHTML = `
+                <div class="service-info-list">
+                    <div class="service-info-item"><strong>كود الأوردر:</strong> ${escapeHtmlAttr(order.orderId)} • <strong>الحالة:</strong> ${escapeHtmlAttr(order.status)}</div>
+                    <div class="service-info-item"><strong>الاسم:</strong> ${escapeHtmlAttr(order.customerName)} • <strong>رقم التواصل:</strong> ${escapeHtmlAttr(order.phone)}</div>
+                    ${order.locationUrl ? `<div class="service-info-item"><strong>اللوكيشن:</strong> ${escapeHtmlAttr(order.locationUrl)}</div>` : ""}
+                </div>
+                ${itemsHtml}
+                <div class="cart-total-row" style="padding:4px 2px;">
+                    <span>الإجمالي الحالي:</span>
+                    <span class="cart-total-amount">${order.total} جنيه</span>
+                </div>
+            `;
+
+            if (cancelFullBtn) {
+                cancelFullBtn.style.display = order.status === "ملغي" ? "none" : "block";
+            }
+
+            modal.classList.add("open");
+            syncBodyScrollLock();
+            pushOverlayState("orderDetails");
+        }
+
+        function closeOrderDetailsModal(fromPopState = false) {
+            const modal = document.getElementById("orderDetailsModal");
+            if (modal) modal.classList.remove("open");
+            activeOrderModalId = null;
+            syncBodyScrollLock();
+            if (!fromPopState) removeOverlayState("orderDetails");
+        }
+
+        function sendOrderCancellationWhatsApp(order, cancelledSummaryLine) {
+            const activeLines = (order.items || [])
+                .filter(i => !i.cancelled && (Number(i.qty) || 0) > 0)
+                .map((i, idx) => `${idx + 1}. ${i.title} — العدد: ${i.qty} — الإجمالي: ${(Number(i.price) || 0) * (Number(i.qty) || 1)} جنيه`);
+
+            let msg = `تحديث بخصوص الأوردر رقم: ${order.orderId}
+`;
+            msg += `العميل: ${order.customerName} (${order.phone})
+`;
+            msg += `حالة الأوردر: ${order.status}
+`;
+            msg += `المنتج الملغي: ${cancelledSummaryLine}
+`;
+            msg += activeLines.length
+                ? `المنتجات المتبقية في الأوردر:
+${activeLines.join("\n")}
+`
+                : `تم إلغاء جميع منتجات الأوردر بالكامل.
+`;
+            msg += `الإجمالي الجديد بعد الإلغاء: ${order.total} جنيه`;
+
+            openWhatsAppWithText(msg, ORDER_WHATSAPP_NUMBER);
+        }
+
+        function decreaseOrderItemQty(orderId, itemIdx) {
+            const order = confirmedOrders.find(o => o.orderId === orderId);
+            if (!order || !order.items || !order.items[itemIdx]) return;
+            const item = order.items[itemIdx];
+            const currentQty = Number(item.qty) || 1;
+            if (currentQty <= 1) {
+                cancelOrderItem(orderId, itemIdx);
+                return;
+            }
+            item.qty = currentQty - 1;
+            order.hasPartialCancellation = true;
+            syncOrderStatus(order);
+            saveConfirmedOrders(confirmedOrders);
+            renderConfirmedOrdersInsideCart();
+            openOrderDetailsModal(orderId);
+            showCaramelToast(`تم تقليل عدد "${item.title}" وتحديث الأوردر ${order.orderId}`);
+            sendOrderCancellationWhatsApp(order, `${item.title} (تم تقليل العدد بمقدار 1، العدد المتبقي: ${item.qty})`);
+        }
+
+        function cancelOrderItem(orderId, itemIdx) {
+            const order = confirmedOrders.find(o => o.orderId === orderId);
+            if (!order || !order.items || !order.items[itemIdx]) return;
+            const item = order.items[itemIdx];
+            const removedQty = Number(item.qty) || 1;
+            item.cancelled = true;
+            item.qty = 0;
+            order.hasPartialCancellation = true;
+            syncOrderStatus(order);
+            saveConfirmedOrders(confirmedOrders);
+            renderConfirmedOrdersInsideCart();
+            openOrderDetailsModal(orderId);
+            showCaramelToast(`تم إلغاء "${item.title}" وتحديث الإجمالي إلى ${order.total} جنيه`);
+            sendOrderCancellationWhatsApp(order, `${item.title} (العدد الملغي: ${removedQty})`);
+        }
+
+        function cancelEntireOrder() {
+            if (!activeOrderModalId) return;
+            const order = confirmedOrders.find(o => o.orderId === activeOrderModalId);
+            if (!order) return;
+
+            const cancelledNames = (order.items || [])
+                .filter(i => !i.cancelled && (Number(i.qty) || 0) > 0)
+                .map(i => `${i.title} (${i.qty})`);
+
+            (order.items || []).forEach(i => {
+                i.cancelled = true;
+                i.qty = 0;
+            });
+            order.hasPartialCancellation = true;
+            syncOrderStatus(order);
+            saveConfirmedOrders(confirmedOrders);
+            renderConfirmedOrdersInsideCart();
+            openOrderDetailsModal(order.orderId);
+            showCaramelToast(`تم إلغاء الأوردر ${order.orderId} بالكامل`);
+            sendOrderCancellationWhatsApp(order, cancelledNames.length ? `إلغاء الأوردر بالكامل: ${cancelledNames.join("، ")}` : "إلغاء الأوردر بالكامل");
         }
 
         function syncLocationUi() {
@@ -4783,39 +5171,42 @@
             } catch (e) {}
         }
 
-        function openWhatsAppWithText(text) {
+        function openWhatsAppWithText(text, customPhone = null) {
+            const targetPhone = customPhone || WHATSAPP_NUMBER;
             const encoded = encodeURIComponent(text);
             const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || "");
+            const isAndroid = /Android/i.test(navigator.userAgent || "");
+
             if (isMobile) {
-                const appUrl = `whatsapp://send?phone=${WHATSAPP_NUMBER}&text=${encoded}`;
-                const webUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;
-                let fallbackTimer = null;
-                const clearFallback = () => {
-                    if (fallbackTimer) {
-                        clearTimeout(fallbackTimer);
-                        fallbackTimer = null;
-                    }
-                    document.removeEventListener("visibilitychange", onVisChange);
-                };
-                const onVisChange = () => {
-                    if (document.visibilityState === "hidden") {
-                        clearFallback();
-                    }
-                };
-                document.addEventListener("visibilitychange", onVisChange);
-                fallbackTimer = setTimeout(() => {
-                    clearFallback();
-                    if (document.visibilityState === "visible") {
-                        window.location.href = webUrl;
-                    }
-                }, 1400);
+                const appUrl = `whatsapp://send?phone=${targetPhone}&text=${encoded}`;
+                const intentUrl = `intent://send?phone=${targetPhone}&text=${encoded}#Intent;scheme=whatsapp;package=com.whatsapp;end`;
+
                 window.location.href = appUrl;
+
+                const link = document.createElement("a");
+                link.href = isAndroid ? intentUrl : appUrl;
+                link.rel = "noopener noreferrer";
+                link.style.display = "none";
+                document.body.appendChild(link);
+                link.click();
+                setTimeout(() => {
+                    if (link.parentNode) link.parentNode.removeChild(link);
+                }, 150);
+
+                if (isAndroid) {
+                    setTimeout(() => {
+                        if (document.visibilityState === "visible") {
+                            window.location.href = intentUrl;
+                        }
+                    }, 350);
+                }
                 return;
             }
-            const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;
-            const waWin = window.open(waUrl, "_blank", "noopener,noreferrer");
+
+            const webUrl = `https://wa.me/${targetPhone}?text=${encoded}`;
+            const waWin = window.open(webUrl, "_blank", "noopener,noreferrer");
             if (!waWin) {
-                window.location.href = waUrl;
+                window.location.href = webUrl;
             }
         }
 
@@ -4844,18 +5235,28 @@
             saveCustomerInfo(customerName, phone);
             const orderId = getNextOrderNumber();
 
-            let message = "مرحباً متجر كارامل، أريد إتمام الطلب التالي:\n\n";
-            message += `رقم الطلب: ${orderId}\n`;
-            message += `الاسم: ${customerName}\n`;
-            message += `رقم التواصل: ${phone}\n`;
+            let message = "مرحباً متجر كارامل، أريد إتمام الطلب التالي:
+
+";
+            message += `رقم الطلب: ${orderId}
+`;
+            message += `الاسم: ${customerName}
+`;
+            message += `رقم التواصل: ${phone}
+`;
             if (capturedCustomerLocation && capturedCustomerLocation.url) {
-                message += `اللوكيشن (الموقع): ${capturedCustomerLocation.url}\n`;
+                message += `اللوكيشن (الموقع): ${capturedCustomerLocation.url}
+`;
             } else {
-                message += `اللوكيشن (الموقع): لم يتم تحديده (يمكن مشاركته هنا)\n`;
+                message += `اللوكيشن (الموقع): لم يتم تحديده (يمكن مشاركته هنا)
+`;
             }
-            message += "\nالمنتجات المطلوبة:\n";
+            message += "
+المنتجات المطلوبة:
+";
 
             let total = 0;
+            const snapshotItems = [];
 
             cart.forEach((item, index) => {
                 const qty = Number(item.qty) || 1;
@@ -4868,21 +5269,65 @@
                 const chosenImg = normalizeProductImageUrl(item.img) || imgs[0] || "";
                 const imgIdx = chosenImg && imgs.length ? imgs.indexOf(chosenImg) : -1;
 
-                message += `${index + 1}. ${item.title}\n`;
-                message += `   - التاجر: ${merchantName}\n`;
-                if (item.selectedSize) message += `   - المقاس: ${item.selectedSize}\n`;
-                if (item.selectedColor) message += `   - اللون: ${item.selectedColor}\n`;
-                if (chosenImg) message += `   - الصورة المختارة${imgIdx >= 0 && imgs.length > 1 ? ` (${imgIdx + 1}/${imgs.length})` : ""}: ${chosenImg}\n`;
-                if (item.itemNote && item.itemNote.trim()) message += `   - تفاصيل إضافية: ${item.itemNote.trim()}\n`;
-                message += `   - العدد: ${qty} × ${price} جنيه = ${subTotal} جنيه\n\n`;
+                snapshotItems.push({
+                    id: item.id,
+                    title: item.title,
+                    merchant: merchantName,
+                    price,
+                    qty,
+                    img: chosenImg,
+                    selectedSize: item.selectedSize || "",
+                    selectedColor: item.selectedColor || "",
+                    itemNote: item.itemNote || "",
+                    cancelled: false
+                });
+
+                message += `${index + 1}. ${item.title}
+`;
+                message += `   - التاجر: ${merchantName}
+`;
+                if (item.selectedSize) message += `   - المقاس: ${item.selectedSize}
+`;
+                if (item.selectedColor) message += `   - اللون: ${item.selectedColor}
+`;
+                if (chosenImg) message += `   - الصورة المختارة${imgIdx >= 0 && imgs.length > 1 ? ` (${imgIdx + 1}/${imgs.length})` : ""}: ${chosenImg}
+`;
+                if (item.itemNote && item.itemNote.trim()) message += `   - تفاصيل إضافية: ${item.itemNote.trim()}
+`;
+                message += `   - العدد: ${qty} × ${price} جنيه = ${subTotal} جنيه
+
+`;
             });
 
-            message += `الإجمالي الكلي: ${total} جنيه\n`;
-            message += "الدفع: السويس الدفع عند الاستلام — المحافظات الأخرى إنستا باي أو فوري أو كاش\n";
-            message += "التوصيل: خلال يوم عمل\n";
+            message += `الإجمالي الكلي: ${total} جنيه
+`;
+            message += "الدفع: السويس الدفع عند الاستلام — المحافظات الأخرى إنستا باي أو فوري أو كاش
+";
+            message += "التوصيل: خلال يوم عمل
+";
             message += "الاسترجاع: خلال أسبوع لو المنتج تالف / به عيوب / أو غير الوصف.";
 
-            openWhatsAppWithText(message);
+            const newConfirmedOrder = {
+                orderId,
+                status: "تم التأكيد",
+                createdAt: new Date().toISOString(),
+                customerName,
+                phone,
+                locationUrl: capturedCustomerLocation?.url || "",
+                total,
+                hasPartialCancellation: false,
+                items: snapshotItems
+            };
+
+            confirmedOrders.unshift(newConfirmedOrder);
+            saveConfirmedOrders(confirmedOrders);
+
+            cart = [];
+            saveCart();
+            updateCartUI();
+            closeCart();
+            showCaramelToast(`تم تسجيل الأوردر ${orderId} كطلب مؤكد!`);
+            openWhatsAppWithText(message, ORDER_WHATSAPP_NUMBER);
         }
 
         function openWhatsAppChatDirect() {
@@ -5027,7 +5472,8 @@
         window.addEventListener("popstate", () => {
             if (overlayStack.length > 0) {
                 const top = overlayStack.pop();
-                if (top === "serviceInfo") closeServiceInfoModal(true);
+                if (top === "orderDetails") closeOrderDetailsModal(true);
+                else if (top === "serviceInfo") closeServiceInfoModal(true);
                 else if (top === "options") closeProductOptionModal(true);
                 else if (top === "preview") closeImageModal(true);
                 else if (top === "cart") closeCart(true);
@@ -5040,6 +5486,7 @@
 
         window.addEventListener("keydown", e => {
             if (e.key === "Escape") {
+                if (document.getElementById("orderDetailsModal")?.classList.contains("open")) { closeOrderDetailsModal(); return; }
                 if (document.getElementById("serviceInfoModal")?.classList.contains("open")) { closeServiceInfoModal(); return; }
                 if (document.getElementById("productOptionModal")?.classList.contains("open")) { closeProductOptionModal(); return; }
                 if (document.getElementById("imageModal")?.classList.contains("open")) { closeImageModal(); return; }
