@@ -1711,6 +1711,37 @@
             gap: 7px;
         }
 
+        
+        .cart-customer-box {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: var(--surface-soft);
+            border: 1px solid var(--border-subtle);
+            border-radius: 11px;
+            padding: 7px 9px;
+        }
+        .cart-customer-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+        .cart-customer-input {
+            width: 100%;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--text-main);
+            background: var(--surface-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 5px 8px;
+            outline: none;
+        }
+        .cart-customer-input:focus {
+            border-color: var(--accent);
+        }
+
         .cart-policy-note {
             background: var(--surface-soft);
             border: 1px solid var(--accent-glow);
@@ -2217,6 +2248,13 @@
         </div>
         <div class="cart-body" id="cartItemsContainer"></div>
         <div class="cart-footer">
+                        <div class="cart-customer-box">
+                <div class="cart-customer-row">
+                    <input type="text" id="checkoutCustomerName" class="cart-customer-input" placeholder="الاسم بالكامل *" required>
+                    <input type="tel" id="checkoutCustomerPhone" class="cart-customer-input" placeholder="رقم الواتساب *" required>
+                </div>
+                <input type="text" id="checkoutCustomerAddress" class="cart-customer-input" placeholder="العنوان بالتفصيل (المنطقة / الشارع) *" required>
+            </div>
             <div class="cart-policy-note">السويس: الدفع عند الاستلام • المحافظات الأخرى: إنستا باي أو فوري أو كاش • التوصيل خلال يوم عمل.</div>
             <div class="cart-total-row">
                 <span>الإجمالي:</span>
@@ -2270,6 +2308,48 @@
 
     <script>
         const WHATSAPP_NUMBER = "201055436305";
+
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzcdxeGcuTjaQFhjL8-kSDK7Sy0jRUKd_2I0cNy-en-46IsVgBvWg-ENAo_6BxjCh1A/exec";
+        const CUSTOMER_INFO_STORAGE_KEY = "caramel_customer_info_v1";
+
+        function loadSavedCustomerInfo() {
+            try {
+                const raw = localStorage.getItem(CUSTOMER_INFO_STORAGE_KEY);
+                if (!raw) return;
+                const info = JSON.parse(raw);
+                const nameEl = document.getElementById("checkoutCustomerName");
+                const phoneEl = document.getElementById("checkoutCustomerPhone");
+                const addrEl = document.getElementById("checkoutCustomerAddress");
+                if (nameEl && info.customerName) nameEl.value = info.customerName;
+                if (phoneEl && info.phone) phoneEl.value = info.phone;
+                if (addrEl && info.address) addrEl.value = info.address;
+            } catch (e) {}
+        }
+
+        function saveCustomerInfo(customerName, phone, address) {
+            try {
+                localStorage.setItem(CUSTOMER_INFO_STORAGE_KEY, JSON.stringify({ customerName, phone, address }));
+            } catch (e) {}
+        }
+
+        async function sendOrderToGoogleSheet(orderPayload) {
+            if (!GOOGLE_SCRIPT_URL) return false;
+            try {
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: {
+                        "Content-Type": "text/plain;charset=utf-8"
+                    },
+                    body: JSON.stringify(orderPayload)
+                });
+                return true;
+            } catch (err) {
+                console.error("Failed to record order in Google Sheet:", err);
+                return false;
+            }
+        }
+
         const STORE_URL = "https://caramelstoresuez.github.io/Carmelastore/";
         const CART_STORAGE_KEY = "caramel_store_cart_v1";
         const INTEREST_STORAGE_KEY = "caramel_smart_interest_v1";
@@ -3242,7 +3322,8 @@
             renderSpotlightBoxes();
             renderProducts(currentCategory);
             renderSideCategoriesList();
-            updateCartUI();
+            loadSavedCustomerInfo();
+        updateCartUI();
         }
 
         let currentCategory = "all";
@@ -4520,13 +4601,39 @@
             if (!fromPopState) removeOverlayState("cart");
         }
 
-        function checkoutOnWhatsApp() {
+        async function checkoutOnWhatsApp() {
             if (cart.length === 0) {
                 showCaramelToast("سلة المشتريات فاضية! أضف منتجات أولاً.");
                 return;
             }
-            let message = "مرحباً متجر كارامل، أريد إتمام الطلب التالي:\n\n";
+
+            const nameEl = document.getElementById("checkoutCustomerName");
+            const phoneEl = document.getElementById("checkoutCustomerPhone");
+            const addrEl = document.getElementById("checkoutCustomerAddress");
+
+            const customerName = (nameEl?.value || "").trim();
+            const phone = (phoneEl?.value || "").trim();
+            const address = (addrEl?.value || "").trim();
+
+            if (!customerName || !phone || !address) {
+                showCaramelToast("من فضلك اكتب الاسم ورقم الواتساب والعنوان أولاً.");
+                if (!customerName && nameEl) nameEl.focus();
+                else if (!phone && phoneEl) phoneEl.focus();
+                else if (!address && addrEl) addrEl.focus();
+                return;
+            }
+
+            saveCustomerInfo(customerName, phone, address);
+
+            const orderId = "CRM-" + Date.now();
+            let message = `مرحباً متجر كارامل، أريد إتمام الطلب رقم: ${orderId}\n`;
+            message += `الاسم: ${customerName}\n`;
+            message += `الواتساب: ${phone}\n`;
+            message += `العنوان: ${address}\n\n`;
+            message += "تفاصيل الطلب:\n";
+
             let total = 0;
+            const itemsSummaryParts = [];
 
             cart.forEach((item, index) => {
                 const qty = Number(item.qty) || 1;
@@ -4538,6 +4645,14 @@
                 const imgs = getProductImagesList(product || item);
                 const chosenImg = normalizeProductImageUrl(item.img) || imgs[0] || "";
                 const imgIdx = chosenImg && imgs.length ? imgs.indexOf(chosenImg) : -1;
+
+                const details = [];
+                if (item.selectedSize) details.push(`مقاس: ${item.selectedSize}`);
+                if (item.selectedColor) details.push(`لون: ${item.selectedColor}`);
+                if (item.itemNote && item.itemNote.trim()) details.push(`ملاحظة: ${item.itemNote.trim()}`);
+                details.push(`تاجر: ${merchantName}`);
+
+                itemsSummaryParts.push(`${item.title} (${qty}×${price}${details.length ? " - " + details.join("، ") : ""})`);
 
                 message += `${index + 1}. ${item.title}\n`;
                 message += `   - التاجر: ${merchantName}\n`;
@@ -4553,7 +4668,21 @@
             message += `التوصيل: خلال يوم عمل\n`;
             message += `الاسترجاع: منك / تالف / به عيوب / أو غير الوصف.`;
 
-            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
+            const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+            const waWin = window.open(waUrl, "_blank", "noopener,noreferrer");
+            if (!waWin) {
+                window.location.href = waUrl;
+            }
+
+            await sendOrderToGoogleSheet({
+                orderId,
+                customerName,
+                phone,
+                address,
+                items: itemsSummaryParts.join(" | "),
+                total,
+                status: "جديد"
+            });
         }
 
         function renderPreviewMediaGallery() {
