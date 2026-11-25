@@ -2408,27 +2408,8 @@
 
         const DEFAULT_APPAREL_SIZES = ["S", "M", "L", "XL", "XXL"];
 
-        const PRODUCT_VARIANTS = {
-            "hm-22": { colors: ["بنفسجي", "باندا"] },
-            "wmn-1": { sizes: ["S", "M", "L", "XL", "XXL"] },
-            "wmn-2": { sizes: ["S", "M", "L", "XL", "XXL"], colors: ["أسود", "أبيض", "بيج", "كشمير", "نبيتي", "كحلي"] },
-            "wmn-3": { sizes: ["فري سايز (يلبس لحد 85 ك)"] },
-            "hm-61": { colors: ["أسود", "بيج", "وردي", "أزرق"] },
-            "htm-7": { colors: ["أسود", "بني داكن"] },
-            "tafse-6": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
-            "tafse-7": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
-            "tafse-8": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
-            "tafse-9": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
-            "tafse-10": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
-            "tafse-11": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
-            "tafse-12": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
-            "tafse-13": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
-            "tafse-14": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
-            "tafse-15": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
-            "tafse-16": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
-            "tafse-17": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
-            "tafse-18": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] }
-        };
+        // المقاسات والألوان والأسعار تأتي من ملفات الـ JSON الخاصة بالمنتجات (sizes / colors / priceOptions / variants / options)
+        const PRODUCT_VARIANTS = {};
 
         let deferredInstallPrompt = null;
         let toastTimer = null;
@@ -2725,11 +2706,16 @@
             activeHoveredCard = null;
         }
 
+        function isBagOrNonApparelProduct(product) {
+            if (!product) return false;
+            const text = normalizeText(`${product.title || ""} ${product.desc || ""} ${product.category || ""}`);
+            return /(شنطه|شنط|حقيبه|حقائب|باك|كروس|توت|محفظه|مقلمه|بوكس|مج|كوب|كوبايات|كاس|كاسات|عطر|برفان|سبلاش|اسبلش|مخمرية|ساعه|اكسسوار|انسيال|سلسله|خاتم|مكرميه|مفارش|مفرش|سجاده|منشر|شماعه|صينيه|صواني)/.test(text);
+        }
+
         function isApparelProduct(product) {
             if (!product) return false;
-            if (PRODUCT_VARIANTS[product.id] && Array.isArray(PRODUCT_VARIANTS[product.id].sizes)) return true;
             if (Array.isArray(product.sizes) && product.sizes.length) return true;
-            if (product.id === "htm-4") return false;
+            if (isBagOrNonApparelProduct(product)) return false;
             const apparelCats = ["women", "men", "kids"];
             if (apparelCats.includes(product.category)) return true;
             if (Array.isArray(product.categories) && product.categories.some(c => apparelCats.includes(c))) return true;
@@ -2811,29 +2797,54 @@
             return collected;
         }
 
+        function normalizeSizeOrOptionEntry(entry, fallbackPrice = 0) {
+            if (!entry) return null;
+            if (typeof entry === "string") {
+                const label = entry.trim();
+                if (!label) return null;
+                const priceMatch = label.match(/(\d+(?:\.\d+)?)\s*(?:جنيه|\bج\b|egp)/i);
+                const parsed = priceMatch ? parseNumericPrice(priceMatch[1]) : 0;
+                return { label, price: parsed > 0 ? parsed : (Number(fallbackPrice) || 0) };
+            }
+            if (typeof entry === "object") {
+                const label = String(entry.label || entry.name || entry.title || entry.value || entry.size || "").trim();
+                if (!label) return null;
+                const rawP = entry.price ?? entry.cost ?? entry.amount ?? entry.salePrice;
+                const parsed = rawP !== undefined && rawP !== null && String(rawP).trim() !== "" ? parseNumericPrice(rawP) : 0;
+                const finalPrice = parsed > 0 ? parsed : (Number(fallbackPrice) || 0);
+                const formattedLabel = (parsed > 0 && !/جنيه|\bج\b|egp/i.test(label))
+                    ? `${label} (${finalPrice} جنيه)`
+                    : label;
+                return { label: formattedLabel, price: finalPrice };
+            }
+            return null;
+        }
+
         function getProductVariantConfig(product) {
             if (!product) return null;
             const explicit = PRODUCT_VARIANTS[product.id] || {};
             const config = {};
+            const fallbackPrice = Number(product.price) || 0;
 
-            if (Array.isArray(explicit.colors) && explicit.colors.length) {
+            if (Array.isArray(product.colors) && product.colors.length) {
+                config.colors = product.colors.map(c => typeof c === "string" ? c.trim() : String(c?.label || c?.name || "").trim()).filter(Boolean);
+            } else if (Array.isArray(explicit.colors) && explicit.colors.length) {
                 config.colors = explicit.colors;
-            } else if (Array.isArray(product.colors) && product.colors.length) {
-                config.colors = product.colors;
             }
 
             const jsonPriceOpts = extractJsonPriceOptions(product);
             if (jsonPriceOpts.length) {
                 config.sizes = jsonPriceOpts;
+            } else if (Array.isArray(product.sizes) && product.sizes.length) {
+                const normalizedSizes = product.sizes.map(s => normalizeSizeOrOptionEntry(s, fallbackPrice)).filter(Boolean);
+                if (normalizedSizes.length) config.sizes = normalizedSizes;
             } else if (Array.isArray(explicit.sizes) && explicit.sizes.length) {
                 config.sizes = explicit.sizes;
-            } else if (Array.isArray(product.sizes) && product.sizes.length) {
-                config.sizes = product.sizes;
             } else if (isApparelProduct(product)) {
                 config.sizes = DEFAULT_APPAREL_SIZES;
             }
 
-            return (config.colors || config.sizes) ? config : null;
+            return ((config.colors && config.colors.length) || (config.sizes && config.sizes.length)) ? config : null;
         }
 
         function showCaramelToast(message) {
