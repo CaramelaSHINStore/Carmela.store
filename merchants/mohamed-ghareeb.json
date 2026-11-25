@@ -19,7 +19,7 @@
     "id": "mohamed-school-notebooks-packs-70",
     "title": "كراريس وكشاكيل مدرسية كشكول 10 وباكو 10 كشكيل 70 جنيه",
     "desc": "كراريس وكشاكيل مدرسية بأغلفة وألوان متنوعة للمدارس والدراسة، سعر الكشكول 10 جنيه وباكو 10 كشاكيل بسعر 70 جنيه.",
-    "price": 70,
+    "price": 10,
     "category": "school",
     "categories": [
       "school"
@@ -28,6 +28,16 @@
     "img": "Momaled/compressed_1795582045598.webp",
     "images": [
       "Momaled/compressed_1795582045598.webp"
+    ],
+    "sizes": [
+      {
+        "label": "كشكول (10 جنيه)",
+        "price": 10
+      },
+      {
+        "label": "باكو / دستة 10 كشاكيل (70 جنيه)",
+        "price": 70
+      }
     ]
   },
   {
