@@ -1,28 +1,15 @@
 [
   {
     "id": "om-ammar-pearl-bag-350",
-    "title": "شنطة لولي أبيض وردات بسلسلة ذهبية هاند ميد",
-    "desc": "شنطة هاند ميد فاخرة من اللولي الأبيض بتفاصيل وردات بارزة، يد لولي وسلسلة ذهبية أنيقة تناسب السهرات والمناسبات والخروجات المميزة.",
-    "price": 350,
-    "category": "tafse",
-    "categories": ["tafse", "women", "gifts"],
-    "merchant": "أم عمار",
-    "img": "Htm/IMG-20261120-WA0028.jpg",
-    "images": [
-      "Htm/IMG-20261120-WA0028.jpg",
-      "Htm/IMG-20261120-WA0021.jpg",
-      "Htm/IMG-20261120-WA0003.jpg"
-    ]
-  }
-]
-[
-  {
-    "id": "om-ammar-pearl-bag-350",
     "title": "شنطة لولي أبيض وردات بسلسلة ذهبية هاند ميد 350 جنيه",
     "desc": "شنطة يد هاند ميد من اللولي الأبيض مزينة بوردات وسلسلة ذهبية أنيقة تناسب السهرات والمناسبات والخروجات المميزة بسعر 350 جنيه.",
     "price": 350,
     "category": "tafse",
-    "categories": ["tafse", "women", "gifts"],
+    "categories": [
+      "tafse",
+      "women",
+      "gifts"
+    ],
     "merchant": "أم عمار",
     "img": "Htm/IMG-20261120-WA0028.jpg",
     "images": [
@@ -37,7 +24,11 @@
     "desc": "شنطة يد هاند ميد مصنوعة يدوياً من الخرز الكريستال الشفاف والأزرق الفاتح بتصميم شبكي ويد خرز وسلسلة ذهبية للسهرات والمناسبات بسعر 350 جنيه.",
     "price": 350,
     "category": "tafse",
-    "categories": ["tafse", "women", "gifts"],
+    "categories": [
+      "tafse",
+      "women",
+      "gifts"
+    ],
     "merchant": "أم عمار",
     "img": "Htm/87584.webp",
     "images": [
@@ -51,7 +42,11 @@
     "desc": "شنطة يد هاند ميد من اللولي الأبيض الفاخر مرفق معها عقد أو إكسسوار لولي متناسق للخطوبة والسهرات والمناسبات الخاصة بسعر 350 جنيه.",
     "price": 350,
     "category": "tafse",
-    "categories": ["tafse", "women", "gifts"],
+    "categories": [
+      "tafse",
+      "women",
+      "gifts"
+    ],
     "merchant": "أم عمار",
     "img": "Htm/87625.webp",
     "images": [
@@ -66,7 +61,11 @@
     "desc": "شنطة يد هاند ميد من الخرز الكريستال الأسود اللامع بتصميم أنيق ويد خرز وحزام خرز للسهرات والمناسبات والحفلات بسعر 350 جنيه.",
     "price": 350,
     "category": "tafse",
-    "categories": ["tafse", "women", "gifts"],
+    "categories": [
+      "tafse",
+      "women",
+      "gifts"
+    ],
     "merchant": "أم عمار",
     "img": "Htm/87591.webp",
     "images": [
@@ -80,7 +79,11 @@
     "desc": "شنطة هاند ميد من اللولي الأبيض بتصميم أسطواني طولي مزودة بسلسلة ذهبية وحزام لولي لإطلالة أنيقة في السهرات والمناسبات بسعر 350 جنيه.",
     "price": 350,
     "category": "tafse",
-    "categories": ["tafse", "women", "gifts"],
+    "categories": [
+      "tafse",
+      "women",
+      "gifts"
+    ],
     "merchant": "أم عمار",
     "img": "Htm/87579.webp",
     "images": [
@@ -93,7 +96,11 @@
     "desc": "شنطة ميني صغيرة هاند ميد من اللولي الأبيض وخرز أحمر بيد خرز عملية ومناسبة للهدايا والتوزيعات والمناسبات بسعر 50 جنيه.",
     "price": 50,
     "category": "tafse",
-    "categories": ["tafse", "women", "gifts"],
+    "categories": [
+      "tafse",
+      "women",
+      "gifts"
+    ],
     "merchant": "أم عمار",
     "img": "Htm/87576.webp",
     "images": [
@@ -106,7 +113,11 @@
     "desc": "صينية ومرايا دائرية ومزخرفة هاند ميد تنفذ حسب الطلب للخطوبة وكتب الكتاب والمناسبات مزينة باللولي والورود والفراشات مع كتابة الأسماء والتواريخ والتهاني بسعر 500 جنيه.",
     "price": 500,
     "category": "tafse",
-    "categories": ["tafse", "women", "gifts"],
+    "categories": [
+      "tafse",
+      "women",
+      "gifts"
+    ],
     "merchant": "أم عمار",
     "img": "Htm/87618.webp",
     "images": [
@@ -122,7 +133,11 @@
     "desc": "عباية سوداء واسعة بقماش منقوش ومتموج بتصميم مريح وأنيق للخروجات والمناسبات، السعر 800 جنيه والسن المحير 650 جنيه.",
     "price": 800,
     "category": "tafse",
-    "categories": ["tafse", "women", "gifts"],
+    "categories": [
+      "tafse",
+      "women",
+      "gifts"
+    ],
     "merchant": "أم عمار",
     "img": "Htm/87626.webp",
     "images": [
@@ -135,7 +150,11 @@
     "desc": "عباية وفستان طويل باللون السماوي بأكمام كشكشة وتفاصيل أزرار أنيقة، السعر 800 جنيه والسن المحير 650 جنيه.",
     "price": 800,
     "category": "tafse",
-    "categories": ["tafse", "women", "gifts"],
+    "categories": [
+      "tafse",
+      "women",
+      "gifts"
+    ],
     "merchant": "أم عمار",
     "img": "Htm/87623.webp",
     "images": [
@@ -148,7 +167,11 @@
     "desc": "عباية وفستان طويل باللون الأزرق البترولي بقماش متموج وكشكشة وأربطة جانبية لإطلالة عصرية ومحتشمة، السعر 800 جنيه والسن المحير 650 جنيه.",
     "price": 800,
     "category": "tafse",
-    "categories": ["tafse", "women", "gifts"],
+    "categories": [
+      "tafse",
+      "women",
+      "gifts"
+    ],
     "merchant": "أم عمار",
     "img": "Htm/87624.webp",
     "images": [
@@ -161,7 +184,11 @@
     "desc": "عباية سوداء واسعة بقصة صدر وكشكشة ناعمة وأكمام واسعة مريحة، السعر 800 جنيه والسن المحير 650 جنيه.",
     "price": 800,
     "category": "tafse",
-    "categories": ["tafse", "women", "gifts"],
+    "categories": [
+      "tafse",
+      "women",
+      "gifts"
+    ],
     "merchant": "أم عمار",
     "img": "Htm/87614.webp",
     "images": [
@@ -174,7 +201,11 @@
     "desc": "عباية باللون البني بقماش مضلع مخطط وأكمام واسعة أنيقة للخروجات اليومية والمناسبات، السعر 800 جنيه والسن المحير 650 جنيه.",
     "price": 800,
     "category": "tafse",
-    "categories": ["tafse", "women", "gifts"],
+    "categories": [
+      "tafse",
+      "women",
+      "gifts"
+    ],
     "merchant": "أم عمار",
     "img": "Htm/87615.webp",
     "images": [
@@ -187,7 +218,11 @@
     "desc": "عباية وفستان طويل باللون الأصفر الفاتح بقصة أنيقة وأربطة جانبية، السعر 800 جنيه والسن المحير 650 جنيه.",
     "price": 800,
     "category": "tafse",
-    "categories": ["tafse", "women", "gifts"],
+    "categories": [
+      "tafse",
+      "women",
+      "gifts"
+    ],
     "merchant": "أم عمار",
     "img": "Htm/87617.webp",
     "images": [
@@ -200,7 +235,11 @@
     "desc": "عباية قطيفة فخمة باللون العنابي البرغندي بقماش ناعم ولامع مع طرحة متناسقة للشتاء والمناسبات، السعر 800 جنيه والسن المحير 650 جنيه.",
     "price": 800,
     "category": "tafse",
-    "categories": ["tafse", "women", "gifts"],
+    "categories": [
+      "tafse",
+      "women",
+      "gifts"
+    ],
     "merchant": "أم عمار",
     "img": "Htm/87611.webp",
     "images": [
@@ -213,7 +252,11 @@
     "desc": "عباية باللون الكحلي الداكن بتصميم عملي وأنيق مع أزرار أمامية وأكمام واسعة، السعر 800 جنيه والسن المحير 650 جنيه.",
     "price": 800,
     "category": "tafse",
-    "categories": ["tafse", "women", "gifts"],
+    "categories": [
+      "tafse",
+      "women",
+      "gifts"
+    ],
     "merchant": "أم عمار",
     "img": "Htm/87612.webp",
     "images": [
@@ -226,7 +269,11 @@
     "desc": "عباية قطيفة نبيتي فخمة مزينة ببروش وحلية فضية أنيقة عند الوسط للسهرات والمناسبات، السعر 800 جنيه والسن المحير 650 جنيه.",
     "price": 800,
     "category": "tafse",
-    "categories": ["tafse", "women", "gifts"],
+    "categories": [
+      "tafse",
+      "women",
+      "gifts"
+    ],
     "merchant": "أم عمار",
     "img": "Htm/87605.webp",
     "images": [
@@ -239,7 +286,11 @@
     "desc": "عباية قطيفة باللون الموف البنفسجي الغامق مع طرحة متناسقة للخروجات والسهرات، السعر 800 جنيه والسن المحير 650 جنيه.",
     "price": 800,
     "category": "tafse",
-    "categories": ["tafse", "women", "gifts"],
+    "categories": [
+      "tafse",
+      "women",
+      "gifts"
+    ],
     "merchant": "أم عمار",
     "img": "Htm/87613.webp",
     "images": [
@@ -252,7 +303,11 @@
     "desc": "عباية وفستان طويل باللون العنابي النبيتي بقماش مضلع وكشكشة عند الوسط وأكمام طويلة، السعر 800 جنيه والسن المحير 650 جنيه.",
     "price": 800,
     "category": "tafse",
-    "categories": ["tafse", "women", "gifts"],
+    "categories": [
+      "tafse",
+      "women",
+      "gifts"
+    ],
     "merchant": "أم عمار",
     "img": "Htm/87604.webp",
     "images": [
@@ -265,7 +320,11 @@
     "desc": "عباية قطيفة فخمة باللون الموف الباذنجاني منقوشة بنقشة شرقية مزخرفة مع طرحة متناسقة للسهرات والمناسبات، السعر 800 جنيه والسن المحير 650 جنيه.",
     "price": 800,
     "category": "tafse",
-    "categories": ["tafse", "women", "gifts"],
+    "categories": [
+      "tafse",
+      "women",
+      "gifts"
+    ],
     "merchant": "أم عمار",
     "img": "Htm/87598.webp",
     "images": [
@@ -278,7 +337,11 @@
     "desc": "عباية باللون الكحلي الغامق بقماش مضلع وأكمام واسعة بتصميم أنيق ومريح، السعر 800 جنيه والسن المحير 650 جنيه.",
     "price": 800,
     "category": "tafse",
-    "categories": ["tafse", "women", "gifts"],
+    "categories": [
+      "tafse",
+      "women",
+      "gifts"
+    ],
     "merchant": "أم عمار",
     "img": "Htm/87587.webp",
     "images": [
