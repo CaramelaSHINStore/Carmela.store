@@ -5,7 +5,10 @@
     "desc": "مجموعة متنوعة من لانش بوكس وعلب حفظ الطعام البلاستيكية بأشكال مستطيلة ومقسمة وموديلات متعددة مثل SUN GROUP بألوان أحمر ووردي وأزرق وبنفسجي وأخضر وبيج وأبيض، الأسعار تبدأ من 70 و90 و120 جنيه.",
     "price": 70,
     "category": "home",
-    "categories": ["home"],
+    "categories": [
+      "home",
+      "school"
+    ],
     "merchant": "محمد غريب",
     "img": "Momaled/compressed_1795582048118.webp",
     "images": [
@@ -17,8 +20,10 @@
     "title": "كراريس وكشاكيل مدرسية كشكول 10 وباكو 10 كشكيل 70 جنيه",
     "desc": "كراريس وكشاكيل مدرسية بأغلفة وألوان متنوعة للمدارس والدراسة، سعر الكشكول 10 جنيه وباكو 10 كشاكيل بسعر 70 جنيه.",
     "price": 70,
-    "category": "home",
-    "categories": ["home"],
+    "category": "school",
+    "categories": [
+      "school"
+    ],
     "merchant": "محمد غريب",
     "img": "Momaled/compressed_1795582045598.webp",
     "images": [
@@ -30,8 +35,11 @@
     "title": "لوحة كتابة ورسم إلكترونية LCD Writing Tablet مقاس 8.5 و10 بوصة",
     "desc": "لوحة كتابة ورسم إلكترونية LCD Panel للأطفال والدراسة والرسم، متوفرة بمقاسي 8.5 بوصة بسعر 50 جنيه و10 بوصة بسعر 65 جنيه.",
     "price": 50,
-    "category": "home",
-    "categories": ["home"],
+    "category": "school",
+    "categories": [
+      "school",
+      "kids"
+    ],
     "merchant": "محمد غريب",
     "img": "Momaled/compressed_1795582045299.webp",
     "images": [
@@ -43,8 +51,11 @@
     "title": "قلم جاف سحري بحبر مخفي وإضاءة وردي وأخضر 10 جنيه",
     "desc": "قلم جاف سحري بحبر مخفي يظهر بالإضاءة برسومات كرتونية وفراولة بألوان وردي وأخضر أدوات مدرسية وهدايا بسعر 10 جنيه.",
     "price": 10,
-    "category": "home",
-    "categories": ["home"],
+    "category": "school",
+    "categories": [
+      "school",
+      "gifts"
+    ],
     "merchant": "محمد غريب",
     "img": "Momaled/compressed_1795582043008.webp",
     "images": [
@@ -56,8 +67,11 @@
     "title": "ألوان فلوماستر مائية OMS Aqua 12 لون 50 جنيه",
     "desc": "علبة أقلام ألوان فلوماستر مائية OMS Aqua Water Colour Pens 12 لون للرسم والتلوين والمدرسة بسعر 50 جنيه.",
     "price": 50,
-    "category": "home",
-    "categories": ["home"],
+    "category": "school",
+    "categories": [
+      "school",
+      "kids"
+    ],
     "merchant": "محمد غريب",
     "img": "Momaled/compressed_1795582042688.webp",
     "images": [
@@ -70,7 +84,10 @@
     "desc": "علبة حفظ طعام ولانش بوكس بلاستيك مستطيلة بغطاء محكم من SUN GROUP بألوان أحمر ورمادي زيتي بسعر 70 جنيه.",
     "price": 70,
     "category": "home",
-    "categories": ["home"],
+    "categories": [
+      "home",
+      "school"
+    ],
     "merchant": "محمد غريب",
     "img": "Momaled/compressed_1795582042386.webp",
     "images": [
@@ -82,8 +99,11 @@
     "title": "مقص مدرسي للأطفال ألوان باستيل وردي وبنفسجي وسماوي 20 جنيه",
     "desc": "مقص مدرسي للأطفال للأعمال اليدوية والقص واللصق بألوان باستيل وردي وبنفسجي وسماوي بسعر 20 جنيه.",
     "price": 20,
-    "category": "home",
-    "categories": ["home"],
+    "category": "school",
+    "categories": [
+      "school",
+      "kids"
+    ],
     "merchant": "محمد غريب",
     "img": "Momaled/compressed_1795582042105.webp",
     "images": [
@@ -95,8 +115,11 @@
     "title": "طقم صلصال تعليمي وأدوات تشكيل NARA 45 جنيه",
     "desc": "طقم صلصال تعليمي وأدوات تشكيل للأطفال من NARA بألوان متعددة مع نشابة وقوالب للأنشطة الفنية بسعر 45 جنيه.",
     "price": 45,
-    "category": "home",
-    "categories": ["home"],
+    "category": "school",
+    "categories": [
+      "school",
+      "kids"
+    ],
     "merchant": "محمد غريب",
     "img": "Momaled/compressed_1795582041380.webp",
     "images": [
@@ -108,8 +131,11 @@
     "title": "قلم جاف شكل باندا قماش وفيونكة منقطة 10 جنيه",
     "desc": "قلم جاف مزين برأس باندا قماش وفيونكة منقطة أدوات مكتبية ومدرسية وهدايا بسعر 10 جنيه.",
     "price": 10,
-    "category": "home",
-    "categories": ["home"],
+    "category": "school",
+    "categories": [
+      "school",
+      "gifts"
+    ],
     "merchant": "محمد غريب",
     "img": "Momaled/compressed_1795582041077.webp",
     "images": [
@@ -121,8 +147,10 @@
     "title": "ورق فولوسكاب مسطر ومجوز ZAD 30 جنيه",
     "desc": "ورق فولوسكاب مسطر ومجوز ماركة ZAD للكتابة والامتحانات والمدارس بسعر 30 جنيه.",
     "price": 30,
-    "category": "home",
-    "categories": ["home"],
+    "category": "school",
+    "categories": [
+      "school"
+    ],
     "merchant": "محمد غريب",
     "img": "Momaled/compressed_1795582040768.webp",
     "images": [
@@ -134,8 +162,11 @@
     "title": "كيس بلالين ملونة 100 قطعة للزينة والحفلات 85 جنيه",
     "desc": "كيس بلالين ملونة متعددة الأحجام والألوان للزينة وأعياد الميلاد والحفلات 100 بالونة بسعر 85 جنيه.",
     "price": 85,
-    "category": "home",
-    "categories": ["home"],
+    "category": "gifts",
+    "categories": [
+      "gifts",
+      "kids"
+    ],
     "merchant": "محمد غريب",
     "img": "Momaled/compressed_1795582040174.webp",
     "images": [
@@ -147,8 +178,11 @@
     "title": "ورق فوم / ورق كوخ باكو ألوان متعددة 65 جنيه",
     "desc": "ورق فوم / ورق كوخ باكو للأعمال الفنية والمدرسية بألوان أحمر وأصفر وأزرق وبنفسجي وأخضر بسعر 65 جنيه.",
     "price": 65,
-    "category": "home",
-    "categories": ["home"],
+    "category": "school",
+    "categories": [
+      "school",
+      "kids"
+    ],
     "merchant": "محمد غريب",
     "img": "Momaled/compressed_1795582039713.webp",
     "images": [
@@ -160,8 +194,11 @@
     "title": "مقلمة مدرسية Kawai وردي تصميم بناتي 50 جنيه",
     "desc": "مقلمة مدرسية بتصميم كرتوني Kawai بناتي باللون الوردي لحفظ الأقلام والأدوات المدرسية بسعر 50 جنيه.",
     "price": 50,
-    "category": "home",
-    "categories": ["home"],
+    "category": "school",
+    "categories": [
+      "school",
+      "kids"
+    ],
     "merchant": "محمد غريب",
     "img": "Momaled/compressed_1795582039428.webp",
     "images": [
@@ -173,8 +210,11 @@
     "title": "فوم جليتر لامع باكو ألوان متعددة 65 جنيه",
     "desc": "ورق فوم جليتر لامع باكو للأشغال اليدوية والمدرسية بألوان وردي وبرتقالي وذهبي وأزرق وأخضر بسعر 65 جنيه.",
     "price": 65,
-    "category": "home",
-    "categories": ["home"],
+    "category": "school",
+    "categories": [
+      "school",
+      "kids"
+    ],
     "merchant": "محمد غريب",
     "img": "Momaled/compressed_1795582039129.webp",
     "images": [
@@ -187,7 +227,10 @@
     "desc": "لاصق مزدوج الوجه Double-Sided Nano Mounting Tape وFoam Mounting Tape للتثبيت والديكور، متوفر بسعر 20 و30 جنيه.",
     "price": 20,
     "category": "home",
-    "categories": ["home"],
+    "categories": [
+      "home",
+      "school"
+    ],
     "merchant": "محمد غريب",
     "img": "Momaled/compressed_1795582038827.webp",
     "images": [
@@ -199,8 +242,11 @@
     "title": "سيلوتيب وشريط لاصق Crystal Green / Falcon 20 جنيه",
     "desc": "بكرات شريط لاصق سيلوتيب للتغليف والقرطاسية ماركة Crystal Green / Falcon بسعر 20 جنيه.",
     "price": 20,
-    "category": "home",
-    "categories": ["home"],
+    "category": "school",
+    "categories": [
+      "school",
+      "home"
+    ],
     "merchant": "محمد غريب",
     "img": "Momaled/compressed_1795582038541.webp",
     "images": [
@@ -212,8 +258,11 @@
     "title": "مقالم بناتي Andlosya Group Girls وردي وبنفسجي وسماوي 65 جنيه",
     "desc": "مقالم مدرسية للبنات Pencil Case من Andlosya Group Girls بألوان وردي وبنفسجي وسماوي بسعر 65 جنيه.",
     "price": 65,
-    "category": "home",
-    "categories": ["home"],
+    "category": "school",
+    "categories": [
+      "school",
+      "kids"
+    ],
     "merchant": "محمد غريب",
     "img": "Momaled/compressed_1795582038234.webp",
     "images": [
@@ -225,8 +274,10 @@
     "title": "رش ثلج وبخاخ حفلات GALA أحمر 30 جنيه",
     "desc": "عبوات رش ثلج وبخاخ زينة وحفلات GALA باللون الأحمر للمناسبات وأعياد الميلاد بسعر 30 جنيه.",
     "price": 30,
-    "category": "home",
-    "categories": ["home"],
+    "category": "gifts",
+    "categories": [
+      "gifts"
+    ],
     "merchant": "محمد غريب",
     "img": "Momaled/compressed_1795582036270.webp",
     "images": [
@@ -238,8 +289,11 @@
     "title": "مقلمة أميرات ديزني Disney Princess سماوي 120 جنيه",
     "desc": "مقلمة مدرسية برسومات أميرات ديزني Disney Princess باللون السماوي للبنات والمدرسة بسعر 120 جنيه.",
     "price": 120,
-    "category": "home",
-    "categories": ["home"],
+    "category": "school",
+    "categories": [
+      "school",
+      "kids"
+    ],
     "merchant": "محمد غريب",
     "img": "Momaled/compressed_1795582035969.webp",
     "images": [
@@ -251,8 +305,11 @@
     "title": "لانش بوكس مقسم 5 أقسام CAMEL LUNCH BOX أزرق ووردي 120 جنيه",
     "desc": "لانش بوكس مقسم 5 أقسام بغطاء محكم CAMEL LUNCH BOX بألوان أزرق ووردي للمدرسة والعمل بسعر 120 جنيه.",
     "price": 120,
-    "category": "home",
-    "categories": ["home"],
+    "category": "school",
+    "categories": [
+      "school",
+      "home"
+    ],
     "merchant": "محمد غريب",
     "img": "Momaled/compressed_1795582035690.webp",
     "images": [
@@ -264,8 +321,10 @@
     "title": "اسكتش ونوت بوك سلك أنمي وساعة 100 ورقة 100 جنيه و150 ورقة 125 جنيه",
     "desc": "نوت بوك واسكتش سلك بغلاف أنمي جوجو ساتورو ومانجا أبيض وأسود وبغلاف ساعة بني مودرن، متاح 100 ورقة بسعر 100 جنيه و150 ورقة بسعر 125 جنيه.",
     "price": 100,
-    "category": "home",
-    "categories": ["home"],
+    "category": "school",
+    "categories": [
+      "school"
+    ],
     "merchant": "محمد غريب",
     "img": "Momaled/compressed_1795582043295.webp",
     "images": [
@@ -278,8 +337,11 @@
     "title": "زمزميات مياه متدرجة الألوان ومواعيد الشرب 4 موديلات 140 جنيه",
     "desc": "مجموعة زمزميات وزجاجات مياه رياضية ومدرسية متدرجة الألوان وردي وسماوي وبرتقالي بمؤشر مواعيد الشرب من 8AM إلى 6PM وسعة متدرجة حتى 1000ml وMOT وWinning Stuff بسعر 140 جنيه.",
     "price": 140,
-    "category": "home",
-    "categories": ["home"],
+    "category": "school",
+    "categories": [
+      "school",
+      "home"
+    ],
     "merchant": "محمد غريب",
     "img": "Momaled/compressed_1795582023165.webp",
     "images": [
@@ -294,8 +356,11 @@
     "title": "زمزميتا مياه برسومات الفضاء سماوي وبنفسجي 100 جنيه",
     "desc": "زمزميتا مياه وزجاجات شرب مدرسية برسومات الفضاء ورواد الفضاء والصواريخ بألوان سماوي وبنفسجي فاتح وغطاء علوي عملي بسعر 100 جنيه.",
     "price": 100,
-    "category": "home",
-    "categories": ["home"],
+    "category": "school",
+    "categories": [
+      "school",
+      "kids"
+    ],
     "merchant": "محمد غريب",
     "img": "Momaled/compressed_1795582032987.webp",
     "images": [
@@ -307,8 +372,10 @@
     "title": "كشاكيل نوت بوك سلك أغلفة موف وto be 80 ورقة 50 جنيه و100 ورقة 65 جنيه",
     "desc": "كشاكيل ونوت بوك سلك بأغلفة موف وto be للمدارس والجامعة والدراسة، الـ 80 ورقة بسعر 50 جنيه والـ 100 ورقة بسعر 65 جنيه.",
     "price": 50,
-    "category": "home",
-    "categories": ["home"],
+    "category": "school",
+    "categories": [
+      "school"
+    ],
     "merchant": "محمد غريب",
     "img": "Momaled/compressed_1795582045598.webp",
     "images": [
@@ -316,4 +383,3 @@
     ]
   }
 ]
-
