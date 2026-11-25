@@ -2681,6 +2681,24 @@
     <script>
         const WHATSAPP_NUMBER = "201055436305";
 
+        function launchWhatsAppTarget(url) {
+            const isAndroid = /Android/i.test(navigator.userAgent || "");
+            if (isAndroid) {
+                try {
+                    const parsed = new URL(url);
+                    const queryPart = parsed.search || "";
+                    const intentUrl = `intent://send${queryPart}#Intent;scheme=whatsapp;package=com.whatsapp;S.browser_fallback_url=${encodeURIComponent(url)};end`;
+                    window.location.href = intentUrl;
+                    return;
+                } catch (e) {}
+            }
+            const waWin = window.open(url, "_blank", "noopener,noreferrer");
+            if (!waWin) {
+                window.location.href = url;
+            }
+        }
+
+
         const STORE_URL = "https://caramelstoresuez.github.io/Carmelastore/";
         const CART_STORAGE_KEY = "caramel_store_cart_v1";
         const INTEREST_STORAGE_KEY = "caramel_smart_interest_v1";
@@ -4360,7 +4378,7 @@
                             <button type="button" class="add-cart-btn" id="${btnId}" onclick="openProductOptionModal('${escapeHtmlAttr(product.id)}', '${btnId}', getActiveCardImageSrc(this.closest('.product-card'), PRODUCTS.find(x => x.id === '${escapeHtmlAttr(product.id)}')))">
                                 <span>+ للمشتريات</span>
                             </button>
-                            <a href="${escapeHtmlAttr(waUrl)}" class="direct-wa-link" target="_blank" rel="noopener noreferrer" onclick="this.href = buildProductWhatsAppUrl(PRODUCTS.find(x => x.id === '${escapeHtmlAttr(product.id)}'), getActiveCardImageSrc(this.closest('.product-card'), PRODUCTS.find(x => x.id === '${escapeHtmlAttr(product.id)}'))); onDirectWhatsAppClick('${escapeHtmlAttr(product.id)}')">
+                            <a href="${escapeHtmlAttr(waUrl)}" class="direct-wa-link" target="_blank" rel="noopener noreferrer" onclick="event.preventDefault(); const _p = PRODUCTS.find(x => x.id === '${escapeHtmlAttr(product.id)}'); const _u = buildProductWhatsAppUrl(_p, getActiveCardImageSrc(this.closest('.product-card'), _p)); this.href = _u; onDirectWhatsAppClick('${escapeHtmlAttr(product.id)}'); launchWhatsAppTarget(_u);">
                                 <span>واتساب</span>
                             </a>
                         </div>
@@ -5085,10 +5103,7 @@
             msg += `الإجمالي الجديد بعد الإلغاء: ${totalAfter} جنيه`;
 
             const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
-            const waWin = window.open(waUrl, "_blank", "noopener,noreferrer");
-            if (!waWin) {
-                window.location.href = waUrl;
-            }
+            launchWhatsAppTarget(waUrl);
         }
 
         function openOrderDetailModal(orderCode) {
@@ -5461,19 +5476,13 @@
             showCaramelToast(`تم تسجيل الأوردر ${orderId} وحفظه كـ «تم التأكيد»`);
 
             const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-            const waWin = window.open(waUrl, "_blank", "noopener,noreferrer");
-            if (!waWin) {
-                window.location.href = waUrl;
-            }
+            launchWhatsAppTarget(waUrl);
         }
 
         function openWhatsAppChatDirect() {
             const greeting = "مرحباً متجر كارامل، أريد التواصل معكم.";
             const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(greeting)}`;
-            const waWin = window.open(waUrl, "_blank", "noopener,noreferrer");
-            if (!waWin) {
-                window.location.href = waUrl;
-            }
+            launchWhatsAppTarget(waUrl);
         }
 
         function renderPreviewMediaGallery() {
@@ -5591,9 +5600,12 @@
                 if (waBtn) {
                     const currentActiveImg = previewModalState.imgs[previewModalState.idx] || normalizedClicked;
                     waBtn.href = buildProductWhatsAppUrl(product, currentActiveImg);
-                    waBtn.onclick = () => {
-                        waBtn.href = buildProductWhatsAppUrl(product, previewModalState.imgs[previewModalState.idx] || normalizedClicked);
+                    waBtn.onclick = (ev) => {
+                        if (ev) ev.preventDefault();
+                        const targetUrl = buildProductWhatsAppUrl(product, previewModalState.imgs[previewModalState.idx] || normalizedClicked);
+                        waBtn.href = targetUrl;
                         onDirectWhatsAppClick(product.id);
+                        launchWhatsAppTarget(targetUrl);
                     };
                 }
             }
