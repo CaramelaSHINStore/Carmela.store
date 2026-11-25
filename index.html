@@ -139,7 +139,6 @@
             100% { transform: translateX(-220%) skewX(-18deg); }
         }
 
-        /* هيدر ثابت + شريط فئات ثابت + انكماش البحث لأيقونة عند التمرير */
         .sticky-header-shell {
             position: sticky;
             top: 0;
@@ -308,7 +307,6 @@
             stroke-linejoin: round;
         }
 
-        /* شريط البحث الكامل + وضع الأيقونة المصغرة عند التمرير */
         .app-search-bar {
             display: flex;
             align-items: center;
@@ -397,7 +395,6 @@
 
         .search-cancel-btn.visible { display: inline-flex; align-items: center; justify-content: center; }
 
-        /* شريط الفئات الثابت */
         .quick-top-tabs {
             background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, var(--accent-tint) 100%);
             border-top: 1px solid rgba(200, 150, 102, 0.22);
@@ -447,7 +444,6 @@
             flex: 1;
         }
 
-        /* شريط مزايا مكثف لتقليل المساحة الرأسية */
         .caramel-promo-strip {
             background: linear-gradient(120deg, #ffffff 0%, var(--accent-tint) 55%, #ffffff 100%);
             border: 1px solid var(--accent-glow);
@@ -1161,7 +1157,6 @@
             font-weight: 700;
         }
 
-        /* زر واتساب عائم + زر إشعارات عائم بدون تزاحم */
         .floating-wa-fab {
             position: fixed;
             left: 14px;
@@ -1238,7 +1233,6 @@
             stroke-linejoin: round;
         }
 
-        /* شريط تنقل سفلي مميز كراميلي داكن */
         .bottom-app-nav {
             position: fixed;
             bottom: 0;
@@ -2192,7 +2186,6 @@
         <div class="feed-sentinel" id="feedSentinel"></div>
     </main>
 
-    <!-- زر واتساب عائم للتواصل السريع -->
     <a href="https://wa.me/201055436305?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D9%85%D8%AA%D8%AC%D8%B1%20%D9%83%D8%A7%D8%B1%D8%A7%D9%85%D9%84%D8%8C%20%D9%84%D8%AF%D9%8A%20%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%A8%D8%AE%D8%B5%D9%88%D8%B5%20%D8%A7%D9%84%D8%B7%D9%84%D8%A8%D8%A7%D8%AA"
        target="_blank" rel="noopener noreferrer"
        class="floating-wa-fab"
@@ -2397,28 +2390,12 @@
             "merchants/umm-waleed.json"
         ];
 
-        const DEFAULT_APPAREL_SIZES = ["S", "M", "L", "XL", "XXL"];
-
+        // لا يتم فرض مقاسات افتراضية إلا إذا وُجدت صراحةً في المنتج أو PRODUCT_VARIANTS
         const PRODUCT_VARIANTS = {
             "hm-22": { colors: ["بنفسجي", "باندا"] },
-            "wmn-1": { sizes: ["S", "M", "L", "XL", "XXL"] },
-            "wmn-2": { sizes: ["S", "M", "L", "XL", "XXL"], colors: ["أسود", "أبيض", "بيج", "كشمير", "نبيتي", "كحلي"] },
             "wmn-3": { sizes: ["فري سايز (يلبس لحد 85 ك)"] },
             "hm-61": { colors: ["أسود", "بيج", "وردي", "أزرق"] },
-            "htm-7": { colors: ["أسود", "بني داكن"] },
-            "tafse-6": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
-            "tafse-7": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
-            "tafse-8": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
-            "tafse-9": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
-            "tafse-10": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
-            "tafse-11": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
-            "tafse-12": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
-            "tafse-13": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
-            "tafse-14": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
-            "tafse-15": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
-            "tafse-16": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
-            "tafse-17": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] },
-            "tafse-18": { sizes: [{ label: "مقاس كبير (850 ج)", price: 850 }, { label: "السن المحير (650 ج)", price: 650 }] }
+            "htm-7": { colors: ["أسود", "بني داكن"] }
         };
 
         let deferredInstallPrompt = null;
@@ -2443,7 +2420,6 @@
         let activeHoveredCard = null;
         let previewModalState = { productId: null, imgs: [], idx: 0 };
 
-        // إدارة التمرير لتصغير البحث لأيقونة عند النزول وتثبيت الفئات
         function updateStickySearchCompactState() {
             const shell = document.getElementById("stickyHeaderShell");
             const input = document.getElementById("homeSearchInput");
@@ -2669,27 +2645,23 @@
             activeHoveredCard = null;
         }
 
-        function isApparelProduct(product) {
-            if (!product) return false;
-            if (PRODUCT_VARIANTS[product.id] && Array.isArray(PRODUCT_VARIANTS[product.id].sizes)) return true;
-            if (Array.isArray(product.sizes) && product.sizes.length) return true;
-            if (product.id === "htm-4") return false;
-            const apparelCats = ["women", "men", "kids"];
-            if (apparelCats.includes(product.category)) return true;
-            if (Array.isArray(product.categories) && product.categories.some(c => apparelCats.includes(c))) return true;
-            return false;
-        }
-
+        // يعرض المقاسات فقط إذا كانت معرفة صراحةً في المنتج أو PRODUCT_VARIANTS (بدون فرض XL/XXL على منتجات أخرى)
         function getProductVariantConfig(product) {
             if (!product) return null;
             const explicit = PRODUCT_VARIANTS[product.id] || {};
             const config = {};
-            if (Array.isArray(explicit.colors) && explicit.colors.length) config.colors = explicit.colors;
-            else if (Array.isArray(product.colors) && product.colors.length) config.colors = product.colors;
 
-            if (Array.isArray(explicit.sizes) && explicit.sizes.length) config.sizes = explicit.sizes;
-            else if (Array.isArray(product.sizes) && product.sizes.length) config.sizes = product.sizes;
-            else if (isApparelProduct(product)) config.sizes = DEFAULT_APPAREL_SIZES;
+            if (Array.isArray(explicit.colors) && explicit.colors.length) {
+                config.colors = explicit.colors;
+            } else if (Array.isArray(product.colors) && product.colors.length) {
+                config.colors = product.colors;
+            }
+
+            if (Array.isArray(explicit.sizes) && explicit.sizes.length) {
+                config.sizes = explicit.sizes;
+            } else if (Array.isArray(product.sizes) && product.sizes.length) {
+                config.sizes = product.sizes;
+            }
 
             return (config.colors || config.sizes) ? config : null;
         }
@@ -2931,7 +2903,6 @@
                 .replace(/\b\w/g, ch => ch.toUpperCase());
         }
 
-        // محرك تصنيف وترتيب ذكي يعتمد على تحليل البيانات والصور والوسوم
         function classifyProductSmartly(rawCat, title = "", desc = "", imagesList = [], numericPrice = 0) {
             const validKeys = Object.keys(CATEGORY_NAMES).filter(k => k !== "all");
             const normCat = normalizeText(rawCat || "");
@@ -2984,7 +2955,6 @@
                 };
             }
 
-            // ترتيب احتياطي ذكي حسب السعر وعدد الصور إذا لم تتطابق الكلمات المفتاحية
             if (numericPrice > 0 && numericPrice <= 120) {
                 return { category: "school", confidence: 0.55, aiTag: "ترتيب ذكي" };
             }
@@ -3071,7 +3041,6 @@
             const rawCategory = rawItem.category || rawItem.section || rawItem.department || rawItem.type || "";
             const smartClass = classifyProductSmartly(rawCategory, itemTitle, itemDesc, extractedImgs, numericPrice);
 
-            // درجة جودة/أولوية ذكية تعتمد على وضوح الوصف والصور والسعر
             const richnessScore =
                 (extractedImgs.length ? 3 : 0) +
                 (extractedImgs.length > 1 ? 1.5 : 0) +
