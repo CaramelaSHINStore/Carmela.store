@@ -330,6 +330,16 @@
     "images": [
       "Momaled/compressed_1795582043295.webp",
       "Momaled/compressed_1795582035267.webp"
+    ],
+    "sizes": [
+      {
+        "label": "100 ورقة (100 جنيه)",
+        "price": 100
+      },
+      {
+        "label": "150 ورقة (125 جنيه)",
+        "price": 125
+      }
     ]
   },
   {
@@ -377,9 +387,19 @@
       "school"
     ],
     "merchant": "محمد غريب",
-    "img": "Momaled/compressed_1795582045598.webp",
+    "img": "Momaled/compressed_1795582040479.webp",
     "images": [
-      "Momaled/compressed_1795582045598.webp"
+      "Momaled/compressed_1795582040479.webp"
+    ],
+    "sizes": [
+      {
+        "label": "80 ورقة (50 جنيه)",
+        "price": 50
+      },
+      {
+        "label": "100 ورقة (65 جنيه)",
+        "price": 65
+      }
     ]
   }
 ]
