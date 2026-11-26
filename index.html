@@ -31,38 +31,19 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./style.css">
-        <script>
-        try {
-            if (sessionStorage.getItem("caramel_splash_shown_v1") === "1") {
-                document.documentElement.classList.add("skip-splash-session");
-            }
-        } catch (e) {}
-    </script>
-    <style>
-        html.skip-splash-session #caramelSplashScreen {
-            display: none !important;
-            opacity: 0 !important;
-            visibility: hidden !important;
-            pointer-events: none !important;
-        }
-    </style>
     <script src="./app.js" defer></script>
 </head>
 <body class="cat-mode-all">
     <div class="caramel-splash-screen" id="caramelSplashScreen" role="status" aria-live="polite" aria-label="جاري تحميل متجر كارامل">
-        <div class="splash-ambient-glow" aria-hidden="true"></div>
         <div class="splash-logo-stage" aria-hidden="false">
-            <div class="splash-pulse-halo" aria-hidden="true"></div>
             <div class="splash-logo-ring">
                 <img src="https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg" alt="لوجو متجر كارامل">
-                <div class="splash-shine-effect" aria-hidden="true"></div>
             </div>
         </div>
-        <div class="splash-brand-name" id="caramelSplashBrandName">CARAMEL STORE</div>
+        <div class="splash-brand-name">CARAMEL STORE</div>
         <div class="splash-slogan-slot" id="caramelSplashSlogan">
             <div class="splash-sub-rect" id="caramelSplashSubRect">
-                <span class="splash-rect-sheen" aria-hidden="true"></span>
-                <span class="splash-typed-text" id="caramelSplashTypedText">كل قطعه وليها دور</span>
+                <span class="splash-typed-text" id="caramelSplashTypedText">كل قطعة وليها دور</span>
             </div>
         </div>
     </div>
