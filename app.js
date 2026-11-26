@@ -145,6 +145,7 @@ let currentSortMode = "smart";
 let isLoadingJsonProducts = true;
 let appendTargetOrderId = null;
 let activeCartOrdersTab = "pending";
+let expandedOrderIds = new Set();
 let pendingOptionSelection = {
     productId: null,
     clickedBtnId: null,
@@ -1433,11 +1434,13 @@ function switchCartOrdersTab(tabName) {
     activeCartOrdersTab = tabName === "received" ? "received" : "pending";
     const pendingBtn = document.getElementById("tabBtnPendingOrders");
     const receivedBtn = document.getElementById("tabBtnReceivedOrders");
+    const currentCartSec = document.getElementById("currentCartSection");
     const pendingSec = document.getElementById("activeOrdersSection");
     const receivedSec = document.getElementById("receivedOrdersSection");
 
     if (pendingBtn) pendingBtn.classList.toggle("active", activeCartOrdersTab === "pending");
     if (receivedBtn) receivedBtn.classList.toggle("active", activeCartOrdersTab === "received");
+    if (currentCartSec) currentCartSec.classList.toggle("is-hidden", activeCartOrdersTab !== "pending");
     if (pendingSec) pendingSec.classList.toggle("is-hidden", activeCartOrdersTab !== "pending");
     if (receivedSec) receivedSec.classList.toggle("is-hidden", activeCartOrdersTab !== "received");
 }
@@ -2923,6 +2926,36 @@ function updateCartUI() {
     updateAppendOrderBannerUI();
 }
 
+function toggleOrderAccordion(orderId) {
+    if (!orderId) return;
+    if (expandedOrderIds.has(orderId)) {
+        expandedOrderIds.delete(orderId);
+    } else {
+        expandedOrderIds.add(orderId);
+    }
+    renderActiveOrdersInCart();
+    renderReceivedOrdersInCart();
+}
+
+function copyOrderNumber(orderId, event) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    if (!orderId) return;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(orderId).catch(() => {});
+    }
+    showCaramelToast(`تم نسخ رقم الطلب: ${orderId}`);
+}
+
+function buildOrderMerchantsSummary(order) {
+    const merchants = Array.from(new Set(
+        (order?.items || []).map(it => (it.merchant || "").trim()).filter(Boolean)
+    ));
+    return merchants.length ? merchants.join("، ") : "متجر كارامل";
+}
+
 function renderActiveOrdersInCart() {
     const ordersContainer = document.getElementById("activeOrdersContainer");
     const countBadge = document.getElementById("activeOrdersCountBadge");
@@ -2932,7 +2965,7 @@ function renderActiveOrdersInCart() {
     if (countBadge) countBadge.textContent = String(visibleOrders.length);
 
     if (!visibleOrders.length) {
-        ordersContainer.innerHTML = `<div class="active-orders-empty">لا توجد طلبات قيد التنفيذ حالياً. أي طلب ترسله سيظهر هنا لتعديله أو الإضافة عليه أو إلغائه.</div>`;
+        ordersContainer.innerHTML = `<div class="active-orders-empty">لا توجد طلبات قيد التنفيذ حالياً. أي طلب ترسله سيظهر برقم الطلب هنا — اضغط على رقم الطلب لفتحه أو إغلاقه.</div>`;
         return;
     }
 
@@ -2940,6 +2973,8 @@ function renderActiveOrdersInCart() {
         const orderTotal = (order.items || []).reduce((sum, it) => sum + ((Number(it.price) || 0) * (Number(it.qty) || 1)), 0);
         const orderPieces = (order.items || []).reduce((sum, it) => sum + (Number(it.qty) || 1), 0);
         const isAppendingThis = appendTargetOrderId === order.orderId;
+        const isExpanded = expandedOrderIds.has(order.orderId) || isAppendingThis;
+        const merchantsSummary = buildOrderMerchantsSummary(order);
 
         const itemsHtml = (order.items || []).map((item, itemIdx) => {
             const product = PRODUCTS.find(p => p.id === item.id);
@@ -2985,32 +3020,63 @@ function renderActiveOrdersInCart() {
         }).join("");
 
         return `
-            <div class="active-order-card ${isAppendingThis ? "appending-target" : ""}">
-                <div class="active-order-head">
-                    <div>
-                        <div class="active-order-id">طلب ${escapeHtmlAttr(order.orderId)}</div>
-                        <div class="active-order-time">${escapeHtmlAttr(order.createdAtLabel || "")} • ${orderPieces} قطعة</div>
+            <div class="order-accordion-card ${isExpanded ? "is-expanded" : ""} ${isAppendingThis ? "appending-target" : ""}">
+                <button type="button" class="order-number-trigger" onclick="toggleOrderAccordion('${escapeHtmlAttr(order.orderId)}')" aria-expanded="${isExpanded}">
+                    <div class="order-trigger-main">
+                        <div class="order-id-row">
+                            <span class="order-id-code">#${escapeHtmlAttr(order.orderId)}</span>
+                            <span class="order-id-hint">${isExpanded ? "اضغط لإغلاق الطلب" : "اضغط لفتح الطلب"}</span>
+                        </div>
+                        <div class="order-trigger-sub">${escapeHtmlAttr(order.createdAtLabel || "")} • ${orderPieces} قطعة • ${formatPriceNumber(orderTotal)} ج</div>
                     </div>
-                    <span class="active-order-status-pill">قيد التنفيذ</span>
-                </div>
-                <div class="active-order-items-list">${itemsHtml || `<div class="active-orders-empty">لا توجد منتجات متبقية في هذا الطلب.</div>`}</div>
-                <div class="active-order-total-line">
-                    <span>إجمالي الطلب بعد التعديل:</span>
-                    <strong>${formatPriceNumber(orderTotal)} جنيه</strong>
-                </div>
-                <div class="active-order-actions">
-                    <button type="button" class="order-add-more-btn ${isAppendingThis ? "active" : ""}" onclick="toggleAppendToOrder('${escapeHtmlAttr(order.orderId)}')">
-                        ${isAppendingThis ? "جاري الإضافة للطلب..." : "+ إضافة منتجات"}
-                    </button>
-                    <button type="button" class="order-send-update-btn" onclick="sendOrderUpdateWhatsApp('${escapeHtmlAttr(order.orderId)}', 'تعديل')">
-                        إرسال التعديل للواتساب
-                    </button>
-                    <button type="button" class="order-received-btn" onclick="markOrderAsReceived('${escapeHtmlAttr(order.orderId)}')">
-                        ✓ تم الاستلام
-                    </button>
-                    <button type="button" class="order-cancel-btn" onclick="cancelActiveOrder('${escapeHtmlAttr(order.orderId)}')">
-                        إلغاء الطلب
-                    </button>
+                    <div class="order-trigger-right">
+                        <span class="active-order-status-pill">قيد التنفيذ</span>
+                        <span class="order-chevron-icon" aria-hidden="true">⌄</span>
+                    </div>
+                </button>
+
+                <div class="order-accordion-panel">
+                    <div class="order-stage-stepper" aria-label="مراحل الطلب">
+                        <div class="order-stage-step done">
+                            <span class="order-stage-dot"></span>
+                            <span>تم الإرسال</span>
+                        </div>
+                        <div class="order-stage-step done">
+                            <span class="order-stage-dot"></span>
+                            <span>قيد التنفيذ</span>
+                        </div>
+                        <div class="order-stage-step">
+                            <span class="order-stage-dot"></span>
+                            <span>تم الاستلام</span>
+                        </div>
+                    </div>
+
+                    <div class="active-order-head">
+                        <div class="order-trigger-sub">التجار: ${escapeHtmlAttr(merchantsSummary)}</div>
+                        <button type="button" class="order-copy-id-btn" onclick="copyOrderNumber('${escapeHtmlAttr(order.orderId)}', event)">نسخ الرقم</button>
+                    </div>
+
+                    <div class="active-order-items-list">${itemsHtml || `<div class="active-orders-empty">لا توجد منتجات متبقية في هذا الطلب.</div>`}</div>
+
+                    <div class="active-order-total-line">
+                        <span>إجمالي الطلب:</span>
+                        <strong>${formatPriceNumber(orderTotal)} جنيه</strong>
+                    </div>
+
+                    <div class="active-order-actions">
+                        <button type="button" class="order-add-more-btn ${isAppendingThis ? "active" : ""}" onclick="toggleAppendToOrder('${escapeHtmlAttr(order.orderId)}')">
+                            ${isAppendingThis ? "جاري الإضافة للطلب..." : "+ إضافة منتجات"}
+                        </button>
+                        <button type="button" class="order-send-update-btn" onclick="sendOrderUpdateWhatsApp('${escapeHtmlAttr(order.orderId)}', 'تعديل')">
+                            إرسال التعديل للواتساب
+                        </button>
+                        <button type="button" class="order-received-btn" onclick="markOrderAsReceived('${escapeHtmlAttr(order.orderId)}')">
+                            ✓ تم الاستلام
+                        </button>
+                        <button type="button" class="order-cancel-btn" onclick="cancelActiveOrder('${escapeHtmlAttr(order.orderId)}')">
+                            إلغاء الطلب
+                        </button>
+                    </div>
                 </div>
             </div>
         `;
@@ -3096,6 +3162,7 @@ function renderReceivedOrdersInCart() {
     container.innerHTML = receivedOrders.map(order => {
         const orderTotal = (order.items || []).reduce((sum, it) => sum + ((Number(it.price) || 0) * (Number(it.qty) || 1)), 0);
         const orderPieces = (order.items || []).reduce((sum, it) => sum + (Number(it.qty) || 1), 0);
+        const isExpanded = expandedOrderIds.has(order.orderId);
 
         const itemsHtml = (order.items || []).map((item, itemIdx) => {
             const metaParts = [];
@@ -3115,18 +3182,41 @@ function renderReceivedOrdersInCart() {
         }).join("");
 
         return `
-            <div class="received-order-card">
-                <div class="active-order-head">
-                    <div>
-                        <div class="active-order-id">طلب ${escapeHtmlAttr(order.orderId)}</div>
-                        <div class="active-order-time">استُلم: ${escapeHtmlAttr(order.receivedAtLabel || order.createdAtLabel || "")} • ${orderPieces} قطعة</div>
+            <div class="order-accordion-card ${isExpanded ? "is-expanded" : ""}">
+                <button type="button" class="order-number-trigger" onclick="toggleOrderAccordion('${escapeHtmlAttr(order.orderId)}')" aria-expanded="${isExpanded}">
+                    <div class="order-trigger-main">
+                        <div class="order-id-row">
+                            <span class="order-id-code">#${escapeHtmlAttr(order.orderId)}</span>
+                            <span class="order-id-hint">${isExpanded ? "اضغط لإغلاق الطلب" : "اضغط لفتح الطلب"}</span>
+                        </div>
+                        <div class="order-trigger-sub">استُلم: ${escapeHtmlAttr(order.receivedAtLabel || order.createdAtLabel || "")} • ${orderPieces} قطعة • ${formatPriceNumber(orderTotal)} ج</div>
                     </div>
-                    <span class="received-order-status-pill">تم الاستلام</span>
-                </div>
-                <div class="received-order-items-box">${itemsHtml}</div>
-                <div class="active-order-total-line">
-                    <span>إجمالي الطلب:</span>
-                    <strong>${formatPriceNumber(orderTotal)} جنيه</strong>
+                    <div class="order-trigger-right">
+                        <span class="received-order-status-pill">تم الاستلام</span>
+                        <span class="order-chevron-icon" aria-hidden="true">⌄</span>
+                    </div>
+                </button>
+
+                <div class="order-accordion-panel">
+                    <div class="order-stage-stepper" aria-label="مراحل الطلب">
+                        <div class="order-stage-step done completed-step">
+                            <span class="order-stage-dot"></span>
+                            <span>تم الإرسال</span>
+                        </div>
+                        <div class="order-stage-step done completed-step">
+                            <span class="order-stage-dot"></span>
+                            <span>قيد التنفيذ</span>
+                        </div>
+                        <div class="order-stage-step done completed-step">
+                            <span class="order-stage-dot"></span>
+                            <span>تم الاستلام</span>
+                        </div>
+                    </div>
+                    <div class="received-order-items-box">${itemsHtml}</div>
+                    <div class="active-order-total-line">
+                        <span>إجمالي الطلب:</span>
+                        <strong>${formatPriceNumber(orderTotal)} جنيه</strong>
+                    </div>
                 </div>
             </div>
         `;
@@ -3450,6 +3540,7 @@ function checkoutOnWhatsApp() {
     };
 
     activeOrders.unshift(newOrder);
+    expandedOrderIds.add(orderId);
     saveActiveOrders();
 
     const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
