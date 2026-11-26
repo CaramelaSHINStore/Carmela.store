@@ -1220,20 +1220,22 @@
 
         .cats-backdrop.open { display: block; }
 
+        /* تصميم الفئات الحديث المستوحى من الشبكة الدائرية العصرية */
         .cats-drawer {
             position: fixed;
             top: 0;
             right: 0;
             bottom: 0;
-            width: min(392px, 93vw);
-            background: var(--surface-soft);
+            width: min(410px, 94vw);
+            background: #171411;
+            color: #f8f5f0;
             z-index: 215;
             transform: translateX(105%);
             transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
             display: flex;
             flex-direction: column;
-            box-shadow: -12px 0 38px rgba(0, 0, 0, 0.28);
-            border-left: 2px solid var(--accent);
+            box-shadow: -14px 0 42px rgba(0, 0, 0, 0.45);
+            border-left: 1.5px solid rgba(200, 150, 102, 0.35);
         }
 
         .cats-drawer.open { transform: translateX(0); }
@@ -1241,28 +1243,28 @@
         .cats-drawer-body {
             flex: 1;
             overflow-y: auto;
-            padding: 14px 14px 24px;
+            padding: 16px 14px 28px;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
             align-content: start;
-            background: var(--surface-soft);
+            background: radial-gradient(circle at top right, rgba(200, 150, 102, 0.12), transparent 52%), #171411;
         }
 
         .bento-cat-card {
             position: relative;
-            background: var(--surface-elevated);
-            border: 1px solid var(--border-subtle);
-            border-radius: 18px;
-            padding: 14px 12px 13px;
+            background: linear-gradient(165deg, rgba(38, 32, 27, 0.96) 0%, rgba(24, 20, 17, 0.98) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 14px 10px 13px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 8px;
             text-align: center;
-            box-shadow: 0 8px 20px -14px rgba(18, 16, 14, 0.22);
-            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 10px 22px -12px rgba(0, 0, 0, 0.65);
+            transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease, box-shadow 0.22s ease;
             overflow: hidden;
         }
 
@@ -1270,11 +1272,12 @@
             content: "";
             position: absolute;
             top: 0;
-            left: 0;
-            right: 0;
-            height: 3.5px;
+            left: 14%;
+            right: 14%;
+            height: 3px;
+            border-radius: 0 0 999px 999px;
             background: var(--cat-top-bar, var(--accent));
-            opacity: 0.9;
+            opacity: 0.92;
         }
 
         .bento-cat-card.featured-all {
@@ -1284,61 +1287,62 @@
             justify-content: space-between;
             text-align: right;
             padding: 14px 16px;
-            background: linear-gradient(135deg, #2b2119 0%, #17120e 100%);
-            border: 1px solid rgba(200, 150, 102, 0.45);
-            box-shadow: 0 12px 24px -12px rgba(18, 16, 14, 0.45);
+            background: linear-gradient(135deg, #2d2219 0%, #191410 100%);
+            border: 1.5px solid rgba(229, 190, 150, 0.42);
+            box-shadow: 0 14px 28px -14px rgba(0, 0, 0, 0.75);
         }
 
         .bento-cat-card.featured-all::before { display: none; }
 
         .bento-cat-card:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
             border-color: var(--cat-top-bar, var(--accent));
+            box-shadow: 0 14px 26px -12px rgba(0, 0, 0, 0.75);
         }
 
-        .bento-cat-card.active:not(.featured-all) {
+        .bento-cat-card.active {
             border-color: var(--cat-top-bar, var(--accent));
-            box-shadow: 0 0 0 2px var(--cat-top-bar, var(--accent));
+            background: linear-gradient(165deg, rgba(52, 42, 33, 0.98) 0%, rgba(28, 23, 19, 0.99) 100%);
+            box-shadow: 0 0 0 1.5px var(--cat-top-bar, var(--accent)), 0 14px 26px -12px rgba(0, 0, 0, 0.75);
         }
 
         .bento-cat-art-frame {
-            width: 58px;
-            height: 58px;
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
             background: var(--cat-art-bg, #f7efe4);
-            border: 1.5px solid var(--cat-top-bar, var(--accent));
-            box-shadow: 0 6px 14px -8px rgba(18, 16, 14, 0.25);
+            border: 2px solid var(--cat-top-bar, var(--accent));
+            box-shadow: 0 8px 16px -8px rgba(0, 0, 0, 0.55);
             transition: transform 0.22s ease, box-shadow 0.22s ease;
         }
 
         .bento-cat-card:hover .bento-cat-art-frame {
-            transform: scale(1.06);
-            box-shadow: 0 8px 18px -8px var(--accent-glow);
+            transform: scale(1.07);
         }
 
         .bento-cat-card.featured-all .bento-cat-art-frame {
-            width: 58px;
-            height: 58px;
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.12);
-            border: 1.5px solid rgba(200, 150, 102, 0.65);
+            background: rgba(200, 150, 102, 0.16);
+            border: 1.5px solid rgba(229, 190, 150, 0.65);
         }
 
-        .bento-cat-art-frame svg { width: 28px; height: 28px; display: block; }
-        .bento-cat-card.featured-all .bento-cat-art-frame svg { width: 30px; height: 30px; }
+        .bento-cat-art-frame svg { width: 26px; height: 26px; display: block; }
+        .bento-cat-card.featured-all .bento-cat-art-frame svg { width: 28px; height: 28px; }
 
-        .bento-cat-text-col { display: flex; flex-direction: column; gap: 2px; }
+        .bento-cat-text-col { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
         .bento-cat-card.featured-all .bento-cat-text-col { flex: 1; margin-right: 12px; }
 
-        .bento-cat-title { font-size: 0.96rem; font-weight: 900; color: var(--text-main); line-height: 1.25; }
-        .bento-cat-card.featured-all .bento-cat-title { font-size: 1.04rem; color: #ffffff; }
+        .bento-cat-title { font-size: 0.9rem; font-weight: 900; color: #ffffff; line-height: 1.3; }
+        .bento-cat-card.featured-all .bento-cat-title { font-size: 1.02rem; color: #ffffff; }
 
-        .bento-cat-sub { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); line-height: 1.32; }
-        .bento-cat-card.featured-all .bento-cat-sub { color: rgba(235, 208, 176, 0.88); font-size: 0.74rem; }
+        .bento-cat-sub { font-size: 0.68rem; font-weight: 700; color: rgba(235, 224, 210, 0.72); line-height: 1.32; }
+        .bento-cat-card.featured-all .bento-cat-sub { color: rgba(229, 190, 150, 0.9); font-size: 0.74rem; }
 
         .option-modal-backdrop {
             display: none;
@@ -2059,250 +2063,6 @@
             background: var(--surface-elevated);
         }
 
-        .confirmed-orders-section {
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1.5px dashed var(--accent-glow);
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .confirmed-orders-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 0.78rem;
-            font-weight: 900;
-            color: var(--text-main);
-        }
-        .confirmed-orders-badge {
-            background: rgba(22, 163, 74, 0.14);
-            color: #15803d;
-            border: 1px solid rgba(22, 163, 74, 0.35);
-            padding: 2px 9px;
-            border-radius: 999px;
-            font-size: 0.7rem;
-            font-weight: 900;
-        }
-        body.dark-theme .confirmed-orders-badge {
-            color: #4ade80;
-        }
-        .confirmed-order-card {
-            background: var(--surface-elevated);
-            border: 1px solid var(--border-subtle);
-            border-right: 3.5px solid #16a34a;
-            border-radius: 12px;
-            padding: 8px 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            cursor: pointer;
-            transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
-            box-shadow: 0 4px 10px -8px rgba(18, 16, 14, 0.18);
-        }
-        .confirmed-order-card:hover {
-            transform: translateY(-1px);
-            border-color: var(--accent);
-            box-shadow: 0 8px 16px -10px rgba(18, 16, 14, 0.24);
-        }
-        .confirmed-order-card.cancelled {
-            border-right-color: #dc2626;
-            opacity: 0.88;
-        }
-        .confirmed-order-card.modified {
-            border-right-color: #d97706;
-        }
-        .confirmed-order-top {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 6px;
-        }
-        .confirmed-order-code {
-            font-size: 0.8rem;
-            font-weight: 900;
-            color: var(--text-main);
-        }
-        .order-status-pill {
-            font-size: 0.68rem;
-            font-weight: 900;
-            padding: 2px 8px;
-            border-radius: 999px;
-            white-space: nowrap;
-        }
-        .order-status-pill.confirmed {
-            background: rgba(22, 163, 74, 0.14);
-            color: #15803d;
-        }
-        .order-status-pill.modified {
-            background: rgba(217, 119, 6, 0.16);
-            color: #b45309;
-        }
-        .order-status-pill.cancelled {
-            background: rgba(220, 38, 38, 0.14);
-            color: #b91c1c;
-        }
-        body.dark-theme .order-status-pill.confirmed { color: #4ade80; }
-        body.dark-theme .order-status-pill.modified { color: #fbbf24; }
-        body.dark-theme .order-status-pill.cancelled { color: #f87171; }
-        .confirmed-order-sub {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 0.72rem;
-            font-weight: 800;
-            color: var(--text-muted);
-        }
-        .confirmed-order-total {
-            color: var(--accent-deep);
-            font-weight: 900;
-        }
-        .order-detail-meta-grid {
-            background: var(--surface-elevated);
-            border: 1px solid var(--border-subtle);
-            border-radius: 14px;
-            padding: 10px 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            font-size: 0.78rem;
-            font-weight: 800;
-            color: var(--text-main);
-        }
-        .order-detail-meta-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        .order-detail-meta-label {
-            color: var(--text-muted);
-            font-size: 0.74rem;
-        }
-        .order-detail-items-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .order-detail-item-card {
-            background: var(--surface-elevated);
-            border: 1px solid var(--border-subtle);
-            border-radius: 14px;
-            padding: 9px 11px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-        .order-detail-item-card.cancelled-item {
-            opacity: 0.65;
-            background: var(--surface-soft);
-        }
-        .order-detail-item-head {
-            display: flex;
-            align-items: center;
-            gap: 9px;
-        }
-        .order-detail-item-head img {
-            width: 46px;
-            height: 46px;
-            border-radius: 10px;
-            object-fit: cover;
-            border: 1px solid var(--accent-glow);
-            flex-shrink: 0;
-        }
-        .order-detail-item-info {
-            flex: 1;
-            min-width: 0;
-        }
-        .order-detail-item-title {
-            font-size: 0.82rem;
-            font-weight: 900;
-            color: var(--text-main);
-            line-height: 1.3;
-        }
-        .order-detail-item-sub {
-            font-size: 0.72rem;
-            font-weight: 800;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
-        .order-detail-item-actions {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 6px;
-            flex-wrap: wrap;
-            padding-top: 4px;
-            border-top: 1px dashed var(--border-subtle);
-        }
-        .order-item-price-tag {
-            font-size: 0.8rem;
-            font-weight: 900;
-            color: var(--accent-deep);
-        }
-        .order-item-btns {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .order-action-btn-minus {
-            padding: 4px 9px;
-            border-radius: 9px;
-            background: var(--surface-soft);
-            color: var(--text-main);
-            border: 1px solid var(--accent-glow);
-            font-size: 0.72rem;
-            font-weight: 900;
-        }
-        .order-action-btn-minus:hover {
-            background: var(--espresso);
-            color: var(--accent-soft);
-        }
-        .order-action-btn-cancel {
-            padding: 4px 10px;
-            border-radius: 9px;
-            background: #fef2f2;
-            color: #b91c1c;
-            border: 1px solid rgba(185, 28, 28, 0.28);
-            font-size: 0.72rem;
-            font-weight: 900;
-        }
-        .order-action-btn-cancel:hover {
-            background: #dc2626;
-            color: #ffffff;
-        }
-        .cancel-full-order-btn {
-            width: 100%;
-            padding: 9px 12px;
-            border-radius: 12px;
-            background: rgba(220, 38, 38, 0.1);
-            color: #b91c1c;
-            border: 1.5px solid rgba(220, 38, 38, 0.35);
-            font-size: 0.8rem;
-            font-weight: 900;
-        }
-        body.dark-theme .cancel-full-order-btn {
-            color: #f87171;
-            background: rgba(220, 38, 38, 0.15);
-        }
-        .cancel-full-order-btn:hover {
-            background: #dc2626;
-            color: #ffffff;
-        }
-        .order-detail-total-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: var(--accent-tint);
-            border: 1px solid var(--accent-glow);
-            border-radius: 12px;
-            padding: 8px 12px;
-            font-size: 0.88rem;
-            font-weight: 900;
-        }
-
-/* 1. شاشة البداية الاحترافية */
 .caramel-splash-screen {
     position: fixed;
     inset: 0;
@@ -2358,7 +2118,6 @@
     100% { opacity: 1; transform: scale(1); }
 }
 
-/* 2. شريط الأسعار الذكي المثبت */
 .sticky-price-bar {
     position: sticky;
     top: var(--header-offset, 66px);
@@ -2400,7 +2159,6 @@
     font-weight: 900;
 }
 
-/* 3. اقتراحات البحث الذكي */
 .smart-search-suggestions {
     display: flex;
     align-items: center;
@@ -2426,7 +2184,6 @@
     white-space: nowrap;
 }
 
-/* 4. واجهة التاجر المنفصلة */
 body.merchant-storefront-mode .dual-spotlight-row,
 body.merchant-storefront-mode .payment-service-strip {
     display: none !important;
@@ -2467,13 +2224,11 @@ body.merchant-storefront-mode .payment-service-strip {
     font-weight: 800;
 }
 
-/* 5. ظهور ذكي ناعم للكروت */
 @keyframes cardSmartReveal {
     0% { opacity: 0; transform: translateY(14px) scale(0.98); }
     100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* الفئات السلسلة والبحث الذكي وخدمة العملاء */
 .promo-actions-pair {
     display: inline-flex;
     align-items: center;
@@ -2618,13 +2373,7 @@ body.merchant-storefront-mode .payment-service-strip {
                     </svg>
                 </button>
             </div>
-            <div class="smart-search-suggestions" id="smartSearchSuggestions">
-                <button type="button" class="search-suggest-chip" onclick="applyQuickSearch('عطر')">عطور</button>
-                <button type="button" class="search-suggest-chip" onclick="applyQuickSearch('هاند ميد')">هاند ميد</button>
-                <button type="button" class="search-suggest-chip" onclick="applyQuickSearch('مطبخ')">أدوات مطبخ</button>
-                <button type="button" class="search-suggest-chip" onclick="applyQuickSearch('كشكول')">مدرسة</button>
-                <button type="button" class="search-suggest-chip" onclick="applyQuickSearch('هدية')">هدايا</button>
-            </div>
+            <div class="smart-search-suggestions" id="smartSearchSuggestions"></div>
         </div>
     </header>
 
@@ -2784,19 +2533,6 @@ body.merchant-storefront-mode .payment-service-strip {
     </nav>
 
     <div class="caramel-toast" id="caramelToast" role="status" aria-live="polite"></div>
-
-    <div class="option-modal-backdrop" id="orderDetailModal" onclick="closeOrderDetailModal()">
-        <div class="option-modal-card" onclick="event.stopPropagation()">
-            <div class="option-modal-header">
-                <h3 id="orderDetailModalTitle">تفاصيل الأوردر</h3>
-                <button type="button" class="option-modal-close" onclick="closeOrderDetailModal()" aria-label="إغلاق">&times;</button>
-            </div>
-            <div class="option-modal-body" id="orderDetailModalBody"></div>
-            <div class="option-modal-footer" id="orderDetailModalFooter">
-                <button type="button" class="option-confirm-btn" onclick="closeOrderDetailModal()">إغلاق</button>
-            </div>
-        </div>
-    </div>
 
     <div class="option-modal-backdrop" id="serviceInfoModal" onclick="closeServiceInfoModal()">
         <div class="option-modal-card" onclick="event.stopPropagation()">
@@ -3043,8 +2779,6 @@ body.merchant-storefront-mode .payment-service-strip {
         ];
 
         const DEFAULT_APPAREL_SIZES = ["S", "M", "L", "XL", "XXL"];
-
-        // المقاسات والألوان والأسعار تأتي من ملفات الـ JSON الخاصة بالمنتجات (sizes / colors / priceOptions / variants / options)
         const PRODUCT_VARIANTS = {};
 
         let deferredInstallPrompt = null;
@@ -3116,6 +2850,7 @@ body.merchant-storefront-mode .payment-service-strip {
             const shouldOpen = typeof forceOpen === "boolean" ? forceOpen : !wrap.classList.contains("open");
             wrap.classList.toggle("open", shouldOpen);
             if (toggleBtn) toggleBtn.classList.toggle("active", shouldOpen);
+            renderSmartSearchSuggestions();
             setTimeout(syncHeaderStickyOffsets, 220);
             if (shouldOpen && input) {
                 setTimeout(() => {
@@ -3634,101 +3369,101 @@ body.merchant-storefront-mode .payment-service-strip {
         const CATEGORY_SUBTITLES = {
             all: "تشكيلة المتجر بالكامل من كل التجار",
             home: "تنظيم، مطبخ، ومفروشات",
-            appliances: "أجهزة وأدوات كهربائية منزلية وعملية",
-            phones: "هواتف، شواحن، سماعات، وكفرات",
-            jewelry: "إكسسوارات، سلاسل، أساور، وخواتم",
-            perfume: "عطور، عناية شخصية، تجميل، وصحة",
-            school: "أدوات مكتبية، كشاكيل، وأدوات دراسة",
+            appliances: "أجهزة وأدوات كهربائية منزلية",
+            phones: "هواتف، شواحن، وسماعات",
+            jewelry: "إكسسوارات، سلاسل، وخواتم",
+            perfume: "عطور، عناية شخصية، وصحة",
+            school: "كشاكيل، أقلام، وأدوات دراسة",
             gifts: "هدايا مخصصة وذكريات",
-            tafse: "شغل يدوي ومكرميات وعبايات",
+            tafse: "شغل يدوي ومكرميات",
             women: "أزياء وعناية نسائية",
             men: "اختيارات عملية للرجال",
             kids: "مستلزمات وتفاصيل للأطفال"
         };
 
         const CATEGORY_THEME_META = {
-            all:        { bar: "#c89666", bg: "rgba(200, 150, 102, 0.16)", stroke: "#e5be96" },
-            home:       { bar: "#b88656", bg: "#f7efe4", stroke: "#996738" },
-            appliances: { bar: "#0ea5e9", bg: "#e0f2fe", stroke: "#0369a1" },
-            phones:     { bar: "#6366f1", bg: "#e0e7ff", stroke: "#4338ca" },
-            jewelry:    { bar: "#e11d48", bg: "#ffe4e6", stroke: "#be123c" },
-            perfume:    { bar: "#3b82f6", bg: "#dbeafe", stroke: "#1d4ed8" },
-            school:     { bar: "#0284c7", bg: "#e0f2fe", stroke: "#0284c7" },
-            gifts:      { bar: "#db2777", bg: "#fce7f3", stroke: "#db2777" },
-            tafse:      { bar: "#52624b", bg: "#e6ede3", stroke: "#384532" },
-            women:      { bar: "#d97706", bg: "#fef3c7", stroke: "#d97706" },
-            men:        { bar: "#334155", bg: "#e2e8f0", stroke: "#334155" },
-            kids:       { bar: "#0e7490", bg: "#cffafe", stroke: "#0e7490" }
+            all:        { bar: "#e5be96", bg: "rgba(200, 150, 102, 0.18)", stroke: "#f3d5b5" },
+            home:       { bar: "#d4a373", bg: "#faefe3", stroke: "#996738" },
+            appliances: { bar: "#38bdf8", bg: "#e0f2fe", stroke: "#0284c7" },
+            phones:     { bar: "#818cf8", bg: "#e0e7ff", stroke: "#4338ca" },
+            jewelry:    { bar: "#fb7185", bg: "#ffe4e6", stroke: "#be123c" },
+            perfume:    { bar: "#60a5fa", bg: "#dbeafe", stroke: "#1d4ed8" },
+            school:     { bar: "#0ea5e9", bg: "#e0f2fe", stroke: "#0369a1" },
+            gifts:      { bar: "#f472b6", bg: "#fce7f3", stroke: "#be185d" },
+            tafse:      { bar: "#84a98c", bg: "#e8f0ea", stroke: "#354f52" },
+            women:      { bar: "#fbbf24", bg: "#fef3c7", stroke: "#b45309" },
+            men:        { bar: "#94a3b8", bg: "#e2e8f0", stroke: "#1e293b" },
+            kids:       { bar: "#22d3ee", bg: "#cffafe", stroke: "#0e7490" }
         };
 
         function buildCategoryGraphicSvg(catKey, customStroke = "") {
             const s = customStroke || (CATEGORY_THEME_META[catKey]?.stroke || "#996738");
             switch (catKey) {
                 case "appliances":
-                    return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M18 4L8 18h8l-2 10 10-14h-8l2-10z"></path>
                     </svg>`;
                 case "phones":
-                    return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <rect x="9.5" y="4.5" width="13" height="23" rx="2.8"></rect>
                         <path d="M14 7.5h4"></path>
                         <circle cx="16" cy="24" r="1" fill="${s}" stroke="none"></circle>
                     </svg>`;
                 case "jewelry":
-                    return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M9 7l7 5 7-5"></path>
                         <circle cx="16" cy="18.5" r="7"></circle>
                         <path d="M16 14.5l2.2 2.2-2.2 2.2-2.2-2.2 2.2-2.2z"></path>
                     </svg>`;
                 case "school":
-                    return `<svg viewBox="0 0 32 32" fill="none" stroke="#0284c7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <rect x="6" y="5" width="16" height="22" rx="2.5"></rect>
                         <path d="M10 11h8M10 15h6"></path>
                         <path d="M22 8l4 4-8 8-4 1 1-4 7-9z"></path>
                     </svg>`;
                 case "home":
-                    return `<svg viewBox="0 0 32 32" fill="none" stroke="#996738" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M5 14.5L16 5.5l11 9V26a1.5 1.5 0 0 1-1.5 1.5h-19A1.5 1.5 0 0 1 5 26V14.5z"></path>
                         <path d="M13 27.5v-8h6v8"></path>
                     </svg>`;
                 case "kids":
-                    return `<svg viewBox="0 0 32 32" fill="none" stroke="#0e7490" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <circle cx="16" cy="17" r="9.5"></circle>
-                        <circle cx="13" cy="15.5" r="1.2" fill="#0e7490" stroke="none"></circle>
-                        <circle cx="19" cy="15.5" r="1.2" fill="#0e7490" stroke="none"></circle>
+                        <circle cx="13" cy="15.5" r="1.2" fill="${s}" stroke="none"></circle>
+                        <circle cx="19" cy="15.5" r="1.2" fill="${s}" stroke="none"></circle>
                         <path d="M12.5 19.5c1.1 1.5 2.2 2.2 3.5 2.2s2.4-.7 3.5-2.2"></path>
                         <path d="M16 7.5c1.2-2 3-2 3.8-0.8"></path>
                     </svg>`;
                 case "tafse":
-                    return `<svg viewBox="0 0 32 32" fill="none" stroke="#384532" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M8 7h16"></path>
                         <path d="M11 7v10c0 3 2.2 4.5 5 4.5s5-1.5 5-4.5V7"></path>
                         <path d="M12.5 21.5v5.5M16 21.5v6M19.5 21.5v5.5"></path>
                     </svg>`;
                 case "men":
-                    return `<svg viewBox="0 0 32 32" fill="none" stroke="#334155" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M11 7l5 3 5-3 4 4.5-3.5 3.5V26h-11V15L7 11.5 11 7z"></path>
                     </svg>`;
                 case "women":
-                    return `<svg viewBox="0 0 32 32" fill="none" stroke="#d97706" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <circle cx="16" cy="13" r="6.5"></circle>
                         <path d="M16 19.5v8M12.5 24.5h7"></path>
                     </svg>`;
                 case "perfume":
-                    return `<svg viewBox="0 0 32 32" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <rect x="13" y="4.5" width="6" height="3.5" rx="1"></rect>
                         <rect x="9.5" y="10.5" width="13" height="16.5" rx="4.5"></rect>
                         <path d="M13 18.5h6"></path>
                     </svg>`;
                 case "gifts":
-                    return `<svg viewBox="0 0 32 32" fill="none" stroke="#db2777" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <rect x="6.5" y="14" width="19" height="12.5" rx="2"></rect>
                         <rect x="5" y="10.5" width="22" height="4" rx="1.5"></rect>
                         <path d="M16 10.5v16"></path>
                         <path d="M16 10.5c-1.8-3.5-6.2-3.8-6.2-1 0 1.8 3.5 1.4 6.2 1zm0 0c1.8-3.5 6.2-3.8 6.2-1 0 1.8-3.5 1.4-6.2 1z"></path>
                     </svg>`;
                 default:
-                    return `<svg viewBox="0 0 32 32" fill="none" stroke="#e5be96" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    return `<svg viewBox="0 0 32 32" fill="none" stroke="#e5be96" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <rect x="5.5" y="5.5" width="8.5" height="8.5" rx="2"></rect>
                         <rect x="18" y="5.5" width="8.5" height="8.5" rx="2"></rect>
                         <rect x="5.5" y="18" width="8.5" height="8.5" rx="2"></rect>
@@ -3904,6 +3639,29 @@ body.merchant-storefront-mode .payment-service-strip {
             return { items: [], fileMerchant: detectedMerchant, fileStyle: detectedStyle };
         }
 
+        function collectExtraSearchableTextFromRaw(rawItem) {
+            const skipKeys = new Set(["id", "code", "sku", "img", "image", "photo", "imgUrl", "imageUrl", "thumbnail", "thumb", "picture", "pic", "images", "photos", "imgs", "gallery", "url", "link", "download_url"]);
+            const parts = [];
+            const walk = (v, depth = 0) => {
+                if (depth > 3 || v === null || v === undefined) return;
+                if (typeof v === "string" || typeof v === "number" || typeof v === "boolean") {
+                    const s = String(v).trim();
+                    if (s && !/^https?:\/\//i.test(s)) parts.push(s);
+                } else if (Array.isArray(v)) {
+                    v.forEach(item => walk(item, depth + 1));
+                } else if (typeof v === "object") {
+                    Object.entries(v).forEach(([k, val]) => {
+                        if (!skipKeys.has(k)) {
+                            parts.push(k);
+                            walk(val, depth + 1);
+                        }
+                    });
+                }
+            };
+            walk(rawItem, 0);
+            return parts.join(" ");
+        }
+
         function normalizeRawJsonProduct(rawItem, index, slugPrefix, fileMerchant, fileStyle) {
             if (!rawItem || typeof rawItem !== "object") return null;
             const itemTitle = String(rawItem.title || rawItem.name || rawItem.product_name || rawItem.productName || "").trim();
@@ -3917,6 +3675,7 @@ body.merchant-storefront-mode .payment-service-strip {
             const priceLabel = rawItem.priceLabel || (typeof rawPriceVal === "string" && /[a-zA-Z\u0600-\u06FF]/.test(rawPriceVal) ? rawPriceVal.trim() : "");
             const rawCategory = rawItem.category || rawItem.section || rawItem.department || rawItem.type || "";
             const resolvedCategory = inferCategorySmartly(rawCategory, itemTitle, itemDesc);
+            const extraSearchText = collectExtraSearchableTextFromRaw(rawItem);
 
             const normalized = {
                 ...rawItem,
@@ -3930,7 +3689,8 @@ body.merchant-storefront-mode .payment-service-strip {
                 subPrice: rawItem.subPrice || rawItem.oldPrice || rawItem.unit || "",
                 category: resolvedCategory,
                 badge: String(rawItem.badge || rawItem.tag || rawItem.label || "").trim(),
-                cardStyle: String(rawItem.style || rawItem.cardStyle || fileStyle || "").trim().toLowerCase()
+                cardStyle: String(rawItem.style || rawItem.cardStyle || fileStyle || "").trim().toLowerCase(),
+                _extraSearchText: extraSearchText
             };
 
             normalized.merchant = inferMerchantForProduct(normalized, fileMerchant);
@@ -4046,6 +3806,7 @@ body.merchant-storefront-mode .payment-service-strip {
             rebuildSearchIndex();
             isLoadingJsonProducts = false;
 
+            renderSmartSearchSuggestions();
             renderSpotlightBoxes();
             renderProducts(currentCategory);
             hydrateTopQuickTabIcons();
@@ -4087,6 +3848,34 @@ body.merchant-storefront-mode .payment-service-strip {
                 html += `<button type="button" class="price-chip-btn ${currentMaxPrice === 1001 ? "active" : ""}" onclick="setPriceFilter(1001)">أكثر من 1000 ج</button>`;
             }
             container.innerHTML = html;
+        }
+
+        function renderSmartSearchSuggestions() {
+            const container = document.getElementById("smartSearchSuggestions");
+            if (!container) return;
+
+            const defaults = ["عطر", "هاند ميد", "مطبخ", "كشكول", "هدية"];
+            const freqMap = new Map();
+            const stopWords = new Set(["من", "في", "على", "مع", "او", "و", "ال", "قطعه", "منتج", "جنيه", "مقاس", "لون"]);
+
+            PRODUCTS.forEach(p => {
+                const words = normalizeText(`${p.title || ""} ${p.badge || ""}`).split(" ");
+                words.forEach(w => {
+                    if (w.length >= 3 && !stopWords.has(w)) {
+                        freqMap.set(w, (freqMap.get(w) || 0) + 1);
+                    }
+                });
+            });
+
+            const dynamicChips = Array.from(freqMap.entries())
+                .sort((a, b) => b[1] - a[1])
+                .map(([w]) => w)
+                .filter(w => !defaults.some(d => normalizeText(d) === w));
+
+            const chips = [...defaults, ...dynamicChips.slice(0, 4)];
+            container.innerHTML = chips.map(term =>
+                `<button type="button" class="search-suggest-chip" onclick="applyQuickSearch('${escapeHtmlAttr(term)}')">${escapeHtmlAttr(term)}</button>`
+            ).join("");
         }
 
         function applyQuickSearch(term) {
@@ -4321,18 +4110,63 @@ body.merchant-storefront-mode .payment-service-strip {
             return Array.from(set);
         }
 
+        function buildDynamicSearchTextForProduct(product) {
+            if (product._extraSearchText) return product._extraSearchText;
+            const skipKeys = new Set(["id", "code", "sku", "img", "image", "photo", "imgUrl", "imageUrl", "thumbnail", "thumb", "picture", "pic", "images", "photos", "imgs", "gallery", "_extraSearchText"]);
+            const parts = [];
+            Object.entries(product).forEach(([k, v]) => {
+                if (skipKeys.has(k) || v === null || v === undefined) return;
+                if (typeof v === "string" || typeof v === "number") parts.push(String(v));
+                else if (Array.isArray(v)) {
+                    parts.push(v.map(item => typeof item === "object" && item !== null ? Object.values(item).join(" ") : String(item)).join(" "));
+                } else if (typeof v === "object") {
+                    parts.push(Object.values(v).join(" "));
+                }
+            });
+            return parts.join(" ");
+        }
+
+        let SEARCH_INDEX_MAP = new Map();
+
+        function rebuildSearchIndex() {
+            const nextMap = new Map();
+            PRODUCTS.forEach(p => {
+                if (!p || !p.id) return;
+                const allCats = [p.category, ...(Array.isArray(p.categories) ? p.categories : [])];
+                const catNames = allCats.map(c => CATEGORY_NAMES[c] || c || "").join(" ");
+                const normTitle = normalizeText(p.title || "");
+                const normDesc = normalizeText(p.desc || "");
+                const normMerchant = normalizeText(p.merchant || "");
+                const normCats = normalizeText(catNames);
+                const normPrice = normalizeText(`${p.price || ""} ${p.priceLabel || ""} ${p.subPrice || ""}`);
+                const normExtra = normalizeText(buildDynamicSearchTextForProduct(p));
+                const fullHaystack = `${normTitle} ${normDesc} ${normMerchant} ${normCats} ${normPrice} ${normExtra}`;
+                nextMap.set(p.id, {
+                    normTitle,
+                    normDesc,
+                    normMerchant,
+                    normCats,
+                    fullHaystack,
+                    words: fullHaystack.split(" ").filter(Boolean),
+                    titleWords: normTitle.split(" ").filter(Boolean),
+                    catSet: new Set(allCats.filter(Boolean))
+                });
+            });
+            SEARCH_INDEX_MAP = nextMap;
+        }
+
         function getProductSearchScore(product, rawQuery) {
             const normalizedQuery = normalizeText(rawQuery);
             if (!normalizedQuery) return 1;
 
-            const idxEntry = SEARCH_INDEX_MAP.get(product.id);
+            let idxEntry = SEARCH_INDEX_MAP.get(product.id);
+            if (!idxEntry) {
+                rebuildSearchIndex();
+                idxEntry = SEARCH_INDEX_MAP.get(product.id);
+            }
+
             const normTitle = idxEntry ? idxEntry.normTitle : normalizeText(product.title || "");
-            const normDesc = idxEntry ? idxEntry.normDesc : normalizeText(product.desc || "");
-            const normMerchant = idxEntry ? idxEntry.normMerchant : normalizeText(product.merchant || "");
-            const allCats = [product.category, ...(Array.isArray(product.categories) ? product.categories : [])];
-            const normCats = idxEntry ? idxEntry.normCats : normalizeText(allCats.map(c => CATEGORY_NAMES[c] || c || "").join(" "));
-            const normPrice = normalizeText(`${product.price || ""} ${product.priceLabel || ""} ${product.subPrice || ""}`);
-            const fullHaystack = idxEntry ? idxEntry.fullHaystack : `${normTitle} ${normDesc} ${normMerchant} ${normCats} ${normPrice}`;
+            const fullHaystack = idxEntry ? idxEntry.fullHaystack : normalizeText(`${product.title || ""} ${product.desc || ""} ${buildDynamicSearchTextForProduct(product)}`);
             const words = idxEntry ? idxEntry.words : fullHaystack.split(" ").filter(Boolean);
             const titleWords = idxEntry ? idxEntry.titleWords : normTitle.split(" ").filter(Boolean);
 
@@ -4364,34 +4198,6 @@ body.merchant-storefront-mode .payment-service-strip {
             }
 
             return totalScore;
-        }
-
-        let SEARCH_INDEX_MAP = new Map();
-
-        function rebuildSearchIndex() {
-            const nextMap = new Map();
-            PRODUCTS.forEach(p => {
-                if (!p || !p.id) return;
-                const allCats = [p.category, ...(Array.isArray(p.categories) ? p.categories : [])];
-                const catNames = allCats.map(c => CATEGORY_NAMES[c] || c || "").join(" ");
-                const normTitle = normalizeText(p.title || "");
-                const normDesc = normalizeText(p.desc || "");
-                const normMerchant = normalizeText(p.merchant || "");
-                const normCats = normalizeText(catNames);
-                const normPrice = normalizeText(`${p.price || ""} ${p.priceLabel || ""} ${p.subPrice || ""}`);
-                const fullHaystack = `${normTitle} ${normDesc} ${normMerchant} ${normCats} ${normPrice}`;
-                nextMap.set(p.id, {
-                    normTitle,
-                    normDesc,
-                    normMerchant,
-                    normCats,
-                    fullHaystack,
-                    words: fullHaystack.split(" ").filter(Boolean),
-                    titleWords: normTitle.split(" ").filter(Boolean),
-                    catSet: new Set(allCats.filter(Boolean))
-                });
-            });
-            SEARCH_INDEX_MAP = nextMap;
         }
 
         function getSmartQuerySuggestion(rawQuery) {
@@ -4659,7 +4465,7 @@ body.merchant-storefront-mode .payment-service-strip {
                 const subText = CATEGORY_SUBTITLES[catKey] || "تشكيلة مميزة من كارامل";
                 const featuredClass = catKey === "all" ? "featured-all" : "";
                 const theme = CATEGORY_THEME_META[catKey] || CATEGORY_THEME_META.all;
-                const svgArt = buildCategoryGraphicSvg(catKey);
+                const svgArt = buildCategoryGraphicSvg(catKey, catKey === "all" ? "#e5be96" : theme.stroke);
                 return `
                     <button type="button"
                         class="bento-cat-card ${featuredClass} ${isActive ? "active" : ""}"
@@ -4928,8 +4734,8 @@ body.merchant-storefront-mode .payment-service-strip {
         function getFilteredProducts(category, rawQuery) {
             const hasSearch = Boolean(normalizeText(rawQuery));
             let baseCategoryList = PRODUCTS.filter(p => {
-                const catMatch = category === "all" || p.category === category || (Array.isArray(p.categories) && p.categories.includes(category));
-                const merchantMatch = !currentMerchant || p.merchant === currentMerchant;
+                const catMatch = hasSearch || category === "all" || p.category === category || (Array.isArray(p.categories) && p.categories.includes(category));
+                const merchantMatch = hasSearch || !currentMerchant || p.merchant === currentMerchant;
                 return catMatch && merchantMatch && matchesSearchQuery(p, rawQuery);
             });
 
@@ -4966,7 +4772,7 @@ body.merchant-storefront-mode .payment-service-strip {
             if (base.length === 0) return [];
 
             const items = base.map(product => ({ type: "product", product, tag: "p0" }));
-            if (!currentMerchant) {
+            if (!currentMerchant && !normalizeText(rawQuery)) {
                 items.splice(Math.min(7, items.length), 0, { type: "special", id: "special-0" });
             }
             return items;
@@ -5033,7 +4839,7 @@ body.merchant-storefront-mode .payment-service-strip {
             const searchSummaryText = document.getElementById("searchResultsSummaryText");
             if (searchSummaryBar && searchSummaryText) {
                 if (trimmedQuery) {
-                    searchSummaryText.innerHTML = `نتائج البحث الذكي عن "<strong>${escapeHtmlAttr(trimmedQuery)}</strong>": <strong>${filteredList.length}</strong> منتج`;
+                    searchSummaryText.innerHTML = `نتائج البحث الذكي في كل المتجر عن "<strong>${escapeHtmlAttr(trimmedQuery)}</strong>": <strong>${filteredList.length}</strong> منتج`;
                     searchSummaryBar.classList.add("visible");
                 } else {
                     searchSummaryBar.classList.remove("visible");
@@ -5045,7 +4851,7 @@ body.merchant-storefront-mode .payment-service-strip {
                 ? " — مدخلات جديدة"
                 : (currentFeedMode === "deals" ? " — أسعار اقتصادية" : " — من أجلك");
             const baseCatTitle = currentMerchant ? `منتجات التاجر: ${currentMerchant}` : `${CATEGORY_NAMES[category] || "المنتجات"}${modeSuffix}`;
-            titleEl.textContent = trimmedQuery ? `${baseCatTitle} — بحث: "${trimmedQuery}"` : baseCatTitle;
+            titleEl.textContent = trimmedQuery ? `نتائج البحث: "${trimmedQuery}"` : baseCatTitle;
 
             if (countBadgeEl) {
                 countBadgeEl.textContent = isLoadingJsonProducts && !PRODUCTS.length ? "جاري التحميل..." : `${filteredList.length} منتج`;
@@ -5149,8 +4955,7 @@ body.merchant-storefront-mode .payment-service-strip {
             const imgOpen = document.getElementById("imageModal")?.classList.contains("open");
             const optOpen = document.getElementById("productOptionModal")?.classList.contains("open");
             const srvOpen = document.getElementById("serviceInfoModal")?.classList.contains("open");
-            const ordOpen = document.getElementById("orderDetailModal")?.classList.contains("open");
-            document.body.style.overflow = (cartOpen || catsOpen || imgOpen || optOpen || srvOpen || ordOpen) ? "hidden" : "";
+            document.body.style.overflow = (cartOpen || catsOpen || imgOpen || optOpen || srvOpen) ? "hidden" : "";
         }
 
         function pushOverlayState(overlayName) {
@@ -5168,7 +4973,6 @@ body.merchant-storefront-mode .payment-service-strip {
             closeImageModal(true);
             closeProductOptionModal(true);
             closeServiceInfoModal(true);
-            closeOrderDetailModal(true);
             overlayStack = [];
             syncBodyScrollLock();
         }
@@ -5181,7 +4985,6 @@ body.merchant-storefront-mode .payment-service-strip {
                 else if (lastOverlay === "image") closeImageModal(true);
                 else if (lastOverlay === "option") closeProductOptionModal(true);
                 else if (lastOverlay === "serviceInfo") closeServiceInfoModal(true);
-                else if (lastOverlay === "orderDetail") closeOrderDetailModal(true);
             } else {
                 closeAllOverlays();
             }
@@ -5270,31 +5073,29 @@ body.merchant-storefront-mode .payment-service-strip {
             const colorGroup = document.getElementById("optionModalColorGroup");
             const colorPills = document.getElementById("optionModalColorPills");
 
-            if (variantCfg && Array.isArray(variantCfg.sizes) && variantCfg.sizes.length) {
+            if (variantCfg?.sizes?.length) {
                 sizeGroup.style.display = "flex";
-                const firstEntry = variantCfg.sizes[0];
-                const firstLabel = typeof firstEntry === "string" ? firstEntry : firstEntry.label;
-                const firstPrice = (typeof firstEntry === "object" && Number(firstEntry.price) > 0) ? Number(firstEntry.price) : basePrice;
-                pendingOptionSelection.selectedSize = firstLabel;
-                pendingOptionSelection.currentPrice = firstPrice;
-                renderOptionModalPriceDisplay();
-
-                sizePills.innerHTML = variantCfg.sizes.map((entry, idx) => {
-                    const szLabel = typeof entry === "string" ? entry : entry.label;
-                    const szPrice = (typeof entry === "object" && Number(entry.price) > 0) ? Number(entry.price) : basePrice;
-                    return `<button type="button" class="option-pill-btn ${idx === 0 ? "selected" : ""}" data-price="${szPrice}" onclick="selectOptionPill('size', this, '${escapeHtmlAttr(szLabel)}', ${szPrice})">${escapeHtmlAttr(szLabel)}</button>`;
+                sizePills.innerHTML = variantCfg.sizes.map((s, idx) => {
+                    const sizeLabel = typeof s === "string" ? s : s.label;
+                    const sizePrice = typeof s === "string" ? basePrice : (Number(s.price) || basePrice);
+                    if (idx === 0) {
+                        pendingOptionSelection.selectedSize = sizeLabel;
+                        pendingOptionSelection.currentPrice = sizePrice;
+                    }
+                    return `<button type="button" class="option-pill-btn ${idx === 0 ? "selected" : ""}" data-price="${sizePrice}" onclick="selectModalOptionPill('size', '${escapeHtmlAttr(sizeLabel)}', this)">${escapeHtmlAttr(sizeLabel)}</button>`;
                 }).join("");
+                renderOptionModalPriceDisplay();
             } else {
                 sizeGroup.style.display = "none";
                 sizePills.innerHTML = "";
             }
 
-            if (variantCfg && Array.isArray(variantCfg.colors) && variantCfg.colors.length) {
+            if (variantCfg?.colors?.length) {
                 colorGroup.style.display = "flex";
-                pendingOptionSelection.selectedColor = variantCfg.colors[0];
-                colorPills.innerHTML = variantCfg.colors.map((col, idx) =>
-                    `<button type="button" class="option-pill-btn ${idx === 0 ? "selected" : ""}" onclick="selectOptionPill('color', this, '${escapeHtmlAttr(col)}')">${escapeHtmlAttr(col)}</button>`
-                ).join("");
+                colorPills.innerHTML = variantCfg.colors.map((c, idx) => {
+                    if (idx === 0) pendingOptionSelection.selectedColor = c;
+                    return `<button type="button" class="option-pill-btn ${idx === 0 ? "selected" : ""}" onclick="selectModalOptionPill('color', '${escapeHtmlAttr(c)}', this)">${escapeHtmlAttr(c)}</button>`;
+                }).join("");
             } else {
                 colorGroup.style.display = "none";
                 colorPills.innerHTML = "";
@@ -5305,18 +5106,20 @@ body.merchant-storefront-mode .payment-service-strip {
             pushOverlayState("option");
         }
 
-        function selectOptionPill(type, btnEl, value, optionPrice = null) {
-            const parent = btnEl ? btnEl.parentElement : null;
+        function selectModalOptionPill(type, val, btnEl) {
+            const parent = btnEl.parentElement;
             if (parent) parent.querySelectorAll(".option-pill-btn").forEach(b => b.classList.remove("selected"));
-            if (btnEl) btnEl.classList.add("selected");
+            btnEl.classList.add("selected");
             if (type === "size") {
-                pendingOptionSelection.selectedSize = value;
-                if (optionPrice !== null && Number(optionPrice) > 0) {
-                    pendingOptionSelection.currentPrice = Number(optionPrice);
+                pendingOptionSelection.selectedSize = val;
+                const pillPrice = Number(btnEl.getAttribute("data-price"));
+                if (!Number.isNaN(pillPrice) && pillPrice > 0) {
+                    pendingOptionSelection.currentPrice = pillPrice;
                     renderOptionModalPriceDisplay();
                 }
+            } else if (type === "color") {
+                pendingOptionSelection.selectedColor = val;
             }
-            else if (type === "color") pendingOptionSelection.selectedColor = value;
         }
 
         function closeProductOptionModal(fromPopState = false) {
@@ -5327,52 +5130,47 @@ body.merchant-storefront-mode .payment-service-strip {
         }
 
         function confirmAddProductWithOptions() {
-            const product = PRODUCTS.find(p => p.id === pendingOptionSelection.productId);
-            if (!product) return;
-            const noteText = (document.getElementById("optionModalNoteInput")?.value || "").trim();
-            const chosenPrice = Number(pendingOptionSelection.currentPrice || product.price || 0);
-            const chosenQty = Math.max(1, Number(pendingOptionSelection.qty || 1));
-
-            addToCart(product.id, pendingOptionSelection.clickedBtnId, {
-                size: pendingOptionSelection.selectedSize,
-                color: pendingOptionSelection.selectedColor,
-                note: noteText,
-                customImg: pendingOptionSelection.selectedImg,
-                customPrice: chosenPrice,
-                qtyToAdd: chosenQty
-            });
+            const { productId, clickedBtnId, selectedSize, selectedColor, selectedImg, currentPrice, qty } = pendingOptionSelection;
+            const note = (document.getElementById("optionModalNoteInput")?.value || "").trim();
+            const addCount = Math.max(1, Number(qty || 1));
             closeProductOptionModal();
+            addToCart(productId, clickedBtnId, {
+                size: selectedSize,
+                color: selectedColor,
+                note,
+                img: selectedImg,
+                price: currentPrice,
+                qty: addCount
+            });
         }
 
-        function addToCart(productId, clickedBtnId = null, extraOptions = {}) {
+        function addToCart(productId, btnId = null, customOpts = {}) {
             const product = PRODUCTS.find(p => p.id === productId);
             if (!product) return;
             trackProductInterest(product, 2.5, true);
 
-            const imgs = getProductImagesList(product);
-            const chosenImg = normalizeProductImageUrl(extraOptions.customImg) || imgs[0] || "";
-            const itemPrice = Number(extraOptions.customPrice) > 0 ? Number(extraOptions.customPrice) : (Number(product.price) || 0);
-            const addQty = Math.max(1, Number(extraOptions.qtyToAdd || 1));
+            const resolvedPrice = (typeof customOpts.price === "number" && customOpts.price > 0)
+                ? customOpts.price
+                : (Number(product.price) || 0);
+            const resolvedImg = normalizeProductImageUrl(customOpts.img) || getProductImagesList(product)[0] || "";
+            const addQty = Math.max(1, Number(customOpts.qty || 1));
 
             const variantCfg = getProductVariantConfig(product);
-            let defaultSize = "";
-            if (variantCfg && Array.isArray(variantCfg.sizes) && variantCfg.sizes.length) {
-                const firstSz = variantCfg.sizes[0];
-                defaultSize = typeof firstSz === "string" ? firstSz : firstSz.label;
-            }
-            const defaultColor = (variantCfg && Array.isArray(variantCfg.colors) && variantCfg.colors.length) ? variantCfg.colors[0] : "";
+            const firstSizeEntry = variantCfg?.sizes?.[0];
+            const defaultSize = typeof firstSizeEntry === "string" ? firstSizeEntry : (firstSizeEntry?.label || "");
+            const defaultColor = variantCfg?.colors?.[0] || "";
 
-            const selectedSize = extraOptions.size !== undefined ? extraOptions.size : defaultSize;
-            const selectedColor = extraOptions.color !== undefined ? extraOptions.color : defaultColor;
-            const note = extraOptions.note || "";
+            const chosenSize = customOpts.size !== undefined ? customOpts.size : defaultSize;
+            const chosenColor = customOpts.color !== undefined ? customOpts.color : defaultColor;
+            const chosenNote = customOpts.note !== undefined ? customOpts.note : "";
 
             const existingItem = cart.find(item =>
-                item.id === productId &&
-                (item.selectedSize || "") === (selectedSize || "") &&
-                (item.selectedColor || "") === (selectedColor || "") &&
-                (item.note || "") === note &&
-                (item.img || "") === chosenImg &&
-                Number(item.price || 0) === itemPrice
+                item.id === product.id &&
+                (item.selectedSize || "") === chosenSize &&
+                (item.selectedColor || "") === chosenColor &&
+                (item.note || "") === chosenNote &&
+                (item.img || "") === resolvedImg &&
+                Number(item.price || 0) === resolvedPrice
             );
 
             if (existingItem) {
@@ -5381,28 +5179,35 @@ body.merchant-storefront-mode .payment-service-strip {
                 cart.push({
                     id: product.id,
                     title: product.title,
-                    price: itemPrice,
-                    img: chosenImg,
+                    price: resolvedPrice,
+                    img: resolvedImg,
                     merchant: product.merchant || "متجر كارامل",
                     qty: addQty,
-                    selectedSize,
-                    selectedColor,
-                    note
+                    selectedSize: chosenSize,
+                    selectedColor: chosenColor,
+                    note: chosenNote
                 });
             }
 
             saveCart();
-            updateCartUI(true);
+            updateCartUI();
 
-            const targetBtn = clickedBtnId ? document.getElementById(clickedBtnId) : null;
-            if (targetBtn) {
-                targetBtn.classList.add("added");
-                targetBtn.innerHTML = `<span>✓ تمت الإضافة (${addQty})</span>`;
-                setTimeout(() => {
-                    targetBtn.classList.remove("added");
-                    targetBtn.innerHTML = `<span>+ للمشتريات</span>`;
-                }, 1100);
+            const btn = btnId ? document.getElementById(btnId) : null;
+            if (btn) {
+                const origHTML = btn.innerHTML;
+                btn.classList.add("added");
+                btn.innerHTML = "<span>تمت الإضافة</span>";
+                setTimeout(() => { btn.classList.remove("added"); btn.innerHTML = origHTML; }, 900);
             }
+
+            const navCartBtn = document.getElementById("navCartBtn");
+            if (navCartBtn) {
+                navCartBtn.classList.remove("pop");
+                void navCartBtn.offsetWidth;
+                navCartBtn.classList.add("pop");
+            }
+
+            showCaramelToast(`تمت إضافة "${product.title}" (${addQty}) إلى المشتريات`);
         }
 
         function updateCartItemOption(index, field, value) {
@@ -5412,7 +5217,78 @@ body.merchant-storefront-mode .payment-service-strip {
             updateCartUI();
         }
 
-        function updateCartQty(index, delta) {
+        function updateCartUI() {
+            const distinctEl = document.getElementById("cartDistinctCount");
+            const piecesEl = document.getElementById("cartTotalPieces");
+            const bottomBadgeEl = document.getElementById("bottomCartCount");
+            const container = document.getElementById("cartItemsContainer");
+            const totalEl = document.getElementById("cartTotalAmount");
+
+            const distinctCount = cart.length;
+            const totalPieces = cart.reduce((sum, item) => sum + item.qty, 0);
+            const totalAmount = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+
+            if (distinctEl) distinctEl.textContent = distinctCount;
+            if (piecesEl) piecesEl.textContent = totalPieces;
+            if (bottomBadgeEl) {
+                bottomBadgeEl.textContent = totalPieces;
+                bottomBadgeEl.classList.toggle("visible", totalPieces > 0);
+            }
+            if (totalEl) totalEl.textContent = `${totalAmount} جنيه`;
+
+            if (!cart.length) {
+                container.innerHTML = `<div class="cart-empty">سلة المشتريات فارغة حاليًا — أضف المنتجات التي تعجبك.</div>`;
+                return;
+            }
+
+            container.innerHTML = cart.map((item, idx) => {
+                const productObj = PRODUCTS.find(p => p.id === item.id);
+                const variantCfg = getProductVariantConfig(productObj);
+                let sizeSelectHTML = "";
+                if (variantCfg?.sizes?.length) {
+                    const sizeLabels = variantCfg.sizes.map(s => typeof s === "string" ? s : s.label);
+                    if (item.selectedSize && !sizeLabels.includes(item.selectedSize)) sizeLabels.unshift(item.selectedSize);
+                    sizeSelectHTML = `<select class="cart-option-select" aria-label="المقاس" onchange="updateCartItemOption(${idx}, 'selectedSize', this.value)">${sizeLabels.map(s => `<option value="${escapeHtmlAttr(s)}" ${item.selectedSize === s ? "selected" : ""}>المقاس: ${escapeHtmlAttr(s)}</option>`).join("")}</select>`;
+                }
+
+                let colorSelectHTML = "";
+                if (variantCfg?.colors?.length) {
+                    const colorsList = [...variantCfg.colors];
+                    if (item.selectedColor && !colorsList.includes(item.selectedColor)) colorsList.unshift(item.selectedColor);
+                    colorSelectHTML = `<select class="cart-option-select" aria-label="اللون" onchange="updateCartItemOption(${idx}, 'selectedColor', this.value)">${colorsList.map(c => `<option value="${escapeHtmlAttr(c)}" ${item.selectedColor === c ? "selected" : ""}>اللون: ${escapeHtmlAttr(c)}</option>`).join("")}</select>`;
+                }
+
+                const optionsBlockHTML = (sizeSelectHTML || colorSelectHTML || item.note)
+                    ? `<div class="cart-item-options">${sizeSelectHTML}${colorSelectHTML}<input type="text" class="cart-item-note-input" placeholder="تفاصيل إضافية (اختياري)..." value="${escapeHtmlAttr(item.note || "")}" onchange="updateCartItemOption(${idx}, 'note', this.value)"></div>`
+                    : `<div class="cart-item-options"><input type="text" class="cart-item-note-input" placeholder="تفاصيل إضافية (اختياري)..." value="" onchange="updateCartItemOption(${idx}, 'note', this.value)"></div>`;
+
+                const itemImg = normalizeProductImageUrl(item.img) || getProductImagesList(productObj)[0] || "";
+
+                return `
+                    <div class="cart-item">
+                        <div class="cart-item-top">
+                            <img src="${escapeHtmlAttr(itemImg)}" alt="${escapeHtmlAttr(item.title)}" onerror="this.style.visibility='hidden'">
+                            <div class="cart-item-info">
+                                <div class="cart-item-title">${escapeHtmlAttr(item.title)}</div>
+                                <div class="cart-item-meta-line">
+                                    <span class="cart-item-price">${item.price * item.qty} جنيه</span>
+                                    <span class="cart-item-merchant">• ${escapeHtmlAttr(item.merchant || "متجر كارامل")}</span>
+                                </div>
+                            </div>
+                            <div class="qty-controls">
+                                <button type="button" class="qty-btn" onclick="changeQty(${idx}, 1)">+</button>
+                                <span class="qty-val">${item.qty}</span>
+                                <button type="button" class="qty-btn" onclick="changeQty(${idx}, -1)">-</button>
+                                <button type="button" class="remove-item-btn" onclick="removeCartItem(${idx})" aria-label="حذف">&times;</button>
+                            </div>
+                        </div>
+                        ${optionsBlockHTML}
+                    </div>
+                `;
+            }).join("");
+        }
+
+        function changeQty(index, delta) {
             if (!cart[index]) return;
             cart[index].qty += delta;
             if (cart[index].qty <= 0) cart.splice(index, 1);
@@ -5421,99 +5297,94 @@ body.merchant-storefront-mode .payment-service-strip {
         }
 
         function removeCartItem(index) {
-            if (!cart[index]) return;
             cart.splice(index, 1);
             saveCart();
             updateCartUI();
         }
 
         function clearCart() {
+            if (!cart.length) return;
             cart = [];
             saveCart();
             updateCartUI();
         }
 
-        function updateCartUI(animateBadge = false) {
-            const totalPieces = cart.reduce((sum, item) => sum + item.qty, 0);
-            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+        let customerLocationState = {
+            lat: null,
+            lng: null,
+            mapUrl: "",
+            addressLabel: ""
+        };
 
-            const bottomBadge = document.getElementById("bottomCartCount");
-            const bottomNavCartBtn = document.getElementById("navCartBtn");
-            if (bottomBadge) {
-                if (totalPieces > 0) { bottomBadge.textContent = totalPieces; bottomBadge.classList.add("visible"); }
-                else { bottomBadge.textContent = ""; bottomBadge.classList.remove("visible"); }
-                if (animateBadge && bottomNavCartBtn) {
-                    bottomNavCartBtn.classList.remove("pop");
-                    void bottomNavCartBtn.offsetWidth;
-                    bottomNavCartBtn.classList.add("pop");
-                }
+        function syncCustomerLocationUI(statusText = "") {
+            const btn = document.getElementById("cartLocationBtn");
+            const btnText = document.getElementById("cartLocationBtnText");
+            const clearBtn = document.getElementById("cartLocationClearBtn");
+            const preview = document.getElementById("cartLocationPreview");
+            if (!btn || !btnText || !clearBtn || !preview) return;
+
+            if (customerLocationState.mapUrl) {
+                btn.classList.add("located");
+                btnText.textContent = "تم تحديد اللوكيشن بنجاح";
+                clearBtn.classList.add("visible");
+                preview.style.display = "block";
+                preview.textContent = customerLocationState.addressLabel
+                    ? `${customerLocationState.addressLabel} • ${customerLocationState.mapUrl}`
+                    : customerLocationState.mapUrl;
+            } else {
+                btn.classList.remove("located");
+                btnText.textContent = statusText || "تحديد موقعي الحالي (اللوكيشن)";
+                clearBtn.classList.remove("visible");
+                preview.style.display = "none";
+                preview.textContent = "";
             }
+        }
 
-            const distinctCountEl = document.getElementById("cartDistinctCount");
-            const totalPiecesEl = document.getElementById("cartTotalPieces");
-            if (distinctCountEl) distinctCountEl.textContent = String(cart.length);
-            if (totalPiecesEl) totalPiecesEl.textContent = String(totalPieces);
+        function clearCustomerLocation() {
+            customerLocationState = { lat: null, lng: null, mapUrl: "", addressLabel: "" };
+            syncCustomerLocationUI();
+        }
 
-            const container = document.getElementById("cartItemsContainer");
-            const totalAmountEl = document.getElementById("cartTotalAmount");
-            totalAmountEl.textContent = `${totalPrice} جنيه`;
-
-            if (cart.length === 0) {
-                container.innerHTML = `<div class="cart-empty">سلة المشتريات فارغة حاليًا.. أضف أي منتج يعجبك واطلبه بسهولة.</div>`;
+        function requestCustomerLocation() {
+            if (!navigator.geolocation) {
+                showCaramelToast("المتصفح لا يدعم تحديد الموقع الجغرافي (GPS)");
                 return;
             }
+            syncCustomerLocationUI("جاري تحديد موقعك...");
+            navigator.geolocation.getCurrentPosition(
+                pos => {
+                    const lat = Number(pos.coords.latitude.toFixed(6));
+                    const lng = Number(pos.coords.longitude.toFixed(6));
+                    const mapUrl = `https://maps.google.com/?q=${lat},${lng}`;
+                    customerLocationState = {
+                        lat,
+                        lng,
+                        mapUrl,
+                        addressLabel: `إحداثيات: ${lat}, ${lng}`
+                    };
+                    syncCustomerLocationUI();
+                    showCaramelToast("تم إرفاق اللوكيشن بنجاح");
+                },
+                err => {
+                    syncCustomerLocationUI();
+                    if (err && err.code === 1) {
+                        showCaramelToast("يرجى السماح بالوصول للموقع من إعدادات المتصفح");
+                    } else {
+                        showCaramelToast("تعذر تحديد الموقع حالياً، حاول مرة أخرى");
+                    }
+                },
+                { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+            );
+        }
 
-            container.innerHTML = cart.map((item, idx) => {
-                const product = PRODUCTS.find(p => p.id === item.id);
-                const variantCfg = getProductVariantConfig(product);
-                const merchantLabel = item.merchant || (product ? product.merchant : "") || "متجر كارامل";
-                const itemImg = normalizeProductImageUrl(item.img) || (product ? getProductImagesList(product)[0] || "" : "");
-
-                let sizeSelectHtml = "";
-                if (variantCfg && Array.isArray(variantCfg.sizes) && variantCfg.sizes.length) {
-                    const opts = variantCfg.sizes.map(entry => {
-                        const szLabel = typeof entry === "string" ? entry : entry.label;
-                        return `<option value="${escapeHtmlAttr(szLabel)}" ${item.selectedSize === szLabel ? "selected" : ""}>مقاس: ${escapeHtmlAttr(szLabel)}</option>`;
-                    }).join("");
-                    sizeSelectHtml = `<select class="cart-option-select" onchange="updateCartItemOption(${idx}, 'selectedSize', this.value)" aria-label="اختر المقاس">${opts}</select>`;
-                }
-
-                let colorSelectHtml = "";
-                if (variantCfg && Array.isArray(variantCfg.colors) && variantCfg.colors.length) {
-                    const opts = variantCfg.colors.map(col => `<option value="${escapeHtmlAttr(col)}" ${item.selectedColor === col ? "selected" : ""}>لون: ${escapeHtmlAttr(col)}</option>`).join("");
-                    colorSelectHtml = `<select class="cart-option-select" onchange="updateCartItemOption(${idx}, 'selectedColor', this.value)" aria-label="اختر اللون">${opts}</select>`;
-                }
-
-                return `
-                    <div class="cart-item">
-                        <div class="cart-item-top">
-                            <img src="${escapeHtmlAttr(itemImg)}" alt="${escapeHtmlAttr(item.title)}" onerror="handleProductImageError(this, '${escapeHtmlAttr(item.id)}')">
-                            <div class="cart-item-info">
-                                <div class="cart-item-title">${escapeHtmlAttr(item.title)}</div>
-                                <div class="cart-item-meta-line">
-                                    <span class="cart-item-price">${item.price * item.qty} جنيه</span>
-                                    <span class="cart-item-merchant">التاجر: ${escapeHtmlAttr(merchantLabel)}</span>
-                                </div>
-                            </div>
-                            <div class="qty-controls">
-                                <button type="button" class="qty-btn" onclick="updateCartQty(${idx}, 1)" aria-label="زيادة الكمية">+</button>
-                                <span class="qty-val">${item.qty}</span>
-                                <button type="button" class="qty-btn" onclick="updateCartQty(${idx}, -1)" aria-label="إنقاص الكمية">-</button>
-                                <button type="button" class="remove-item-btn" onclick="removeCartItem(${idx})" aria-label="حذف المنتج">&times;</button>
-                            </div>
-                        </div>
-                        ${(sizeSelectHtml || colorSelectHtml) ? `<div class="cart-item-options">${sizeSelectHtml}${colorSelectHtml}</div>` : ""}
-                        <input type="text" class="cart-item-note-input" placeholder="تفاصيل إضافية للقطعة (اختياري)..." value="${escapeHtmlAttr(item.note || "")}" onchange="updateCartItemOption(${idx}, 'note', this.value)">
-                    </div>
-                `;
-            }).join("");
+        function openWhatsAppChatDirect() {
+            const directUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("مرحباً متجر كارامل")}`;
+            launchWhatsAppTarget(directUrl);
         }
 
         function openCart() {
-            closeCategoriesDrawer(true);
-            closeImageModal(true);
-            closeProductOptionModal(true);
             updateCartUI();
+            syncCustomerLocationUI();
             document.getElementById("cartDrawer").classList.add("open");
             document.getElementById("cartBackdrop").classList.add("open");
             setBottomNavActive("navCartBtn");
@@ -5522,101 +5393,15 @@ body.merchant-storefront-mode .payment-service-strip {
         }
 
         function closeCart(fromPopState = false) {
-            const drawer = document.getElementById("cartDrawer");
-            const backdrop = document.getElementById("cartBackdrop");
-            if (drawer) drawer.classList.remove("open");
-            if (backdrop) backdrop.classList.remove("open");
+            document.getElementById("cartDrawer").classList.remove("open");
+            document.getElementById("cartBackdrop").classList.remove("open");
             setBottomNavActive("navHomeBtn");
             syncBodyScrollLock();
             if (!fromPopState) removeOverlayState("cart");
         }
 
-        function onDirectWhatsAppClick(productId) {
-            const product = PRODUCTS.find(p => p.id === productId);
-            if (product) trackProductInterest(product, 3, true);
-        }
-
-        let customerLocationState = {
-            lat: null,
-            lng: null,
-            accuracy: null,
-            mapsUrl: "",
-            label: ""
-        };
-
-        function renderCustomerLocationUI() {
-            const btn = document.getElementById("cartLocationBtn");
-            const textEl = document.getElementById("cartLocationBtnText");
-            const clearBtn = document.getElementById("cartLocationClearBtn");
-            const previewEl = document.getElementById("cartLocationPreview");
-            if (!btn || !textEl || !clearBtn || !previewEl) return;
-
-            if (customerLocationState.mapsUrl) {
-                btn.classList.add("located");
-                textEl.textContent = "تم تحديد اللوكيشن بنجاح ✓";
-                clearBtn.classList.add("visible");
-                previewEl.style.display = "block";
-                previewEl.textContent = customerLocationState.mapsUrl;
-            } else {
-                btn.classList.remove("located");
-                textEl.textContent = "تحديد موقعي الحالي (اللوكيشن)";
-                clearBtn.classList.remove("visible");
-                previewEl.style.display = "none";
-                previewEl.textContent = "";
-            }
-        }
-
-        function clearCustomerLocation() {
-            customerLocationState = { lat: null, lng: null, accuracy: null, mapsUrl: "", label: "" };
-            renderCustomerLocationUI();
-            showCaramelToast("تم إلغاء اللوكيشن");
-        }
-
-        function requestCustomerLocation() {
-            const textEl = document.getElementById("cartLocationBtnText");
-            if (!navigator.geolocation) {
-                showCaramelToast("المتصفح لا يدعم تحديد الموقع الجغرافي");
-                return;
-            }
-            if (textEl) textEl.textContent = "جاري تحديد موقعك...";
-            navigator.geolocation.getCurrentPosition(
-                pos => {
-                    const lat = Number(pos.coords.latitude.toFixed(6));
-                    const lng = Number(pos.coords.longitude.toFixed(6));
-                    const accuracy = Math.round(pos.coords.accuracy || 0);
-                    const mapsUrl = `https://maps.google.com/?q=${lat},${lng}`;
-                    customerLocationState = {
-                        lat,
-                        lng,
-                        accuracy,
-                        mapsUrl,
-                        label: accuracy ? `دقة ~${accuracy}م` : ""
-                    };
-                    renderCustomerLocationUI();
-                    showCaramelToast("تم تحديد موقعك الحالي بنجاح");
-                },
-                err => {
-                    renderCustomerLocationUI();
-                    if (err && err.code === 1) {
-                        showCaramelToast("يرجى السماح بالوصول إلى الموقع من إعدادات المتصفح");
-                    } else {
-                        showCaramelToast("تعذر تحديد الموقع حالياً، حاول مرة أخرى");
-                    }
-                },
-                { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 }
-            );
-        }
-
-        function openWhatsAppChatDirect() {
-            const waUrl = `https://wa.me/${WHATSAPP_NUMBER}`;
-            launchWhatsAppTarget(waUrl);
-        }
-
         function checkoutOnWhatsApp() {
-            if (cart.length === 0) {
-                showCaramelToast("سلة المشتريات فارغة حاليًا");
-                return;
-            }
+            if (!cart.length) { showCaramelToast("سلة المشتريات فارغة!"); return; }
 
             const nameInput = document.getElementById("checkoutCustomerName");
             const phoneInput = document.getElementById("checkoutCustomerPhone");
@@ -5628,65 +5413,67 @@ body.merchant-storefront-mode .payment-service-strip {
                 if (nameInput) nameInput.focus();
                 return;
             }
-            if (!customerPhone) {
-                showCaramelToast("من فضلك اكتب رقم التواصل أولاً");
+            if (!customerPhone || customerPhone.replace(/\D/g, "").length < 7) {
+                showCaramelToast("من فضلك اكتب رقم تواصل صحيح أولاً");
                 if (phoneInput) phoneInput.focus();
                 return;
             }
 
-            let total = 0;
-            let totalPieces = 0;
-            let message = "مرحبًا متجر كارامل، أريد إتمام الطلب التالي:\n";
-            message += `الاسم: ${customerName}\n`;
-            message += `رقم التواصل: ${customerPhone}\n`;
-            if (customerLocationState.mapsUrl) {
-                message += `اللوكيشن: ${customerLocationState.mapsUrl}\n`;
+            let msg = "مرحباً متجر كارامل، أريد إتمام الطلب التالي:\n";
+            msg += `الاسم: ${customerName}\n`;
+            msg += `رقم التواصل: ${customerPhone}\n`;
+            if (customerLocationState.mapUrl) {
+                msg += `اللوكيشن: ${customerLocationState.mapUrl}\n`;
             }
-            message += "--------------------\n";
+            msg += "----------------------------\n";
+            let total = 0;
 
             cart.forEach((item, idx) => {
-                const product = PRODUCTS.find(p => p.id === item.id);
-                const subtotal = item.price * item.qty;
-                total += subtotal;
-                totalPieces += item.qty;
-                const merchantLabel = item.merchant || (product ? product.merchant : "") || "متجر كارامل";
+                const sub = item.price * item.qty;
+                total += sub;
                 const details = [];
                 if (item.selectedSize) details.push(`المقاس: ${item.selectedSize}`);
                 if (item.selectedColor) details.push(`اللون: ${item.selectedColor}`);
-                if (item.note) details.push(`ملاحظات: ${item.note}`);
-                const detailsStr = details.length ? ` (${details.join(" - ")})` : "";
-                const itemImg = normalizeProductImageUrl(item.img) || (product ? getProductImagesList(product)[0] || "" : "");
-                const imgLine = itemImg ? `\n   الصورة المختارة: ${itemImg}` : "";
-                message += `${idx + 1}. ${item.title}${detailsStr} — التاجر: ${merchantLabel} — العدد: ${item.qty} × ${item.price} = ${subtotal} جنيه${imgLine}\n`;
+                if (item.note) details.push(`ملاحظة: ${item.note}`);
+                if (item.img) details.push(`الصورة: ${item.img}`);
+                const detailsStr = details.length ? ` [${details.join(" | ")}]` : "";
+                msg += `${idx + 1}. ${item.title} (${item.merchant || "متجر كارامل"}) - العدد: ${item.qty} × ${item.price} = ${sub} جنيه${detailsStr}\n`;
             });
 
-            message += `--------------------\nإجمالي القطع: ${totalPieces}\nالإجمالي الكلي: ${total} جنيه\n(السويس: الدفع عند الاستلام | المحافظات الأخرى: إنستا باي أو فوري أو كاش | التوصيل خلال يوم عمل)`;
-            const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-            launchWhatsAppTarget(waUrl);
+            msg += "----------------------------\n";
+            msg += `الإجمالي: ${total} جنيه\n`;
+            msg += "ملاحظة: السويس الدفع عند الاستلام، والمحافظات الأخرى إنستا باي أو فوري أو كاش، والتوصيل خلال يوم عمل.";
+
+            launchWhatsAppTarget(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`);
         }
 
-        function setPreviewImageByIndex(idx) {
+        function setPreviewImageIndex(targetIdx) {
             const imgs = previewModalState.imgs || [];
             if (!imgs.length) return;
-            const safeIdx = ((idx % imgs.length) + imgs.length) % imgs.length;
+            const safeIdx = ((targetIdx % imgs.length) + imgs.length) % imgs.length;
             previewModalState.idx = safeIdx;
+            const chosenSrc = imgs[safeIdx];
 
             const modalImg = document.getElementById("modalImagePreview");
-            if (modalImg) {
-                modalImg.setAttribute("data-retry-step", "0");
-                modalImg.style.opacity = "1";
-                modalImg.removeAttribute("data-broken");
-                modalImg.src = imgs[safeIdx];
-            }
+            if (modalImg) modalImg.src = chosenSrc;
 
             document.querySelectorAll("#previewThumbsRow .preview-thumb-btn").forEach((btn, i) => {
                 btn.classList.toggle("active", i === safeIdx);
             });
 
             const product = PRODUCTS.find(p => p.id === previewModalState.productId);
-            const waBtn = document.getElementById("previewWhatsAppBtn");
-            if (product && waBtn) {
-                waBtn.href = buildProductWhatsAppUrl(product, imgs[safeIdx]);
+            if (product) {
+                const waBtn = document.getElementById("previewWhatsAppBtn");
+                if (waBtn) waBtn.href = buildProductWhatsAppUrl(product, chosenSrc);
+
+                const addBtn = document.getElementById("previewAddToCartBtn");
+                if (addBtn) {
+                    addBtn.onclick = () => {
+                        const chosenImg = previewModalState.imgs[previewModalState.idx] || chosenSrc;
+                        closeImageModal();
+                        openProductOptionModal(product.id, null, chosenImg);
+                    };
+                }
             }
         }
 
@@ -5695,42 +5482,40 @@ body.merchant-storefront-mode .payment-service-strip {
                 event.preventDefault();
                 event.stopPropagation();
             }
-            setPreviewImageByIndex((previewModalState.idx || 0) + delta);
+            setPreviewImageIndex((previewModalState.idx || 0) + delta);
         }
 
         function openImageModal(src, productId = null) {
-            const product = productId ? PRODUCTS.find(p => p.id === productId) : null;
-            if (product) trackProductInterest(product, 2, true);
-
-            const imgs = product ? getProductImagesList(product) : [normalizeProductImageUrl(src)].filter(Boolean);
-            const startImg = normalizeProductImageUrl(src) || imgs[0] || "";
-            const startIdx = Math.max(0, imgs.indexOf(startImg));
-            previewModalState = { productId, imgs, idx: startIdx };
-
+            const modal = document.getElementById("imageModal");
             const modalImg = document.getElementById("modalImagePreview");
+            const product = productId ? PRODUCTS.find(p => p.id === productId) : null;
+            const imgs = product ? getProductImagesList(product) : [normalizeProductImageUrl(src)].filter(Boolean);
+            const startUrl = normalizeProductImageUrl(src) || imgs[0] || "";
+            const foundIdx = Math.max(0, imgs.indexOf(startUrl));
+
+            previewModalState = {
+                productId: product ? product.id : null,
+                imgs: imgs.length ? imgs : (startUrl ? [startUrl] : []),
+                idx: foundIdx
+            };
+
+            modalImg.src = previewModalState.imgs[foundIdx] || startUrl;
+            modalImg.alt = product ? product.title : "معاينة المنتج";
+
             const prevBtn = document.getElementById("previewPrevBtn");
             const nextBtn = document.getElementById("previewNextBtn");
             const thumbsRow = document.getElementById("previewThumbsRow");
+            const hasMulti = previewModalState.imgs.length > 1;
 
-            if (modalImg) {
-                modalImg.setAttribute("data-retry-step", "0");
-                modalImg.style.opacity = "1";
-                modalImg.removeAttribute("data-broken");
-                modalImg.src = imgs[startIdx] || startImg;
-            }
-
-            if (prevBtn && nextBtn) {
-                const showNav = imgs.length > 1;
-                prevBtn.style.display = showNav ? "inline-flex" : "none";
-                nextBtn.style.display = showNav ? "inline-flex" : "none";
-            }
+            if (prevBtn) prevBtn.style.display = hasMulti ? "inline-flex" : "none";
+            if (nextBtn) nextBtn.style.display = hasMulti ? "inline-flex" : "none";
 
             if (thumbsRow) {
-                if (imgs.length > 1) {
+                if (hasMulti) {
                     thumbsRow.style.display = "flex";
-                    thumbsRow.innerHTML = imgs.map((u, idx) => `
-                        <button type="button" class="preview-thumb-btn ${idx === startIdx ? "active" : ""}" onclick="setPreviewImageByIndex(${idx})">
-                            <img src="${escapeHtmlAttr(u)}" alt="صورة ${idx + 1}">
+                    thumbsRow.innerHTML = previewModalState.imgs.map((u, i) => `
+                        <button type="button" class="preview-thumb-btn ${i === foundIdx ? "active" : ""}" onclick="setPreviewImageIndex(${i})">
+                            <img src="${escapeHtmlAttr(u)}" alt="صورة ${i + 1}">
                         </button>
                     `).join("");
                 } else {
@@ -5750,11 +5535,11 @@ body.merchant-storefront-mode .payment-service-strip {
             const waBtn = document.getElementById("previewWhatsAppBtn");
 
             if (product) {
-                const displayPrice = product.priceLabel || product.price;
+                trackProductInterest(product, 1.5, true);
                 catChip.textContent = CATEGORY_NAMES[product.category] || "متجر كارامل";
                 merchantChip.textContent = `التاجر: ${product.merchant || "متجر كارامل"}`;
                 titleEl.textContent = product.title;
-                mainPriceEl.innerHTML = `${displayPrice}<span>جنيه</span>`;
+                mainPriceEl.innerHTML = `${product.priceLabel || product.price}<span>جنيه</span>`;
 
                 if (product.subPrice) {
                     subPriceEl.textContent = product.subPrice;
@@ -5763,36 +5548,37 @@ body.merchant-storefront-mode .payment-service-strip {
                     subPriceEl.style.display = "none";
                 }
 
-                storyTextEl.textContent = product.desc || "منتج مختار بعناية من متجر كارامل بجودة عالية وسعر مناسب.";
+                storyTextEl.textContent = product.desc || "قطعة مختارة بعناية من متجر كارامل لتناسب احتياجك اليومي بأفضل قيمة مقابل السعر.";
                 hookNoteEl.textContent = buildEngagingHookForProduct(product);
 
                 addBtn.onclick = () => {
+                    const activeImg = previewModalState.imgs[previewModalState.idx] || startUrl;
                     closeImageModal();
-                    openProductOptionModal(product.id, null, previewModalState.imgs[previewModalState.idx] || startImg);
+                    openProductOptionModal(product.id, null, activeImg);
                 };
-                waBtn.href = buildProductWhatsAppUrl(product, previewModalState.imgs[previewModalState.idx] || startImg);
+                waBtn.href = buildProductWhatsAppUrl(product, previewModalState.imgs[foundIdx] || startUrl);
                 waBtn.onclick = e => {
                     e.preventDefault();
-                    const activeSrc = previewModalState.imgs[previewModalState.idx] || startImg;
-                    const u = buildProductWhatsAppUrl(product, activeSrc);
-                    waBtn.href = u;
+                    const activeImg = previewModalState.imgs[previewModalState.idx] || startUrl;
+                    const targetUrl = buildProductWhatsAppUrl(product, activeImg);
+                    waBtn.href = targetUrl;
                     onDirectWhatsAppClick(product.id);
-                    launchWhatsAppTarget(u);
+                    launchWhatsAppTarget(targetUrl);
                 };
             } else {
                 catChip.textContent = "متجر كارامل";
                 merchantChip.textContent = "التاجر: كارامل";
-                titleEl.textContent = "معاينة سريعة للمنتج";
+                titleEl.textContent = "معاينة المنتج";
                 mainPriceEl.textContent = "متجر كارامل";
                 subPriceEl.style.display = "none";
-                storyTextEl.textContent = "كل حاجة تحتاجها عند كارامل بأرخص الأسعار والتوصيل لباب المنزل في أسرع وقت.";
-                hookNoteEl.textContent = "وحتى لو المنتج مش موجود بنجيبهولك.";
-                addBtn.onclick = closeImageModal;
+                storyTextEl.textContent = "كل حاجة تحتاجها عند كارامل بأرخص الأسعار والتوصيل لباب المنزل.";
+                hookNoteEl.textContent = "تواصل معنا مباشرة لأي استفسار أو طلب خاص.";
+                addBtn.onclick = () => closeImageModal();
                 waBtn.href = `https://wa.me/${WHATSAPP_NUMBER}`;
                 waBtn.onclick = e => { e.preventDefault(); launchWhatsAppTarget(waBtn.href); };
             }
 
-            document.getElementById("imageModal").classList.add("open");
+            modal.classList.add("open");
             syncBodyScrollLock();
             pushOverlayState("image");
         }
@@ -5804,140 +5590,147 @@ body.merchant-storefront-mode .payment-service-strip {
             if (!fromPopState) removeOverlayState("image");
         }
 
-        const ONESIGNAL_APP_ID = "d35b19eb-6b19-4cb0-b964-83640a9721b5";
+        function onDirectWhatsAppClick(productId) {
+            const product = PRODUCTS.find(p => p.id === productId);
+            if (product) trackProductInterest(product, 2, true);
+        }
+
+        const ONESIGNAL_APP_ID = "34243bb3-1896-4bd8-b310-feec311a51c3";
         const PUSH_SUBSCRIBED_KEY = "caramel_push_subscribed_v1";
-        let oneSignalReady = false;
-        let isRequestingPush = false;
-        let pushCollapseTimer = null;
+        let oneSignalReadyPromise = null;
 
-        function setPushButtonToCircleCheck(animateSmooth = false) {
+        function isPushAlreadySubscribed() {
+            try { return localStorage.getItem(PUSH_SUBSCRIBED_KEY) === "1" && Notification.permission === "granted"; }
+            catch (e) { return false; }
+        }
+
+        function syncPushButtonUI(subscribed) {
             const btn = document.getElementById("caramelPushBtn");
             const iconWrap = document.getElementById("caramelPushIcon");
-            if (!btn) return;
-            if (animateSmooth) {
-                btn.classList.add("hiding-smooth");
-                setTimeout(() => {
-                    btn.classList.add("circle-check-only");
-                    if (iconWrap) iconWrap.innerHTML = `<svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"></path></svg>`;
-                    btn.classList.remove("hiding-smooth");
-                }, 180);
-            } else {
-                btn.classList.add("circle-check-only");
-                if (iconWrap) iconWrap.innerHTML = `<svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"></path></svg>`;
-            }
-        }
-
-        function schedulePushButtonCollapse() {
-            clearTimeout(pushCollapseTimer);
-            pushCollapseTimer = setTimeout(() => { setPushButtonToCircleCheck(true); }, 3200);
-        }
-
-        function updatePushButtonUI() {
-            const btn = document.getElementById("caramelPushBtn");
             const textEl = document.getElementById("caramelPushBtnText");
-            const iconWrap = document.getElementById("caramelPushIcon");
-            if (!btn || !textEl) return;
-            const isSubscribed = localStorage.getItem(PUSH_SUBSCRIBED_KEY) === "1";
-            btn.classList.add("visible");
-            if (isSubscribed) {
-                textEl.textContent = "الإشعارات مفعّلة ✓";
-                if (iconWrap) iconWrap.innerHTML = `<svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"></path></svg>`;
-                schedulePushButtonCollapse();
+            if (!btn) return;
+            if (!("Notification" in window)) { btn.classList.remove("visible"); return; }
+
+            if (subscribed || isPushAlreadySubscribed()) {
+                btn.classList.add("visible", "circle-check-only");
+                btn.setAttribute("aria-label", "تم تفعيل إشعارات متجر كارامل");
+                if (iconWrap) iconWrap.innerHTML = `<svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg>`;
+                if (textEl) textEl.textContent = "تم تفعيل الإشعارات";
+                setTimeout(() => { btn.classList.add("hiding-smooth"); }, 1400);
             } else {
-                clearTimeout(pushCollapseTimer);
                 btn.classList.remove("circle-check-only", "hiding-smooth");
-                textEl.textContent = "فعّل إشعارات العروض";
+                btn.classList.add("visible");
+                btn.setAttribute("aria-label", "تفعيل إشعارات متجر كارامل");
                 if (iconWrap) iconWrap.innerHTML = `<svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg>`;
+                if (textEl) textEl.textContent = "فعّل إشعارات العروض";
             }
         }
 
-        window.OneSignalDeferred = window.OneSignalDeferred || [];
-        OneSignalDeferred.push(async function(OneSignal) {
-            try {
-                await OneSignal.init({ appId: ONESIGNAL_APP_ID, allowLocalhostAsSecureOrigin: true });
-                oneSignalReady = true;
-                if (OneSignal.User?.PushSubscription?.optedIn) {
-                    localStorage.setItem(PUSH_SUBSCRIBED_KEY, "1");
-                    updatePushButtonUI();
+        function loadOneSignalSDK() {
+            if (oneSignalReadyPromise) return oneSignalReadyPromise;
+            oneSignalReadyPromise = new Promise((resolve, reject) => {
+                if (window.OneSignal && typeof window.OneSignal.init === "function") { resolve(window.OneSignal); return; }
+                window.OneSignalDeferred = window.OneSignalDeferred || [];
+                window.OneSignalDeferred.push(async function(OneSignal) {
+                    try {
+                        await OneSignal.init({ appId: ONESIGNAL_APP_ID, allowLocalhostAsSecureOrigin: true });
+                        resolve(OneSignal);
+                    } catch (err) { reject(err); }
+                });
+                if (!document.querySelector('script[src*="OneSignalSDK.page.js"]')) {
+                    const script = document.createElement("script");
+                    script.src = "https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js";
+                    script.defer = true;
+                    script.onerror = () => reject(new Error("OneSignal SDK load failed"));
+                    document.head.appendChild(script);
                 }
-            } catch (e) {}
-        });
-
-        function loadOneSignalSdkLazy() {
-            if (document.getElementById("onesignal-sdk-script")) return;
-            const s = document.createElement("script");
-            s.id = "onesignal-sdk-script";
-            s.src = "https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js";
-            s.defer = true;
-            document.head.appendChild(s);
+            });
+            return oneSignalReadyPromise;
         }
 
         async function enableCaramelPush() {
-            if (isRequestingPush) return;
-            isRequestingPush = true;
-            loadOneSignalSdkLazy();
-            const textEl = document.getElementById("caramelPushBtnText");
-            const originalText = textEl ? textEl.textContent : "فعّل إشعارات العروض";
-            if (textEl) textEl.textContent = "جاري التفعيل...";
-
+            if (!("Notification" in window)) { showCaramelToast("متصفحك الحالي لا يدعم الإشعارات"); return; }
             try {
-                if (window.OneSignal && oneSignalReady) {
-                    if (!OneSignal.Notifications.permission) await OneSignal.Notifications.requestPermission();
-                    if (OneSignal.User?.PushSubscription && !OneSignal.User.PushSubscription.optedIn) await OneSignal.User.PushSubscription.optIn();
-                    localStorage.setItem(PUSH_SUBSCRIBED_KEY, "1");
-                    updatePushButtonUI();
-                    showCaramelToast("تم تفعيل إشعارات عروض متجر كارامل بنجاح!");
-                } else if ("Notification" in window) {
+                const OneSignal = await loadOneSignalSDK();
+                if (OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.optedIn) {
+                    try { localStorage.setItem(PUSH_SUBSCRIBED_KEY, "1"); } catch (e) {}
+                    syncPushButtonUI(true);
+                    showCaramelToast("إشعارات متجر كارامل مفعّلة بالفعل!");
+                    return;
+                }
+                if (OneSignal.Notifications && typeof OneSignal.Notifications.requestPermission === "function") {
+                    await OneSignal.Notifications.requestPermission();
+                }
+                const optedInNow = Boolean(OneSignal.User?.PushSubscription?.optedIn || Notification.permission === "granted");
+                if (optedInNow) {
+                    try { localStorage.setItem(PUSH_SUBSCRIBED_KEY, "1"); } catch (e) {}
+                    syncPushButtonUI(true);
+                    showCaramelToast("تم تفعيل إشعارات متجر كارامل بنجاح!");
+                } else {
+                    syncPushButtonUI(false);
+                    showCaramelToast("يمكنك تفعيل الإشعارات من إعدادات المتصفح في أي وقت");
+                }
+            } catch (err) {
+                try {
                     const perm = await Notification.requestPermission();
                     if (perm === "granted") {
-                        localStorage.setItem(PUSH_SUBSCRIBED_KEY, "1");
-                        updatePushButtonUI();
-                        showCaramelToast("تم تفعيل إشعارات عروض متجر كارامل بنجاح!");
-                    } else if (textEl) {
-                        textEl.textContent = originalText;
+                        try { localStorage.setItem(PUSH_SUBSCRIBED_KEY, "1"); } catch (e) {}
+                        syncPushButtonUI(true);
+                        showCaramelToast("تم تفعيل الإشعارات بنجاح!");
                     }
-                }
-            } catch (e) {
-                if (textEl) textEl.textContent = originalText;
-            } finally {
-                isRequestingPush = false;
+                } catch (e2) {}
             }
         }
 
-        const feedSentinelEl = document.getElementById("feedSentinel");
-        if (feedSentinelEl && "IntersectionObserver" in window) {
-            const feedObserver = new IntersectionObserver(entries => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) renderMoreFeedItems();
-                });
-            }, { rootMargin: "260px" });
-            feedObserver.observe(feedSentinelEl);
+        function initSentinelObserver() {
+            const sentinel = document.getElementById("feedSentinel");
+            if (!sentinel) return;
+            if ("IntersectionObserver" in window) {
+                const observer = new IntersectionObserver(entries => {
+                    entries.forEach(entry => { if (entry.isIntersecting) renderMoreFeedItems(); });
+                }, { rootMargin: "240px 0px" });
+                observer.observe(sentinel);
+            }
+            window.addEventListener("scroll", () => {
+                if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 320)) renderMoreFeedItems();
+            }, { passive: true });
         }
 
-        window.addEventListener("scroll", () => {
-            if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 420)) {
-                renderMoreFeedItems();
-            }
-        }, { passive: true });
+        function initUrlMerchantParam() {
+            try {
+                const params = new URLSearchParams(window.location.search);
+                const merchantParam = (params.get("merchant") || "").trim();
+                if (!merchantParam) return false;
+                const matched = PRODUCTS.find(p => p.merchant === merchantParam) || PRODUCTS.find(p => normalizeText(p.merchant).includes(normalizeText(merchantParam)));
+                const targetMerchant = matched ? matched.merchant : merchantParam;
+                filterByMerchant(targetMerchant, false);
+                return true;
+            } catch (e) { return false; }
+        }
 
-        updatePushButtonUI();
         initThemeMode();
-        syncHeaderStickyOffsets();
         hydrateTopQuickTabIcons();
-        renderSideCategoriesList();
+        syncHeaderStickyOffsets();
+        renderSmartSearchSuggestions();
         renderSpotlightBoxes();
         renderProducts("all");
         updateCartUI();
-        loadMerchantProductsFromJson();
+        initSentinelObserver();
+        syncPushButtonUI(isPushAlreadySubscribed());
+        if (isPushAlreadySubscribed()) loadOneSignalSDK().catch(() => {});
 
-        function dismissCaramelSplash() {
-            const splash = document.getElementById("caramelSplashScreen");
-            if (splash && !splash.classList.contains("hide")) {
-                splash.classList.add("hide");
-            }
-        }
-        setTimeout(dismissCaramelSplash, 1450);
-        window.addEventListener("load", () => setTimeout(dismissCaramelSplash, 400));
+        window.addEventListener("DOMContentLoaded", () => {
+            setTimeout(() => {
+                const splash = document.getElementById("caramelSplashScreen");
+                if (splash) splash.classList.add("hide");
+            }, 950);
+            setTimeout(syncHeaderStickyOffsets, 120);
+        });
+
+        loadMerchantProductsFromJson().then(() => {
+            initUrlMerchantParam();
+            setTimeout(syncHeaderStickyOffsets, 100);
+        });
     </script>
 </body>
 </html>
