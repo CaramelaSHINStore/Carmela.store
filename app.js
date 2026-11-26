@@ -80,6 +80,7 @@ function launchWhatsAppTarget(url) {
 const STORE_URL = "https://caramelstoresuez.github.io/Carmelastore/";
 const CART_STORAGE_KEY = "caramel_store_cart_v1";
 const ACTIVE_ORDERS_STORAGE_KEY = "caramel_active_orders_v1";
+const RECEIVED_ORDERS_STORAGE_KEY = "caramel_received_orders_v1";
 const INTEREST_STORAGE_KEY = "caramel_smart_interest_v1";
 const THEME_STORAGE_KEY = "caramel_store_theme_mode_v1";
 const CUSTOMER_PROFILE_KEY = "caramel_customer_profile_v1";
@@ -1282,6 +1283,7 @@ let continuationBatchIndex = 0;
 let continuationCursor = 0;
 let cart = [];
 let activeOrders = [];
+let receivedOrders = [];
 let overlayStack = [];
 let interestData = { categories: {}, keywords: {}, seenIds: [], sessionRoll: Math.random() };
 
@@ -1338,8 +1340,24 @@ function saveActiveOrders() {
     } catch (e) {}
 }
 
+function loadReceivedOrdersFromStorage() {
+    try {
+        const raw = localStorage.getItem(RECEIVED_ORDERS_STORAGE_KEY);
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed.filter(o => o && o.orderId) : [];
+    } catch (e) { return []; }
+}
+
+function saveReceivedOrders() {
+    try {
+        localStorage.setItem(RECEIVED_ORDERS_STORAGE_KEY, JSON.stringify(receivedOrders));
+    } catch (e) {}
+}
+
 cart = loadCartFromStorage();
 activeOrders = loadActiveOrdersFromStorage();
+receivedOrders = loadReceivedOrdersFromStorage();
 
 try {
     const savedInterest = localStorage.getItem(INTEREST_STORAGE_KEY);
@@ -2826,6 +2844,7 @@ function updateCartUI() {
     }
 
     renderActiveOrdersInCart();
+    renderReceivedOrdersInCart();
     updateAppendOrderBannerUI();
 }
 
@@ -2911,6 +2930,9 @@ function renderActiveOrdersInCart() {
                     <button type="button" class="order-send-update-btn" onclick="sendOrderUpdateWhatsApp('${escapeHtmlAttr(order.orderId)}', 'تعديل')">
                         إرسال التعديل للواتساب
                     </button>
+                    <button type="button" class="order-received-btn" onclick="markOrderAsReceived('${escapeHtmlAttr(order.orderId)}')">
+                        ✓ تم الاستلام
+                    </button>
                     <button type="button" class="order-cancel-btn" onclick="cancelActiveOrder('${escapeHtmlAttr(order.orderId)}')">
                         إلغاء الطلب
                     </button>
@@ -2918,6 +2940,123 @@ function renderActiveOrdersInCart() {
             </div>
         `;
     }).join("");
+}
+
+function markOrderAsReceived(orderId) {
+    const orderIdx = activeOrders.findIndex(o => o.orderId === orderId);
+    if (orderIdx === -1) return;
+    const order = activeOrders[orderIdx];
+    const confirmed = window.confirm(`تأكيد استلام الطلب ${orderId} ونقله إلى الأوردرات المستلمة؟`);
+    if (!confirmed) return;
+
+    if (appendTargetOrderId === orderId) {
+        appendTargetOrderId = null;
+        updateAppendOrderBannerUI();
+    }
+
+    const receivedOrder = {
+        ...order,
+        status: "received",
+        receivedAt: new Date().toISOString(),
+        receivedAtLabel: new Date().toLocaleString("ar-EG", {
+            day: "2-digit",
+            month: "short",
+            hour: "2-digit",
+            minute: "2-digit"
+        })
+    };
+
+    activeOrders.splice(orderIdx, 1);
+    receivedOrders.unshift(receivedOrder);
+    saveActiveOrders();
+    saveReceivedOrders();
+    updateCartUI();
+    showCaramelToast(`تم نقل الطلب ${orderId} إلى الأوردرات المستلمة`);
+}
+
+function reorderReceivedItem(orderId, itemIdx) {
+    const order = receivedOrders.find(o => o.orderId === orderId);
+    const item = order && Array.isArray(order.items) ? order.items[itemIdx] : null;
+    if (!item) return;
+
+    mergeLineItemIntoList(cart, {
+        id: item.id,
+        title: item.title,
+        price: Number(item.price) || 0,
+        img: item.selectedImg || item.img || "",
+        selectedImg: item.selectedImg || item.img || "",
+        merchant: item.merchant || "متجر كارامل",
+        qty: Math.max(1, Number(item.qty) || 1),
+        selectedSize: item.selectedSize || "",
+        selectedColor: item.selectedColor || "",
+        customNote: item.customNote || ""
+    });
+    saveCart();
+    updateCartUI();
+    showCaramelToast(`تمت إضافة "${item.title}" للسلة مرة أخرى`);
+}
+
+function clearReceivedOrdersHistory() {
+    if (!receivedOrders.length) return;
+    if (!window.confirm("هل تريد مسح سجل الأوردرات المستلمة؟")) return;
+    receivedOrders = [];
+    saveReceivedOrders();
+    renderReceivedOrdersInCart();
+    showCaramelToast("تم مسح سجل الأوردرات المستلمة");
+}
+
+function renderReceivedOrdersInCart() {
+    const container = document.getElementById("receivedOrdersContainer");
+    const countBadge = document.getElementById("receivedOrdersCountBadge");
+    if (!container) return;
+
+    if (countBadge) countBadge.textContent = String(receivedOrders.length);
+
+    if (!receivedOrders.length) {
+        container.innerHTML = `<div class="received-orders-empty">لا توجد أوردرات مستلمة بعد. بعد الضغط على "تم الاستلام" سيُحفظ طلبك هنا.</div>`;
+        return;
+    }
+
+    container.innerHTML = receivedOrders.map(order => {
+        const orderTotal = (order.items || []).reduce((sum, it) => sum + ((Number(it.price) || 0) * (Number(it.qty) || 1)), 0);
+        const orderPieces = (order.items || []).reduce((sum, it) => sum + (Number(it.qty) || 1), 0);
+
+        const itemsHtml = (order.items || []).map((item, itemIdx) => {
+            const metaParts = [];
+            if (item.selectedSize) metaParts.push(item.selectedSize);
+            if (item.selectedColor) metaParts.push(item.selectedColor);
+            if (item.customNote) metaParts.push(item.customNote);
+
+            return `
+                <div class="received-order-item-row">
+                    <div class="received-order-item-text">
+                        <div class="received-order-item-title">${escapeHtmlAttr(item.title)} × ${item.qty}</div>
+                        ${metaParts.length ? `<div class="received-order-item-sub">${escapeHtmlAttr(metaParts.join(" • "))}</div>` : ""}
+                    </div>
+                    <button type="button" class="received-reorder-btn" onclick="reorderReceivedItem('${escapeHtmlAttr(order.orderId)}', ${itemIdx})">إعادة طلب</button>
+                </div>
+            `;
+        }).join("");
+
+        return `
+            <div class="received-order-card">
+                <div class="active-order-head">
+                    <div>
+                        <div class="active-order-id">طلب ${escapeHtmlAttr(order.orderId)}</div>
+                        <div class="active-order-time">استُلم: ${escapeHtmlAttr(order.receivedAtLabel || order.createdAtLabel || "")} • ${orderPieces} قطعة</div>
+                    </div>
+                    <span class="received-order-status-pill">تم الاستلام</span>
+                </div>
+                <div class="received-order-items-box">${itemsHtml}</div>
+                <div class="active-order-total-line">
+                    <span>إجمالي الطلب:</span>
+                    <strong>${formatPriceNumber(orderTotal)} جنيه</strong>
+                </div>
+            </div>
+        `;
+    }).join("") + `
+        <button type="button" class="received-clear-btn" onclick="clearReceivedOrdersHistory()">مسح سجل الأوردرات المستلمة</button>
+    `;
 }
 
 function toggleAppendToOrder(orderId) {
