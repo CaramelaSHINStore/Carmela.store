@@ -395,8 +395,13 @@
             <span>إجمالي القطع: <strong id="cartTotalPieces">0</strong></span>
         </div>
 
-        <div class="cart-top-status-strip" role="tablist" aria-label="حالة الطلبات في السلة">
-            <button type="button" class="cart-top-status-pill active" id="tabBtnPendingOrders" data-tab="pending" onclick="switchCartOrdersTab('pending')">
+        <div class="cart-top-status-strip" role="tablist" aria-label="أقسام السلة والطلبات">
+            <button type="button" class="cart-top-status-pill active" id="tabBtnCurrentCart" data-tab="cart" onclick="switchCartOrdersTab('cart')">
+                <span class="status-pill-dot cart-dot"></span>
+                <span>السلة الحالية</span>
+                <span class="cart-order-tab-badge" id="currentCartCountBadge">0</span>
+            </button>
+            <button type="button" class="cart-top-status-pill" id="tabBtnPendingOrders" data-tab="pending" onclick="switchCartOrdersTab('pending')">
                 <span class="status-pill-dot pending-dot"></span>
                 <span>قيد التنفيذ</span>
                 <span class="cart-order-tab-badge" id="activeOrdersCountBadge">0</span>
@@ -408,31 +413,55 @@
             </button>
         </div>
 
-        <div class="cart-body">
-            <div class="cart-section-block" id="currentCartSection">
-                <div class="cart-section-label">السلة الجارية (لم تُنفذ بعد)</div>
+        <div class="cart-body" id="cartDrawerPagesContainer">
+            <div class="cart-section-block cart-page-panel" id="currentCartSection" data-page="cart">
+                <div class="cart-page-banner">
+                    <div>
+                        <div class="cart-section-label">السلة الحالية</div>
+                        <div class="cart-page-sub">المنتجات المختارة قبل تأكيد الطلب وإرساله</div>
+                    </div>
+                    <span class="cart-page-chip" id="currentCartPageChip">0 منتج</span>
+                </div>
                 <div id="cartItemsContainer"></div>
             </div>
 
-            <div class="cart-section-block" id="activeOrdersSection">
+            <div class="cart-section-block cart-page-panel is-hidden" id="activeOrdersSection" data-page="pending">
+                <div class="cart-page-banner">
+                    <div>
+                        <div class="cart-section-label">طلبات قيد التنفيذ</div>
+                        <div class="cart-page-sub">اضغط على رقم الطلب لفتح تفاصيله أو تعديله أو تأكيد استلامه</div>
+                    </div>
+                    <span class="cart-page-chip" id="pendingOrdersPageChip">0 طلب</span>
+                </div>
                 <div id="activeOrdersContainer"></div>
             </div>
 
-            <div class="cart-section-block is-hidden" id="receivedOrdersSection">
+            <div class="cart-section-block cart-page-panel is-hidden" id="receivedOrdersSection" data-page="received">
+                <div class="cart-page-banner">
+                    <div>
+                        <div class="cart-section-label">أوردرات تم الاستلام</div>
+                        <div class="cart-page-sub">اضغط على رقم الطلب لفتح الأوردر أو إعادة طلب أي منتج</div>
+                    </div>
+                    <span class="cart-page-chip" id="receivedOrdersPageChip">0 طلب</span>
+                </div>
                 <div id="receivedOrdersContainer"></div>
             </div>
         </div>
 
-        <div class="cart-footer">
+        <div class="cart-footer" id="cartFooterCurrentCart">
             <div class="cart-policy-note">السويس: الدفع عند الاستلام • المحافظات الأخرى: إنستا باي أو فوري أو كاش • التوصيل خلال يوم عمل.</div>
-            <div class="cart-total-row">
-                <span>إجمالي السلة الجارية:</span>
+            <div class="cart-total-row" id="currentCartTotalRow">
+                <span>إجمالي السلة الحالية:</span>
                 <span class="cart-total-amount" id="cartTotalAmount">0 جنيه</span>
             </div>
-            <div class="cart-modern-actions">
+            <div class="cart-modern-actions" id="currentCartCheckoutActions">
                 <button type="button" class="checkout-wa-btn" onclick="checkoutOnWhatsApp()">إرسال الطلب واتساب</button>
                 <button type="button" class="checkout-wa-direct-btn" onclick="openWhatsAppChatDirect()">واتساب مباشر</button>
                 <button type="button" class="clear-cart-btn" onclick="clearCart()">تفريغ</button>
+            </div>
+            <div class="cart-tab-quick-actions is-hidden" id="ordersTabQuickActions">
+                <button type="button" class="cart-go-cart-btn" onclick="switchCartOrdersTab('cart')">+ الذهاب إلى السلة الحالية</button>
+                <button type="button" class="checkout-wa-direct-btn" onclick="openWhatsAppChatDirect()">واتساب مباشر</button>
             </div>
         </div>
     </aside>
