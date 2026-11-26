@@ -159,6 +159,17 @@
             </div>
         </div>
 
+        <div class="append-mode-banner is-hidden" id="appendOrderBanner" aria-live="polite">
+            <div class="append-mode-info">
+                <strong>وضع الإضافة للطلب قيد التنفيذ:</strong>
+                <span id="appendOrderBannerText">أضف أي منتجات جديدة وستُضاف تلقائياً لطلبك الحالي.</span>
+            </div>
+            <div class="append-mode-actions">
+                <button type="button" class="append-open-cart-btn" onclick="openCart()">عرض الطلب</button>
+                <button type="button" class="append-cancel-btn" onclick="cancelAppendToOrderMode()">إنهاء الإضافة</button>
+            </div>
+        </div>
+
         <section class="dual-spotlight-row" aria-label="قبل نفاذ الكمية وأسعار مميزة">
             <div class="spotlight-box">
                 <div class="spotlight-box-header">
@@ -339,7 +350,7 @@
                 </div>
             </div>
             <div class="option-modal-footer">
-                <button type="button" class="option-confirm-btn" onclick="confirmAddProductWithOptions()">تأكيد وإضافة للسلة</button>
+                <button type="button" class="option-confirm-btn" id="optionModalConfirmBtn" onclick="confirmAddProductWithOptions()">تأكيد وإضافة للسلة</button>
                 <button type="button" class="option-cancel-btn" onclick="closeProductOptionModal()">إلغاء</button>
             </div>
         </div>
@@ -358,7 +369,20 @@
             <span>الطلبات المسجلة: <strong id="cartDistinctCount">0</strong></span>
             <span>إجمالي القطع: <strong id="cartTotalPieces">0</strong></span>
         </div>
-        <div class="cart-body" id="cartItemsContainer"></div>
+        <div class="cart-body">
+            <div class="cart-section-block">
+                <div class="cart-section-label">سلة المشتريات الحالية</div>
+                <div id="cartItemsContainer"></div>
+            </div>
+
+            <div class="cart-section-block" id="activeOrdersSection">
+                <div class="cart-section-label">
+                    <span>الطلبات قيد التنفيذ</span>
+                    <span class="active-orders-count-badge" id="activeOrdersCountBadge">0</span>
+                </div>
+                <div id="activeOrdersContainer"></div>
+            </div>
+        </div>
         <div class="cart-footer">
             <div class="cart-customer-box">
                 <div class="cart-customer-row">
