@@ -98,6 +98,7 @@ function launchWhatsAppTarget(url) {
 
 const STORE_URL = "https://caramelstoresuez.github.io/Carmelastore/";
 const CART_STORAGE_KEY = "caramel_store_cart_v1";
+const WISHLIST_STORAGE_KEY = "caramel_wishlist_v1";
 const ACTIVE_ORDERS_STORAGE_KEY = "caramel_active_orders_v1";
 const RECEIVED_ORDERS_STORAGE_KEY = "caramel_received_orders_v1";
 const INTEREST_STORAGE_KEY = "caramel_smart_interest_v1";
@@ -105,6 +106,7 @@ const THEME_STORAGE_KEY = "caramel_store_theme_mode_v1";
 const CUSTOMER_PROFILE_KEY = "caramel_customer_profile_v1";
 const SEARCH_HISTORY_KEY = "caramel_search_history_v1";
 const BATCH_SIZE = 12;
+const FULL_MODE_INITIAL_BATCH = 24;
 const CONTINUATION_STEP = 8;
 
 const GITHUB_MERCHANTS_CONFIG = {
@@ -138,14 +140,15 @@ const PRODUCT_VARIANTS = {};
 
 let deferredInstallPrompt = null;
 let toastTimer = null;
-let searchDebounceTimer = null;
 let isAppendingBatch = false;
 let currentFeedMode = "for-you";
 let currentSortMode = "smart";
+let onlyFavoritesMode = false;
 let isLoadingJsonProducts = true;
 let appendTargetOrderId = null;
 let activeCartOrdersTab = "cart";
 let expandedOrderIds = new Set();
+let pendingConfirmAction = null;
 let pendingOptionSelection = {
     productId: null,
     clickedBtnId: null,
@@ -164,6 +167,7 @@ let pausedMotionKind = { trends: false, deals: false };
 let autoHoverSlideTimer = null;
 let activeHoveredCard = null;
 let previewModalState = { productId: null, imgs: [], idx: 0 };
+let feedObserver = null;
 
 function createDebounced(fn, delay = 180) {
     let timer = null;
@@ -207,6 +211,9 @@ function initThemeMode() {
         const saved = localStorage.getItem(THEME_STORAGE_KEY);
         if (saved === "dark") {
             document.body.classList.add("dark-theme");
+            document.documentElement.classList.add("boot-dark-root");
+        } else {
+            document.documentElement.classList.remove("boot-dark-root");
         }
     } catch (e) {}
     syncThemeIcon();
@@ -214,10 +221,161 @@ function initThemeMode() {
 
 function toggleThemeMode() {
     const isDark = document.body.classList.toggle("dark-theme");
+    document.documentElement.classList.toggle("boot-dark-root", isDark);
     try { localStorage.setItem(THEME_STORAGE_KEY, isDark ? "dark" : "light"); } catch (e) {}
     syncThemeIcon();
     renderSideCategoriesList();
     showCaramelToast(isDark ? "تم تفعيل المظهر الليلي" : "تم تفعيل المظهر النهاري");
+}
+
+function openConfirmModal(title, message, onConfirm, confirmLabel = "تأكيد") {
+    const modal = document.getElementById("confirmActionModal");
+    const titleEl = document.getElementById("confirmModalTitle");
+    const msgEl = document.getElementById("confirmModalMessage");
+    const okBtn = document.getElementById("confirmModalOkBtn");
+    if (!modal || !titleEl || !msgEl || !okBtn) {
+        if (window.confirm(message)) onConfirm();
+        return;
+    }
+    titleEl.textContent = title || "تأكيد العملية";
+    msgEl.textContent = message || "";
+    okBtn.textContent = confirmLabel;
+    pendingConfirmAction = onConfirm;
+    modal.classList.add("open");
+    syncBodyScrollLock();
+    pushOverlayState("confirm");
+}
+
+function closeConfirmModal(fromPopState = false) {
+    const modal = document.getElementById("confirmActionModal");
+    if (modal) modal.classList.remove("open");
+    pendingConfirmAction = null;
+    syncBodyScrollLock();
+    if (!fromPopState) removeOverlayState("confirm");
+}
+
+function executeConfirmedAction() {
+    const fn = pendingConfirmAction;
+    closeConfirmModal();
+    if (typeof fn === "function") fn();
+}
+
+function loadWishlistFromStorage() {
+    try {
+        const raw = localStorage.getItem(WISHLIST_STORAGE_KEY);
+        const arr = raw ? JSON.parse(raw) : [];
+        return Array.isArray(arr) ? arr.map(String) : [];
+    } catch (e) {
+        return [];
+    }
+}
+
+let wishlistIds = loadWishlistFromStorage();
+
+function saveWishlist() {
+    try { localStorage.setItem(WISHLIST_STORAGE_KEY, JSON.stringify(wishlistIds)); } catch (e) {}
+}
+
+function updateWishlistUI() {
+    const badge = document.getElementById("headerFavCount");
+    const btn = document.getElementById("headerFavFilterBtn");
+    if (badge) {
+        badge.textContent = String(wishlistIds.length);
+        badge.classList.toggle("visible", wishlistIds.length > 0);
+    }
+    if (btn) btn.classList.toggle("active", onlyFavoritesMode);
+}
+
+function toggleProductFavorite(productId, btnEl, event) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    const idStr = String(productId || "");
+    if (!idStr) return;
+    const idx = wishlistIds.indexOf(idStr);
+    let added = false;
+    if (idx > -1) {
+        wishlistIds.splice(idx, 1);
+    } else {
+        wishlistIds.unshift(idStr);
+        added = true;
+        const prod = PRODUCTS.find(p => String(p.id) === idStr);
+        if (prod) trackProductInterest(prod, 2, true);
+    }
+    saveWishlist();
+    updateWishlistUI();
+
+    document.querySelectorAll(`.fav-toggle-btn[data-fav-id="${CSS.escape(idStr)}"]`).forEach(el => {
+        el.classList.toggle("active", added);
+        el.setAttribute("aria-pressed", String(added));
+    });
+
+    if (onlyFavoritesMode && !added) {
+        renderProducts(currentCategory);
+    }
+    showCaramelToast(added ? "تمت الإضافة إلى المفضلة ♥" : "تمت الإزالة من المفضلة");
+}
+
+function toggleFavoritesFilter() {
+    if (!wishlistIds.length && !onlyFavoritesMode) {
+        showCaramelToast("قائمة المفضلة فارغة حالياً — اضغط على القلب في أي منتج لحفظه");
+        return;
+    }
+    onlyFavoritesMode = !onlyFavoritesMode;
+    updateWishlistUI();
+    renderProducts(currentCategory);
+    if (onlyFavoritesMode) scrollToProductsTop();
+}
+
+function copyProductShareLink(productId, event) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+    if (!productId) return;
+    const shareUrl = `${STORE_URL}?product=${encodeURIComponent(productId)}`;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(shareUrl).then(() => {
+            showCaramelToast("تم نسخ رابط المنتج المباشر!");
+        }).catch(() => {
+            showCaramelToast(shareUrl);
+        });
+    } else {
+        showCaramelToast("رابط المنتج: " + shareUrl);
+    }
+}
+
+function renderMerchantsQuickStrip() {
+    const strip = document.getElementById("merchantsQuickStrip");
+    if (!strip) return;
+    if (!PRODUCTS.length) {
+        strip.innerHTML = "";
+        strip.classList.add("is-hidden");
+        return;
+    }
+
+    const counts = new Map();
+    PRODUCTS.forEach(p => {
+        const m = (p.merchant || "").trim();
+        if (m) counts.set(m, (counts.get(m) || 0) + 1);
+    });
+
+    const merchants = Array.from(counts.entries()).sort((a, b) => b[1] - a[1]);
+    if (merchants.length <= 1) {
+        strip.innerHTML = "";
+        strip.classList.add("is-hidden");
+        return;
+    }
+
+    strip.classList.remove("is-hidden");
+    const allChip = `<button type="button" class="merchant-strip-chip ${!currentMerchant ? "active" : ""}" onclick="clearMerchantFilter(true)"><span>كل التجار</span><span class="merchant-strip-count">${PRODUCTS.length}</span></button>`;
+    const itemsHtml = merchants.map(([name, cnt]) => {
+        const active = currentMerchant === name;
+        return `<button type="button" class="merchant-strip-chip ${active ? "active" : ""}" onclick="filterByMerchant('${escapeHtmlAttr(name)}', true)"><span>${escapeHtmlAttr(name)}</span><span class="merchant-strip-count">${cnt}</span></button>`;
+    }).join("");
+
+    strip.innerHTML = allChip + itemsHtml;
 }
 
 function toggleHeaderSearchBar(forceOpen = null) {
@@ -496,6 +654,40 @@ function stopCardAutoSlide() {
     activeHoveredCard = null;
 }
 
+function attachCardSwipeSupport(cardEl) {
+    if (!cardEl || cardEl.dataset.swipeBound === "1") return;
+    cardEl.dataset.swipeBound = "1";
+    const imgBox = cardEl.querySelector(".product-img-box");
+    if (!imgBox) return;
+
+    let startX = 0;
+    let startY = 0;
+    imgBox.addEventListener("touchstart", e => {
+        if (!e.touches || !e.touches[0]) return;
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+    }, { passive: true });
+
+    imgBox.addEventListener("touchend", e => {
+        if (!e.changedTouches || !e.changedTouches[0]) return;
+        const dx = e.changedTouches[0].clientX - startX;
+        const dy = e.changedTouches[0].clientY - startY;
+        if (Math.abs(dx) > 38 && Math.abs(dx) > Math.abs(dy) * 1.35) {
+            const product = PRODUCTS.find(p => p.id === cardEl.dataset.productId);
+            const imgs = getProductImagesList(product);
+            if (product && imgs.length > 1) {
+                const imgEl = cardEl.querySelector(".product-img-box img");
+                const cur = Number(imgEl?.getAttribute("data-img-idx") || "0");
+                setCardImageByIndex(cardEl, product, cur + (dx < 0 ? 1 : -1));
+            }
+        }
+    }, { passive: true });
+}
+
+function hydrateCardsInteractivity(rootEl = document) {
+    rootEl.querySelectorAll(".product-card").forEach(attachCardSwipeSupport);
+}
+
 function isBagOrNonApparelProduct(product) {
     if (!product) return false;
     const text = normalizeText(`${product.title || ""} ${product.desc || ""} ${product.category || ""}`);
@@ -680,9 +872,6 @@ async function shareStoreApp() {
             const reg = await navigator.serviceWorker.register("./sw.js", { scope: "./", updateViaCache: "none" });
             if (reg.waiting) reg.waiting.postMessage({ type: "SKIP_WAITING" });
             reg.update().catch(() => {});
-            setInterval(() => {
-                reg.update().catch(() => {});
-            }, 300000);
             reg.addEventListener("updatefound", () => {
                 const newWorker = reg.installing;
                 if (!newWorker) return;
@@ -745,75 +934,29 @@ function buildCategoryGraphicSvg(catKey, customStroke = "") {
     const s = customStroke || (CATEGORY_THEME_META[catKey]?.stroke || "#996738");
     switch (catKey) {
         case "appliances":
-            return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M18 4L8 18h8l-2 10 10-14h-8l2-10z"></path>
-            </svg>`;
+            return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 4L8 18h8l-2 10 10-14h-8l2-10z"></path></svg>`;
         case "phones":
-            return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="9.5" y="4.5" width="13" height="23" rx="2.8"></rect>
-                <path d="M14 7.5h4"></path>
-                <circle cx="16" cy="24" r="1" fill="${s}" stroke="none"></circle>
-            </svg>`;
+            return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9.5" y="4.5" width="13" height="23" rx="2.8"></rect><path d="M14 7.5h4"></path><circle cx="16" cy="24" r="1" fill="${s}" stroke="none"></circle></svg>`;
         case "jewelry":
-            return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M9 7l7 5 7-5"></path>
-                <circle cx="16" cy="18.5" r="7"></circle>
-                <path d="M16 14.5l2.2 2.2-2.2 2.2-2.2-2.2 2.2-2.2z"></path>
-            </svg>`;
+            return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 7l7 5 7-5"></path><circle cx="16" cy="18.5" r="7"></circle><path d="M16 14.5l2.2 2.2-2.2 2.2-2.2-2.2 2.2-2.2z"></path></svg>`;
         case "school":
-            return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="6" y="5" width="16" height="22" rx="2.5"></rect>
-                <path d="M10 11h8M10 15h6"></path>
-                <path d="M22 8l4 4-8 8-4 1 1-4 7-9z"></path>
-            </svg>`;
+            return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="5" width="16" height="22" rx="2.5"></rect><path d="M10 11h8M10 15h6"></path><path d="M22 8l4 4-8 8-4 1 1-4 7-9z"></path></svg>`;
         case "home":
-            return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M5 14.5L16 5.5l11 9V26a1.5 1.5 0 0 1-1.5 1.5h-19A1.5 1.5 0 0 1 5 26V14.5z"></path>
-                <path d="M13 27.5v-8h6v8"></path>
-            </svg>`;
+            return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 14.5L16 5.5l11 9V26a1.5 1.5 0 0 1-1.5 1.5h-19A1.5 1.5 0 0 1 5 26V14.5z"></path><path d="M13 27.5v-8h6v8"></path></svg>`;
         case "kids":
-            return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <circle cx="16" cy="17" r="9.5"></circle>
-                <circle cx="13" cy="15.5" r="1.2" fill="${s}" stroke="none"></circle>
-                <circle cx="19" cy="15.5" r="1.2" fill="${s}" stroke="none"></circle>
-                <path d="M12.5 19.5c1.1 1.5 2.2 2.2 3.5 2.2s2.4-.7 3.5-2.2"></path>
-                <path d="M16 7.5c1.2-2 3-2 3.8-0.8"></path>
-            </svg>`;
+            return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="16" cy="17" r="9.5"></circle><circle cx="13" cy="15.5" r="1.2" fill="${s}" stroke="none"></circle><circle cx="19" cy="15.5" r="1.2" fill="${s}" stroke="none"></circle><path d="M12.5 19.5c1.1 1.5 2.2 2.2 3.5 2.2s2.4-.7 3.5-2.2"></path><path d="M16 7.5c1.2-2 3-2 3.8-0.8"></path></svg>`;
         case "tafse":
-            return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M8 7h16"></path>
-                <path d="M11 7v10c0 3 2.2 4.5 5 4.5s5-1.5 5-4.5V7"></path>
-                <path d="M12.5 21.5v5.5M16 21.5v6M19.5 21.5v5.5"></path>
-            </svg>`;
+            return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 7h16"></path><path d="M11 7v10c0 3 2.2 4.5 5 4.5s5-1.5 5-4.5V7"></path><path d="M12.5 21.5v5.5M16 21.5v6M19.5 21.5v5.5"></path></svg>`;
         case "men":
-            return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M11 7l5 3 5-3 4 4.5-3.5 3.5V26h-11V15L7 11.5 11 7z"></path>
-            </svg>`;
+            return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 7l5 3 5-3 4 4.5-3.5 3.5V26h-11V15L7 11.5 11 7z"></path></svg>`;
         case "women":
-            return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <circle cx="16" cy="13" r="6.5"></circle>
-                <path d="M16 19.5v8M12.5 24.5h7"></path>
-            </svg>`;
+            return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="16" cy="13" r="6.5"></circle><path d="M16 19.5v8M12.5 24.5h7"></path></svg>`;
         case "perfume":
-            return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="13" y="4.5" width="6" height="3.5" rx="1"></rect>
-                <rect x="9.5" y="10.5" width="13" height="16.5" rx="4.5"></rect>
-                <path d="M13 18.5h6"></path>
-            </svg>`;
+            return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="13" y="4.5" width="6" height="3.5" rx="1"></rect><rect x="9.5" y="10.5" width="13" height="16.5" rx="4.5"></rect><path d="M13 18.5h6"></path></svg>`;
         case "gifts":
-            return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="6.5" y="14" width="19" height="12.5" rx="2"></rect>
-                <rect x="5" y="10.5" width="22" height="4" rx="1.5"></rect>
-                <path d="M16 10.5v16"></path>
-                <path d="M16 10.5c-1.8-3.5-6.2-3.8-6.2-1 0 1.8 3.5 1.4 6.2 1zm0 0c1.8-3.5 6.2-3.8 6.2-1 0 1.8-3.5 1.4-6.2 1z"></path>
-            </svg>`;
+            return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6.5" y="14" width="19" height="12.5" rx="2"></rect><rect x="5" y="10.5" width="22" height="4" rx="1.5"></rect><path d="M16 10.5v16"></path><path d="M16 10.5c-1.8-3.5-6.2-3.8-6.2-1 0 1.8 3.5 1.4 6.2 1zm0 0c1.8-3.5 6.2-3.8 6.2-1 0 1.8-3.5 1.4-6.2 1z"></path></svg>`;
         default:
-            return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="5.5" y="5.5" width="8.5" height="8.5" rx="2"></rect>
-                <rect x="18" y="5.5" width="8.5" height="8.5" rx="2"></rect>
-                <rect x="5.5" y="18" width="8.5" height="8.5" rx="2"></rect>
-                <rect x="18" y="18" width="8.5" height="8.5" rx="2"></rect>
-            </svg>`;
+            return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5.5" y="5.5" width="8.5" height="8.5" rx="2"></rect><rect x="18" y="5.5" width="8.5" height="8.5" rx="2"></rect><rect x="5.5" y="18" width="8.5" height="8.5" rx="2"></rect><rect x="18" y="18" width="8.5" height="8.5" rx="2"></rect></svg>`;
     }
 }
 
@@ -1046,8 +1189,9 @@ function normalizeRawJsonProduct(rawItem, index, slugPrefix, fileMerchant, fileS
 
 const PRODUCTS = [];
 
-async function discoverMerchantJsonSources() {
+async function discoverMerchantJsonSources(forceRefresh = false) {
     const sourcesMap = new Map();
+    const qSuffix = forceRefresh ? `?ts=${Date.now()}` : "";
 
     const registerJsonPath = (relPath, customDownloadUrl = "") => {
         const normalizedPath = String(relPath || "").replace(/^\.?\/+/, "").trim();
@@ -1065,8 +1209,9 @@ async function discoverMerchantJsonSources() {
         }
     };
 
+    let loadedManifest = false;
     try {
-        const indexJsonResp = await fetch(`./merchants/index.json?ts=${Date.now()}`, { cache: "no-store" });
+        const indexJsonResp = await fetch(`./merchants/index.json${qSuffix}`, { cache: forceRefresh ? "no-store" : "default" });
         if (indexJsonResp && indexJsonResp.ok) {
             const idxData = await indexJsonResp.json();
             const fileEntries = Array.isArray(idxData) ? idxData : (Array.isArray(idxData?.files) ? idxData.files : []);
@@ -1078,37 +1223,40 @@ async function discoverMerchantJsonSources() {
                     if (p) registerJsonPath(p.includes("/") ? p : `${GITHUB_MERCHANTS_CONFIG.folder}/${p}`, entry.url || "");
                 }
             });
+            loadedManifest = fileEntries.length > 0;
         }
     } catch (e) {}
 
-    try {
-        const apiUrl = `https://api.github.com/repos/${GITHUB_MERCHANTS_CONFIG.owner}/${GITHUB_MERCHANTS_CONFIG.repo}/contents/${GITHUB_MERCHANTS_CONFIG.folder}?ref=${GITHUB_MERCHANTS_CONFIG.branch}&ts=${Date.now()}`;
-        const apiResp = await fetch(apiUrl, { cache: "no-store" });
-        if (apiResp && apiResp.ok) {
-            const filesList = await apiResp.json();
-            if (Array.isArray(filesList)) {
-                filesList.forEach(f => {
-                    if (f && f.type === "file" && /\.json$/i.test(f.name) && f.name.toLowerCase() !== "index.json") {
-                        registerJsonPath(`${GITHUB_MERCHANTS_CONFIG.folder}/${f.name}`, f.download_url || "");
-                    }
-                });
+    if (!loadedManifest) {
+        try {
+            const apiUrl = `https://api.github.com/repos/${GITHUB_MERCHANTS_CONFIG.owner}/${GITHUB_MERCHANTS_CONFIG.repo}/contents/${GITHUB_MERCHANTS_CONFIG.folder}?ref=${GITHUB_MERCHANTS_CONFIG.branch}`;
+            const apiResp = await fetch(apiUrl, { cache: forceRefresh ? "no-store" : "default" });
+            if (apiResp && apiResp.ok) {
+                const filesList = await apiResp.json();
+                if (Array.isArray(filesList)) {
+                    filesList.forEach(f => {
+                        if (f && f.type === "file" && /\.json$/i.test(f.name) && f.name.toLowerCase() !== "index.json") {
+                            registerJsonPath(`${GITHUB_MERCHANTS_CONFIG.folder}/${f.name}`, f.download_url || "");
+                        }
+                    });
+                }
             }
-        }
-    } catch (e) {}
+        } catch (e) {}
+    }
 
     FALLBACK_MERCHANT_FILES.forEach(path => registerJsonPath(path));
-
     return Array.from(sourcesMap.values());
 }
 
-async function fetchJsonWithFallback(source) {
+async function fetchJsonWithFallback(source, forceRefresh = false) {
+    const qSuffix = forceRefresh ? `?ts=${Date.now()}` : "";
     const urlsToTry = [
-        `${source.localUrl}?ts=${Date.now()}`,
-        `${source.rawUrl}?ts=${Date.now()}`
+        `${source.localUrl}${qSuffix}`,
+        `${source.rawUrl}${qSuffix}`
     ];
     for (const url of urlsToTry) {
         try {
-            const resp = await fetch(url, { cache: "no-store" });
+            const resp = await fetch(url, { cache: forceRefresh ? "no-store" : "default" });
             if (resp && resp.ok) {
                 const text = await resp.text();
                 const cleanText = text.replace(/^\uFEFF/, "").trim();
@@ -1119,17 +1267,17 @@ async function fetchJsonWithFallback(source) {
     return null;
 }
 
-async function loadMerchantProductsFromJson() {
+async function loadMerchantProductsFromJson(forceRefresh = false) {
     isLoadingJsonProducts = true;
     renderProducts(currentCategory);
 
-    const merchantSources = await discoverMerchantJsonSources();
+    const merchantSources = await discoverMerchantJsonSources(forceRefresh);
     const jsonProductsById = new Map();
 
     const fetchedPayloads = await Promise.all(
         merchantSources.map(async source => ({
             source,
-            payload: await fetchJsonWithFallback(source)
+            payload: await fetchJsonWithFallback(source, forceRefresh)
         }))
     );
 
@@ -1151,10 +1299,12 @@ async function loadMerchantProductsFromJson() {
     rebuildSearchIndex();
     isLoadingJsonProducts = false;
 
+    renderMerchantsQuickStrip();
     renderSmartSearchSuggestions();
     renderSpotlightBoxes();
     renderProducts(currentCategory);
     updateCartUI();
+    updateWishlistUI();
     applyUrlDeepLinkParams();
 }
 
@@ -1416,15 +1566,17 @@ function toggleProfileEditorPanel(forceOpen = null) {
 function saveCustomerProfileFromPanel() {
     const nameInput = document.getElementById("checkoutCustomerName");
     const phoneInput = document.getElementById("checkoutCustomerPhone");
+    const addrInput = document.getElementById("checkoutCustomerAddress");
     const nameVal = (nameInput?.value || "").trim();
     const phoneVal = (phoneInput?.value || "").trim();
+    const addrVal = (addrInput?.value || "").trim();
 
     if (!nameVal && !phoneVal) {
         showCaramelToast("اكتب الاسم أو رقم التواصل أولاً");
         return;
     }
 
-    saveCustomerProfileInputs(nameVal, phoneVal);
+    saveCustomerProfileInputs(nameVal, phoneVal, addrVal);
     syncMyDataButtonBadge();
     toggleProfileEditorPanel(false);
     showCaramelToast("تم حفظ بياناتك بنجاح");
@@ -1476,17 +1628,20 @@ function loadCustomerProfileToInputs() {
         const prof = JSON.parse(raw);
         const nameEl = document.getElementById("checkoutCustomerName");
         const phoneEl = document.getElementById("checkoutCustomerPhone");
+        const addrEl = document.getElementById("checkoutCustomerAddress");
         if (nameEl && prof.name && !nameEl.value) nameEl.value = prof.name;
         if (phoneEl && prof.phone && !phoneEl.value) phoneEl.value = prof.phone;
+        if (addrEl && prof.address && !addrEl.value) addrEl.value = prof.address;
     } catch (e) {}
     syncMyDataButtonBadge();
 }
 
-function saveCustomerProfileInputs(name, phone) {
+function saveCustomerProfileInputs(name, phone, address = "") {
     try {
         localStorage.setItem(CUSTOMER_PROFILE_KEY, JSON.stringify({
             name: String(name || "").trim(),
-            phone: String(phone || "").trim()
+            phone: String(phone || "").trim(),
+            address: String(address || "").trim()
         }));
     } catch (e) {}
     syncMyDataButtonBadge();
@@ -1692,12 +1847,7 @@ function getProductSearchScore(product, rawQuery) {
     const normalizedQuery = normalizeText(rawQuery);
     if (!normalizedQuery) return 1;
 
-    let idxEntry = SEARCH_INDEX_MAP.get(product.id);
-    if (!idxEntry) {
-        rebuildSearchIndex();
-        idxEntry = SEARCH_INDEX_MAP.get(product.id);
-    }
-
+    const idxEntry = SEARCH_INDEX_MAP.get(product.id);
     const normTitle = idxEntry ? idxEntry.normTitle : normalizeText(product.title || "");
     const fullHaystack = idxEntry ? idxEntry.fullHaystack : normalizeText(`${product.title || ""} ${product.desc || ""} ${buildDynamicSearchTextForProduct(product)}`);
     const words = idxEntry ? idxEntry.words : fullHaystack.split(" ").filter(Boolean);
@@ -1861,6 +2011,8 @@ function scoreProductForUser(product, seedOffset = 0) {
     });
     if (inCartCat) catScore += 14;
 
+    if (wishlistIds.includes(String(product.id))) catScore += 16;
+
     const tokens = extractTokens(product.title).filter(t => t.length >= 2);
     let kwScore = 0;
     tokens.forEach(t => { kwScore += (interestData.keywords[t] || 0) * 5; });
@@ -1944,7 +2096,7 @@ function renderSpotlightBoxes() {
         paintSpotlightSlide("deals");
         return;
     }
-    const hasTaste = Object.keys(interestData.categories).length > 0 || Object.keys(interestData.keywords).length > 0 || cart.length > 0;
+    const hasTaste = Object.keys(interestData.categories).length > 0 || Object.keys(interestData.keywords).length > 0 || cart.length > 0 || wishlistIds.length > 0;
 
     const lowStockCandidates = interleaveMerchantsSmartly([...PRODUCTS].sort((a, b) => {
         const scoreA = scoreProductForUser(a, 3) + (a.badge ? 8 : 0);
@@ -2111,6 +2263,7 @@ function appendMoreContinuationCards() {
     const nextWave = buildOtherProductsWave(CONTINUATION_STEP);
     continuationItems.push(...nextWave);
     grid.insertAdjacentHTML("beforeend", nextWave.map(p => buildProductCardHTML(p, `cont-${continuationBatchIndex}`)).join(""));
+    hydrateCardsInteractivity(grid);
 }
 
 function renderContinuationAfterSection() {
@@ -2148,6 +2301,7 @@ function renderContinuationAfterSection() {
             </div>
         </section>
     `;
+    hydrateCardsInteractivity(container);
 }
 
 function filterByMerchant(merchantName, shouldScroll = true) {
@@ -2161,6 +2315,7 @@ function filterByMerchant(merchantName, shouldScroll = true) {
     document.querySelectorAll(".quick-top-tabs .quick-tab-item").forEach(item => {
         item.classList.toggle("active", item.getAttribute("data-quick") === "all");
     });
+    renderMerchantsQuickStrip();
     renderProducts("all");
     if (shouldScroll) scrollToProductsTop();
 }
@@ -2168,6 +2323,7 @@ function filterByMerchant(merchantName, shouldScroll = true) {
 function clearMerchantFilter(shouldScroll = true) {
     currentMerchant = "";
     applyCategoryPageMood(currentCategory);
+    renderMerchantsQuickStrip();
     renderProducts(currentCategory);
     if (shouldScroll) scrollToProductsTop();
 }
@@ -2223,16 +2379,23 @@ function buildProductCardHTML(product, instanceTag = "base") {
     const waUrl = buildProductWhatsAppUrl(product, imgSrc);
     const btnId = `btn-${instanceTag}-${product.id}`;
     const addLabel = appendTargetOrderId ? "+ للطلب الحالي" : "+ للمشتريات";
+    const isFav = wishlistIds.includes(String(product.id));
 
     const styleClass = product.cardStyle === "gold"
         ? "card-style-gold"
         : (product.cardStyle === "vip" ? "card-style-vip" : "");
     const badgeHtml = product.badge ? `<span class="card-json-badge">${escapeHtmlAttr(product.badge)}</span>` : "";
 
+    const favBtnHtml = `
+        <button type="button" class="fav-toggle-btn ${isFav ? "active" : ""}" data-fav-id="${escapeHtmlAttr(product.id)}" aria-pressed="${isFav}" aria-label="حفظ في المفضلة" onclick="toggleProductFavorite('${escapeHtmlAttr(product.id)}', this, event)">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+        </button>
+    `;
+
     const multiControlsHTML = hasMultiImgs ? `
         <button type="button" class="card-img-nav-btn prev" onclick="cycleCardImage(this, this.closest('.product-card').dataset.productId, -1, event)" aria-label="الصورة السابقة">›</button>
         <button type="button" class="card-img-nav-btn next" onclick="cycleCardImage(this, this.closest('.product-card').dataset.productId, 1, event)" aria-label="الصورة التالية">‹</button>
-        <span class="card-img-counter">1/${imgs.length}</span>
+        <span class="card-img-counter">${hasMultiImgs ? `1/${imgs.length}` : ""}</span>
         <div class="card-img-dots">
             ${imgs.map((_, idx) => `<button type="button" class="card-img-dot ${idx === 0 ? "active" : ""}" onclick="jumpCardImage(this, this.closest('.product-card').dataset.productId, ${idx}, event)" aria-label="صورة ${idx + 1}"></button>`).join("")}
         </div>
@@ -2241,6 +2404,7 @@ function buildProductCardHTML(product, instanceTag = "base") {
     return `
         <article class="product-card ${styleClass}" data-product-id="${escapeHtmlAttr(product.id)}" data-merchant="${escapeHtmlAttr(merchantName)}">
             ${badgeHtml}
+            ${favBtnHtml}
             <div class="product-img-box"
                  onmouseenter="startCardAutoSlide(this.closest('.product-card'), this.closest('.product-card').dataset.productId)"
                  onmouseleave="stopCardAutoSlide()"
@@ -2301,9 +2465,10 @@ function sortEconomicAcrossCategories(list) {
 function getFilteredProducts(category, rawQuery) {
     const hasSearch = Boolean(normalizeText(rawQuery));
     let baseCategoryList = PRODUCTS.filter(p => {
+        const favMatch = !onlyFavoritesMode || wishlistIds.includes(String(p.id));
         const catMatch = hasSearch || category === "all" || p.category === category || (Array.isArray(p.categories) && p.categories.includes(category));
         const merchantMatch = hasSearch || !currentMerchant || p.merchant === currentMerchant;
-        return catMatch && merchantMatch && matchesSearchQuery(p, rawQuery);
+        return favMatch && catMatch && merchantMatch && matchesSearchQuery(p, rawQuery);
     });
 
     renderSmartPriceChips(baseCategoryList);
@@ -2331,7 +2496,7 @@ function getFilteredProducts(category, rawQuery) {
     } else if (currentFeedMode === "new") {
         list = interleaveMerchantsSmartly([...list].reverse());
     } else {
-        const hasTaste = Object.keys(interestData.categories).length > 0 || Object.keys(interestData.keywords).length > 0 || cart.length > 0;
+        const hasTaste = Object.keys(interestData.categories).length > 0 || Object.keys(interestData.keywords).length > 0 || cart.length > 0 || wishlistIds.length > 0;
         const ranked = hasTaste
             ? [...list].sort((a, b) => scoreProductForUser(b, 2) - scoreProductForUser(a, 2))
             : shuffleArray(list);
@@ -2369,12 +2534,15 @@ function renderMoreFeedItems() {
 
         if (isFullSelectionMode()) {
             if (renderedCount < currentFeedItems.length) {
-                const remainingSlice = currentFeedItems.slice(renderedCount);
-                grid.insertAdjacentHTML("beforeend", remainingSlice.map(entry => entry.type === "special" ? buildSpecialRequestCardHTML() : buildProductCardHTML(entry.product, entry.tag)).join(""));
-                renderedCount = currentFeedItems.length;
+                const nextSlice = currentFeedItems.slice(renderedCount, renderedCount + FULL_MODE_INITIAL_BATCH);
+                grid.insertAdjacentHTML("beforeend", nextSlice.map(entry => entry.type === "special" ? buildSpecialRequestCardHTML() : buildProductCardHTML(entry.product, entry.tag)).join(""));
+                renderedCount += nextSlice.length;
+                hydrateCardsInteractivity(grid);
             }
-            if (!document.getElementById("continuationAfterGrid")) renderContinuationAfterSection();
-            else if (sentinel) appendMoreContinuationCards();
+            if (renderedCount >= currentFeedItems.length) {
+                if (!document.getElementById("continuationAfterGrid")) renderContinuationAfterSection();
+                else if (sentinel) appendMoreContinuationCards();
+            }
             if (sentinel) sentinel.textContent = "انزل للأسفل أو اضغط للمزيد من المنتجات المتنوعة";
             return;
         }
@@ -2386,10 +2554,23 @@ function renderMoreFeedItems() {
 
         grid.insertAdjacentHTML("beforeend", nextSlice.map(entry => entry.type === "special" ? buildSpecialRequestCardHTML() : buildProductCardHTML(entry.product, entry.tag)).join(""));
         renderedCount += nextSlice.length;
+        hydrateCardsInteractivity(grid);
         if (sentinel) sentinel.textContent = "اكتشف المزيد بالأسفل أو اطلب أي منتج خاص";
     } finally {
         isAppendingBatch = false;
     }
+}
+
+function attachFeedObserver() {
+    const sentinel = document.getElementById("feedSentinel");
+    if (!sentinel || !("IntersectionObserver" in window)) return;
+    if (feedObserver) feedObserver.disconnect();
+    feedObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) renderMoreFeedItems();
+        });
+    }, { rootMargin: "280px" });
+    feedObserver.observe(sentinel);
 }
 
 function renderProducts(category = currentCategory) {
@@ -2424,7 +2605,8 @@ function renderProducts(category = currentCategory) {
     const modeSuffix = currentFeedMode === "new"
         ? " — مدخلات جديدة"
         : (currentFeedMode === "deals" ? " — أسعار اقتصادية" : " — من أجلك");
-    const baseCatTitle = currentMerchant ? `منتجات التاجر: ${currentMerchant}` : `${CATEGORY_NAMES[category] || "المنتجات"}${modeSuffix}`;
+    const favPrefix = onlyFavoritesMode ? "المفضلة • " : "";
+    const baseCatTitle = currentMerchant ? `${favPrefix}منتجات التاجر: ${currentMerchant}` : `${favPrefix}${CATEGORY_NAMES[category] || "المنتجات"}${modeSuffix}`;
     titleEl.textContent = trimmedQuery ? `نتائج البحث: "${trimmedQuery}"` : baseCatTitle;
 
     if (countBadgeEl) {
@@ -2444,11 +2626,13 @@ function renderProducts(category = currentCategory) {
         }
 
         const suggestionTerm = trimmedQuery ? getSmartQuerySuggestion(trimmedQuery) : "";
-        const emptyMsg = trimmedQuery
-            ? `ملقيناش نتيجة مطابقة لـ "${trimmedQuery}".. جرّب كلمة بحث أخرى أو تواصل معنا.`
-            : (!PRODUCTS.length
-                ? "لم يتم العثور على منتجات صالحة داخل ملفات الـ JSON حالياً."
-                : "لا توجد منتجات مطابقة للتصفية الحالية.. جرّب قسماً آخر أو تواصل معنا.");
+        const emptyMsg = onlyFavoritesMode
+            ? "لا توجد منتجات في المفضلة مطابقة للتصفية الحالية."
+            : (trimmedQuery
+                ? `ملقيناش نتيجة مطابقة لـ "${trimmedQuery}".. جرّب كلمة بحث أخرى أو تواصل معنا.`
+                : (!PRODUCTS.length
+                    ? "لم يتم العثور على منتجات صالحة داخل ملفات الـ JSON حالياً."
+                    : "لا توجد منتجات مطابقة للتصفية الحالية.. جرّب قسماً آخر أو تواصل معنا."));
 
         const suggestionBtnHtml = suggestionTerm
             ? `<button type="button" class="add-cart-btn max-w-240" onclick="applyQuickSearch('${escapeHtmlAttr(suggestionTerm)}')">هل تقصد: ${escapeHtmlAttr(suggestionTerm)}؟</button>`
@@ -2466,28 +2650,25 @@ function renderProducts(category = currentCategory) {
         return;
     }
 
-    const initialSlice = isFullSelectionMode() ? currentFeedItems : currentFeedItems.slice(0, BATCH_SIZE);
+    const initialLimit = isFullSelectionMode() ? FULL_MODE_INITIAL_BATCH : BATCH_SIZE;
+    const initialSlice = currentFeedItems.slice(0, initialLimit);
     grid.innerHTML = initialSlice.map(entry => entry.type === "special" ? buildSpecialRequestCardHTML() : buildProductCardHTML(entry.product, entry.tag)).join("");
     renderedCount = initialSlice.length;
+    hydrateCardsInteractivity(grid);
 
     if (isFullSelectionMode()) {
-        renderContinuationAfterSection();
+        if (renderedCount >= currentFeedItems.length) renderContinuationAfterSection();
+        else {
+            const afterEl = document.getElementById("continuationAfterRecommendations");
+            if (afterEl) afterEl.innerHTML = "";
+        }
         if (sentinel) sentinel.textContent = "انزل للأسفل أو اضغط للمزيد من المنتجات المتنوعة";
     } else {
         const afterEl = document.getElementById("continuationAfterRecommendations");
         if (afterEl) afterEl.innerHTML = "";
         if (sentinel) sentinel.textContent = "انزل للأسفل لعرض المزيد من المنتجات تلقائياً";
     }
-}
-
-const feedSentinelEl = document.getElementById("feedSentinel");
-if (feedSentinelEl && "IntersectionObserver" in window) {
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) renderMoreFeedItems();
-        });
-    }, { rootMargin: "260px" });
-    observer.observe(feedSentinelEl);
+    attachFeedObserver();
 }
 
 function filterByCategory(category, tabEl, shouldScroll = false) {
@@ -2502,6 +2683,7 @@ function filterByCategory(category, tabEl, shouldScroll = false) {
         document.querySelectorAll(".quick-top-tabs .quick-tab-item").forEach(item => item.classList.remove("active"));
         tabEl.classList.add("active");
     }
+    renderMerchantsQuickStrip();
     renderProducts(category);
     if (shouldScroll) scrollToProductsTop();
 }
@@ -2511,6 +2693,8 @@ function resetHomeFresh() {
     currentMerchant = "";
     currentCategory = "all";
     currentMaxPrice = 0;
+    onlyFavoritesMode = false;
+    updateWishlistUI();
     currentSortMode = "smart";
     const sortSel = document.getElementById("productsSortSelect");
     if (sortSel) sortSel.value = "smart";
@@ -2521,6 +2705,7 @@ function resetHomeFresh() {
     document.querySelectorAll(".quick-top-tabs .quick-tab-item").forEach(item => {
         item.classList.toggle("active", item.getAttribute("data-quick") === "all");
     });
+    renderMerchantsQuickStrip();
     renderProducts("all");
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
@@ -2547,7 +2732,8 @@ function syncBodyScrollLock() {
         document.getElementById("catsDrawer")?.classList.contains("open") ||
         document.getElementById("imageModal")?.classList.contains("open") ||
         document.getElementById("productOptionModal")?.classList.contains("open") ||
-        document.getElementById("serviceInfoModal")?.classList.contains("open")
+        document.getElementById("serviceInfoModal")?.classList.contains("open") ||
+        document.getElementById("confirmActionModal")?.classList.contains("open")
     );
     document.body.style.overflow = anyOpen ? "hidden" : "";
 }
@@ -2573,6 +2759,7 @@ function closeTopOverlayFromPopState() {
     else if (top === "image") closeImageModal(true);
     else if (top === "option") closeProductOptionModal(true);
     else if (top === "serviceInfo") closeServiceInfoModal(true);
+    else if (top === "confirm") closeConfirmModal(true);
 }
 
 window.addEventListener("popstate", () => {
@@ -2585,6 +2772,7 @@ function closeAllOverlays() {
     closeImageModal(true);
     closeProductOptionModal(true);
     closeServiceInfoModal(true);
+    closeConfirmModal(true);
     overlayStack = [];
     syncBodyScrollLock();
 }
@@ -3116,33 +3304,35 @@ function markOrderAsReceived(orderId) {
     const orderIdx = activeOrders.findIndex(o => o.orderId === orderId);
     if (orderIdx === -1) return;
     const order = activeOrders[orderIdx];
-    const confirmed = window.confirm(`تأكيد استلام الطلب ${orderId} ونقله إلى الأوردرات المستلمة؟`);
-    if (!confirmed) return;
-
-    if (appendTargetOrderId === orderId) {
-        appendTargetOrderId = null;
-        updateAppendOrderBannerUI();
-    }
-
-    const receivedOrder = {
-        ...order,
-        status: "received",
-        receivedAt: new Date().toISOString(),
-        receivedAtLabel: new Date().toLocaleString("ar-EG", {
-            day: "2-digit",
-            month: "short",
-            hour: "2-digit",
-            minute: "2-digit"
-        })
-    };
-
-    activeOrders.splice(orderIdx, 1);
-    receivedOrders.unshift(receivedOrder);
-    saveActiveOrders();
-    saveReceivedOrders();
-    updateCartUI();
-    switchCartOrdersTab("received");
-    showCaramelToast(`تم نقل الطلب ${orderId} إلى تم الاستلام`);
+    openConfirmModal(
+        "تأكيد الاستلام",
+        `تأكيد استلام الطلب ${orderId} ونقله إلى الأوردرات المستلمة؟`,
+        () => {
+            if (appendTargetOrderId === orderId) {
+                appendTargetOrderId = null;
+                updateAppendOrderBannerUI();
+            }
+            const receivedOrder = {
+                ...order,
+                status: "received",
+                receivedAt: new Date().toISOString(),
+                receivedAtLabel: new Date().toLocaleString("ar-EG", {
+                    day: "2-digit",
+                    month: "short",
+                    hour: "2-digit",
+                    minute: "2-digit"
+                })
+            };
+            activeOrders.splice(orderIdx, 1);
+            receivedOrders.unshift(receivedOrder);
+            saveActiveOrders();
+            saveReceivedOrders();
+            updateCartUI();
+            switchCartOrdersTab("received");
+            showCaramelToast(`تم نقل الطلب ${orderId} إلى تم الاستلام`);
+        },
+        "تأكيد الاستلام"
+    );
 }
 
 function reorderReceivedItem(orderId, itemIdx) {
@@ -3169,11 +3359,17 @@ function reorderReceivedItem(orderId, itemIdx) {
 
 function clearReceivedOrdersHistory() {
     if (!receivedOrders.length) return;
-    if (!window.confirm("هل تريد مسح سجل الأوردرات المستلمة؟")) return;
-    receivedOrders = [];
-    saveReceivedOrders();
-    renderReceivedOrdersInCart();
-    showCaramelToast("تم مسح سجل الأوردرات المستلمة");
+    openConfirmModal(
+        "مسح السجل",
+        "هل تريد مسح سجل الأوردرات المستلمة؟",
+        () => {
+            receivedOrders = [];
+            saveReceivedOrders();
+            renderReceivedOrdersInCart();
+            showCaramelToast("تم مسح سجل الأوردرات المستلمة");
+        },
+        "مسح السجل"
+    );
 }
 
 function renderReceivedOrdersInCart() {
@@ -3330,17 +3526,36 @@ function updateOrderItemOption(orderId, itemIdx, field, value) {
     updateCartUI();
 }
 
+function formatGroupedItemsForWhatsApp(items = []) {
+    const grouped = new Map();
+    items.forEach(item => {
+        const mName = (item.merchant || "متجر كارامل").trim();
+        if (!grouped.has(mName)) grouped.set(mName, []);
+        grouped.get(mName).push(item);
+    });
+
+    let counter = 1;
+    const sections = [];
+    grouped.forEach((mItems, mName) => {
+        const mSubtotal = mItems.reduce((s, it) => s + ((Number(it.price) || 0) * (Number(it.qty) || 1)), 0);
+        const itemLines = mItems.map(item => {
+            const extras = [];
+            if (item.selectedSize) extras.push(`المقاس: ${item.selectedSize}`);
+            if (item.selectedColor) extras.push(`اللون: ${item.selectedColor}`);
+            if (item.customNote) extras.push(`تفاصيل: ${item.customNote}`);
+            if (item.selectedImg) extras.push(`الصورة: ${item.selectedImg}`);
+            const extraText = extras.length ? ` (${extras.join(" | ")})` : "";
+            const line = `${counter++}. ${item.title}${extraText} × ${item.qty} = ${(Number(item.price) || 0) * (Number(item.qty) || 1)} جنيه`;
+            return line;
+        });
+        sections.push(`[التاجر: ${mName} — إجمالي: ${mSubtotal} جنيه]\n${itemLines.join("\n")}`);
+    });
+    return sections.join("\n\n");
+}
+
 function buildOrderMessageText(order, actionPrefix = "تعديل على الطلب") {
     const totalAmount = (order.items || []).reduce((sum, it) => sum + ((Number(it.price) || 0) * (Number(it.qty) || 1)), 0);
-    const lines = (order.items || []).map((item, i) => {
-        const extras = [];
-        if (item.selectedSize) extras.push(`المقاس: ${item.selectedSize}`);
-        if (item.selectedColor) extras.push(`اللون: ${item.selectedColor}`);
-        if (item.customNote) extras.push(`تفاصيل: ${item.customNote}`);
-        if (item.merchant) extras.push(`التاجر: ${item.merchant}`);
-        const extraText = extras.length ? ` (${extras.join(" | ")})` : "";
-        return `${i + 1}. ${item.title}${extraText} × ${item.qty} = ${(Number(item.price) || 0) * (Number(item.qty) || 1)} جنيه`;
-    });
+    const groupedBody = formatGroupedItemsForWhatsApp(order.items || []);
 
     const headerLines = [
         `رقم الطلب: ${order.orderId}`,
@@ -3351,7 +3566,7 @@ function buildOrderMessageText(order, actionPrefix = "تعديل على الطل
         headerLines.push(`العنوان/اللوكيشن: ${order.locationSummary}`);
     }
 
-    return `مرحباً متجر كارامل، هذا (${actionPrefix}):\n\n${headerLines.join("\n")}\n\n${lines.length ? lines.join("\n") : "(تم تفريغ المنتجات)"}\n\nالإجمالي: ${totalAmount} جنيه`;
+    return `مرحباً متجر كارامل، هذا (${actionPrefix}):\n\n${headerLines.join("\n")}\n\n${groupedBody || "(تم تفريغ المنتجات)"}\n\nالإجمالي الكلي: ${totalAmount} جنيه`;
 }
 
 function sendOrderUpdateWhatsApp(orderId, actionLabel = "تعديل") {
@@ -3368,24 +3583,27 @@ function sendOrderUpdateWhatsApp(orderId, actionLabel = "تعديل") {
 function cancelActiveOrder(orderId) {
     const order = activeOrders.find(o => o.orderId === orderId);
     if (!order) return;
-    const confirmed = window.confirm(`هل تريد إلغاء الطلب ${orderId}؟`);
-    if (!confirmed) return;
+    openConfirmModal(
+        "إلغاء الطلب",
+        `هل تريد إلغاء الطلب ${orderId}؟`,
+        () => {
+            if (appendTargetOrderId === orderId) appendTargetOrderId = null;
+            const cancelMsg = `مرحباً متجر كارامل، أود (إلغاء الطلب) رقم: ${order.orderId}\nالاسم: ${order.customerName || "-"}\nرقم التواصل: ${order.customerPhone || "-"}`;
+            order.status = "cancelled";
+            order.updatedAt = new Date().toISOString();
+            saveActiveOrders();
+            updateCartUI();
+            showCaramelToast(`تم إلغاء الطلب ${orderId}`);
 
-    if (appendTargetOrderId === orderId) {
-        appendTargetOrderId = null;
-    }
-
-    const cancelMsg = `مرحباً متجر كارامل، أود (إلغاء الطلب) رقم: ${order.orderId}\nالاسم: ${order.customerName || "-"}\nرقم التواصل: ${order.customerPhone || "-"}`;
-    order.status = "cancelled";
-    order.updatedAt = new Date().toISOString();
-    saveActiveOrders();
-    updateCartUI();
-    showCaramelToast(`تم إلغاء الطلب ${orderId}`);
-
-    const notifyWa = window.confirm("هل تحب إرسال إشعار الإلغاء على واتساب الآن؟");
-    if (notifyWa) {
-        launchWhatsAppTarget(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(cancelMsg)}`);
-    }
+            openConfirmModal(
+                "إشعار واتساب",
+                "هل تحب إرسال إشعار الإلغاء على واتساب الآن؟",
+                () => launchWhatsAppTarget(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(cancelMsg)}`),
+                "إرسال واتساب"
+            );
+        },
+        "إلغاء الطلب"
+    );
 }
 
 function changeCartQty(index, delta) {
@@ -3486,7 +3704,7 @@ function requestCustomerLocation() {
             let addressLabel = "";
 
             try {
-                const resp = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&accept-language=ar`, { cache: "no-store" });
+                const resp = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&accept-language=ar`);
                 if (resp && resp.ok) {
                     const data = await resp.json();
                     if (data && data.display_name) {
@@ -3527,8 +3745,10 @@ function checkoutOnWhatsApp() {
 
     const nameInput = document.getElementById("checkoutCustomerName");
     const phoneInput = document.getElementById("checkoutCustomerPhone");
+    const addrInput = document.getElementById("checkoutCustomerAddress");
     const customerName = (nameInput?.value || "").trim();
     const customerPhone = (phoneInput?.value || "").trim();
+    const customerAddress = (addrInput?.value || "").trim();
 
     if (!customerName) {
         toggleProfileEditorPanel(true);
@@ -3544,7 +3764,7 @@ function checkoutOnWhatsApp() {
         return;
     }
 
-    saveCustomerProfileInputs(customerName, customerPhone);
+    saveCustomerProfileInputs(customerName, customerPhone, customerAddress);
     toggleProfileEditorPanel(false);
 
     const orderId = `ORD-${Date.now().toString().slice(-6)}`;
@@ -3554,11 +3774,13 @@ function checkoutOnWhatsApp() {
         hour: "2-digit",
         minute: "2-digit"
     });
-    const locationSummary = customerLocationData && customerLocationData.mapsUrl
-        ? (customerLocationData.addressLabel
-            ? `${customerLocationData.addressLabel} - ${customerLocationData.mapsUrl}`
-            : customerLocationData.mapsUrl)
-        : "";
+
+    const locationParts = [];
+    if (customerAddress) locationParts.push(customerAddress);
+    if (customerLocationData && customerLocationData.mapsUrl) {
+        locationParts.push(customerLocationData.summaryText || customerLocationData.mapsUrl);
+    }
+    const locationSummary = locationParts.join(" — ");
 
     const newOrder = {
         orderId,
@@ -3576,16 +3798,7 @@ function checkoutOnWhatsApp() {
     saveActiveOrders();
 
     const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-    const lines = cart.map((item, i) => {
-        const extras = [];
-        if (item.selectedSize) extras.push(`المقاس: ${item.selectedSize}`);
-        if (item.selectedColor) extras.push(`اللون: ${item.selectedColor}`);
-        if (item.customNote) extras.push(`تفاصيل: ${item.customNote}`);
-        if (item.merchant) extras.push(`التاجر: ${item.merchant}`);
-        if (item.selectedImg) extras.push(`الصورة: ${item.selectedImg}`);
-        const extraText = extras.length ? ` (${extras.join(" | ")})` : "";
-        return `${i + 1}. ${item.title}${extraText} × ${item.qty} = ${item.price * item.qty} جنيه`;
-    });
+    const groupedBody = formatGroupedItemsForWhatsApp(cart);
 
     const customerHeaderLines = [
         `رقم الطلب: ${orderId}`,
@@ -3601,7 +3814,7 @@ function checkoutOnWhatsApp() {
     updateCartUI();
     switchCartOrdersTab("pending");
 
-    const message = `مرحباً متجر كارامل، أود تأكيد الطلب التالي:\n\n${customerHeaderLines.join("\n")}\n\n${lines.join("\n")}\n\nالإجمالي: ${totalAmount} جنيه\n(السويس: الدفع عند الاستلام • المحافظات الأخرى: إنستا باي أو فوري أو كاش • التوصيل خلال يوم عمل)`;
+    const message = `مرحباً متجر كارامل، أود تأكيد الطلب التالي:\n\n${customerHeaderLines.join("\n")}\n\n${groupedBody}\n\nالإجمالي الكلي: ${totalAmount} جنيه\n(السويس: الدفع عند الاستلام • المحافظات الأخرى: إنستا باي أو فوري أو كاش • التوصيل خلال يوم عمل)`;
     launchWhatsAppTarget(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`);
 }
 
@@ -3698,6 +3911,7 @@ function openImageModal(src, productId = null) {
     const imgEl = document.getElementById("modalImagePreview");
     const catChip = document.getElementById("previewCategoryChip");
     const merchantChip = document.getElementById("previewMerchantChip");
+    const copyLinkBtn = document.getElementById("previewCopyLinkBtn");
     const titleEl = document.getElementById("previewProductTitle");
     const mainPriceEl = document.getElementById("previewMainPrice");
     const subPriceEl = document.getElementById("previewSubPrice");
@@ -3738,6 +3952,10 @@ function openImageModal(src, productId = null) {
         merchantChip.textContent = `التاجر: ${merchantLabel}`;
         merchantChip.classList.toggle("is-clickable", Boolean(product));
         merchantChip.onclick = product ? () => { closeImageModal(); filterByMerchant(merchantLabel, true); } : null;
+    }
+    if (copyLinkBtn) {
+        copyLinkBtn.classList.toggle("is-hidden", !product);
+        copyLinkBtn.onclick = product ? e => copyProductShareLink(product.id, e) : null;
     }
     if (titleEl) titleEl.textContent = titleText;
     if (mainPriceEl) {
@@ -3790,6 +4008,25 @@ function closeImageModal(fromPopState = false) {
     syncBodyScrollLock();
     if (!fromPopState) removeOverlayState("image");
 }
+
+(function bindModalSwipe() {
+    const mediaBox = document.querySelector(".preview-top-media");
+    if (!mediaBox) return;
+    let sx = 0, sy = 0;
+    mediaBox.addEventListener("touchstart", e => {
+        if (!e.touches || !e.touches[0]) return;
+        sx = e.touches[0].clientX;
+        sy = e.touches[0].clientY;
+    }, { passive: true });
+    mediaBox.addEventListener("touchend", e => {
+        if (!e.changedTouches || !e.changedTouches[0]) return;
+        const dx = e.changedTouches[0].clientX - sx;
+        const dy = e.changedTouches[0].clientY - sy;
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.3) {
+            stepPreviewImage(dx < 0 ? 1 : -1);
+        }
+    }, { passive: true });
+})();
 
 const ONESIGNAL_APP_ID = "d35fc670-898a-4e20-bb33-9f97e48f3e4f";
 const PUSH_PERMISSION_STORAGE_KEY = "caramel_push_enabled_v1";
@@ -3899,8 +4136,8 @@ function initCaramelSplashScreen() {
     const headerSloganEl = document.querySelector(".logo-sub");
 
     const splashBadgeText = "كل قطعة وليها دور";
-    const minSplashMs = 1500;
-    const maxSafetyMs = 2200;
+    const minSplashMs = 1350;
+    const maxSafetyMs = 2000;
     const startTime = Date.now();
     let dismissed = false;
 
@@ -3910,7 +4147,7 @@ function initCaramelSplashScreen() {
 
     setTimeout(() => {
         if (rectEl) rectEl.classList.add("descend-in");
-    }, 280);
+    }, 240);
 
     function playHeaderSloganEntrance() {
         if (!headerSloganEl) return;
@@ -3925,7 +4162,7 @@ function initCaramelSplashScreen() {
         if (!splash) { playHeaderSloganEntrance(); return; }
         splash.classList.add("hide");
         playHeaderSloganEntrance();
-        setTimeout(() => { if (splash && splash.parentNode) splash.parentNode.removeChild(splash); }, 500);
+        setTimeout(() => { if (splash && splash.parentNode) splash.parentNode.removeChild(splash); }, 450);
     }
 
     function scheduleDismiss() {
@@ -3947,6 +4184,7 @@ renderSideCategoriesList();
 renderSmartSearchSuggestions();
 renderSpotlightBoxes();
 updateCartUI();
+updateWishlistUI();
 loadCustomerProfileToInputs();
 initCaramelPushUI();
-loadMerchantProductsFromJson();
+loadMerchantProductsFromJson(false);
