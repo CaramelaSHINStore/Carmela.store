@@ -3096,9 +3096,9 @@ function initCaramelSplashScreen() {
     const caretEl = document.getElementById("caramelSplashCaret");
     const headerSloganEl = document.querySelector(".logo-sub");
 
-    const splashBadgeText = "سبوجن";
-    const minSplashMs = 1750;
-    const maxSafetyMs = 3200;
+    const splashBadgeText = "كل قطعه وليها دور";
+    const minSplashMs = 3500;
+    const maxSafetyMs = 3900;
     const startTime = Date.now();
     let dismissed = false;
     let typingTimer = null;
