@@ -3117,7 +3117,16 @@ function initCaramelSplashScreen() {
     let dismissed = false;
     let typingTimer = null;
 
-    if (typedTextEl) typedTextEl.textContent = splashBadgeText;
+    const rectEl = document.getElementById("caramelSplashSubRect") || document.getElementById("caramelSplashSlogan");
+    if (rectEl) {
+        rectEl.style.opacity = "1";
+        rectEl.style.visibility = "visible";
+    }
+    if (typedTextEl) {
+        typedTextEl.textContent = splashBadgeText;
+        typedTextEl.style.opacity = "1";
+        typedTextEl.style.visibility = "visible";
+    }
 
     function playHeaderSloganEntrance() {
         if (!headerSloganEl) return;
