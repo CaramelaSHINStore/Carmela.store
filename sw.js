@@ -1,59 +1,89 @@
-const CACHE_NAME = "caramel-store-v2.1";
+const CACHE_VERSION = "caramel-store-v20261127-1";
+const STATIC_CACHE = `caramel-static-${CACHE_VERSION}`;
+const DYNAMIC_CACHE = `caramel-dynamic-${CACHE_VERSION}`;
+
 const CORE_ASSETS = [
-    "./",
-    "./index.html",
-    "./style.css",
-    "./app.js",
-    "./manifest.json"
+  "./",
+  "./index.html",
+  "./style.css",
+  "./app.js",
+  "./manifest.json"
 ];
 
 self.addEventListener("install", event => {
-    self.skipWaiting();
-    event.waitUntil(
-        caches.open(CACHE_NAME).then(cache => cache.addAll(CORE_ASSETS)).catch(() => {})
-    );
+  event.waitUntil(
+    caches.open(STATIC_CACHE).then(cache => cache.addAll(CORE_ASSETS)).catch(() => {})
+  );
+  self.skipWaiting();
 });
 
 self.addEventListener("activate", event => {
-    event.waitUntil(
-        caches.keys().then(keys =>
-            Promise.all(
-                keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
-            )
-        ).then(() => self.clients.claim())
-    );
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(
+        keys
+          .filter(k => k !== STATIC_CACHE && k !== DYNAMIC_CACHE)
+          .map(k => caches.delete(k))
+      )
+    )
+  );
+  self.clients.claim();
 });
 
 self.addEventListener("message", event => {
-    if (event.data && event.data.type === "SKIP_WAITING") {
-        self.skipWaiting();
-    }
+  if (event && event.data && event.data.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
 });
 
 self.addEventListener("fetch", event => {
-    if (event.request.method !== "GET") return;
-    const url = new URL(event.request.url);
+  const req = event.request;
+  if (req.method !== "GET") return;
 
-    // Avoid caching dynamic JSON catalogs or external APIs so merchant updates appear smoothly
-    if (url.pathname.endsWith(".json") && !url.pathname.endsWith("manifest.json")) {
-        event.respondWith(
-            fetch(event.request).catch(() => caches.match(event.request))
-        );
-        return;
-    }
+  const url = new URL(req.url);
+  const isJsonData = url.pathname.toLowerCase().endsWith(".json");
+  const isApiCall = url.hostname.includes("api.github.com") || url.hostname.includes("nominatim.openstreetmap.org");
 
-    if (url.origin === self.location.origin) {
-        event.respondWith(
-            caches.match(event.request).then(cached => {
-                const networkFetch = fetch(event.request).then(resp => {
-                    if (resp && resp.ok) {
-                        const clone = resp.clone();
-                        caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone)).catch(() => {});
-                    }
-                    return resp;
-                }).catch(() => cached);
-                return cached || networkFetch;
-            })
-        );
-    }
+  if (isJsonData || isApiCall) {
+    event.respondWith(
+      fetch(req, { cache: "no-store" })
+        .then(res => {
+          if (res && res.ok && !isApiCall) {
+            const copy = res.clone();
+            caches.open(DYNAMIC_CACHE).then(c => c.put(req, copy)).catch(() => {});
+          }
+          return res;
+        })
+        .catch(() => caches.match(req))
+    );
+    return;
+  }
+
+  if (req.mode === "navigate") {
+    event.respondWith(
+      fetch(req)
+        .then(res => {
+          if (res && res.ok) {
+            const copy = res.clone();
+            caches.open(STATIC_CACHE).then(c => c.put("./index.html", copy)).catch(() => {});
+          }
+          return res;
+        })
+        .catch(() => caches.match("./index.html"))
+    );
+    return;
+  }
+
+  event.respondWith(
+    caches.match(req).then(cached => {
+      if (cached) return cached;
+      return fetch(req).then(res => {
+        if (res && res.ok && url.origin === self.location.origin) {
+          const copy = res.clone();
+          caches.open(DYNAMIC_CACHE).then(c => c.put(req, copy)).catch(() => {});
+        }
+        return res;
+      }).catch(() => cached);
+    })
+  );
 });
