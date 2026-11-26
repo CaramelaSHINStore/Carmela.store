@@ -3,10 +3,10 @@
     "id": "om-waleed-watches-collection-250",
     "name": "ساعات معدنية موديلات متنوعة",
     "merchant": "أم وليد",
-    "category": "gifts",
+    "category": "jewelry",
     "categories": [
-      "gifts",
-      "accessories"
+      "jewelry",
+      "gifts"
     ],
     "price": 250,
     "img": "Omwaled/compressed_1795517021993.webp",
@@ -22,10 +22,10 @@
     "id": "om-waleed-watches-collection-200",
     "name": "ساعات معدنية موديلات متنوعة",
     "merchant": "أم وليد",
-    "category": "gifts",
+    "category": "jewelry",
     "categories": [
-      "gifts",
-      "accessories"
+      "jewelry",
+      "gifts"
     ],
     "price": 200,
     "img": "Omwaled/compressed_1795517033781.webp",
@@ -42,10 +42,11 @@
     "id": "om-waleed-leather-watches-collection-150",
     "name": "ساعات جلد موديلات متنوعة",
     "merchant": "أم وليد",
-    "category": "gifts",
+    "category": "jewelry",
     "categories": [
+      "jewelry",
       "gifts",
-      "accessories"
+      "men"
     ],
     "price": 150,
     "img": "Omwaled/compressed_1795517007729.webp",
@@ -139,8 +140,7 @@
     "merchant": "أم وليد",
     "category": "home",
     "categories": [
-      "home",
-      "women"
+      "home"
     ],
     "price": 200,
     "img": "Omwaled/compressed_1795608068494.webp",
@@ -199,11 +199,11 @@
     "id": "om-waleed-eyes-necklace-150",
     "name": "سلسلة عيون",
     "merchant": "أم وليد",
-    "category": "gifts",
+    "category": "jewelry",
     "categories": [
-      "gifts",
+      "jewelry",
       "women",
-      "accessories"
+      "gifts"
     ],
     "price": 150,
     "img": "Omwaled/compressed_1795608067629.webp",
@@ -219,7 +219,7 @@
     "category": "gifts",
     "categories": [
       "gifts",
-      "accessories"
+      "phones"
     ],
     "price": 100,
     "img": "Omwaled/compressed_1795608067078.webp",
@@ -311,8 +311,8 @@
     "category": "gifts",
     "categories": [
       "gifts",
-      "men",
-      "accessories"
+      "jewelry",
+      "men"
     ],
     "price": 200,
     "img": "Omwaled/compressed_1795608066061.webp",
@@ -344,7 +344,8 @@
     "merchant": "أم وليد",
     "category": "gifts",
     "categories": [
-      "gifts"
+      "gifts",
+      "home"
     ],
     "price": 130,
     "img": "Omwaled/compressed_1795608065889.webp",
@@ -406,7 +407,7 @@
     "category": "gifts",
     "categories": [
       "gifts",
-      "accessories"
+      "jewelry"
     ],
     "price": 35,
     "img": "Omwaled/compressed_1795608065125.webp",
@@ -454,7 +455,7 @@
     "category": "gifts",
     "categories": [
       "gifts",
-      "accessories"
+      "jewelry"
     ],
     "price": 30,
     "img": "Omwaled/compressed_1795608064656.webp",
@@ -627,7 +628,8 @@
     "merchant": "أم وليد",
     "category": "home",
     "categories": [
-      "home"
+      "home",
+      "gifts"
     ],
     "price": 40,
     "img": "Omwaled/compressed_1795608062889.webp",
