@@ -96,25 +96,25 @@ button { font-family: 'Cairo', sans-serif; cursor: pointer; border: none; backgr
 }
 
 @keyframes logoPulse {
-    0%, 100% { border-color: var(--accent); box-shadow: 0 0 18px var(--accent-glow), inset 0 0 10px rgba(255, 255, 255, 0.06); }
-    50% { border-color: var(--accent-soft); box-shadow: 0 0 26px var(--accent-glow), inset 0 0 14px rgba(255, 255, 255, 0.14); }
+    0%, 100% { border-color: var(--accent); box-shadow: 0 0 16px var(--accent-glow); }
+    50% { border-color: var(--accent-soft); box-shadow: 0 0 22px var(--accent-glow); }
 }
 
 @keyframes cartPop {
     0% { transform: scale(1); }
-    45% { transform: scale(1.13); }
+    45% { transform: scale(1.12); }
     100% { transform: scale(1); }
 }
 
 @keyframes modalPopIn {
-    0% { opacity: 0; transform: translateY(18px) scale(0.96); }
+    0% { opacity: 0; transform: translateY(14px) scale(0.97); }
     100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 @keyframes slideSideFlip {
     0% {
-        opacity: 0.16;
-        transform: perspective(680px) rotateY(-18deg) scale(0.96);
+        opacity: 0.2;
+        transform: perspective(680px) rotateY(-14deg) scale(0.97);
     }
     100% {
         opacity: 1;
@@ -122,65 +122,28 @@ button { font-family: 'Cairo', sans-serif; cursor: pointer; border: none; backgr
     }
 }
 
-@keyframes shimmerSweep {
-    0% { transform: translateX(160%) skewX(-18deg); }
-    100% { transform: translateX(-220%) skewX(-18deg); }
-}
-
-@keyframes shineSweep {
-    0% { transform: translateY(-100%); }
-    65%, 100% { transform: translateY(100%); }
-}
-
 @keyframes cardSmartReveal {
-    0% { opacity: 0; transform: translateY(14px) scale(0.98); }
+    0% { opacity: 0; transform: translateY(12px) scale(0.985); }
     100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-@keyframes splashGlowBreath {
-    0%, 100% { transform: scale(0.92); opacity: 0.65; }
-    50% { transform: scale(1.14); opacity: 1; }
-}
-
-@keyframes splashHaloRipple {
-    0% { transform: scale(0.88); opacity: 0.65; }
-    100% { transform: scale(1.34); opacity: 0; }
-}
-
-@keyframes splashCaretBlink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-}
-
-@keyframes splashLogoAppear {
-    0% { opacity: 0; transform: scale(0.82); }
+@keyframes splashLogoSmoothIn {
+    0% { opacity: 0; transform: scale(0.9); }
     100% { opacity: 1; transform: scale(1); }
 }
 
-@keyframes splashLogoHeartbeat {
-    0%, 100% { transform: scale(1); box-shadow: 0 0 28px rgba(200, 150, 102, 0.34); }
-    22% { transform: scale(1.08); box-shadow: 0 0 48px rgba(229, 190, 150, 0.65); }
-    42% { transform: scale(0.99); box-shadow: 0 0 30px rgba(200, 150, 102, 0.38); }
-    64% { transform: scale(1.055); box-shadow: 0 0 42px rgba(229, 190, 150, 0.55); }
-}
-
-@keyframes splashBrandDropFromLogo {
-    0% { opacity: 0; transform: translateY(-22px); }
-    100% { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes splashSubDropFromBrand {
-    0% { opacity: 0; transform: translateY(-22px); }
+@keyframes splashBrandSmoothIn {
+    0% { opacity: 0; transform: translateY(10px); }
     100% { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes sloganRevealSmooth {
-    0% { opacity: 0; transform: translateY(14px); clip-path: inset(0 0 100% 0); letter-spacing: 1.5px; }
-    100% { opacity: 1; transform: translateY(0); clip-path: inset(0 0 0% 0); letter-spacing: 0.2px; }
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
 }
 
 .top-app-bar {
-    background: rgba(18, 16, 14, 0.94);
+    background: rgba(18, 16, 14, 0.95);
     backdrop-filter: blur(20px) saturate(150%);
     -webkit-backdrop-filter: blur(20px) saturate(150%);
     padding: 10px 14px;
@@ -217,7 +180,7 @@ button { font-family: 'Cairo', sans-serif; cursor: pointer; border: none; backgr
     border-radius: 999px;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(36, 30, 26, 0.94));
     border: 1.5px solid var(--accent);
-    animation: logoPulse 3s infinite ease-in-out;
+    animation: logoPulse 3.2s infinite ease-in-out;
     cursor: pointer;
     transition: transform 0.2s ease;
 }
@@ -257,7 +220,7 @@ button { font-family: 'Cairo', sans-serif; cursor: pointer; border: none; backgr
 }
 
 .logo-sub.slogan-reenter.play {
-    animation: sloganRevealSmooth 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation: sloganRevealSmooth 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .header-actions {
@@ -666,17 +629,6 @@ button { font-family: 'Cairo', sans-serif; cursor: pointer; border: none; backgr
     overflow: hidden;
 }
 
-.spotlight-box::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 46px;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
-    pointer-events: none;
-    animation: shimmerSweep 5.2s ease-in-out infinite;
-}
-
 .spotlight-box-header {
     display: flex;
     align-items: center;
@@ -725,7 +677,7 @@ button { font-family: 'Cairo', sans-serif; cursor: pointer; border: none; backgr
     height: 100%;
     object-fit: cover;
     display: block;
-    animation: slideSideFlip 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    animation: slideSideFlip 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .visual-price-overlay {
@@ -1261,35 +1213,6 @@ body.dark-theme .direct-wa-link {
     background: #16a34a;
     color: #ffffff;
     border-color: #16a34a;
-}
-
-.special-request-card {
-    background: linear-gradient(150deg, #100e0c 0%, var(--espresso-soft) 65%, var(--accent-deep) 100%);
-    color: #ffffff;
-    border-radius: 20px;
-    padding: 16px 14px;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    box-shadow: var(--shadow-main);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 12px;
-}
-
-.special-request-card h3 { font-size: 0.94rem; font-weight: 900; color: var(--accent-soft); line-height: 1.35; }
-.special-request-card p { font-size: 0.75rem; color: rgba(255, 255, 255, 0.9); line-height: 1.45; margin-top: 5px; }
-
-.special-request-btn {
-    width: 100%;
-    padding: 9px 12px;
-    border-radius: 12px;
-    background: linear-gradient(135deg, var(--accent-soft), var(--accent));
-    color: var(--espresso);
-    font-size: 0.78rem;
-    font-weight: 900;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .feed-sentinel {
@@ -2327,14 +2250,12 @@ footer {
     background: var(--surface-elevated);
 }
 
+/* --- Refined Splash Screen --- */
 .caramel-splash-screen {
     position: fixed;
     inset: 0;
     z-index: 9999;
-    background-color: #14110f;
-    background:
-        radial-gradient(circle at 50% 38%, rgba(200, 150, 102, 0.16) 0%, transparent 56%),
-        radial-gradient(circle at 50% 45%, #231c16 0%, #161310 66%, #0f0d0b 100%);
+    background: radial-gradient(circle at 50% 42%, #241d17 0%, #14110f 72%, #0e0c0a 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -2344,24 +2265,14 @@ footer {
     text-align: center;
     opacity: 1;
     visibility: visible;
-    transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.65s ease, transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.45s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .caramel-splash-screen.hide {
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-16px) scale(1.02);
+    transform: translateY(-10px) scale(1.01);
     pointer-events: none;
-}
-
-.splash-ambient-glow {
-    position: absolute;
-    width: 260px;
-    height: 260px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(229, 190, 150, 0.22) 0%, rgba(200, 150, 102, 0.05) 48%, rgba(200, 150, 102, 0) 72%);
-    pointer-events: none;
-    animation: splashGlowBreath 2.2s ease-in-out infinite;
 }
 
 .splash-logo-stage {
@@ -2370,37 +2281,22 @@ footer {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 148px;
-    height: 148px;
-}
-
-.splash-pulse-halo {
-    position: absolute;
-    inset: 4px;
-    border-radius: 50%;
-    border: 1.5px solid rgba(229, 190, 150, 0.45);
-    box-shadow: 0 0 28px rgba(200, 150, 102, 0.22);
-    opacity: 0;
-    pointer-events: none;
-    animation: splashHaloRipple 1.8s cubic-bezier(0.16, 1, 0.3, 1) 0.55s infinite;
+    width: 124px;
+    height: 124px;
 }
 
 .splash-logo-ring {
     position: relative;
     z-index: 2;
-    width: 128px;
-    height: 128px;
+    width: 112px;
+    height: 112px;
     border-radius: 50%;
-    padding: 4px;
+    padding: 3px;
     background: linear-gradient(135deg, var(--caramel-light), var(--caramel), var(--caramel-dark));
-    box-shadow: 0 0 36px rgba(200, 150, 102, 0.4);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
     overflow: hidden;
     opacity: 0;
-    transform: scale(0.82);
-    animation:
-        splashLogoAppear 0.58s cubic-bezier(0.22, 1, 0.36, 1) 0.05s forwards,
-        splashLogoHeartbeat 1.55s ease-in-out 0.62s infinite;
-    will-change: transform, opacity, box-shadow;
+    animation: splashLogoSmoothIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.06s forwards;
 }
 
 .splash-logo-ring img {
@@ -2412,43 +2308,15 @@ footer {
     background: #181512;
 }
 
-.splash-shine-effect {
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    overflow: hidden;
-    pointer-events: none;
-    z-index: 3;
-}
-
-.splash-shine-effect::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-        60deg,
-        transparent 40%,
-        rgba(255, 255, 255, 0.35) 50%,
-        transparent 60%
-    );
-    transform: translateY(-100%);
-    animation: shineSweep 3s infinite;
-}
-
 .splash-brand-name {
     position: relative;
-    z-index: 2;
-    font-size: 1.75rem;
+    z-index: 1;
+    font-size: 1.55rem;
     font-weight: 900;
     color: #f7f3ed;
     letter-spacing: 3px;
     opacity: 0;
-    transform: translateY(-22px);
-    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.45));
-    animation: splashBrandDropFromLogo 0.52s cubic-bezier(0.22, 1, 0.36, 1) 0.55s forwards;
+    animation: splashBrandSmoothIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
 }
 
 .splash-slogan-slot {
@@ -2457,10 +2325,9 @@ footer {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
-    min-height: 56px;
-    overflow: hidden;
-    padding: 4px 12px 10px;
+    justify-content: center;
+    min-height: 40px;
+    padding: 2px 10px;
 }
 
 .splash-sub-rect {
@@ -2469,83 +2336,28 @@ footer {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    min-width: 146px;
-    min-height: 40px;
-    padding: 7px 24px;
+    padding: 6px 20px;
     border-radius: 999px;
-    overflow: hidden;
     opacity: 0;
-    transform: translateY(-22px);
-    font-size: 1.05rem;
+    transform: translateY(10px);
+    font-size: 0.96rem;
     font-weight: 800;
-    color: #f7dec4;
-    background: #261f19;
-    border: 1px solid rgba(229, 190, 150, 0.45);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
-}
-
-.splash-sub-rect.descend-in {
-    animation: splashSubDropFromBrand 0.52s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    color: var(--accent-soft);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(229, 190, 150, 0.32);
+    transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1), transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .splash-sub-rect::before {
     content: "";
-    width: 7px;
-    height: 7px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
     background: var(--caramel-light);
-    box-shadow: 0 0 10px var(--caramel-light);
     flex-shrink: 0;
 }
 
-
-
-.splash-rect-sheen {
-    position: absolute;
-    top: 0;
-    left: -135%;
-    width: 65%;
-    height: 100%;
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 255, 255, 0.42),
-        transparent
-    );
-    transform: skewX(-22deg);
-    pointer-events: none;
-}
-
-.splash-sub-rect.descend-in .splash-rect-sheen {
-    animation: spogenRectSheen 0.95s ease 0.25s forwards;
-}
-
-@keyframes spogenRectSheen {
-    0% { left: -135%; }
-    100% { left: 150%; }
-}
-
-.splash-typed-text {
-    display: inline-block;
-    letter-spacing: 0 !important;
-    text-rendering: geometricPrecision;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-.splash-typing-caret {
-    display: inline-block;
-    width: 2px;
-    height: 1.05em;
-    background-color: var(--caramel-light);
-    margin-right: 1px;
-    border-radius: 2px;
-    animation: splashCaretBlink 0.72s step-end infinite;
-}
-
-.splash-typing-caret.done {
-    opacity: 0;
-    width: 0;
-    margin: 0;
-    animation: none;
+.splash-sub-rect.descend-in {
+    opacity: 1;
+    transform: translateY(0);
 }
