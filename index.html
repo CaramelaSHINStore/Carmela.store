@@ -74,7 +74,6 @@
         body.cat-mode-kids { --accent: #0e7490; --accent-soft: #67e8f9; --accent-deep: #155e75; --accent-glow: rgba(14, 116, 144, 0.28); --accent-tint: rgba(14, 116, 144, 0.085); --page-mood-bg: #eef8fa; }
         body.cat-mode-women { --accent: #d97706; --accent-soft: #fcd34d; --accent-deep: #b45309; --accent-glow: rgba(217, 119, 6, 0.28); --accent-tint: rgba(217, 119, 6, 0.085); --page-mood-bg: #fcf6ed; }
         body.cat-mode-men { --accent: #334155; --accent-soft: #cbd5e1; --accent-deep: #1e293b; --accent-glow: rgba(51, 65, 85, 0.28); --accent-tint: rgba(51, 65, 85, 0.085); --page-mood-bg: #f1f4f8; }
-
         body.cat-mode-appliances { --accent: #0ea5e9; --accent-soft: #7dd3fc; --accent-deep: #0369a1; --accent-glow: rgba(14, 165, 233, 0.28); --accent-tint: rgba(14, 165, 233, 0.085); --page-mood-bg: #eef7fc; }
         body.cat-mode-phones { --accent: #6366f1; --accent-soft: #a5b4fc; --accent-deep: #4338ca; --accent-glow: rgba(99, 102, 241, 0.28); --accent-tint: rgba(99, 102, 241, 0.085); --page-mood-bg: #f1f2fe; }
         body.cat-mode-jewelry { --accent: #e11d48; --accent-soft: #fda4af; --accent-deep: #be123c; --accent-glow: rgba(225, 29, 72, 0.28); --accent-tint: rgba(225, 29, 72, 0.085); --page-mood-bg: #fdf1f4; }
@@ -160,6 +159,16 @@
         @keyframes shimmerSweep {
             0% { transform: translateX(160%) skewX(-18deg); }
             100% { transform: translateX(-220%) skewX(-18deg); }
+        }
+
+        @keyframes sloganReenterAnim {
+            0% { opacity: 0.2; transform: translateY(-4px) scale(0.97); }
+            60% { opacity: 1; transform: translateY(1px) scale(1.02); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .logo-sub.slogan-reenter.play {
+            animation: sloganReenterAnim 0.48s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         .top-app-bar {
@@ -377,6 +386,8 @@
             scrollbar-width: none;
             position: relative;
             z-index: 105;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
         }
 
         .quick-top-tabs::-webkit-scrollbar { display: none; }
@@ -392,6 +403,9 @@
             padding: 5px 13px;
             box-shadow: 0 4px 10px -6px rgba(18, 16, 14, 0.16);
             transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .quick-tab-item:hover {
@@ -405,6 +419,95 @@
             font-weight: 900;
             border-color: var(--accent);
             box-shadow: 0 6px 14px -6px var(--accent-glow);
+        }
+
+        .quick-tab-icon {
+            width: 16px;
+            height: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .quick-tab-icon svg {
+            width: 15px;
+            height: 15px;
+            display: block;
+        }
+
+        .sticky-price-bar {
+            position: sticky;
+            top: var(--header-offset, 66px);
+            z-index: 104;
+            background: var(--surface-elevated);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 7px 14px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            box-shadow: 0 6px 16px -12px rgba(18, 16, 14, 0.25);
+        }
+
+        .sticky-price-bar::-webkit-scrollbar { display: none; }
+
+        .price-bar-label {
+            font-size: 0.74rem;
+            font-weight: 900;
+            color: var(--accent-deep);
+            white-space: nowrap;
+            margin-left: 2px;
+        }
+
+        .price-chip-btn {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--text-main);
+            background: var(--surface-soft);
+            border: 1px solid var(--border-subtle);
+            border-radius: 999px;
+            padding: 4px 12px;
+            white-space: nowrap;
+            transition: all 0.18s ease;
+        }
+
+        .price-chip-btn:hover { border-color: var(--accent); }
+
+        .price-chip-btn.active {
+            background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+            color: #ffffff;
+            border-color: transparent;
+            font-weight: 900;
+        }
+
+        .smart-search-suggestions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            padding-top: 7px;
+        }
+
+        .smart-search-suggestions::-webkit-scrollbar { display: none; }
+
+        .search-suggest-chip {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--accent-soft);
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(200, 150, 102, 0.35);
+            padding: 3px 11px;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+
+        .search-suggest-chip:hover {
+            background: var(--accent);
+            color: #ffffff;
+            border-color: var(--accent-soft);
         }
 
         .container {
@@ -478,6 +581,33 @@
             stroke-width: 2.3;
             stroke-linecap: round;
             stroke-linejoin: round;
+        }
+
+        .promo-actions-pair {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .promo-cs-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--espresso);
+            color: var(--accent-soft);
+            border: 1px solid var(--accent);
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 0.74rem;
+            font-weight: 900;
+            transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+        }
+
+        .promo-cs-link:hover {
+            transform: translateY(-1px);
+            background: var(--accent);
+            color: #ffffff;
         }
 
         .promo-special-link {
@@ -672,6 +802,45 @@
             box-shadow: 0 8px 16px -8px var(--accent-glow);
         }
 
+        .search-results-summary-bar {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            background: var(--surface-elevated);
+            border: 1px solid var(--accent-glow);
+            border-radius: 16px;
+            padding: 9px 13px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow-main);
+        }
+
+        .search-results-summary-bar.visible {
+            display: flex;
+        }
+
+        .search-summary-text {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .search-summary-text strong {
+            color: var(--accent-deep);
+            font-weight: 900;
+        }
+
+        .search-clear-inline-btn {
+            background: var(--accent-tint);
+            color: var(--accent-deep);
+            border: 1px solid var(--accent-glow);
+            border-radius: 999px;
+            padding: 3px 11px;
+            font-size: 0.73rem;
+            font-weight: 900;
+        }
+
         .section-heading {
             display: flex;
             align-items: center;
@@ -768,6 +937,34 @@
         }
 
         .merchant-banner.visible { display: flex; }
+
+        body.merchant-storefront-mode .dual-spotlight-row,
+        body.merchant-storefront-mode .payment-service-strip {
+            display: none !important;
+        }
+
+        .merchant-banner-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .merchant-avatar-badge {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--caramel-light), var(--caramel));
+            color: var(--espresso);
+            font-size: 1.25rem;
+            font-weight: 900;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
         .merchant-banner-info { display: flex; flex-direction: column; gap: 3px; }
         .merchant-banner-kicker { font-size: 0.7rem; font-weight: 800; color: var(--accent-soft); }
         .merchant-banner-title { font-size: 1.06rem; font-weight: 900; color: #ffffff; display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
@@ -779,6 +976,23 @@
             background: linear-gradient(135deg, var(--accent-soft), var(--accent));
             padding: 2px 11px;
             border-radius: 999px;
+        }
+
+        .merchant-actions-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .merchant-share-btn {
+            background: rgba(255, 255, 255, 0.14);
+            color: var(--accent-soft);
+            border: 1px solid rgba(255, 255, 255, 0.24);
+            padding: 7px 13px;
+            border-radius: 12px;
+            font-size: 0.78rem;
+            font-weight: 800;
         }
 
         .merchant-back-btn {
@@ -1220,7 +1434,6 @@
 
         .cats-backdrop.open { display: block; }
 
-        /* تصميم الفئات الحديث: شبكة 5 أعمدة بصور منتجات نقية وأسماء واضحة */
         .cats-drawer {
             position: fixed;
             top: 0;
@@ -1266,9 +1479,7 @@
             transition: transform 0.2s ease, opacity 0.2s ease;
         }
 
-        .clean-cat-tile:hover {
-            transform: translateY(-2px);
-        }
+        .clean-cat-tile:hover { transform: translateY(-2px); }
 
         .clean-cat-photo-wrap {
             width: 100%;
@@ -1303,10 +1514,7 @@
             justify-content: center;
         }
 
-        .clean-cat-fallback-svg svg {
-            width: 100%;
-            height: 100%;
-        }
+        .clean-cat-fallback-svg svg { width: 100%; height: 100%; }
 
         .clean-cat-label {
             font-size: 0.68rem;
@@ -1718,11 +1926,13 @@
             border-radius: 11px;
             padding: 7px 9px;
         }
+
         .cart-customer-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 6px;
         }
+
         .cart-customer-input {
             width: 100%;
             font-family: 'Cairo', sans-serif;
@@ -1735,14 +1945,15 @@
             padding: 5px 8px;
             outline: none;
         }
-        .cart-customer-input:focus {
-            border-color: var(--accent);
-        }
+
+        .cart-customer-input:focus { border-color: var(--accent); }
+
         .cart-location-row {
             display: flex;
             align-items: center;
             gap: 6px;
         }
+
         .cart-location-btn {
             flex: 1;
             display: inline-flex;
@@ -1759,18 +1970,18 @@
             padding: 6px 8px;
             transition: all 0.2s ease;
         }
-        .cart-location-btn:hover {
-            background: var(--accent-tint);
-        }
+
+        .cart-location-btn:hover { background: var(--accent-tint); }
+
         .cart-location-btn.located {
             background: rgba(22, 163, 74, 0.12);
             color: #15803d;
             border-style: solid;
             border-color: rgba(22, 163, 74, 0.45);
         }
-        body.dark-theme .cart-location-btn.located {
-            color: #4ade80;
-        }
+
+        body.dark-theme .cart-location-btn.located { color: #4ade80; }
+
         .cart-location-clear-btn {
             padding: 6px 8px;
             border-radius: 8px;
@@ -1780,11 +1991,13 @@
             font-weight: 800;
             display: none;
         }
+
         .cart-location-clear-btn.visible {
             display: inline-flex;
             align-items: center;
             justify-content: center;
         }
+
         .cart-location-preview {
             font-size: 0.67rem;
             font-weight: 700;
@@ -1817,10 +2030,12 @@
             font-weight: 800;
             transition: all 0.2s ease;
         }
+
         body.dark-theme .checkout-wa-direct-btn {
             color: #4ade80;
             background: rgba(22, 163, 74, 0.12);
         }
+
         .checkout-wa-direct-btn:hover {
             background: #16a34a;
             color: #ffffff;
@@ -1914,6 +2129,7 @@
             z-index: 4;
             border: 1px solid rgba(255, 255, 255, 0.25);
         }
+
         .preview-nav-btn.prev { right: 10px; }
         .preview-nav-btn.next { left: 10px; }
 
@@ -2044,296 +2260,113 @@
             background: var(--surface-elevated);
         }
 
-.caramel-splash-screen {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    background: radial-gradient(circle at center, #241e1a 0%, #12100e 100%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    padding: 24px;
-    text-align: center;
-    opacity: 1;
-    visibility: visible;
-    transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.caramel-splash-screen.hide {
-    opacity: 0;
-    visibility: hidden;
-    transform: scale(1.03);
-    pointer-events: none;
-}
-.splash-logo-ring {
-    width: 126px;
-    height: 126px;
-    border-radius: 50%;
-    padding: 5px;
-    background: linear-gradient(135deg, var(--caramel-light), var(--caramel), var(--caramel-dark));
-    box-shadow: 0 0 32px rgba(200, 150, 102, 0.35);
-    opacity: 0;
-    transform: scale(0.82);
-    animation:
-        splashLogoAppear 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.08s forwards,
-        splashLogoHeartbeat 1.5s ease-in-out 0.75s infinite;
-    will-change: transform, opacity, box-shadow;
-}
-.splash-logo-ring img {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    object-fit: cover;
-    display: block;
-}
-.splash-brand-name {
-    font-size: 1.65rem;
-    font-weight: 900;
-    color: #ffffff;
-    letter-spacing: 3px;
-    opacity: 0;
-    transform: translateY(10px);
-    animation: splashBrandFadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.45s forwards;
-}
-.splash-slogan {
-    position: relative;
-    overflow: hidden;
-    opacity: 0;
-    transform: translateY(14px);
-    clip-path: inset(0 0 100% 0);
-    font-size: 0.95rem;
-    font-weight: 800;
-    color: var(--caramel-light);
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(200, 150, 102, 0.35);
-    padding: 7px 20px;
-    border-radius: 999px;
-    animation: sloganRevealSmooth 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.95s forwards;
-    will-change: transform, opacity, clip-path;
-}
-.splash-slogan::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 54px;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.42), transparent);
-    animation: shimmerSweep 1.35s ease-in-out 1.25s 1 forwards;
-    pointer-events: none;
-}
-@keyframes splashLogoAppear {
-    0% { opacity: 0; transform: scale(0.82); }
-    100% { opacity: 1; transform: scale(1); }
-}
-@keyframes splashLogoHeartbeat {
-    0%, 100% { transform: scale(1); box-shadow: 0 0 28px rgba(200, 150, 102, 0.35); }
-    25% { transform: scale(1.07); box-shadow: 0 0 46px rgba(200, 150, 102, 0.65); }
-    45% { transform: scale(0.99); box-shadow: 0 0 30px rgba(200, 150, 102, 0.4); }
-    65% { transform: scale(1.05); box-shadow: 0 0 42px rgba(200, 150, 102, 0.58); }
-}
-@keyframes splashBrandFadeUp {
-    0% { opacity: 0; transform: translateY(10px); }
-    100% { opacity: 1; transform: translateY(0); }
-}
-@keyframes sloganRevealSmooth {
-    0% { opacity: 0; transform: translateY(14px); clip-path: inset(0 0 100% 0); letter-spacing: 1.5px; }
-    100% { opacity: 1; transform: translateY(0); clip-path: inset(0 0 0% 0); letter-spacing: 0.2px; }
-}
+        .caramel-splash-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: radial-gradient(circle at center, #241e1a 0%, #12100e 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            padding: 24px;
+            text-align: center;
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
 
-.sticky-price-bar {
-    position: sticky;
-    top: var(--header-offset, 66px);
-    z-index: 104;
-    background: var(--surface-elevated);
-    border-bottom: 1px solid var(--border-subtle);
-    padding: 7px 14px;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    overflow-x: auto;
-    scrollbar-width: none;
-    box-shadow: 0 6px 16px -12px rgba(18, 16, 14, 0.25);
-}
-.sticky-price-bar::-webkit-scrollbar { display: none; }
-.price-bar-label {
-    font-size: 0.74rem;
-    font-weight: 900;
-    color: var(--accent-deep);
-    white-space: nowrap;
-    margin-left: 2px;
-}
-.price-chip-btn {
-    font-size: 0.75rem;
-    font-weight: 800;
-    color: var(--text-main);
-    background: var(--surface-soft);
-    border: 1px solid var(--border-subtle);
-    border-radius: 999px;
-    padding: 4px 12px;
-    white-space: nowrap;
-    transition: all 0.18s ease;
-}
-.price-chip-btn:hover { border-color: var(--accent); }
-.price-chip-btn.active {
-    background: linear-gradient(135deg, var(--accent), var(--accent-deep));
-    color: #ffffff;
-    border-color: transparent;
-    font-weight: 900;
-}
+        .caramel-splash-screen.hide {
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(1.03);
+            pointer-events: none;
+        }
 
-.smart-search-suggestions {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    overflow-x: auto;
-    scrollbar-width: none;
-    padding-top: 7px;
-}
-.smart-search-suggestions::-webkit-scrollbar { display: none; }
-.search-suggest-chip:hover {
-    background: var(--accent);
-    color: #ffffff;
-    border-color: var(--accent-soft);
-}
-.search-suggest-chip {
-    font-size: 0.72rem;
-    font-weight: 800;
-    color: var(--accent-soft);
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(200, 150, 102, 0.35);
-    padding: 3px 11px;
-    border-radius: 999px;
-    white-space: nowrap;
-}
+        .splash-logo-ring {
+            width: 126px;
+            height: 126px;
+            border-radius: 50%;
+            padding: 5px;
+            background: linear-gradient(135deg, var(--caramel-light), var(--caramel), var(--caramel-dark));
+            box-shadow: 0 0 32px rgba(200, 150, 102, 0.35);
+            opacity: 0;
+            transform: scale(0.82);
+            animation:
+                splashLogoAppear 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.08s forwards,
+                splashLogoHeartbeat 1.5s ease-in-out 0.75s infinite;
+            will-change: transform, opacity, box-shadow;
+        }
 
-body.merchant-storefront-mode .dual-spotlight-row,
-body.merchant-storefront-mode .payment-service-strip {
-    display: none !important;
-}
-.merchant-banner-top-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    flex-wrap: wrap;
-}
-.merchant-avatar-badge {
-    width: 48px;
-    height: 48px;
-    border-radius: 16px;
-    background: linear-gradient(135deg, var(--caramel-light), var(--caramel));
-    color: var(--espresso);
-    font-size: 1.25rem;
-    font-weight: 900;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-.merchant-actions-group {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-.merchant-share-btn {
-    background: rgba(255, 255, 255, 0.14);
-    color: var(--accent-soft);
-    border: 1px solid rgba(255, 255, 255, 0.24);
-    padding: 7px 13px;
-    border-radius: 12px;
-    font-size: 0.78rem;
-    font-weight: 800;
-}
+        .splash-logo-ring img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+        }
 
-@keyframes cardSmartReveal {
-    0% { opacity: 0; transform: translateY(14px) scale(0.98); }
-    100% { opacity: 1; transform: translateY(0) scale(1); }
-}
+        .splash-brand-name {
+            font-size: 1.65rem;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: 3px;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: splashBrandFadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.45s forwards;
+        }
 
-.promo-actions-pair {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    flex-wrap: wrap;
-}
-.promo-cs-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    background: var(--espresso);
-    color: var(--accent-soft);
-    border: 1px solid var(--accent);
-    padding: 5px 12px;
-    border-radius: 999px;
-    font-size: 0.74rem;
-    font-weight: 900;
-    transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
-}
-.promo-cs-link:hover {
-    transform: translateY(-1px);
-    background: var(--accent);
-    color: #ffffff;
-}
-.quick-top-tabs {
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-}
-.quick-tab-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-}
-.quick-tab-icon {
-    width: 16px;
-    height: 16px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-.quick-tab-icon svg {
-    width: 15px;
-    height: 15px;
-    display: block;
-}
-.search-results-summary-bar {
-    display: none;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 8px;
-    background: var(--surface-elevated);
-    border: 1px solid var(--accent-glow);
-    border-radius: 16px;
-    padding: 9px 13px;
-    margin-bottom: 12px;
-    box-shadow: var(--shadow-main);
-}
-.search-results-summary-bar.visible {
-    display: flex;
-}
-.search-summary-text {
-    font-size: 0.8rem;
-    font-weight: 800;
-    color: var(--text-main);
-}
-.search-summary-text strong {
-    color: var(--accent-deep);
-    font-weight: 900;
-}
-.search-clear-inline-btn {
-    background: var(--accent-tint);
-    color: var(--accent-deep);
-    border: 1px solid var(--accent-glow);
-    border-radius: 999px;
-    padding: 3px 11px;
-    font-size: 0.73rem;
-    font-weight: 900;
-}
-    
-</style>
+        .splash-slogan {
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(14px);
+            clip-path: inset(0 0 100% 0);
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--caramel-light);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(200, 150, 102, 0.35);
+            padding: 7px 20px;
+            border-radius: 999px;
+            animation: sloganRevealSmooth 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.95s forwards;
+            will-change: transform, opacity, clip-path;
+        }
+
+        .splash-slogan::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 54px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.42), transparent);
+            animation: shimmerSweep 1.35s ease-in-out 1.25s 1 forwards;
+            pointer-events: none;
+        }
+
+        @keyframes splashLogoAppear {
+            0% { opacity: 0; transform: scale(0.82); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes splashLogoHeartbeat {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 28px rgba(200, 150, 102, 0.35); }
+            25% { transform: scale(1.07); box-shadow: 0 0 46px rgba(200, 150, 102, 0.65); }
+            45% { transform: scale(0.99); box-shadow: 0 0 30px rgba(200, 150, 102, 0.4); }
+            65% { transform: scale(1.05); box-shadow: 0 0 42px rgba(200, 150, 102, 0.58); }
+        }
+
+        @keyframes splashBrandFadeUp {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes sloganRevealSmooth {
+            0% { opacity: 0; transform: translateY(14px); clip-path: inset(0 0 100% 0); letter-spacing: 1.5px; }
+            100% { opacity: 1; transform: translateY(0); clip-path: inset(0 0 0% 0); letter-spacing: 0.2px; }
+        }
+    </style>
 </head>
 <body class="cat-mode-all" style="background-color:#12100e;">
 
@@ -2732,17 +2765,13 @@ body.merchant-storefront-mode .payment-service-strip {
                 if (text) schemeParams.set("text", text);
                 const schemeUrl = `whatsapp://send?${schemeParams.toString()}`;
 
-                const intentQuery = schemeParams.toString() ? `?${schemeParams.toString()}` : "";
-                const intentUrl = `intent://send${intentQuery}#Intent;scheme=whatsapp;package=com.whatsapp;S.browser_fallback_url=${encodeURIComponent(apiUrl)};end`;
-
-                return { phone, text, apiUrl, schemeUrl, intentUrl };
+                return { phone, text, apiUrl, schemeUrl };
             } catch (e) {
                 return {
                     phone: WHATSAPP_NUMBER,
                     text: "",
                     apiUrl: url,
-                    schemeUrl: url,
-                    intentUrl: url
+                    schemeUrl: url
                 };
             }
         }
@@ -2953,7 +2982,7 @@ body.merchant-storefront-mode .payment-service-strip {
 
         function normalizeProductImageUrl(rawImg) {
             if (!rawImg || typeof rawImg !== "string") return "";
-            let cleaned = rawImg.trim().replace(/\\/g, "/");
+            let cleaned = rawImg.trim().replace(/\/g, "/");
             if (!cleaned) return "";
             if (/^https?:\/\//i.test(cleaned) || cleaned.startsWith("data:") || cleaned.startsWith("blob:")) {
                 return cleaned;
@@ -2982,8 +3011,10 @@ body.merchant-storefront-mode .payment-service-strip {
                         }
                     });
                 } else if (typeof val === "string") {
-                    if (val.includes(",") || val.includes("\n") || val.includes("|")) {
-                        val.split(/[\n,|]+/).forEach(part => candidates.push(part));
+                    if (val.includes(",") || val.includes("
+") || val.includes("|")) {
+                        val.split(/[
+,|]+/).forEach(part => candidates.push(part));
                     } else {
                         candidates.push(val);
                     }
@@ -3389,21 +3420,6 @@ body.merchant-storefront-mode .payment-service-strip {
             women: "النساء",
             men: "الرجال",
             kids: "الأطفال"
-        };
-
-        const CATEGORY_SUBTITLES = {
-            all: "تشكيلة المتجر بالكامل من كل التجار",
-            home: "تنظيم، مطبخ، ومفروشات",
-            appliances: "أجهزة وأدوات كهربائية منزلية",
-            phones: "هواتف، شواحن، وسماعات",
-            jewelry: "إكسسوارات، سلاسل، وخواتم",
-            perfume: "عطور، عناية شخصية، وصحة",
-            school: "كشاكيل، أقلام، وأدوات دراسة",
-            gifts: "هدايا مخصصة وذكريات",
-            tafse: "شغل يدوي ومكرميات",
-            women: "أزياء وعناية نسائية",
-            men: "اختيارات عملية للرجال",
-            kids: "مستلزمات وتفاصيل للأطفال"
         };
 
         const CATEGORY_THEME_META = {
@@ -3951,7 +3967,7 @@ body.merchant-storefront-mode .payment-service-strip {
 
             if (retryStep <= 1 && currentSrc && !/^https?:\/\//i.test(currentSrc)) {
                 imgEl.setAttribute("data-retry-step", "2");
-                const cleanPath = currentSrc.replace(/^\.?\//, "");
+                const cleanPath = currentSrc.replace(/^\.\/?/, "");
                 imgEl.src = `https://raw.githubusercontent.com/${GITHUB_MERCHANTS_CONFIG.owner}/${GITHUB_MERCHANTS_CONFIG.repo}/${GITHUB_MERCHANTS_CONFIG.branch}/${cleanPath}`;
                 return;
             }
@@ -4771,7 +4787,7 @@ body.merchant-storefront-mode .payment-service-strip {
 
         function getFilteredProducts(category, rawQuery) {
             const hasSearch = Boolean(normalizeText(rawQuery));
-            let baseCategoryList = PRODUCTS.filter(p => {
+            const baseCategoryList = PRODUCTS.filter(p => {
                 const catMatch = hasSearch || category === "all" || p.category === category || (Array.isArray(p.categories) && p.categories.includes(category));
                 const merchantMatch = hasSearch || !currentMerchant || p.merchant === currentMerchant;
                 return catMatch && merchantMatch && matchesSearchQuery(p, rawQuery);
@@ -4957,7 +4973,6 @@ body.merchant-storefront-mode .payment-service-strip {
             filterByCategory("all", allTab, false);
         }
 
-        
         function replaySloganEntrance() {
             const sub = document.querySelector(".logo-sub");
             if (!sub) return;
@@ -5161,8 +5176,8 @@ body.merchant-storefront-mode .payment-service-strip {
             btnEl.classList.add("selected");
             if (type === "size") {
                 pendingOptionSelection.selectedSize = val;
-                const pillPrice = Number(btnEl.getAttribute("data-price"));
-                if (!Number.isNaN(pillPrice) && pillPrice > 0) {
+                const pillPrice = parseNumericPrice(btnEl.getAttribute("data-price"));
+                if (pillPrice > 0) {
                     pendingOptionSelection.currentPrice = pillPrice;
                     renderOptionModalPriceDisplay();
                 }
@@ -5180,17 +5195,22 @@ body.merchant-storefront-mode .payment-service-strip {
 
         function confirmAddProductWithOptions() {
             const { productId, clickedBtnId, selectedSize, selectedColor, selectedImg, currentPrice, qty } = pendingOptionSelection;
-            const note = (document.getElementById("optionModalNoteInput")?.value || "").trim();
-            const addCount = Math.max(1, Number(qty || 1));
+            const noteText = (document.getElementById("optionModalNoteInput")?.value || "").trim();
+            const safeQty = Math.max(1, Number(qty) || 1);
             closeProductOptionModal();
             addToCart(productId, clickedBtnId, {
                 size: selectedSize,
                 color: selectedColor,
-                note,
-                img: selectedImg,
-                price: currentPrice,
-                qty: addCount
+                note: noteText,
+                chosenImg: selectedImg,
+                unitPrice: currentPrice,
+                qty: safeQty
             });
+        }
+
+        function onDirectWhatsAppClick(productId) {
+            const product = PRODUCTS.find(p => p.id === productId);
+            if (product) trackProductInterest(product, 2, true);
         }
 
         function addToCart(productId, btnId = null, customOpts = {}) {
@@ -5198,38 +5218,36 @@ body.merchant-storefront-mode .payment-service-strip {
             if (!product) return;
             trackProductInterest(product, 2.5, true);
 
-            const resolvedPrice = (typeof customOpts.price === "number" && customOpts.price > 0)
-                ? customOpts.price
-                : (Number(product.price) || 0);
-            const resolvedImg = normalizeProductImageUrl(customOpts.img) || getProductImagesList(product)[0] || "";
-            const addQty = Math.max(1, Number(customOpts.qty || 1));
-
             const variantCfg = getProductVariantConfig(product);
             const firstSizeEntry = variantCfg?.sizes?.[0];
-            const defaultSize = typeof firstSizeEntry === "string" ? firstSizeEntry : (firstSizeEntry?.label || "");
+            const defaultSizeLabel = typeof firstSizeEntry === "string" ? firstSizeEntry : (firstSizeEntry?.label || "");
+            const defaultSizePrice = typeof firstSizeEntry === "string" ? (Number(product.price) || 0) : (Number(firstSizeEntry?.price) || Number(product.price) || 0);
             const defaultColor = variantCfg?.colors?.[0] || "";
+            const chosenSize = customOpts.size || defaultSizeLabel;
+            const chosenColor = customOpts.color || defaultColor;
+            const chosenNote = customOpts.note || "";
+            const chosenImg = normalizeProductImageUrl(customOpts.chosenImg) || normalizeProductImageUrl(product.img) || "";
+            const effectivePrice = Number(customOpts.unitPrice) > 0 ? Number(customOpts.unitPrice) : (defaultSizePrice || Number(product.price) || 0);
+            const addQty = Math.max(1, Number(customOpts.qty) || 1);
 
-            const chosenSize = customOpts.size !== undefined ? customOpts.size : defaultSize;
-            const chosenColor = customOpts.color !== undefined ? customOpts.color : defaultColor;
-            const chosenNote = customOpts.note !== undefined ? customOpts.note : "";
-
-            const existing = cart.find(item =>
-                item.id === product.id &&
+            const existingItem = cart.find(item =>
+                item.id === productId &&
                 (item.selectedSize || "") === chosenSize &&
                 (item.selectedColor || "") === chosenColor &&
                 (item.note || "") === chosenNote &&
-                (item.img || "") === resolvedImg &&
-                Number(item.price || 0) === resolvedPrice
+                (item.img || "") === chosenImg &&
+                Number(item.price || 0) === effectivePrice
             );
 
-            if (existing) {
-                existing.qty += addQty;
+            if (existingItem) {
+                existingItem.qty += addQty;
+                if (chosenImg) existingItem.img = chosenImg;
             } else {
                 cart.push({
                     id: product.id,
                     title: product.title,
-                    price: resolvedPrice,
-                    img: resolvedImg,
+                    price: effectivePrice,
+                    img: chosenImg,
                     merchant: product.merchant || "متجر كارامل",
                     qty: addQty,
                     selectedSize: chosenSize,
@@ -5239,98 +5257,27 @@ body.merchant-storefront-mode .payment-service-strip {
             }
 
             saveCart();
-            updateCartUI();
-
-            const navCartBtn = document.getElementById("navCartBtn");
-            if (navCartBtn) {
-                navCartBtn.classList.remove("pop");
-                void navCartBtn.offsetWidth;
-                navCartBtn.classList.add("pop");
-            }
+            updateCartUI(true);
 
             const targetBtn = btnId ? document.getElementById(btnId) : null;
             if (targetBtn) {
                 const origHTML = targetBtn.innerHTML;
                 targetBtn.classList.add("added");
-                targetBtn.innerHTML = `<span>تمت الإضافة</span>`;
+                targetBtn.innerHTML = `<span>تمت الإضافة (${addQty})</span>`;
                 setTimeout(() => {
                     targetBtn.classList.remove("added");
                     targetBtn.innerHTML = origHTML;
-                }, 1100);
+                }, 900);
             }
-        }
-
-        function updateCartUI() {
-            const totalPieces = cart.reduce((sum, item) => sum + item.qty, 0);
-            const totalAmount = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-            const badge = document.getElementById("bottomCartCount");
-            if (badge) {
-                badge.textContent = totalPieces;
-                badge.classList.toggle("visible", totalPieces > 0);
-            }
-            const distinctEl = document.getElementById("cartDistinctCount");
-            const piecesEl = document.getElementById("cartTotalPieces");
-            if (distinctEl) distinctEl.textContent = cart.length;
-            if (piecesEl) piecesEl.textContent = totalPieces;
-            document.getElementById("cartTotalAmount").textContent = `${totalAmount} جنيه`;
-
-            const container = document.getElementById("cartItemsContainer");
-            if (!cart.length) {
-                container.innerHTML = `<div class="cart-empty">سلة المشتريات فارغة حالياً.. أضف أي منتج يعجبك واطلبه بسهولة!</div>`;
-                return;
-            }
-
-            container.innerHTML = cart.map((item, idx) => {
-                const prodObj = PRODUCTS.find(p => p.id === item.id);
-                const variantCfg = prodObj ? getProductVariantConfig(prodObj) : null;
-                const fallbackPrice = prodObj ? (Number(prodObj.price) || 0) : (Number(item.price) || 0);
-                const itemImg = normalizeProductImageUrl(item.img) || (prodObj ? getProductImagesList(prodObj)[0] : "") || "";
-
-                let sizeSelectHTML = "";
-                if (variantCfg?.sizes?.length) {
-                    const labels = variantCfg.sizes.map(s => typeof s === "string" ? s : s.label);
-                    if (item.selectedSize && !labels.includes(item.selectedSize)) labels.unshift(item.selectedSize);
-                    sizeSelectHTML = `<select class="cart-option-select" onchange="updateCartItemOption(${idx}, 'selectedSize', this.value)">${labels.map(s => `<option value="${escapeHtmlAttr(s)}" ${item.selectedSize === s ? "selected" : ""}>المقاس/الاختيار: ${escapeHtmlAttr(s)}</option>`).join("")}</select>`;
-                }
-
-                let colorSelectHTML = "";
-                if (variantCfg?.colors?.length) {
-                    const colors = [...variantCfg.colors];
-                    if (item.selectedColor && !colors.includes(item.selectedColor)) colors.unshift(item.selectedColor);
-                    colorSelectHTML = `<select class="cart-option-select" onchange="updateCartItemOption(${idx}, 'selectedColor', this.value)">${colors.map(c => `<option value="${escapeHtmlAttr(c)}" ${item.selectedColor === c ? "selected" : ""}>اللون: ${escapeHtmlAttr(c)}</option>`).join("")}</select>`;
-                }
-
-                return `
-                    <div class="cart-item">
-                        <div class="cart-item-top">
-                            <img src="${escapeHtmlAttr(itemImg)}" alt="${escapeHtmlAttr(item.title)}" onerror="this.style.visibility='hidden'">
-                            <div class="cart-item-info">
-                                <div class="cart-item-title">${escapeHtmlAttr(item.title)}</div>
-                                <div class="cart-item-meta-line">
-                                    <span class="cart-item-price">${(Number(item.price) || fallbackPrice) * item.qty} جنيه</span>
-                                    <span class="cart-item-merchant">• ${escapeHtmlAttr(item.merchant || "متجر كارامل")}</span>
-                                </div>
-                            </div>
-                            <div class="qty-controls">
-                                <button type="button" class="qty-btn" onclick="changeQty(${idx}, 1)">+</button>
-                                <span class="qty-val">${item.qty}</span>
-                                <button type="button" class="qty-btn" onclick="changeQty(${idx}, -1)">-</button>
-                                <button type="button" class="remove-item-btn" onclick="removeCartItem(${idx})">&times;</button>
-                            </div>
-                        </div>
-                        ${(sizeSelectHTML || colorSelectHTML) ? `<div class="cart-item-options">${sizeSelectHTML}${colorSelectHTML}</div>` : ""}
-                        <input type="text" class="cart-item-note-input" placeholder="ملاحظات إضافية على القطعة (اختياري)..." value="${escapeHtmlAttr(item.note || "")}" oninput="updateCartItemOption(${idx}, 'note', this.value)">
-                    </div>
-                `;
-            }).join("");
+            showCaramelToast(`تمت إضافة "${product.title}" (${addQty}) إلى المشتريات`);
         }
 
         function updateCartItemOption(index, field, value) {
             if (!cart[index]) return;
             cart[index][field] = value;
             if (field === "selectedSize") {
-                const prodObj = PRODUCTS.find(p => p.id === cart[index].id);
-                const variantCfg = prodObj ? getProductVariantConfig(prodObj) : null;
+                const product = PRODUCTS.find(p => p.id === cart[index].id);
+                const variantCfg = getProductVariantConfig(product);
                 const matchedSize = variantCfg?.sizes?.find(s => (typeof s === "string" ? s : s.label) === value);
                 if (matchedSize && typeof matchedSize === "object" && Number(matchedSize.price) > 0) {
                     cart[index].price = Number(matchedSize.price);
@@ -5338,6 +5285,80 @@ body.merchant-storefront-mode .payment-service-strip {
             }
             saveCart();
             updateCartUI();
+        }
+
+        function updateCartUI(animateBadge = false) {
+            const distinctEl = document.getElementById("cartDistinctCount");
+            const piecesEl = document.getElementById("cartTotalPieces");
+            const bottomBadge = document.getElementById("bottomCartCount");
+            const navCartBtn = document.getElementById("navCartBtn");
+            const totalAmountEl = document.getElementById("cartTotalAmount");
+            const container = document.getElementById("cartItemsContainer");
+
+            const distinctOrders = cart.length;
+            const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+            if (distinctEl) distinctEl.textContent = String(distinctOrders);
+            if (piecesEl) piecesEl.textContent = String(totalQty);
+
+            if (bottomBadge) {
+                bottomBadge.textContent = String(totalQty);
+                bottomBadge.classList.toggle("visible", totalQty > 0);
+            }
+            if (animateBadge && navCartBtn) {
+                navCartBtn.classList.remove("pop");
+                void navCartBtn.offsetWidth;
+                navCartBtn.classList.add("pop");
+            }
+            if (totalAmountEl) totalAmountEl.textContent = `${totalPrice} جنيه`;
+
+            if (!cart.length) {
+                container.innerHTML = `<div class="cart-empty">سلة المشتريات فارغة حاليًا.</div>`;
+                return;
+            }
+
+            container.innerHTML = cart.map((item, idx) => {
+                const product = PRODUCTS.find(p => p.id === item.id);
+                const variantCfg = getProductVariantConfig(product);
+                const sizeSelectHTML = variantCfg?.sizes?.length ? `
+                    <select class="cart-option-select" aria-label="المقاس" onchange="updateCartItemOption(${idx}, 'selectedSize', this.value)">
+                        ${variantCfg.sizes.map(s => {
+                            const sLabel = typeof s === "string" ? s : s.label;
+                            return `<option value="${escapeHtmlAttr(sLabel)}" ${item.selectedSize === sLabel ? "selected" : ""}>المقاس: ${escapeHtmlAttr(sLabel)}</option>`;
+                        }).join("")}
+                    </select>` : "";
+
+                const colorSelectHTML = variantCfg?.colors?.length ? `
+                    <select class="cart-option-select" aria-label="اللون" onchange="updateCartItemOption(${idx}, 'selectedColor', this.value)">
+                        ${variantCfg.colors.map(c => `<option value="${escapeHtmlAttr(c)}" ${item.selectedColor === c ? "selected" : ""}>اللون: ${escapeHtmlAttr(c)}</option>`).join("")}
+                    </select>` : "";
+
+                const itemImgSrc = normalizeProductImageUrl(item.img) || normalizeProductImageUrl(product?.img) || "";
+
+                return `
+                    <div class="cart-item">
+                        <div class="cart-item-top">
+                            <img src="${escapeHtmlAttr(itemImgSrc)}" alt="${escapeHtmlAttr(item.title)}" onerror="this.style.visibility='hidden'">
+                            <div class="cart-item-info">
+                                <div class="cart-item-title">${escapeHtmlAttr(item.title)}</div>
+                                <div class="cart-item-meta-line">
+                                    <span class="cart-item-price">${item.price * item.qty} جنيه</span>
+                                    <span class="cart-item-merchant">${escapeHtmlAttr(item.merchant || "متجر كارامل")}</span>
+                                </div>
+                            </div>
+                            <div class="qty-controls">
+                                <button type="button" class="qty-btn" onclick="changeQty(${idx}, 1)" aria-label="زيادة الكمية">+</button>
+                                <span class="qty-val">${item.qty}</span>
+                                <button type="button" class="qty-btn" onclick="changeQty(${idx}, -1)" aria-label="إنقاص الكمية">-</button>
+                                <button type="button" class="remove-item-btn" onclick="removeCartItem(${idx})" aria-label="حذف المنتج">&times;</button>
+                            </div>
+                        </div>
+                        ${(sizeSelectHTML || colorSelectHTML) ? `<div class="cart-item-options">${sizeSelectHTML}${colorSelectHTML}</div>` : ""}
+                        <input type="text" class="cart-item-note-input" placeholder="ملاحظة خاصة بالقطعة (اختياري)..." value="${escapeHtmlAttr(item.note || "")}" onchange="updateCartItemOption(${idx}, 'note', this.value)">
+                    </div>
+                `;
+            }).join("");
         }
 
         function changeQty(index, delta) {
@@ -5355,14 +5376,130 @@ body.merchant-storefront-mode .payment-service-strip {
         }
 
         function clearCart() {
+            if (!cart.length) return;
             cart = [];
             saveCart();
             updateCartUI();
+            showCaramelToast("تم تفريغ سلة المشتريات");
+        }
+
+        let customerLocationData = null;
+
+        function updateLocationUi() {
+            const btn = document.getElementById("cartLocationBtn");
+            const btnText = document.getElementById("cartLocationBtnText");
+            const clearBtn = document.getElementById("cartLocationClearBtn");
+            const preview = document.getElementById("cartLocationPreview");
+            if (!btn || !btnText || !clearBtn || !preview) return;
+
+            if (customerLocationData && customerLocationData.mapUrl) {
+                btn.classList.add("located");
+                btnText.textContent = "تم تحديد موقعك الحالي بنجاح";
+                clearBtn.classList.add("visible");
+                preview.style.display = "block";
+                preview.textContent = `رابط الموقع: ${customerLocationData.mapUrl}`;
+            } else {
+                btn.classList.remove("located");
+                btnText.textContent = "تحديد موقعي الحالي (اللوكيشن)";
+                clearBtn.classList.remove("visible");
+                preview.style.display = "none";
+                preview.textContent = "";
+            }
+        }
+
+        function clearCustomerLocation() {
+            customerLocationData = null;
+            updateLocationUi();
+            showCaramelToast("تم إلغاء اللوكيشن المحدد");
+        }
+
+        function requestCustomerLocation() {
+            const btnText = document.getElementById("cartLocationBtnText");
+            if (!navigator.geolocation) {
+                showCaramelToast("المتصفح الحالي لا يدعم تحديد الموقع الجغرافي.");
+                return;
+            }
+            if (btnText) btnText.textContent = "جاري تحديد موقعك...";
+            navigator.geolocation.getCurrentPosition(
+                pos => {
+                    const lat = Number(pos.coords.latitude).toFixed(6);
+                    const lng = Number(pos.coords.longitude).toFixed(6);
+                    customerLocationData = {
+                        lat,
+                        lng,
+                        mapUrl: `https://maps.google.com/?q=${lat},${lng}`
+                    };
+                    updateLocationUi();
+                    showCaramelToast("تم التقاط اللوكيشن بدقة");
+                },
+                () => {
+                    updateLocationUi();
+                    showCaramelToast("تعذر الوصول للموقع، تأكد من تفعيل GPS والسماح بالصلاحية.");
+                },
+                { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+            );
+        }
+
+        function openWhatsAppChatDirect() {
+            const directUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("مرحباً متجر كارامل، أريد التواصل معكم")}`;
+            launchWhatsAppTarget(directUrl);
+        }
+
+        function checkoutOnWhatsApp() {
+            if (!cart.length) {
+                showCaramelToast("سلة المشتريات فارغة، أضف منتجات أولاً");
+                return;
+            }
+            const nameInput = document.getElementById("checkoutCustomerName");
+            const phoneInput = document.getElementById("checkoutCustomerPhone");
+            const customerName = (nameInput?.value || "").trim();
+            const customerPhone = (phoneInput?.value || "").trim();
+
+            if (!customerName) {
+                showCaramelToast("من فضلك اكتب الاسم بالكامل أولاً");
+                if (nameInput) nameInput.focus();
+                return;
+            }
+            if (!customerPhone) {
+                showCaramelToast("من فضلك اكتب رقم التواصل أولاً");
+                if (phoneInput) phoneInput.focus();
+                return;
+            }
+
+            let lines = ["*طلب جديد من متجر كارامل - Caramel Store*", ""];
+            lines.push(`*الاسم:* ${customerName}`);
+            lines.push(`*رقم التواصل:* ${customerPhone}`);
+            if (customerLocationData && customerLocationData.mapUrl) {
+                lines.push(`*اللوكيشن:* ${customerLocationData.mapUrl}`);
+            }
+            lines.push("", "*المنتجات المطلوبة:*");
+            let total = 0;
+
+            cart.forEach((item, idx) => {
+                const sub = item.price * item.qty;
+                total += sub;
+                const details = [];
+                if (item.merchant) details.push(`التاجر: ${item.merchant}`);
+                if (item.selectedSize) details.push(`المقاس: ${item.selectedSize}`);
+                if (item.selectedColor) details.push(`اللون: ${item.selectedColor}`);
+                if (item.note) details.push(`ملاحظة: ${item.note}`);
+                if (item.img) details.push(`الصورة المختارة: ${item.img}`);
+                const extraStr = details.length ? ` (${details.join(" | ")})` : "";
+                lines.push(`${idx + 1}. *${item.title}*${extraStr} — العدد: ${item.qty} × ${item.price} = *${sub} جنيه*`);
+            });
+
+            lines.push("", `*الإجمالي الكلي: ${total} جنيه*`);
+            lines.push("_السويس: الدفع عند الاستلام | المحافظات الأخرى: إنستا باي أو فوري أو كاش | التوصيل خلال يوم عمل_");
+
+            const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join("\n"))}`;
+            launchWhatsAppTarget(waUrl);
         }
 
         function openCart() {
+            closeAllOverlays();
             setBottomNavActive("navCartBtn");
             updateCartUI();
+            updateLocationUi();
             document.getElementById("cartBackdrop").classList.add("open");
             document.getElementById("cartDrawer").classList.add("open");
             syncBodyScrollLock();
@@ -5374,195 +5511,74 @@ body.merchant-storefront-mode .payment-service-strip {
             const drawer = document.getElementById("cartDrawer");
             if (backdrop) backdrop.classList.remove("open");
             if (drawer) drawer.classList.remove("open");
-            setBottomNavActive("navHomeBtn");
             syncBodyScrollLock();
             if (!fromPopState) removeOverlayState("cart");
         }
 
-        let customerLocationData = null;
-
-        function requestCustomerLocation() {
-            const btn = document.getElementById("cartLocationBtn");
-            const txt = document.getElementById("cartLocationBtnText");
-            const clearBtn = document.getElementById("cartLocationClearBtn");
-            const preview = document.getElementById("cartLocationPreview");
-
-            if (!navigator.geolocation) {
-                showCaramelToast("المتصفح الحالي لا يدعم تحديد الموقع الجغرافي.");
-                return;
-            }
-
-            if (txt) txt.textContent = "جاري تحديد موقعك...";
-            if (btn) btn.disabled = true;
-
-            navigator.geolocation.getCurrentPosition(
-                pos => {
-                    if (btn) btn.disabled = false;
-                    const lat = Number(pos.coords.latitude).toFixed(6);
-                    const lng = Number(pos.coords.longitude).toFixed(6);
-                    const mapsUrl = `https://maps.google.com/?q=${lat},${lng}`;
-                    customerLocationData = { lat, lng, mapsUrl };
-
-                    if (btn) btn.classList.add("located");
-                    if (txt) txt.textContent = "تم تحديد اللوكيشن بنجاح";
-                    if (clearBtn) clearBtn.classList.add("visible");
-                    if (preview) {
-                        preview.style.display = "block";
-                        preview.textContent = mapsUrl;
-                    }
-                    showCaramelToast("تم إرفاق موقعك الحالي للطلب");
-                },
-                () => {
-                    if (btn) btn.disabled = false;
-                    if (txt) txt.textContent = customerLocationData ? "تم تحديد اللوكيشن بنجاح" : "تحديد موقعي الحالي (اللوكيشن)";
-                    showCaramelToast("تعذر الوصول للموقع، تأكد من تفعيل GPS أو السماح بالصلاحية.");
-                },
-                { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 }
-            );
-        }
-
-        function clearCustomerLocation() {
-            customerLocationData = null;
-            const btn = document.getElementById("cartLocationBtn");
-            const txt = document.getElementById("cartLocationBtnText");
-            const clearBtn = document.getElementById("cartLocationClearBtn");
-            const preview = document.getElementById("cartLocationPreview");
-            if (btn) btn.classList.remove("located");
-            if (txt) txt.textContent = "تحديد موقعي الحالي (اللوكيشن)";
-            if (clearBtn) clearBtn.classList.remove("visible");
-            if (preview) {
-                preview.style.display = "none";
-                preview.textContent = "";
-            }
-        }
-
-        function openWhatsAppChatDirect() {
-            const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("مرحباً متجر كارامل، أود التواصل معكم.")}`;
-            launchWhatsAppTarget(url);
-        }
-
-        function checkoutOnWhatsApp() {
-            if (!cart.length) {
-                showCaramelToast("السلة فارغة! أضف منتجات أولاً.");
-                return;
-            }
-
-            const nameInput = document.getElementById("checkoutCustomerName");
-            const phoneInput = document.getElementById("checkoutCustomerPhone");
-            const customerName = (nameInput?.value || "").trim();
-            const customerPhone = (phoneInput?.value || "").trim();
-
-            if (!customerName) {
-                showCaramelToast("برجاء إدخال الاسم بالكامل أولاً.");
-                if (nameInput) nameInput.focus();
-                return;
-            }
-            if (!customerPhone) {
-                showCaramelToast("برجاء إدخال رقم التواصل أولاً.");
-                if (phoneInput) phoneInput.focus();
-                return;
-            }
-
-            let total = 0;
-            const lines = cart.map((item, idx) => {
-                const sub = item.price * item.qty;
-                total += sub;
-                const details = [];
-                if (item.selectedSize) details.push(`المقاس/الاختيار: ${item.selectedSize}`);
-                if (item.selectedColor) details.push(`اللون: ${item.selectedColor}`);
-                if (item.note) details.push(`ملاحظة: ${item.note}`);
-                const detailsStr = details.length ? ` (${details.join(" | ")})` : "";
-                const prodObj = PRODUCTS.find(p => p.id === item.id);
-                const imgs = prodObj ? getProductImagesList(prodObj) : [];
-                const chosenImg = normalizeProductImageUrl(item.img) || imgs[0] || "";
-                const imgIdx = chosenImg && imgs.length ? imgs.indexOf(chosenImg) : -1;
-                const imgLine = chosenImg
-                    ? `\n   الصورة المختارة${imgIdx >= 0 && imgs.length > 1 ? ` (${imgIdx + 1}/${imgs.length})` : ""}: ${chosenImg}`
-                    : "";
-                return `${idx + 1}. ${item.title}${detailsStr} — العدد: ${item.qty} × ${item.price} = ${sub} جنيه (التاجر: ${item.merchant || "متجر كارامل"})${imgLine}`;
-            });
-
-            const customerBlock = [
-                `الاسم: ${customerName}`,
-                `رقم التواصل: ${customerPhone}`,
-                customerLocationData ? `اللوكيشن: ${customerLocationData.mapsUrl}` : ""
-            ].filter(Boolean).join("\n");
-
-            const msg = `طلب جديد من متجر كارامل:\n\n${customerBlock}\n\n${lines.join("\n")}\n\nالإجمالي: ${total} جنيه\n(السويس: الدفع عند الاستلام | المحافظات الأخرى: إنستا باي أو فوري أو كاش | التوصيل خلال يوم عمل)`;
-            const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
-            launchWhatsAppTarget(url);
-        }
-
-        function syncPreviewModalMedia(imgs, startIdx = 0) {
-            const safeList = Array.isArray(imgs) && imgs.length ? imgs : [];
-            previewModalState.imgs = safeList;
-            previewModalState.idx = safeList.length ? (((startIdx % safeList.length) + safeList.length) % safeList.length) : 0;
-
-            const activeUrl = safeList[previewModalState.idx] || "";
-            const modalImg = document.getElementById("modalImagePreview");
-            if (modalImg && activeUrl) {
-                modalImg.src = activeUrl;
-            }
-
+        function renderPreviewGallery(imgs, activeIdx) {
             const prevBtn = document.getElementById("previewPrevBtn");
             const nextBtn = document.getElementById("previewNextBtn");
             const thumbsRow = document.getElementById("previewThumbsRow");
+            const modalImg = document.getElementById("modalImagePreview");
+            const product = PRODUCTS.find(p => p.id === previewModalState.productId);
 
-            if (safeList.length > 1) {
-                if (prevBtn) prevBtn.style.display = "inline-flex";
-                if (nextBtn) nextBtn.style.display = "inline-flex";
-                if (thumbsRow) {
+            const safeIdx = imgs.length ? (((activeIdx % imgs.length) + imgs.length) % imgs.length) : 0;
+            previewModalState.idx = safeIdx;
+            const currentSrc = imgs[safeIdx] || "";
+
+            if (modalImg && currentSrc) {
+                modalImg.src = currentSrc;
+                if (product) modalImg.alt = product.title;
+            }
+
+            if (prevBtn) prevBtn.style.display = imgs.length > 1 ? "inline-flex" : "none";
+            if (nextBtn) nextBtn.style.display = imgs.length > 1 ? "inline-flex" : "none";
+
+            if (thumbsRow) {
+                if (imgs.length > 1) {
                     thumbsRow.style.display = "flex";
-                    thumbsRow.innerHTML = safeList.map((u, idx) => `
-                        <button type="button" class="preview-thumb-btn ${idx === previewModalState.idx ? "active" : ""}" onclick="selectPreviewThumb(${idx}, event)">
-                            <img src="${escapeHtmlAttr(u)}" alt="صورة ${idx + 1}">
+                    thumbsRow.innerHTML = imgs.map((u, i) => `
+                        <button type="button" class="preview-thumb-btn ${i === safeIdx ? "active" : ""}" onclick="selectPreviewThumb(${i}, event)">
+                            <img src="${escapeHtmlAttr(u)}" alt="صورة ${i + 1}">
                         </button>
                     `).join("");
-                }
-            } else {
-                if (prevBtn) prevBtn.style.display = "none";
-                if (nextBtn) nextBtn.style.display = "none";
-                if (thumbsRow) {
+                } else {
                     thumbsRow.style.display = "none";
                     thumbsRow.innerHTML = "";
                 }
             }
 
-            const product = PRODUCTS.find(p => p.id === previewModalState.productId);
-            const waBtn = document.getElementById("previewWhatsAppBtn");
-            if (product && waBtn) {
-                waBtn.href = buildProductWhatsAppUrl(product, activeUrl);
+            if (product) {
+                const waBtn = document.getElementById("previewWhatsAppBtn");
+                if (waBtn) waBtn.href = buildProductWhatsAppUrl(product, currentSrc);
             }
         }
 
         function stepPreviewImage(delta, event) {
-            if (event) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
+            if (event) { event.preventDefault(); event.stopPropagation(); }
             if (!previewModalState.imgs.length) return;
-            syncPreviewModalMedia(previewModalState.imgs, previewModalState.idx + delta);
+            renderPreviewGallery(previewModalState.imgs, previewModalState.idx + delta);
         }
 
-        function selectPreviewThumb(targetIdx, event) {
-            if (event) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
+        function selectPreviewThumb(idx, event) {
+            if (event) { event.preventDefault(); event.stopPropagation(); }
             if (!previewModalState.imgs.length) return;
-            syncPreviewModalMedia(previewModalState.imgs, targetIdx);
+            renderPreviewGallery(previewModalState.imgs, idx);
         }
 
         function openImageModal(src, productId = null) {
-            const cleanSrc = normalizeProductImageUrl(src);
-            if (!cleanSrc) return;
+            const modal = document.getElementById("imageModal");
+            const modalImg = document.getElementById("modalImagePreview");
             const product = productId ? PRODUCTS.find(p => p.id === productId) : null;
-            if (product) trackProductInterest(product, 1.5, true);
+            const imgs = product ? getProductImagesList(product) : [];
+            const clickedCleanSrc = normalizeProductImageUrl(src);
+            const initialIdx = imgs.length && clickedCleanSrc && imgs.includes(clickedCleanSrc) ? imgs.indexOf(clickedCleanSrc) : 0;
+            const finalImg = imgs[initialIdx] || clickedCleanSrc;
+            if (!finalImg) return;
 
-            const allImgs = product ? getProductImagesList(product) : [cleanSrc];
-            const foundIdx = allImgs.indexOf(cleanSrc);
-            previewModalState.productId = product ? product.id : null;
-            syncPreviewModalMedia(allImgs, foundIdx >= 0 ? foundIdx : 0);
+            previewModalState = { productId, imgs, idx: initialIdx };
+            modalImg.src = finalImg;
+            modalImg.alt = product ? product.title : "معاينة المنتج";
 
             const catChip = document.getElementById("previewCategoryChip");
             const merchantChip = document.getElementById("previewMerchantChip");
@@ -5575,56 +5591,53 @@ body.merchant-storefront-mode .payment-service-strip {
             const waBtn = document.getElementById("previewWhatsAppBtn");
 
             if (product) {
+                trackProductInterest(product, 1.5, true);
+                const merchantName = product.merchant || "متجر كارامل";
                 const displayPrice = product.priceLabel || product.price;
                 catChip.textContent = CATEGORY_NAMES[product.category] || "متجر كارامل";
-                merchantChip.textContent = `التاجر: ${product.merchant || "متجر كارامل"}`;
+                merchantChip.textContent = `التاجر: ${merchantName}`;
                 titleEl.textContent = product.title;
                 mainPriceEl.innerHTML = `${displayPrice}<span>جنيه</span>`;
 
                 if (product.subPrice) {
                     subPriceEl.textContent = product.subPrice;
-                    subPriceEl.style.display = "inline-flex";
+                    subPriceEl.style.display = "inline-block";
                 } else {
                     subPriceEl.style.display = "none";
                 }
 
-                storyTextEl.textContent = product.desc ? `${product.title} — ${product.desc}.` : `${product.title} متوفر الآن في متجر كارامل بأفضل قيمة وجودة.`;
+                storyTextEl.textContent = product.desc || "منتج مختار بعناية من متجر كارامل ليلبي احتياجك بجودة عالية وسعر مناسب.";
                 hookNoteEl.textContent = buildEngagingHookForProduct(product);
 
-                addBtn.style.display = "flex";
                 addBtn.onclick = () => {
-                    const currentShownImg = previewModalState.imgs[previewModalState.idx] || cleanSrc;
+                    const activeChosenImg = previewModalState.imgs[previewModalState.idx] || finalImg;
                     closeImageModal();
-                    openProductOptionModal(product.id, null, currentShownImg);
+                    openProductOptionModal(product.id, null, activeChosenImg);
                 };
-
-                waBtn.style.display = "flex";
-                waBtn.href = buildProductWhatsAppUrl(product, cleanSrc);
+                waBtn.href = buildProductWhatsAppUrl(product, finalImg);
                 waBtn.onclick = e => {
                     e.preventDefault();
-                    const currentShownImg = previewModalState.imgs[previewModalState.idx] || cleanSrc;
-                    const freshUrl = buildProductWhatsAppUrl(product, currentShownImg);
+                    const activeChosenImg = previewModalState.imgs[previewModalState.idx] || finalImg;
+                    const targetUrl = buildProductWhatsAppUrl(product, activeChosenImg);
+                    waBtn.href = targetUrl;
                     onDirectWhatsAppClick(product.id);
-                    launchWhatsAppTarget(freshUrl);
+                    launchWhatsAppTarget(targetUrl);
                 };
             } else {
-                catChip.textContent = "معاينة سريعة";
-                merchantChip.textContent = "متجر كارامل";
-                titleEl.textContent = "صورة منتج من متجر كارامل";
-                mainPriceEl.textContent = "تواصل معنا للسعر";
+                catChip.textContent = "متجر كارامل";
+                merchantChip.textContent = "التاجر: كارامل";
+                titleEl.textContent = "معاينة الصورة";
+                mainPriceEl.textContent = "";
                 subPriceEl.style.display = "none";
-                storyTextEl.textContent = "استكشف تشكيلة متجر كارامل المتجددة يومياً بأفضل الأسعار.";
-                hookNoteEl.textContent = "وحتى لو المنتج مش موجود بنجيبهولك.";
-                addBtn.style.display = "none";
-                waBtn.style.display = "flex";
+                storyTextEl.textContent = "تفاصيل إضافية متوفرة عند الطلب من متجر كارامل.";
+                hookNoteEl.textContent = "حتى لو المنتج مش موجود بنجيبهولك بأفضل سعر.";
+                addBtn.onclick = () => closeImageModal();
                 waBtn.href = `https://wa.me/${WHATSAPP_NUMBER}`;
-                waBtn.onclick = e => {
-                    e.preventDefault();
-                    launchWhatsAppTarget(waBtn.href);
-                };
+                waBtn.onclick = e => { e.preventDefault(); launchWhatsAppTarget(waBtn.href); };
             }
 
-            document.getElementById("imageModal").classList.add("open");
+            renderPreviewGallery(imgs, initialIdx);
+            modal.classList.add("open");
             syncBodyScrollLock();
             pushOverlayState("image");
         }
@@ -5636,195 +5649,101 @@ body.merchant-storefront-mode .payment-service-strip {
             if (!fromPopState) removeOverlayState("image");
         }
 
-        function onDirectWhatsAppClick(productId) {
-            const product = PRODUCTS.find(p => p.id === productId);
-            if (product) trackProductInterest(product, 3, true);
-        }
-
-        (function initInfiniteFeedObserver() {
-            const sentinel = document.getElementById("feedSentinel");
-            if (!sentinel || !("IntersectionObserver" in window)) return;
-            const observer = new IntersectionObserver(entries => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) renderMoreFeedItems();
-                });
-            }, { rootMargin: "260px 0px" });
-            observer.observe(sentinel);
-        })();
-
-        const ONESIGNAL_APP_ID = "d3550750-e923-411f-a350-fe4d8cd80a8d";
-        const PUSH_SUBSCRIBED_STORAGE_KEY = "caramel_push_subscribed_v1";
-        let oneSignalReadyPromise = null;
-
-        function isPushAlreadySubscribed() {
-            try { return localStorage.getItem(PUSH_SUBSCRIBED_STORAGE_KEY) === "1"; } catch (e) { return false; }
-        }
-
-        function setPushSubscribedState(subscribed, animateHide = false) {
-            try {
-                if (subscribed) localStorage.setItem(PUSH_SUBSCRIBED_STORAGE_KEY, "1");
-                else localStorage.removeItem(PUSH_SUBSCRIBED_STORAGE_KEY);
-            } catch (e) {}
-            syncCaramelPushButton(animateHide);
-        }
-
-        let pushHideTimer = null;
-
-        function syncCaramelPushButton(animateHide = false) {
-            const btn = document.getElementById("caramelPushBtn");
-            const iconEl = document.getElementById("caramelPushIcon");
-            const textEl = document.getElementById("caramelPushBtnText");
-            if (!btn) return;
-            if (!("Notification" in window)) { btn.classList.remove("visible"); return; }
-            if (Notification.permission === "denied") { btn.classList.remove("visible"); return; }
-
-            const isGranted = Notification.permission === "granted" || isPushAlreadySubscribed();
-            if (isGranted) {
-                if (animateHide) {
-                    clearTimeout(pushHideTimer);
-                    btn.classList.add("visible", "circle-check-only");
-                    btn.classList.remove("hiding-smooth");
-                    btn.title = "الإشعارات مفعّلة";
-                    btn.setAttribute("aria-label", "الإشعارات مفعّلة");
-                    if (iconEl) iconEl.innerHTML = `<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
-                    if (textEl) textEl.textContent = "مفعّلة";
-                    pushHideTimer = setTimeout(() => {
-                        btn.classList.add("hiding-smooth");
-                        setTimeout(() => {
-                            btn.classList.remove("visible", "circle-check-only", "hiding-smooth");
-                        }, 300);
-                    }, 1100);
-                } else {
-                    btn.classList.remove("visible", "circle-check-only", "hiding-smooth");
-                }
-            } else {
-                btn.classList.add("visible");
-                btn.classList.remove("circle-check-only", "hiding-smooth");
-                btn.title = "فعّل إشعارات العروض";
-                btn.setAttribute("aria-label", "تفعيل إشعارات متجر كارامل");
-                if (iconEl) iconEl.innerHTML = `<svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg>`;
-                if (textEl) textEl.textContent = "فعّل إشعارات العروض";
+        function morphPushButtonToCheck() {
+            const pushBtn = document.getElementById("caramelPushBtn");
+            const iconWrap = document.getElementById("caramelPushIcon");
+            if (!pushBtn) return;
+            pushBtn.classList.add("visible", "circle-check-only");
+            if (iconWrap) {
+                iconWrap.innerHTML = `<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
             }
+            setTimeout(() => { pushBtn.classList.add("hiding-smooth"); }, 2200);
+            setTimeout(() => { pushBtn.classList.remove("visible", "hiding-smooth"); }, 2600);
         }
 
-        function ensureOneSignalInitialized() {
-            if (oneSignalReadyPromise) return oneSignalReadyPromise;
-            oneSignalReadyPromise = new Promise(resolve => {
-                window.OneSignalDeferred = window.OneSignalDeferred || [];
-                OneSignalDeferred.push(async function(OneSignal) {
-                    try {
-                        if (!window.__caramelOneSignalInited) {
-                            await OneSignal.init({
-                                appId: ONESIGNAL_APP_ID,
-                                allowLocalhostAsSecureOrigin: true,
-                                notifyButton: { enable: false }
-                            });
-                            window.__caramelOneSignalInited = true;
-                        }
-                        resolve(OneSignal);
-                    } catch (e) { resolve(null); }
-                });
-
-                if (!document.getElementById("onesignal-sdk-script")) {
-                    const script = document.createElement("script");
-                    script.id = "onesignal-sdk-script";
-                    script.src = "https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js";
-                    script.async = true;
-                    script.defer = true;
-                    document.head.appendChild(script);
-                }
-            });
-            return oneSignalReadyPromise;
+        function syncPushButtonState() {
+            const pushBtn = document.getElementById("caramelPushBtn");
+            if (!pushBtn) return;
+            if (!("Notification" in window)) { pushBtn.classList.remove("visible"); return; }
+            if (Notification.permission === "granted") {
+                pushBtn.classList.add("visible", "circle-check-only");
+                const iconWrap = document.getElementById("caramelPushIcon");
+                if (iconWrap) iconWrap.innerHTML = `<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+                setTimeout(() => { pushBtn.classList.add("hiding-smooth"); }, 1400);
+                setTimeout(() => { pushBtn.classList.remove("visible", "hiding-smooth"); }, 1800);
+            } else {
+                pushBtn.classList.remove("circle-check-only", "hiding-smooth");
+                pushBtn.classList.add("visible");
+            }
         }
 
         async function enableCaramelPush() {
             if (!("Notification" in window)) {
-                showCaramelToast("المتصفح الحالي لا يدعم الإشعارات.");
+                showCaramelToast("متصفحك الحالي لا يدعم الإشعارات");
                 return;
             }
-            if (Notification.permission === "granted") {
-                setPushSubscribedState(true, true);
-                const OneSignal = await ensureOneSignalInitialized();
-                if (OneSignal && OneSignal.User && OneSignal.User.PushSubscription) {
-                    try { await OneSignal.User.PushSubscription.optIn(); } catch (e) {}
-                }
-                showCaramelToast("إشعارات متجر كارامل مفعّلة بالفعل!");
-                return;
-            }
-
             try {
-                const permissionResult = await Notification.requestPermission();
-                if (permissionResult === "granted") {
-                    setPushSubscribedState(true, true);
-                    const OneSignal = await ensureOneSignalInitialized();
-                    if (OneSignal && OneSignal.User && OneSignal.User.PushSubscription) {
-                        try { await OneSignal.User.PushSubscription.optIn(); } catch (e) {}
+                const permission = await Notification.requestPermission();
+                if (permission === "granted") {
+                    morphPushButtonToCheck();
+                    showCaramelToast("تم تفعيل إشعارات متجر كارامل بنجاح");
+                    if ("serviceWorker" in navigator) {
+                        const reg = await navigator.serviceWorker.ready;
+                        if (reg && reg.active) reg.active.postMessage({ type: "ENABLE_CARAMEL_PUSH" });
                     }
-                    showCaramelToast("تم تفعيل إشعارات متجر كارامل بنجاح!");
                 } else {
-                    syncCaramelPushButton();
-                    showCaramelToast("لم يتم تفعيل الإشعارات بعد.");
+                    showCaramelToast("لم يتم تفعيل الإشعارات");
                 }
-            } catch (e) {
-                syncCaramelPushButton();
+            } catch (err) {
+                showCaramelToast("تعذر تفعيل الإشعارات حالياً");
             }
         }
 
-        function applyUrlQueryFiltersOnLoad() {
-            try {
-                const params = new URLSearchParams(window.location.search);
-                const merchantParam = (params.get("merchant") || "").trim();
-                const catParam = (params.get("category") || "").trim().toLowerCase();
-                if (merchantParam) {
-                    currentMerchant = merchantParam;
-                    return;
+        function initInfiniteFeedObserver() {
+            const sentinel = document.getElementById("feedSentinel");
+            if (!sentinel) return;
+            if ("IntersectionObserver" in window) {
+                const observer = new IntersectionObserver(entries => {
+                    if (entries.some(entry => entry.isIntersecting)) renderMoreFeedItems();
+                }, { rootMargin: "220px 0px" });
+                observer.observe(sentinel);
+            }
+            window.addEventListener("scroll", () => {
+                if ((window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 280)) {
+                    renderMoreFeedItems();
                 }
-                if (catParam && CATEGORY_NAMES[catParam]) {
-                    currentCategory = catParam;
-                    applyCategoryPageMood(catParam);
-                    document.querySelectorAll(".quick-top-tabs .quick-tab-item").forEach(el => {
-                        el.classList.toggle("active", el.getAttribute("data-quick") === catParam);
-                    });
-                }
-            } catch (e) {}
+            }, { passive: true });
         }
 
-        window.addEventListener("DOMContentLoaded", () => {
-            initThemeMode();
-            applyUrlQueryFiltersOnLoad();
-            syncHeaderStickyOffsets();
-            updateSearchCancelButton();
-            renderSmartSearchSuggestions();
-            renderSpotlightBoxes();
-            renderProducts("all");
-            hydrateTopQuickTabIcons();
-            renderSideCategoriesList();
-            updateCartUI();
-            syncCaramelPushButton();
-            loadMerchantProductsFromJson();
-
-            if ("Notification" in window && Notification.permission === "granted") {
-                setPushSubscribedState(true);
-                ensureOneSignalInitialized().then(async OneSignal => {
-                    if (OneSignal && OneSignal.User && OneSignal.User.PushSubscription) {
-                        try {
-                            if (!OneSignal.User.PushSubscription.optedIn) {
-                                await OneSignal.User.PushSubscription.optIn();
-                            }
-                        } catch (e) {}
-                    }
-                });
-            }
-
-            replaySloganEntrance();
-            setTimeout(() => {
-                const splash = document.getElementById("caramelSplashScreen");
-                if (splash) {
-                    splash.classList.add("hide");
-                    setTimeout(() => splash.remove(), 650);
-                }
-            }, 2450);
+        document.addEventListener("keydown", e => {
+            if (e.key === "Escape") closeAllOverlays();
         });
+
+        function hideSplashScreenSmoothly() {
+            const splash = document.getElementById("caramelSplashScreen");
+            if (!splash || splash.classList.contains("hide")) return;
+            splash.classList.add("hide");
+            setTimeout(() => { if (splash && splash.parentNode) splash.parentNode.removeChild(splash); }, 650);
+        }
+
+        window.addEventListener("load", () => {
+            setTimeout(hideSplashScreenSmoothly, 3100);
+            setTimeout(syncHeaderStickyOffsets, 120);
+        });
+        setTimeout(hideSplashScreenSmoothly, 4200);
+
+        initThemeMode();
+        syncHeaderStickyOffsets();
+        hydrateTopQuickTabIcons();
+        renderSideCategoriesList();
+        renderSmartSearchSuggestions();
+        renderSpotlightBoxes();
+        renderProducts("all");
+        updateCartUI();
+        updateLocationUi();
+        syncPushButtonState();
+        initInfiniteFeedObserver();
+        loadMerchantProductsFromJson();
     </script>
 </body>
 </html>
