@@ -87,14 +87,19 @@
     "desc": "عباية باللون الكحلي الداكن بأزرار أمامية وأكمام واسعة، السعر 800 جنيه والسن المحير 650 جنيه.",
     "price": 800,
     "sizes": [
-      { "label": "عادي (800 جنيه)", "price": 800 },
-      { "label": "السن المحير (650 جنيه)", "price": 650 }
+      {
+        "label": "عادي (800 جنيه)",
+        "price": 800
+      },
+      {
+        "label": "السن المحير (650 جنيه)",
+        "price": 650
+      }
     ],
-    "category": "tafse",
+    "category": "women",
     "categories": [
-      "tafse",
       "women",
-      "gifts"
+      "kids"
     ],
     "merchant": "أم عمار",
     "img": "Tahra/compressed_1795585828807.webp",
@@ -108,14 +113,19 @@
     "desc": "عباية قطيفة باللون الموف منقوشة بنقشة شرقية مزخرفة مع طرحة، السعر 800 جنيه والسن المحير 650 جنيه.",
     "price": 800,
     "sizes": [
-      { "label": "عادي (800 جنيه)", "price": 800 },
-      { "label": "السن المحير (650 جنيه)", "price": 650 }
+      {
+        "label": "عادي (800 جنيه)",
+        "price": 800
+      },
+      {
+        "label": "السن المحير (650 جنيه)",
+        "price": 650
+      }
     ],
-    "category": "tafse",
+    "category": "women",
     "categories": [
-      "tafse",
       "women",
-      "gifts"
+      "kids"
     ],
     "merchant": "أم عمار",
     "img": "Tahra/compressed_1795585828647.webp",
@@ -129,14 +139,19 @@
     "desc": "عباية وفستان طويل باللون الأصفر الفاتح بأربطة جانبية وأكمام طويلة، السعر 800 جنيه والسن المحير 650 جنيه.",
     "price": 800,
     "sizes": [
-      { "label": "عادي (800 جنيه)", "price": 800 },
-      { "label": "السن المحير (650 جنيه)", "price": 650 }
+      {
+        "label": "عادي (800 جنيه)",
+        "price": 800
+      },
+      {
+        "label": "السن المحير (650 جنيه)",
+        "price": 650
+      }
     ],
-    "category": "tafse",
+    "category": "women",
     "categories": [
-      "tafse",
       "women",
-      "gifts"
+      "kids"
     ],
     "merchant": "أم عمار",
     "img": "Tahra/compressed_1795585826722.webp",
@@ -150,14 +165,19 @@
     "desc": "عباية قطيفة باللون الموف البنفسجي الغامق مع طرحة متناسقة، السعر 800 جنيه والسن المحير 650 جنيه.",
     "price": 800,
     "sizes": [
-      { "label": "عادي (800 جنيه)", "price": 800 },
-      { "label": "السن المحير (650 جنيه)", "price": 650 }
+      {
+        "label": "عادي (800 جنيه)",
+        "price": 800
+      },
+      {
+        "label": "السن المحير (650 جنيه)",
+        "price": 650
+      }
     ],
-    "category": "tafse",
+    "category": "women",
     "categories": [
-      "tafse",
       "women",
-      "gifts"
+      "kids"
     ],
     "merchant": "أم عمار",
     "img": "Tahra/compressed_1795585826571.webp",
@@ -171,14 +191,19 @@
     "desc": "عباية قطيفة باللون البني بأكمام واسعة مريحة، السعر 800 جنيه والسن المحير 650 جنيه.",
     "price": 800,
     "sizes": [
-      { "label": "عادي (800 جنيه)", "price": 800 },
-      { "label": "السن المحير (650 جنيه)", "price": 650 }
+      {
+        "label": "عادي (800 جنيه)",
+        "price": 800
+      },
+      {
+        "label": "السن المحير (650 جنيه)",
+        "price": 650
+      }
     ],
-    "category": "tafse",
+    "category": "women",
     "categories": [
-      "tafse",
       "women",
-      "gifts"
+      "kids"
     ],
     "merchant": "أم عمار",
     "img": "Tahra/compressed_1795585826432.webp",
@@ -192,14 +217,19 @@
     "desc": "عباية باللون البني بقماش مضلع مخطط وأكمام واسعة، السعر 800 جنيه والسن المحير 650 جنيه.",
     "price": 800,
     "sizes": [
-      { "label": "عادي (800 جنيه)", "price": 800 },
-      { "label": "السن المحير (650 جنيه)", "price": 650 }
+      {
+        "label": "عادي (800 جنيه)",
+        "price": 800
+      },
+      {
+        "label": "السن المحير (650 جنيه)",
+        "price": 650
+      }
     ],
-    "category": "tafse",
+    "category": "women",
     "categories": [
-      "tafse",
       "women",
-      "gifts"
+      "kids"
     ],
     "merchant": "أم عمار",
     "img": "Tahra/compressed_1795585826319.webp",
@@ -213,14 +243,19 @@
     "desc": "عباية وفستان طويل باللون السماوي بأكمام كشكشة وتفاصيل أزرار، السعر 800 جنيه والسن المحير 650 جنيه.",
     "price": 800,
     "sizes": [
-      { "label": "عادي (800 جنيه)", "price": 800 },
-      { "label": "السن المحير (650 جنيه)", "price": 650 }
+      {
+        "label": "عادي (800 جنيه)",
+        "price": 800
+      },
+      {
+        "label": "السن المحير (650 جنيه)",
+        "price": 650
+      }
     ],
-    "category": "tafse",
+    "category": "women",
     "categories": [
-      "tafse",
       "women",
-      "gifts"
+      "kids"
     ],
     "merchant": "أم عمار",
     "img": "Tahra/compressed_1795585825856.webp",
@@ -234,14 +269,19 @@
     "desc": "عباية باللون الكحلي الغامق بقماش مضلع وأكمام واسعة، السعر 800 جنيه والسن المحير 650 جنيه.",
     "price": 800,
     "sizes": [
-      { "label": "عادي (800 جنيه)", "price": 800 },
-      { "label": "السن المحير (650 جنيه)", "price": 650 }
+      {
+        "label": "عادي (800 جنيه)",
+        "price": 800
+      },
+      {
+        "label": "السن المحير (650 جنيه)",
+        "price": 650
+      }
     ],
-    "category": "tafse",
+    "category": "women",
     "categories": [
-      "tafse",
       "women",
-      "gifts"
+      "kids"
     ],
     "merchant": "أم عمار",
     "img": "Tahra/compressed_1795585825684.webp",
@@ -255,14 +295,19 @@
     "desc": "عباية سوداء واسعة بقصة صدر وكشكشة وأكمام واسعة، السعر 800 جنيه والسن المحير 650 جنيه.",
     "price": 800,
     "sizes": [
-      { "label": "عادي (800 جنيه)", "price": 800 },
-      { "label": "السن المحير (650 جنيه)", "price": 650 }
+      {
+        "label": "عادي (800 جنيه)",
+        "price": 800
+      },
+      {
+        "label": "السن المحير (650 جنيه)",
+        "price": 650
+      }
     ],
-    "category": "tafse",
+    "category": "women",
     "categories": [
-      "tafse",
       "women",
-      "gifts"
+      "kids"
     ],
     "merchant": "أم عمار",
     "img": "Tahra/compressed_1795585825567.webp",
@@ -276,14 +321,19 @@
     "desc": "عباية قطيفة نبيتي مزينة ببروش فضي عند الوسط، السعر 800 جنيه والسن المحير 650 جنيه.",
     "price": 800,
     "sizes": [
-      { "label": "عادي (800 جنيه)", "price": 800 },
-      { "label": "السن المحير (650 جنيه)", "price": 650 }
+      {
+        "label": "عادي (800 جنيه)",
+        "price": 800
+      },
+      {
+        "label": "السن المحير (650 جنيه)",
+        "price": 650
+      }
     ],
-    "category": "tafse",
+    "category": "women",
     "categories": [
-      "tafse",
       "women",
-      "gifts"
+      "kids"
     ],
     "merchant": "أم عمار",
     "img": "Tahra/compressed_1795585825413.webp",
@@ -297,14 +347,19 @@
     "desc": "عباية وفستان طويل باللون الأزرق البترولي بقماش متموج وكشكشة وأربطة جانبية، السعر 800 جنيه والسن المحير 650 جنيه.",
     "price": 800,
     "sizes": [
-      { "label": "عادي (800 جنيه)", "price": 800 },
-      { "label": "السن المحير (650 جنيه)", "price": 650 }
+      {
+        "label": "عادي (800 جنيه)",
+        "price": 800
+      },
+      {
+        "label": "السن المحير (650 جنيه)",
+        "price": 650
+      }
     ],
-    "category": "tafse",
+    "category": "women",
     "categories": [
-      "tafse",
       "women",
-      "gifts"
+      "kids"
     ],
     "merchant": "أم عمار",
     "img": "Tahra/compressed_1795585825201.webp",
@@ -318,14 +373,19 @@
     "desc": "عباية قطيفة باللون العنابي البرغندي مع طرحة متناسقة للشتاء والمناسبات، السعر 800 جنيه والسن المحير 650 جنيه.",
     "price": 800,
     "sizes": [
-      { "label": "عادي (800 جنيه)", "price": 800 },
-      { "label": "السن المحير (650 جنيه)", "price": 650 }
+      {
+        "label": "عادي (800 جنيه)",
+        "price": 800
+      },
+      {
+        "label": "السن المحير (650 جنيه)",
+        "price": 650
+      }
     ],
-    "category": "tafse",
+    "category": "women",
     "categories": [
-      "tafse",
       "women",
-      "gifts"
+      "kids"
     ],
     "merchant": "أم عمار",
     "img": "Tahra/compressed_1795585825051.webp",
@@ -339,14 +399,19 @@
     "desc": "عباية سوداء واسعة بقماش منقوش ومتموج بتصميم مريح وأنيق للخروجات والمناسبات، السعر 800 جنيه والسن المحير 650 جنيه.",
     "price": 800,
     "sizes": [
-      { "label": "عادي (800 جنيه)", "price": 800 },
-      { "label": "السن المحير (650 جنيه)", "price": 650 }
+      {
+        "label": "عادي (800 جنيه)",
+        "price": 800
+      },
+      {
+        "label": "السن المحير (650 جنيه)",
+        "price": 650
+      }
     ],
-    "category": "tafse",
+    "category": "women",
     "categories": [
-      "tafse",
       "women",
-      "gifts"
+      "kids"
     ],
     "merchant": "أم عمار",
     "img": "Tahra/compressed_1795585824891.webp",
