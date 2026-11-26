@@ -4,9 +4,9 @@
     "title": "أندر / ملابس داخلية نسائية موديلات وألوان متنوعة",
     "desc": "أندر / ملابس داخلية نسائية بنقشات وألوان متعددة Dabbagh / Kandel بسعر 65 جنيه. يرجى تحديد الموديل أو اللون المطلوب عند الطلب.",
     "price": 65,
-    "category": "clothes",
+    "category": "women",
     "categories": [
-      "clothes"
+      "women"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795606430440.webp",
@@ -22,8 +22,7 @@
     "price": 60,
     "category": "perfume",
     "categories": [
-      "perfume",
-      "clothes"
+      "perfume"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795606431057.webp",
@@ -67,9 +66,8 @@
     "title": "صواني تقديم فضية موديلات متنوعة",
     "desc": "صواني تقديم فضية أنيقة (صينية مستطيلة بنقش زخرفي في المنتصف، صينية مستطيلة بإطار منقوش وسطح أملس، وصينية بيضاوية بحافة مزخرفة) بسعر 1600 جنيه. يرجى تحديد الموديل المطلوب عند الطلب.",
     "price": 1600,
-    "category": "tafse",
+    "category": "home",
     "categories": [
-      "tafse",
       "home",
       "gifts"
     ],
@@ -305,8 +303,7 @@
     "category": "tafse",
     "categories": [
       "tafse",
-      "home",
-      "gifts"
+      "home"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525683537.webp",
@@ -334,9 +331,9 @@
     "title": "طقم كوبايات زجاج بيد 6 قطع بلانك ماكس",
     "desc": "طقم كوبايات زجاج شفافة بيد بتصميم حلزوني منقوش وقاعدة متينة 6 قطع بلانك ماكس للمشروبات الباردة والساخنة والزبادي والحلويات بسعر 250 جنيه.",
     "price": 250,
-    "category": "home",
+    "category": "women",
     "categories": [
-      "home"
+      "women"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525683448.webp",
@@ -368,7 +365,8 @@
     "category": "perfume",
     "categories": [
       "perfume",
-      "gifts"
+      "gifts",
+      "men"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525683381.webp",
@@ -398,7 +396,8 @@
     "price": 300,
     "category": "home",
     "categories": [
-      "home"
+      "home",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525682768.webp",
@@ -456,10 +455,9 @@
     "title": "طقم بولات صيني برسومات غزال 6 قطع",
     "desc": "طقم بولات وأطباق خزف صيني برسومات غزال وأوراق شجر في علبة هدايا مقسمة 6 قطع للشوربة والحلويات والزبادي بسعر 240 جنيه.",
     "price": 240,
-    "category": "home",
+    "category": "women",
     "categories": [
-      "home",
-      "gifts"
+      "women"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525682338.webp",
@@ -490,7 +488,8 @@
     "category": "perfume",
     "categories": [
       "perfume",
-      "gifts"
+      "gifts",
+      "men"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525682015.webp",
@@ -506,7 +505,8 @@
     "category": "perfume",
     "categories": [
       "perfume",
-      "gifts"
+      "gifts",
+      "women"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525682101.webp",
@@ -537,7 +537,8 @@
     "price": 80,
     "category": "home",
     "categories": [
-      "home"
+      "home",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525681784.webp",
@@ -582,7 +583,8 @@
     "price": 260,
     "category": "home",
     "categories": [
-      "home"
+      "home",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525681397.webp",
@@ -614,7 +616,7 @@
     "category": "perfume",
     "categories": [
       "perfume",
-      "gifts"
+      "men"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525681338.webp",
@@ -629,8 +631,7 @@
     "price": 120,
     "category": "perfume",
     "categories": [
-      "perfume",
-      "gifts"
+      "perfume"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525681083.webp",
@@ -689,9 +690,9 @@
     "title": "بادي سبلاش Azuva روائح متنوعة",
     "desc": "معطر جسم بادي سبلاش Body Splash من Azuva ببخاخ رشاش برسومات الورود والفواكه Cherry Blossom و Floral و Vanilla Coconut بسعر 80 جنيه.",
     "price": 80,
-    "category": "perfume",
+    "category": "women",
     "categories": [
-      "perfume"
+      "women"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525680633.webp",
@@ -722,7 +723,8 @@
     "category": "home",
     "categories": [
       "home",
-      "gifts"
+      "gifts",
+      "kids"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525680554.webp",
@@ -795,9 +797,9 @@
     "title": "بادي الدباغ حريمي مضلع بدانتيل ألوان متعددة",
     "desc": "بادي الدباغ حريمي مضلع بحواف دانتيل عند الرقبة والأكتاف أصفر خردلي وأوف وايت وأخضر زمردي وكشمير وفوشيا وأسود ملابس نسائية بسعر 130 جنيه.",
     "price": 130,
-    "category": "clothes",
+    "category": "women",
     "categories": [
-      "clothes"
+      "women"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525679797.webp",
@@ -810,9 +812,9 @@
     "title": "بادي عجينة سلسلة تريكو فري سايز يلبس لحد 85 ك",
     "desc": "بادي عجينة سلسلة نسائي خامة تريكو عجينة فري سايز يلبس لحد 85 ك بأكمام طويلة ورقبة عالية خفيفة بلمسة مموجة عند الياقة ملابس حريمي بسعر 230 جنيه.",
     "price": 230,
-    "category": "clothes",
+    "category": "women",
     "categories": [
-      "clothes"
+      "women"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525679961.webp",
@@ -859,7 +861,8 @@
     "category": "perfume",
     "categories": [
       "perfume",
-      "gifts"
+      "gifts",
+      "women"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525679587.webp",
@@ -875,7 +878,8 @@
     "category": "perfume",
     "categories": [
       "perfume",
-      "gifts"
+      "gifts",
+      "men"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525679436.webp",
@@ -921,7 +925,8 @@
     "category": "perfume",
     "categories": [
       "perfume",
-      "gifts"
+      "gifts",
+      "women"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525679120.webp",
@@ -937,7 +942,8 @@
     "category": "perfume",
     "categories": [
       "perfume",
-      "gifts"
+      "gifts",
+      "women"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525678955.webp",
@@ -952,7 +958,9 @@
     "price": 160,
     "category": "perfume",
     "categories": [
-      "perfume"
+      "perfume",
+      "gifts",
+      "women"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525679002.webp",
@@ -967,8 +975,7 @@
     "price": 275,
     "category": "home",
     "categories": [
-      "home",
-      "gifts"
+      "home"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525678854.webp",
@@ -983,7 +990,9 @@
     "price": 100,
     "category": "perfume",
     "categories": [
-      "perfume"
+      "perfume",
+      "gifts",
+      "women"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525678684.webp",
@@ -998,7 +1007,9 @@
     "price": 160,
     "category": "perfume",
     "categories": [
-      "perfume"
+      "perfume",
+      "gifts",
+      "women"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525678735.webp",
@@ -1123,7 +1134,8 @@
     "category": "perfume",
     "categories": [
       "perfume",
-      "gifts"
+      "gifts",
+      "women"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525677659.webp",
@@ -1154,7 +1166,8 @@
     "price": 250,
     "category": "home",
     "categories": [
-      "home"
+      "home",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525677144.webp",
@@ -1185,7 +1198,8 @@
     "category": "perfume",
     "categories": [
       "perfume",
-      "gifts"
+      "gifts",
+      "women"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525676515.webp",
@@ -1231,7 +1245,8 @@
     "category": "perfume",
     "categories": [
       "perfume",
-      "gifts"
+      "gifts",
+      "women"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525676873.webp",
