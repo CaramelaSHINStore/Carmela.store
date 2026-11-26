@@ -1,4 +1,5 @@
 const WHATSAPP_NUMBER = "201055436305";
+const BRAND_LOGO_URL = "https://raw.githubusercontent.com/Caramelstoresuez/Carmelastore/main/IMG_%D9%A0%D9%A1%D9%A3%D9%A9%D9%A2%D9%A5_%D9%A2%D9%A0%D9%A2%D9%A6%D9%A1%D9%A1%D9%A2%D9%A7_048.jpg";
 
 function buildWhatsAppDeepLink(url) {
     try {
@@ -52,6 +53,7 @@ function launchWhatsAppTarget(url) {
     };
 
     let switchedAway = false;
+    let fallbackTriggered = false;
     const onVisChange = () => {
         if (document.hidden) {
             switchedAway = true;
@@ -60,14 +62,26 @@ function launchWhatsAppTarget(url) {
     };
     document.addEventListener("visibilitychange", onVisChange);
 
+    const runSingleFallback = () => {
+        if (fallbackTriggered || switchedAway || document.visibilityState !== "visible") return;
+        fallbackTriggered = true;
+        if (isAndroid && intentUrl) {
+            try {
+                window.location.href = intentUrl;
+                return;
+            } catch (e) {}
+        }
+        if (isIOS) {
+            window.location.href = schemeUrl;
+            return;
+        }
+        const win = window.open(apiUrl, "_blank", "noopener,noreferrer");
+        if (!win) window.location.href = apiUrl;
+    };
+
     try {
         if (isAndroid && intentUrl) {
             window.location.href = intentUrl;
-            setTimeout(() => {
-                if (!switchedAway && document.visibilityState === "visible") {
-                    triggerDirectScheme(schemeUrl);
-                }
-            }, 350);
         } else {
             triggerDirectScheme(schemeUrl);
         }
@@ -79,20 +93,7 @@ function launchWhatsAppTarget(url) {
 
     setTimeout(() => {
         document.removeEventListener("visibilitychange", onVisChange);
-        if (!switchedAway && document.visibilityState === "visible") {
-            if (isAndroid && intentUrl) {
-                try {
-                    window.location.href = intentUrl;
-                    return;
-                } catch (e) {}
-            }
-            if (isIOS) {
-                window.location.href = schemeUrl;
-                return;
-            }
-            const win = window.open(apiUrl, "_blank", "noopener,noreferrer");
-            if (!win) window.location.href = apiUrl;
-        }
+        runSingleFallback();
     }, 1150);
 }
 
@@ -149,6 +150,7 @@ let appendTargetOrderId = null;
 let activeCartOrdersTab = "cart";
 let expandedOrderIds = new Set();
 let pendingConfirmAction = null;
+let pendingConfirmCancelAction = null;
 let pendingOptionSelection = {
     productId: null,
     clickedBtnId: null,
@@ -206,6 +208,14 @@ function syncThemeIcon() {
     }
 }
 
+function syncBrandLogos() {
+    document.querySelectorAll("[data-brand-logo]").forEach(img => {
+        if (img.tagName === "IMG" && img.getAttribute("src") !== BRAND_LOGO_URL) {
+            img.src = BRAND_LOGO_URL;
+        }
+    });
+}
+
 function initThemeMode() {
     try {
         const saved = localStorage.getItem(THEME_STORAGE_KEY);
@@ -228,35 +238,45 @@ function toggleThemeMode() {
     showCaramelToast(isDark ? "تم تفعيل المظهر الليلي" : "تم تفعيل المظهر النهاري");
 }
 
-function openConfirmModal(title, message, onConfirm, confirmLabel = "تأكيد") {
+function openConfirmModal(title, message, onConfirm, confirmLabel = "تأكيد", onCancel = null) {
     const modal = document.getElementById("confirmActionModal");
     const titleEl = document.getElementById("confirmModalTitle");
     const msgEl = document.getElementById("confirmModalMessage");
     const okBtn = document.getElementById("confirmModalOkBtn");
     if (!modal || !titleEl || !msgEl || !okBtn) {
-        if (window.confirm(message)) onConfirm();
+        if (window.confirm(message)) {
+            if (typeof onConfirm === "function") onConfirm();
+        } else if (typeof onCancel === "function") {
+            onCancel();
+        }
         return;
     }
     titleEl.textContent = title || "تأكيد العملية";
     msgEl.textContent = message || "";
     okBtn.textContent = confirmLabel;
     pendingConfirmAction = onConfirm;
+    pendingConfirmCancelAction = onCancel;
     modal.classList.add("open");
     syncBodyScrollLock();
     pushOverlayState("confirm");
 }
 
-function closeConfirmModal(fromPopState = false) {
+function closeConfirmModal(fromPopState = false, invokeCancel = false) {
     const modal = document.getElementById("confirmActionModal");
     if (modal) modal.classList.remove("open");
+    const cancelFn = pendingConfirmCancelAction;
     pendingConfirmAction = null;
+    pendingConfirmCancelAction = null;
     syncBodyScrollLock();
     if (!fromPopState) removeOverlayState("confirm");
+    if (invokeCancel && typeof cancelFn === "function") cancelFn();
 }
 
 function executeConfirmedAction() {
     const fn = pendingConfirmAction;
-    closeConfirmModal();
+    pendingConfirmAction = null;
+    pendingConfirmCancelAction = null;
+    closeConfirmModal(false, false);
     if (typeof fn === "function") fn();
 }
 
@@ -349,33 +369,8 @@ function copyProductShareLink(productId, event) {
 function renderMerchantsQuickStrip() {
     const strip = document.getElementById("merchantsQuickStrip");
     if (!strip) return;
-    if (!PRODUCTS.length) {
-        strip.innerHTML = "";
-        strip.classList.add("is-hidden");
-        return;
-    }
-
-    const counts = new Map();
-    PRODUCTS.forEach(p => {
-        const m = (p.merchant || "").trim();
-        if (m) counts.set(m, (counts.get(m) || 0) + 1);
-    });
-
-    const merchants = Array.from(counts.entries()).sort((a, b) => b[1] - a[1]);
-    if (merchants.length <= 1) {
-        strip.innerHTML = "";
-        strip.classList.add("is-hidden");
-        return;
-    }
-
-    strip.classList.remove("is-hidden");
-    const allChip = `<button type="button" class="merchant-strip-chip ${!currentMerchant ? "active" : ""}" onclick="clearMerchantFilter(true)"><span>كل التجار</span><span class="merchant-strip-count">${PRODUCTS.length}</span></button>`;
-    const itemsHtml = merchants.map(([name, cnt]) => {
-        const active = currentMerchant === name;
-        return `<button type="button" class="merchant-strip-chip ${active ? "active" : ""}" onclick="filterByMerchant('${escapeHtmlAttr(name)}', true)"><span>${escapeHtmlAttr(name)}</span><span class="merchant-strip-count">${cnt}</span></button>`;
-    }).join("");
-
-    strip.innerHTML = allChip + itemsHtml;
+    strip.innerHTML = "";
+    strip.classList.add("is-hidden");
 }
 
 function toggleHeaderSearchBar(forceOpen = null) {
@@ -901,7 +896,7 @@ const CATEGORY_NAMES = {
 };
 
 const CATEGORY_SUBTITLES = {
-    all: "تشكيلة المتجر بالكامل من كل التجار",
+    all: "تشكيلة المتجر بالكامل",
     home: "تنظيم، مطبخ، ومفروشات",
     appliances: "أجهزة وأدوات كهربائية منزلية",
     phones: "هواتف، شواحن، وسماعات",
@@ -1128,7 +1123,7 @@ function extractRawItemsFromJsonPayload(payload, fileMerchantName = "") {
 }
 
 function collectExtraSearchableTextFromRaw(rawItem) {
-    const skipKeys = new Set(["id", "code", "sku", "img", "image", "photo", "imgUrl", "imageUrl", "thumbnail", "thumb", "picture", "pic", "images", "photos", "imgs", "gallery", "url", "link", "download_url"]);
+    const skipKeys = new Set(["id", "code", "sku", "img", "image", "photo", "imgUrl", "imageUrl", "thumbnail", "thumb", "picture", "pic", "images", "photos", "imgs", "gallery", "url", "link", "download_url", "merchant", "seller", "vendor", "store", "owner"]);
     const parts = [];
     const walk = (v, depth = 0) => {
         if (depth > 3 || v === null || v === undefined) return;
@@ -1311,13 +1306,10 @@ async function loadMerchantProductsFromJson(forceRefresh = false) {
 function applyUrlDeepLinkParams() {
     try {
         const params = new URLSearchParams(window.location.search || "");
-        const merchantParam = (params.get("merchant") || "").trim();
         const productParam = (params.get("product") || "").trim();
         const catParam = (params.get("category") || "").trim();
 
-        if (merchantParam) {
-            filterByMerchant(merchantParam, true);
-        } else if (catParam && CATEGORY_NAMES[catParam]) {
+        if (catParam && CATEGORY_NAMES[catParam]) {
             const tabEl = document.querySelector(`.quick-top-tabs .quick-tab-item[data-quick="${catParam}"]`);
             filterByCategory(catParam, tabEl || null, true);
         }
@@ -1800,7 +1792,7 @@ function expandTermVariants(term) {
 
 function buildDynamicSearchTextForProduct(product) {
     if (product._extraSearchText) return product._extraSearchText;
-    const skipKeys = new Set(["id", "code", "sku", "img", "image", "photo", "imgUrl", "imageUrl", "thumbnail", "thumb", "picture", "pic", "images", "photos", "imgs", "gallery", "_extraSearchText"]);
+    const skipKeys = new Set(["id", "code", "sku", "img", "image", "photo", "imgUrl", "imageUrl", "thumbnail", "thumb", "picture", "pic", "images", "photos", "imgs", "gallery", "_extraSearchText", "merchant", "seller", "vendor", "store", "owner"]);
     const parts = [];
     Object.entries(product).forEach(([k, v]) => {
         if (skipKeys.has(k) || v === null || v === undefined) return;
@@ -1824,15 +1816,13 @@ function rebuildSearchIndex() {
         const catNames = allCats.map(c => CATEGORY_NAMES[c] || c || "").join(" ");
         const normTitle = normalizeText(p.title || "");
         const normDesc = normalizeText(p.desc || "");
-        const normMerchant = normalizeText(p.merchant || "");
         const normCats = normalizeText(catNames);
         const normPrice = normalizeText(`${p.price || ""} ${p.priceLabel || ""} ${p.subPrice || ""}`);
         const normExtra = normalizeText(buildDynamicSearchTextForProduct(p));
-        const fullHaystack = `${normTitle} ${normDesc} ${normMerchant} ${normCats} ${normPrice} ${normExtra}`;
+        const fullHaystack = `${normTitle} ${normDesc} ${normCats} ${normPrice} ${normExtra}`;
         nextMap.set(p.id, {
             normTitle,
             normDesc,
-            normMerchant,
             normCats,
             fullHaystack,
             words: fullHaystack.split(" ").filter(Boolean),
@@ -2282,7 +2272,7 @@ function renderContinuationAfterSection() {
     if (!continuationItems.length) { container.innerHTML = ""; return; }
 
     const contextLabel = currentMerchant
-        ? `بعد منتجات ${currentMerchant}.. منتجات أخرى متنوعة من المتجر`
+        ? "منتجات أخرى متنوعة من المتجر"
         : `بعد قسم ${CATEGORY_NAMES[currentCategory] || "القسم"}.. منتجات أخرى متنوعة من المتجر`;
 
     container.innerHTML = `
@@ -2336,20 +2326,10 @@ function updateMerchantBanner(merchantProductsList) {
     if (!banner || !nameEl || !countEl) return;
 
     document.body.classList.toggle("merchant-storefront-mode", Boolean(currentMerchant));
-
-    if (!currentMerchant) {
-        banner.classList.remove("visible");
-        nameEl.textContent = "";
-        countEl.textContent = "";
-        return;
-    }
-
-    const totalForMerchant = PRODUCTS.filter(p => p.merchant === currentMerchant).length;
-    const visibleCount = Array.isArray(merchantProductsList) ? merchantProductsList.length : totalForMerchant;
-    nameEl.textContent = currentMerchant;
-    if (avatarEl) avatarEl.textContent = currentMerchant.trim().charAt(0) || "ك";
-    countEl.textContent = visibleCount === totalForMerchant ? `${totalForMerchant} منتج متاح` : `${visibleCount} من ${totalForMerchant} منتج`;
-    banner.classList.add("visible");
+    banner.classList.remove("visible");
+    nameEl.textContent = "";
+    countEl.textContent = "";
+    if (avatarEl) avatarEl.textContent = "";
 }
 
 function buildSpecialRequestCardHTML() {
@@ -2421,10 +2401,6 @@ function buildProductCardHTML(product, instanceTag = "base") {
                         ${product.subPrice ? `<div class="product-sub">${escapeHtmlAttr(product.subPrice)}</div>` : ""}
                     </div>
                     ${product.desc ? `<div class="product-desc">${escapeHtmlAttr(product.desc)}</div>` : ""}
-                    <button type="button" class="merchant-tag-btn" onclick="event.stopPropagation(); filterByMerchant(this.closest('.product-card').dataset.merchant)" title="عرض منتجات ${escapeHtmlAttr(merchantName)} فقط">
-                        <span>التاجر:</span>
-                        <span class="merchant-tag-name">${escapeHtmlAttr(merchantName)}</span>
-                    </button>
                 </div>
                 <div class="card-btns">
                     <button type="button" class="add-cart-btn" id="${btnId}" onclick="const _c = this.closest('.product-card'); const _p = PRODUCTS.find(x => x.id === _c.dataset.productId); openProductOptionModal(_c.dataset.productId, '${btnId}', getActiveCardImageSrc(_c, _p))">
@@ -2606,11 +2582,14 @@ function renderProducts(category = currentCategory) {
         ? " — مدخلات جديدة"
         : (currentFeedMode === "deals" ? " — أسعار اقتصادية" : " — من أجلك");
     const favPrefix = onlyFavoritesMode ? "المفضلة • " : "";
-    const baseCatTitle = currentMerchant ? `${favPrefix}منتجات التاجر: ${currentMerchant}` : `${favPrefix}${CATEGORY_NAMES[category] || "المنتجات"}${modeSuffix}`;
-    titleEl.textContent = trimmedQuery ? `نتائج البحث: "${trimmedQuery}"` : baseCatTitle;
+    const baseCatTitle = `${favPrefix}${CATEGORY_NAMES[category] || "المنتجات"}${modeSuffix}`;
+    if (titleEl) {
+        titleEl.textContent = trimmedQuery ? `نتائج البحث: "${trimmedQuery}"` : baseCatTitle;
+    }
 
     if (countBadgeEl) {
-        countBadgeEl.textContent = isLoadingJsonProducts && !PRODUCTS.length ? "جاري التحميل..." : `${filteredList.length} منتج`;
+        countBadgeEl.textContent = "";
+        countBadgeEl.classList.add("is-hidden");
     }
 
     currentFeedItems = buildFeedPool(category, rawQuery);
@@ -2759,7 +2738,7 @@ function closeTopOverlayFromPopState() {
     else if (top === "image") closeImageModal(true);
     else if (top === "option") closeProductOptionModal(true);
     else if (top === "serviceInfo") closeServiceInfoModal(true);
-    else if (top === "confirm") closeConfirmModal(true);
+    else if (top === "confirm") closeConfirmModal(true, true);
 }
 
 window.addEventListener("popstate", () => {
@@ -2772,7 +2751,7 @@ function closeAllOverlays() {
     closeImageModal(true);
     closeProductOptionModal(true);
     closeServiceInfoModal(true);
-    closeConfirmModal(true);
+    closeConfirmModal(true, false);
     overlayStack = [];
     syncBodyScrollLock();
 }
@@ -2867,7 +2846,7 @@ function openProductOptionModal(productId, clickedBtnId = null, preferredImgSrc 
         }
     }
 
-    if (titleEl) titleEl.textContent = `${product.title} — التاجر: ${product.merchant || "متجر كارامل"}`;
+    if (titleEl) titleEl.textContent = product.title;
     if (priceEl) priceEl.innerHTML = `${formatPriceNumber(initialUnitPrice)} <span>جنيه</span>`;
     if (noteInput) noteInput.value = "";
     if (confirmBtn) {
@@ -3117,7 +3096,6 @@ function updateCartUI() {
                                 <div class="cart-item-title">${escapeHtmlAttr(item.title)}</div>
                                 <div class="cart-item-meta-line">
                                     <span class="cart-item-price">${formatPriceNumber(item.price * item.qty)} جنيه</span>
-                                    <span class="cart-item-merchant">• ${escapeHtmlAttr(item.merchant || "متجر كارامل")}</span>
                                 </div>
                             </div>
                             <div class="qty-controls">
@@ -3163,13 +3141,6 @@ function copyOrderNumber(orderId, event) {
     showCaramelToast(`تم نسخ رقم الطلب: ${orderId}`);
 }
 
-function buildOrderMerchantsSummary(order) {
-    const merchants = Array.from(new Set(
-        (order?.items || []).map(it => (it.merchant || "").trim()).filter(Boolean)
-    ));
-    return merchants.length ? merchants.join("، ") : "متجر كارامل";
-}
-
 function renderActiveOrdersInCart() {
     const ordersContainer = document.getElementById("activeOrdersContainer");
     const countBadge = document.getElementById("activeOrdersCountBadge");
@@ -3190,7 +3161,6 @@ function renderActiveOrdersInCart() {
         const orderPieces = (order.items || []).reduce((sum, it) => sum + (Number(it.qty) || 1), 0);
         const isAppendingThis = appendTargetOrderId === order.orderId;
         const isExpanded = expandedOrderIds.has(order.orderId) || isAppendingThis;
-        const merchantsSummary = buildOrderMerchantsSummary(order);
 
         const itemsHtml = (order.items || []).map((item, itemIdx) => {
             const product = PRODUCTS.find(p => p.id === item.id);
@@ -3269,7 +3239,7 @@ function renderActiveOrdersInCart() {
                     </div>
 
                     <div class="active-order-head">
-                        <div class="order-trigger-sub">التجار: ${escapeHtmlAttr(merchantsSummary)}</div>
+                        <div class="order-trigger-sub">ملخص الطلب</div>
                         <button type="button" class="order-copy-id-btn" onclick="copyOrderNumber('${escapeHtmlAttr(order.orderId)}', event)">نسخ الرقم</button>
                     </div>
 
@@ -3595,12 +3565,14 @@ function cancelActiveOrder(orderId) {
             updateCartUI();
             showCaramelToast(`تم إلغاء الطلب ${orderId}`);
 
-            openConfirmModal(
-                "إشعار واتساب",
-                "هل تحب إرسال إشعار الإلغاء على واتساب الآن؟",
-                () => launchWhatsAppTarget(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(cancelMsg)}`),
-                "إرسال واتساب"
-            );
+            setTimeout(() => {
+                openConfirmModal(
+                    "إشعار واتساب",
+                    "هل تحب إرسال إشعار الإلغاء على واتساب الآن؟",
+                    () => launchWhatsAppTarget(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(cancelMsg)}`),
+                    "إرسال واتساب"
+                );
+            }, 60);
         },
         "إلغاء الطلب"
     );
@@ -3939,7 +3911,6 @@ function openImageModal(src, productId = null) {
     syncPreviewModalMedia();
 
     const catLabel = product ? (CATEGORY_NAMES[product.category] || "متجر كارامل") : "متجر كارامل";
-    const merchantLabel = product ? (product.merchant || "متجر كارامل") : "متجر كارامل";
     const titleText = product ? product.title : "منتج مميز من متجر كارامل";
     const displayPrice = product ? formatPriceNumber(product.priceLabel || product.price) : "";
     const storyText = product
@@ -3949,9 +3920,9 @@ function openImageModal(src, productId = null) {
 
     if (catChip) catChip.textContent = catLabel;
     if (merchantChip) {
-        merchantChip.textContent = `التاجر: ${merchantLabel}`;
-        merchantChip.classList.toggle("is-clickable", Boolean(product));
-        merchantChip.onclick = product ? () => { closeImageModal(); filterByMerchant(merchantLabel, true); } : null;
+        merchantChip.textContent = "";
+        merchantChip.classList.add("is-hidden");
+        merchantChip.onclick = null;
     }
     if (copyLinkBtn) {
         copyLinkBtn.classList.toggle("is-hidden", !product);
@@ -4030,7 +4001,7 @@ function closeImageModal(fromPopState = false) {
 
 const ONESIGNAL_APP_ID = "d35fc670-898a-4e20-bb33-9f97e48f3e4f";
 const PUSH_PERMISSION_STORAGE_KEY = "caramel_push_enabled_v1";
-const PUSH_ICON_URL = "https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg";
+const PUSH_ICON_URL = BRAND_LOGO_URL;
 let oneSignalReadyPromise = null;
 
 function isPushAlreadyEnabled() {
@@ -4176,6 +4147,7 @@ function initCaramelSplashScreen() {
     setTimeout(finishSplash, maxSafetyMs);
 }
 
+syncBrandLogos();
 initThemeMode();
 initCaramelSplashScreen();
 syncHeaderStickyOffsets();
