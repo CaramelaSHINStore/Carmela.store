@@ -1966,18 +1966,7 @@ function updateMerchantBanner(merchantProductsList) {
 }
 
 function buildSpecialRequestCardHTML() {
-    const waMerchant = encodeURIComponent("مرحباً متجر كارامل، أرغب في الانضمام كتاجر");
-    return `
-        <article class="special-request-card">
-            <div>
-                <h3>كن تاجر</h3>
-                <p>اعرض منتجاتك معنا ووصل لعملائك بسهولة عبر متجر كارامل.</p>
-            </div>
-            <a href="https://wa.me/${WHATSAPP_NUMBER}?text=${waMerchant}" class="special-request-btn" target="_blank" rel="noopener noreferrer" onclick="event.preventDefault(); launchWhatsAppTarget(this.href);">
-                تواصل كتاجر على واتساب
-            </a>
-        </article>
-    `;
+    return "";
 }
 
 function buildProductCardHTML(product, instanceTag = "base") {
@@ -2104,9 +2093,6 @@ function buildFeedPool(category, rawQuery) {
     if (base.length === 0) return [];
 
     const items = base.map(product => ({ type: "product", product, tag: "p0" }));
-    if (!currentMerchant && !normalizeText(rawQuery)) {
-        items.splice(Math.min(7, items.length), 0, { type: "special", id: "special-0" });
-    }
     return items;
 }
 
@@ -2116,7 +2102,6 @@ function appendContinuationWave(category, rawQuery) {
     feedCycle += 1;
     const waveSorted = currentFeedMode === "for-you" ? interleaveMerchantsSmartly(shuffleArray(sourcePool)) : sourcePool;
     const waveItems = waveSorted.map(product => ({ type: "product", product, tag: `w${feedCycle}` }));
-    waveItems.push({ type: "special", id: `special-${feedCycle}` });
     currentFeedItems.push(...waveItems);
 }
 
@@ -3090,40 +3075,24 @@ async function enableCaramelPush() {
 }
 
 function initCaramelSplashScreen() {
-    const SPLASH_SESSION_KEY = "caramel_splash_shown_v1";
     const splash = document.getElementById("caramelSplashScreen");
+    const rectEl = document.getElementById("caramelSplashSubRect");
     const typedTextEl = document.getElementById("caramelSplashTypedText");
-    const caretEl = document.getElementById("caramelSplashCaret");
     const headerSloganEl = document.querySelector(".logo-sub");
 
-    let alreadyShown = false;
-    try {
-        alreadyShown = sessionStorage.getItem(SPLASH_SESSION_KEY) === "1";
-    } catch (e) {}
-
-    if (alreadyShown) {
-        if (splash && splash.parentNode) splash.parentNode.removeChild(splash);
-        return;
-    }
-
-    try {
-        sessionStorage.setItem(SPLASH_SESSION_KEY, "1");
-    } catch (e) {}
-
-    const splashBadgeText = "كل قطعه وليها دور";
-    const minSplashMs = 3500;
-    const maxSafetyMs = 3900;
+    const splashBadgeText = "كل قطعة وليها دور";
+    const minSplashMs = 1500;
+    const maxSafetyMs = 2200;
     const startTime = Date.now();
     let dismissed = false;
-    let typingTimer = null;
 
-    const rectEl = document.getElementById("caramelSplashSubRect") || document.getElementById("caramelSplashSlogan");
-    if (typedTextEl) {
+    if (typedTextEl && !typedTextEl.textContent.trim()) {
         typedTextEl.textContent = splashBadgeText;
     }
+
     setTimeout(() => {
         if (rectEl) rectEl.classList.add("descend-in");
-    }, 1050);
+    }, 280);
 
     function playHeaderSloganEntrance() {
         if (!headerSloganEl) return;
@@ -3135,13 +3104,10 @@ function initCaramelSplashScreen() {
     function finishSplash() {
         if (dismissed) return;
         dismissed = true;
-        clearInterval(typingTimer);
-        if (typedTextEl) typedTextEl.textContent = splashBadgeText;
-        if (caretEl) caretEl.classList.add("done");
         if (!splash) { playHeaderSloganEntrance(); return; }
         splash.classList.add("hide");
         playHeaderSloganEntrance();
-        setTimeout(() => { if (splash && splash.parentNode) splash.parentNode.removeChild(splash); }, 720);
+        setTimeout(() => { if (splash && splash.parentNode) splash.parentNode.removeChild(splash); }, 500);
     }
 
     function scheduleDismiss() {
