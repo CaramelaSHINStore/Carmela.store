@@ -2453,48 +2453,85 @@ footer {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    min-height: 44px;
+    min-height: 56px;
     overflow: hidden;
-    padding-top: 2px;
+    padding: 4px 12px 10px;
 }
 
-.splash-slogan {
+.splash-sub-rect {
     position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 7px;
-    min-height: 36px;
+    gap: 8px;
+    min-width: 146px;
+    min-height: 40px;
+    padding: 7px 24px;
+    border-radius: 14px;
+    overflow: hidden;
     opacity: 0;
-    transform: translateY(-18px) scale(0.96);
+    transform: translateY(-115%) scale(0.94);
     filter: blur(4px);
-    font-size: 0.96rem;
-    font-weight: 800;
-    color: var(--caramel-light);
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(24, 21, 18, 0.94));
-    border: 1px solid rgba(229, 190, 150, 0.4);
-    padding: 7px 22px;
-    border-radius: 999px;
-    box-shadow: 0 12px 26px -10px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.12);
-    transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.68s cubic-bezier(0.22, 1, 0.36, 1), filter 0.55s ease, box-shadow 0.6s ease;
+    font-size: 1.08rem;
+    font-weight: 900;
+    color: #ffe6c4;
+    background: linear-gradient(135deg, rgba(229, 190, 150, 0.22), rgba(24, 21, 18, 0.94));
+    border: 1.2px solid rgba(229, 190, 150, 0.48);
+    box-shadow:
+        0 14px 30px -10px rgba(0, 0, 0, 0.72),
+        inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition:
+        opacity 0.58s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.74s cubic-bezier(0.16, 1, 0.3, 1),
+        filter 0.52s ease,
+        box-shadow 0.6s ease;
     will-change: transform, opacity, filter;
 }
 
-.splash-slogan::before {
+.splash-sub-rect::before {
     content: "";
-    width: 6px;
-    height: 6px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
     background: var(--caramel-light);
-    box-shadow: 0 0 8px var(--caramel-light);
+    box-shadow: 0 0 10px var(--caramel-light);
     flex-shrink: 0;
 }
 
-.splash-slogan.descend-in {
+.splash-sub-rect.descend-in {
     opacity: 1;
     transform: translateY(0) scale(1);
     filter: blur(0);
-    box-shadow: 0 14px 28px -10px rgba(200, 150, 102, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+    box-shadow:
+        0 16px 32px -10px rgba(200, 150, 102, 0.36),
+        inset 0 1px 0 rgba(255, 255, 255, 0.26);
+}
+
+.splash-rect-sheen {
+    position: absolute;
+    top: 0;
+    left: -135%;
+    width: 65%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.42),
+        transparent
+    );
+    transform: skewX(-22deg);
+    pointer-events: none;
+}
+
+.splash-sub-rect.descend-in .splash-rect-sheen {
+    animation: spogenRectSheen 0.95s ease 0.25s forwards;
+}
+
+@keyframes spogenRectSheen {
+    0% { left: -135%; }
+    100% { left: 150%; }
 }
 
 .splash-typed-text {
