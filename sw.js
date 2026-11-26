@@ -1,4 +1,4 @@
-const CACHE_NAME = "caramel-store-v5";
+const CACHE_NAME = "caramel-store-v6";
 const CORE_ASSETS = [
     "./",
     "./index.html",
@@ -37,6 +37,24 @@ self.addEventListener("fetch", event => {
     if (reqUrl.pathname.endsWith(".json") || reqUrl.hostname.includes("api.github.com")) {
         event.respondWith(
             fetch(event.request).catch(() => caches.match(event.request))
+        );
+        return;
+    }
+
+    if (event.request.mode === "navigate") {
+        event.respondWith(
+            fetch(event.request)
+                .then(networkResp => {
+                    if (networkResp && networkResp.status === 200 && reqUrl.origin === self.location.origin) {
+                        const cloned = networkResp.clone();
+                        caches.open(CACHE_NAME).then(cache => cache.put("./index.html", cloned)).catch(() => {});
+                    }
+                    return networkResp;
+                })
+                .catch(async () => {
+                    const cachedIndex = await caches.match("./index.html");
+                    return cachedIndex || caches.match("./");
+                })
         );
         return;
     }
