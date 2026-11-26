@@ -61,6 +61,12 @@
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                     </svg>
                 </button>
+                <button type="button" class="icon-circle-btn fav-header-btn" id="headerFavFilterBtn" onclick="toggleFavoritesFilter()" aria-label="المفضلة" title="عرض المفضلة">
+                    <span class="fav-header-badge" id="headerFavCount"></span>
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                </button>
             </div>
 
             <button type="button" class="logo-pill" onclick="resetHomeFresh()" aria-label="العودة للصفحة الرئيسية">
@@ -158,6 +164,8 @@
                 </a>
             </div>
         </div>
+
+        <div class="merchants-quick-strip is-hidden" id="merchantsQuickStrip" role="region" aria-label="تجار المتجر"></div>
 
         <div class="append-mode-banner is-hidden" id="appendOrderBanner" aria-live="polite">
             <div class="append-mode-info">
@@ -284,6 +292,22 @@
 
     <div class="caramel-toast" id="caramelToast" role="status" aria-live="polite"></div>
 
+    <div class="option-modal-backdrop" id="confirmActionModal" onclick="closeConfirmModal()">
+        <div class="option-modal-card confirm-modal-card" onclick="event.stopPropagation()">
+            <div class="option-modal-header">
+                <h3 id="confirmModalTitle">تأكيد العملية</h3>
+                <button type="button" class="option-modal-close" onclick="closeConfirmModal()" aria-label="إغلاق">&times;</button>
+            </div>
+            <div class="option-modal-body">
+                <p id="confirmModalMessage" class="confirm-modal-msg"></p>
+            </div>
+            <div class="option-modal-footer">
+                <button type="button" class="option-confirm-btn" id="confirmModalOkBtn" onclick="executeConfirmedAction()">تأكيد</button>
+                <button type="button" class="option-cancel-btn" onclick="closeConfirmModal()">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
     <div class="option-modal-backdrop" id="serviceInfoModal" onclick="closeServiceInfoModal()">
         <div class="option-modal-card" onclick="event.stopPropagation()">
             <div class="option-modal-header">
@@ -379,6 +403,7 @@
                 <input type="text" id="checkoutCustomerName" class="cart-customer-input" placeholder="الاسم بالكامل *" required>
                 <input type="tel" id="checkoutCustomerPhone" class="cart-customer-input" placeholder="رقم التواصل *" required>
             </div>
+            <input type="text" id="checkoutCustomerAddress" class="cart-customer-input" placeholder="العنوان التفصيلي (اختياري: الحي / الشارع / علامة مميزة)">
             <div class="cart-location-row">
                 <button type="button" class="cart-location-btn" id="cartLocationBtn" onclick="requestCustomerLocation()">
                     <span id="cartLocationBtnIcon" aria-hidden="true">📍</span>
@@ -480,6 +505,7 @@
                 <div class="preview-badges-row">
                     <span class="preview-cat-chip" id="previewCategoryChip">متجر كارامل</span>
                     <span class="preview-merchant-chip" id="previewMerchantChip">التاجر: كارامل</span>
+                    <button type="button" class="preview-copy-link-btn" id="previewCopyLinkBtn" title="نسخ رابط المنتج">نسخ الرابط</button>
                 </div>
 
                 <div class="preview-product-title" id="previewProductTitle"></div>
