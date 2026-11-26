@@ -144,7 +144,7 @@ let currentFeedMode = "for-you";
 let currentSortMode = "smart";
 let isLoadingJsonProducts = true;
 let appendTargetOrderId = null;
-let activeCartOrdersTab = "pending";
+let activeCartOrdersTab = "cart";
 let expandedOrderIds = new Set();
 let pendingOptionSelection = {
     productId: null,
@@ -1430,19 +1430,40 @@ function saveCustomerProfileFromPanel() {
     showCaramelToast("تم حفظ بياناتك بنجاح");
 }
 
+function syncCartTabFooterVisibility() {
+    const isCartTab = activeCartOrdersTab === "cart";
+    const totalRow = document.getElementById("currentCartTotalRow");
+    const checkoutActions = document.getElementById("currentCartCheckoutActions");
+    const quickOrdersActions = document.getElementById("ordersTabQuickActions");
+    const cartBody = document.getElementById("cartDrawerPagesContainer");
+
+    if (totalRow) totalRow.classList.toggle("is-hidden", !isCartTab);
+    if (checkoutActions) checkoutActions.classList.toggle("is-hidden", !isCartTab);
+    if (quickOrdersActions) quickOrdersActions.classList.toggle("is-hidden", isCartTab);
+    if (cartBody) cartBody.scrollTop = 0;
+}
+
 function switchCartOrdersTab(tabName) {
-    activeCartOrdersTab = tabName === "received" ? "received" : "pending";
+    if (tabName === "received") activeCartOrdersTab = "received";
+    else if (tabName === "pending") activeCartOrdersTab = "pending";
+    else activeCartOrdersTab = "cart";
+
+    const cartBtn = document.getElementById("tabBtnCurrentCart");
     const pendingBtn = document.getElementById("tabBtnPendingOrders");
     const receivedBtn = document.getElementById("tabBtnReceivedOrders");
     const currentCartSec = document.getElementById("currentCartSection");
     const pendingSec = document.getElementById("activeOrdersSection");
     const receivedSec = document.getElementById("receivedOrdersSection");
 
+    if (cartBtn) cartBtn.classList.toggle("active", activeCartOrdersTab === "cart");
     if (pendingBtn) pendingBtn.classList.toggle("active", activeCartOrdersTab === "pending");
     if (receivedBtn) receivedBtn.classList.toggle("active", activeCartOrdersTab === "received");
-    if (currentCartSec) currentCartSec.classList.toggle("is-hidden", activeCartOrdersTab !== "pending");
+
+    if (currentCartSec) currentCartSec.classList.toggle("is-hidden", activeCartOrdersTab !== "cart");
     if (pendingSec) pendingSec.classList.toggle("is-hidden", activeCartOrdersTab !== "pending");
     if (receivedSec) receivedSec.classList.toggle("is-hidden", activeCartOrdersTab !== "received");
+
+    syncCartTabFooterVisibility();
 }
 
 function loadCustomerProfileToInputs() {
@@ -2861,6 +2882,11 @@ function updateCartUI() {
         bottomBadge.classList.toggle("visible", badgeTotal > 0);
     }
 
+    const currentCartBadge = document.getElementById("currentCartCountBadge");
+    const currentCartChip = document.getElementById("currentCartPageChip");
+    if (currentCartBadge) currentCartBadge.textContent = String(cartPieces);
+    if (currentCartChip) currentCartChip.textContent = `${cartPieces} قطعة`;
+
     const distinctEl = document.getElementById("cartDistinctCount");
     const piecesEl = document.getElementById("cartTotalPieces");
     const totalAmountEl = document.getElementById("cartTotalAmount");
@@ -2963,6 +2989,8 @@ function renderActiveOrdersInCart() {
 
     const visibleOrders = activeOrders.filter(o => o && o.status === "pending");
     if (countBadge) countBadge.textContent = String(visibleOrders.length);
+    const pendingChip = document.getElementById("pendingOrdersPageChip");
+    if (pendingChip) pendingChip.textContent = `${visibleOrders.length} طلب`;
 
     if (!visibleOrders.length) {
         ordersContainer.innerHTML = `<div class="active-orders-empty">لا توجد طلبات قيد التنفيذ حالياً. أي طلب ترسله سيظهر برقم الطلب هنا — اضغط على رقم الطلب لفتحه أو إغلاقه.</div>`;
@@ -3024,8 +3052,9 @@ function renderActiveOrdersInCart() {
                 <button type="button" class="order-number-trigger" onclick="toggleOrderAccordion('${escapeHtmlAttr(order.orderId)}')" aria-expanded="${isExpanded}">
                     <div class="order-trigger-main">
                         <div class="order-id-row">
-                            <span class="order-id-code">#${escapeHtmlAttr(order.orderId)}</span>
-                            <span class="order-id-hint">${isExpanded ? "اضغط لإغلاق الطلب" : "اضغط لفتح الطلب"}</span>
+                            <span class="order-id-badge-label">رقم الطلب</span>
+                            <span class="order-id-code">${escapeHtmlAttr(order.orderId)}</span>
+                            <span class="order-id-hint">${isExpanded ? "إغلاق الأوردر" : "فتح الأوردر"}</span>
                         </div>
                         <div class="order-trigger-sub">${escapeHtmlAttr(order.createdAtLabel || "")} • ${orderPieces} قطعة • ${formatPriceNumber(orderTotal)} ج</div>
                     </div>
@@ -3153,6 +3182,8 @@ function renderReceivedOrdersInCart() {
     if (!container) return;
 
     if (countBadge) countBadge.textContent = String(receivedOrders.length);
+    const receivedChip = document.getElementById("receivedOrdersPageChip");
+    if (receivedChip) receivedChip.textContent = `${receivedOrders.length} طلب`;
 
     if (!receivedOrders.length) {
         container.innerHTML = `<div class="received-orders-empty">لا توجد طلبات مستلمة بعد. بعد الضغط على "تم الاستلام" ستُحفظ طلباتك هنا.</div>`;
@@ -3186,8 +3217,9 @@ function renderReceivedOrdersInCart() {
                 <button type="button" class="order-number-trigger" onclick="toggleOrderAccordion('${escapeHtmlAttr(order.orderId)}')" aria-expanded="${isExpanded}">
                     <div class="order-trigger-main">
                         <div class="order-id-row">
-                            <span class="order-id-code">#${escapeHtmlAttr(order.orderId)}</span>
-                            <span class="order-id-hint">${isExpanded ? "اضغط لإغلاق الطلب" : "اضغط لفتح الطلب"}</span>
+                            <span class="order-id-badge-label">رقم الطلب</span>
+                            <span class="order-id-code">${escapeHtmlAttr(order.orderId)}</span>
+                            <span class="order-id-hint">${isExpanded ? "إغلاق الأوردر" : "فتح الأوردر"}</span>
                         </div>
                         <div class="order-trigger-sub">استُلم: ${escapeHtmlAttr(order.receivedAtLabel || order.createdAtLabel || "")} • ${orderPieces} قطعة • ${formatPriceNumber(orderTotal)} ج</div>
                     </div>
