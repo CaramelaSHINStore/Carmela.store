@@ -1,4 +1,4 @@
-const CACHE_NAME = "caramel-store-v6";
+const CACHE_NAME = "caramel-store-v2026-11-26";
 const CORE_ASSETS = [
     "./",
     "./index.html",
@@ -10,17 +10,19 @@ const CORE_ASSETS = [
 self.addEventListener("install", event => {
     self.skipWaiting();
     event.waitUntil(
-        caches.open(CACHE_NAME).then(cache => cache.addAll(CORE_ASSETS)).catch(() => {})
+        caches.open(CACHE_NAME).then(cache => {
+            return Promise.allSettled(CORE_ASSETS.map(url => cache.add(url)));
+        })
     );
 });
 
 self.addEventListener("activate", event => {
     event.waitUntil(
-        caches.keys().then(keys =>
-            Promise.all(
+        caches.keys().then(keys => {
+            return Promise.all(
                 keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
-            )
-        ).then(() => self.clients.claim())
+            );
+        }).then(() => self.clients.claim())
     );
 });
 
@@ -31,25 +33,37 @@ self.addEventListener("message", event => {
 });
 
 self.addEventListener("fetch", event => {
-    if (event.request.method !== "GET") return;
-    const reqUrl = new URL(event.request.url);
+    const req = event.request;
+    if (req.method !== "GET") return;
 
-    if (reqUrl.pathname.endsWith(".json") || reqUrl.hostname.includes("api.github.com")) {
+    const url = new URL(req.url);
+    const isSameOrigin = url.origin === self.location.origin;
+
+    if (req.mode === "navigate" || url.pathname.endsWith(".json")) {
         event.respondWith(
-            fetch(event.request).catch(() => caches.match(event.request))
+            fetch(req).then(res => {
+                if (res && res.ok && isSameOrigin) {
+                    const copy = res.clone();
+                    caches.open(CACHE_NAME).then(c => c.put(req, copy)).catch(() => {});
+                }
+                return res;
+            }).catch(() => caches.match(req).then(cached => cached || caches.match("./index.html")))
         );
         return;
     }
 
-    event.respondWith(
-        fetch(event.request)
-            .then(networkResp => {
-                if (networkResp && networkResp.status === 200 && reqUrl.origin === self.location.origin) {
-                    const cloned = networkResp.clone();
-                    caches.open(CACHE_NAME).then(cache => cache.put(event.request, cloned)).catch(() => {});
-                }
-                return networkResp;
+    if (isSameOrigin) {
+        event.respondWith(
+            caches.match(req).then(cached => {
+                const networkFetch = fetch(req).then(res => {
+                    if (res && res.ok) {
+                        const copy = res.clone();
+                        caches.open(CACHE_NAME).then(c => c.put(req, copy)).catch(() => {});
+                    }
+                    return res;
+                }).catch(() => cached);
+                return cached || networkFetch;
             })
-            .catch(() => caches.match(event.request))
-    );
+        );
+    }
 });
