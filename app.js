@@ -3091,17 +3091,138 @@ async function enableCaramelPush() {
 
 function initCaramelSplashScreen() {
     const splash = document.getElementById("caramelSplashScreen");
-    const rectEl = document.getElementById("caramelSplashSubRect") || document.getElementById("caramelSplashSlogan");
-    const typedTextEl = document.getElementById("caramelSplashTypedText");
-    const caretEl = document.getElementById("caramelSplashCaret");
     const headerSloganEl = document.querySelector(".logo-sub");
-
     const splashBadgeText = "كل قطعه وليها دور";
-    const minSplashMs = 3500;
-    const maxSafetyMs = 3900;
+    const minSplashMs = 3700;
+    const maxSafetyMs = 4100;
     const startTime = Date.now();
     let dismissed = false;
     let typingTimer = null;
+
+    if (!document.getElementById("caramelSplashDropRectStyles")) {
+        const styleEl = document.createElement("style");
+        styleEl.id = "caramelSplashDropRectStyles";
+        styleEl.textContent = `
+            #caramelSplashScreen {
+                flex-direction: column !important;
+                justify-content: center !important;
+                align-items: center !important;
+            }
+            .caramel-splash-drop-rect {
+                position: relative;
+                margin-top: 22px;
+                padding: 13px 28px;
+                min-width: 225px;
+                max-width: 86vw;
+                border-radius: 16px;
+                background: linear-gradient(135deg, rgba(212, 163, 115, 0.22) 0%, rgba(44, 30, 20, 0.92) 50%, rgba(200, 150, 102, 0.26) 100%);
+                border: 1.5px solid rgba(229, 190, 150, 0.58);
+                box-shadow: 0 14px 34px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 244, 230, 0.35), 0 0 22px rgba(212, 163, 115, 0.22);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                direction: rtl;
+                overflow: hidden;
+                opacity: 0;
+                transform: translateY(-34px) scale(0.92);
+                animation: caramelRectDropDown 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.45s forwards;
+            }
+            .caramel-splash-drop-rect::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -120%;
+                width: 65%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255, 238, 214, 0.28), transparent);
+                transform: skewX(-22deg);
+                animation: caramelRectShimmer 2.4s ease-in-out 1.25s infinite;
+                pointer-events: none;
+            }
+            .caramel-splash-drop-rect-dot {
+                width: 7px;
+                height: 7px;
+                border-radius: 50%;
+                background: #e5be96;
+                box-shadow: 0 0 10px #e5be96;
+                flex-shrink: 0;
+            }
+            .caramel-splash-drop-text {
+                font-family: inherit;
+                font-size: 1.05rem;
+                font-weight: 800;
+                letter-spacing: 0.2px;
+                color: #fff6eb;
+                text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+                white-space: nowrap;
+            }
+            .caramel-splash-drop-caret {
+                display: inline-block;
+                width: 2px;
+                height: 1.1em;
+                background-color: #e5be96;
+                margin-right: 2px;
+                border-radius: 2px;
+                animation: caramelCaretBlink 0.75s steps(1) infinite;
+            }
+            .caramel-splash-drop-caret.done {
+                opacity: 0;
+                animation: none;
+            }
+            @keyframes caramelRectDropDown {
+                0% {
+                    opacity: 0;
+                    transform: translateY(-34px) scale(0.92);
+                }
+                65% {
+                    opacity: 1;
+                    transform: translateY(5px) scale(1.02);
+                }
+                100% {
+                    opacity: 1;
+                    transform: translateY(0) scale(1);
+                }
+            }
+            @keyframes caramelRectShimmer {
+                0% { left: -120%; }
+                55%, 100% { left: 160%; }
+            }
+            @keyframes caramelCaretBlink {
+                0%, 49% { opacity: 1; }
+                50%, 100% { opacity: 0; }
+            }
+        `;
+        document.head.appendChild(styleEl);
+    }
+
+    let rectEl = document.getElementById("caramelSplashSubRect") || document.getElementById("caramelSplashSlogan");
+    let typedTextEl = document.getElementById("caramelSplashTypedText");
+    let caretEl = document.getElementById("caramelSplashCaret");
+
+    if (splash) {
+        if (!rectEl) {
+            rectEl = document.createElement("div");
+            rectEl.id = "caramelSplashSubRect";
+            splash.appendChild(rectEl);
+        }
+        rectEl.classList.add("caramel-splash-drop-rect");
+
+        if (!typedTextEl) {
+            rectEl.innerHTML = `
+                <span class="caramel-splash-drop-rect-dot" aria-hidden="true"></span>
+                <span id="caramelSplashTypedText" class="caramel-splash-drop-text"></span>
+                <span id="caramelSplashCaret" class="caramel-splash-drop-caret" aria-hidden="true"></span>
+            `;
+            typedTextEl = document.getElementById("caramelSplashTypedText");
+            caretEl = document.getElementById("caramelSplashCaret");
+        } else {
+            typedTextEl.classList.add("caramel-splash-drop-text");
+            if (caretEl) caretEl.classList.add("caramel-splash-drop-caret");
+        }
+    }
 
     if (typedTextEl) typedTextEl.textContent = "";
 
@@ -3113,10 +3234,23 @@ function initCaramelSplashScreen() {
     }
 
     function startRectTypewriter() {
-        typedTextEl.textContent = splashBadgeText;
+        if (!typedTextEl) return;
+        let charIdx = 0;
+        clearInterval(typingTimer);
+        typingTimer = setInterval(() => {
+            charIdx += 1;
+            typedTextEl.textContent = splashBadgeText.slice(0, charIdx);
+            if (charIdx >= splashBadgeText.length) {
+                clearInterval(typingTimer);
+                if (caretEl) {
+                    setTimeout(() => caretEl.classList.add("done"), 450);
+                }
+            }
+        }, 65);
     }
 
-    
+    setTimeout(startRectTypewriter, 950);
+
     function finishSplash() {
         if (dismissed) return;
         dismissed = true;
