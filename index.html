@@ -395,12 +395,14 @@
             <span>إجمالي القطع: <strong id="cartTotalPieces">0</strong></span>
         </div>
 
-        <div class="cart-orders-tabs-bar" role="tablist" aria-label="حالة الطلبات">
-            <button type="button" class="cart-order-tab-btn active" id="tabBtnPendingOrders" data-tab="pending" onclick="switchCartOrdersTab('pending')">
+        <div class="cart-top-status-strip" role="tablist" aria-label="حالة الطلبات في السلة">
+            <button type="button" class="cart-top-status-pill active" id="tabBtnPendingOrders" data-tab="pending" onclick="switchCartOrdersTab('pending')">
+                <span class="status-pill-dot pending-dot"></span>
                 <span>قيد التنفيذ</span>
                 <span class="cart-order-tab-badge" id="activeOrdersCountBadge">0</span>
             </button>
-            <button type="button" class="cart-order-tab-btn" id="tabBtnReceivedOrders" data-tab="received" onclick="switchCartOrdersTab('received')">
+            <button type="button" class="cart-top-status-pill" id="tabBtnReceivedOrders" data-tab="received" onclick="switchCartOrdersTab('received')">
+                <span class="status-pill-dot received-dot"></span>
                 <span>تم الاستلام</span>
                 <span class="cart-order-tab-badge" id="receivedOrdersCountBadge">0</span>
             </button>
