@@ -3194,3 +3194,76 @@ footer {
     border-color: var(--accent);
     color: var(--accent-deep);
 }
+
+.cart-top-status-strip {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    padding: 8px 10px;
+}
+
+.cart-top-status-pill {
+    padding: 7px 6px;
+    gap: 4px;
+    font-size: 0.72rem;
+    border-radius: 12px;
+}
+
+.cart-dot {
+    background: #38bdf8;
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.7);
+}
+
+.cart-page-panel {
+    animation: modalPopIn 0.18s ease;
+    gap: 10px;
+}
+
+.cart-page-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    background: var(--surface-soft);
+    border: 1px solid var(--accent-glow);
+    border-radius: 13px;
+    padding: 8px 11px;
+}
+
+.cart-page-sub {
+    font-size: 0.67rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    line-height: 1.3;
+}
+
+.cart-page-chip {
+    background: var(--accent-tint);
+    color: var(--accent-deep);
+    border: 1px solid var(--accent-glow);
+    border-radius: 999px;
+    padding: 2px 9px;
+    font-size: 0.68rem;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.order-id-badge-label {
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: var(--text-muted);
+}
+
+.cart-tab-quick-actions {
+    display: grid;
+    grid-template-columns: 1.25fr 0.75fr;
+    gap: 7px;
+}
+
+.cart-go-cart-btn {
+    background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+    color: #ffffff;
+    padding: 8px 10px;
+    border-radius: 11px;
+    font-size: 0.75rem;
+    font-weight: 900;
+}
