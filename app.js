@@ -56,6 +56,8 @@ const STORE_URL = "https://caramelstoresuez.github.io/Carmelastore/";
 const CART_STORAGE_KEY = "caramel_store_cart_v1";
 const INTEREST_STORAGE_KEY = "caramel_smart_interest_v1";
 const THEME_STORAGE_KEY = "caramel_store_theme_mode_v1";
+const CUSTOMER_PROFILE_KEY = "caramel_customer_profile_v1";
+const SEARCH_HISTORY_KEY = "caramel_search_history_v1";
 const BATCH_SIZE = 12;
 const CONTINUATION_STEP = 8;
 
@@ -90,7 +92,10 @@ const PRODUCT_VARIANTS = {};
 
 let deferredInstallPrompt = null;
 let toastTimer = null;
+let searchDebounceTimer = null;
+let isAppendingBatch = false;
 let currentFeedMode = "for-you";
+let currentSortMode = "smart";
 let isLoadingJsonProducts = true;
 let pendingOptionSelection = {
     productId: null,
@@ -110,6 +115,22 @@ let pausedMotionKind = { trends: false, deals: false };
 let autoHoverSlideTimer = null;
 let activeHoveredCard = null;
 let previewModalState = { productId: null, imgs: [], idx: 0 };
+
+function createDebounced(fn, delay = 180) {
+    let timer = null;
+    return function (...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn.apply(this, args), delay);
+    };
+}
+
+function formatPriceNumber(priceOrLabel) {
+    if (typeof priceOrLabel === "string" && /[a-zA-Z\u0600-\u06FF]/.test(priceOrLabel)) {
+        return priceOrLabel.trim();
+    }
+    const num = Number(priceOrLabel) || 0;
+    return num.toLocaleString("ar-EG");
+}
 
 function syncHeaderStickyOffsets() {
     const header = document.querySelector(".top-app-bar");
@@ -159,7 +180,7 @@ function toggleHeaderSearchBar(forceOpen = null) {
     wrap.classList.toggle("open", shouldOpen);
     if (toggleBtn) toggleBtn.classList.toggle("active", shouldOpen);
     renderSmartSearchSuggestions();
-    setTimeout(syncHeaderStickyOffsets, 220);
+    setTimeout(syncHeaderStickyOffsets, 200);
     if (shouldOpen && input) {
         setTimeout(() => {
             input.focus();
@@ -603,74 +624,26 @@ async function shareStoreApp() {
     }
 }
 
-(function initAutoPageSwitchRefresh() {
-    const RELOAD_GUARD_KEY = "caramel_auto_reload_ts_v1";
-    const INITIAL_HTML_LEN = document.documentElement.outerHTML.length;
-    let swRegistration = null;
-    let lastAwayTime = 0;
-
-    function canSafelyReloadNow() {
+(function initServiceWorkerQuietly() {
+    if (!("serviceWorker" in navigator)) return;
+    window.addEventListener("load", async () => {
         try {
-            const lastTs = Number(sessionStorage.getItem(RELOAD_GUARD_KEY) || "0");
-            if (Date.now() - lastTs < 6000) return false;
-            sessionStorage.setItem(RELOAD_GUARD_KEY, String(Date.now()));
-        } catch (e) {}
-        return true;
-    }
-
-    function triggerCleanPageReload() {
-        if (!canSafelyReloadNow()) return;
-        window.location.reload();
-    }
-
-    function activateWaitingWorker(reg) {
-        if (reg && reg.waiting) reg.waiting.postMessage({ type: "SKIP_WAITING" });
-    }
-
-    async function checkRemoteUpdatesIfChanged() {
-        if (swRegistration) {
-            swRegistration.update().catch(() => {});
-            activateWaitingWorker(swRegistration);
-        }
-        try {
-            const resp = await fetch(`./index.html?ts=${Date.now()}`, { cache: "no-store", headers: { "Cache-Control": "no-cache" } });
-            if (resp && resp.ok) {
-                const freshHtml = await resp.text();
-                if (Math.abs(freshHtml.length - INITIAL_HTML_LEN) > 120) triggerCleanPageReload();
-            }
-        } catch (e) {}
-    }
-
-    if ("serviceWorker" in navigator) {
-        window.addEventListener("load", async () => {
-            try {
-                const reg = await navigator.serviceWorker.register("./sw.js", { scope: "./", updateViaCache: "none" });
-                swRegistration = reg;
-                activateWaitingWorker(reg);
+            const reg = await navigator.serviceWorker.register("./sw.js", { scope: "./", updateViaCache: "none" });
+            if (reg.waiting) reg.waiting.postMessage({ type: "SKIP_WAITING" });
+            reg.update().catch(() => {});
+            setInterval(() => {
                 reg.update().catch(() => {});
-                setInterval(() => { reg.update().catch(() => {}); activateWaitingWorker(reg); }, 120000);
-                reg.addEventListener("updatefound", () => {
-                    const newWorker = reg.installing;
-                    if (!newWorker) return;
-                    newWorker.addEventListener("statechange", () => {
-                        if (newWorker.state === "installed") activateWaitingWorker(reg);
-                    });
+            }, 300000);
+            reg.addEventListener("updatefound", () => {
+                const newWorker = reg.installing;
+                if (!newWorker) return;
+                newWorker.addEventListener("statechange", () => {
+                    if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+                        newWorker.postMessage({ type: "SKIP_WAITING" });
+                    }
                 });
-                navigator.serviceWorker.addEventListener("controllerchange", () => triggerCleanPageReload());
-            } catch (e) {}
-        });
-    }
-
-    document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState === "hidden") lastAwayTime = Date.now();
-        else if (document.visibilityState === "visible") {
-            const awayMs = lastAwayTime ? (Date.now() - lastAwayTime) : 0;
-            if (awayMs >= 15000) checkRemoteUpdatesIfChanged();
-        }
-    });
-
-    window.addEventListener("pageshow", event => {
-        if (event.persisted) triggerCleanPageReload();
+            });
+        } catch (e) {}
     });
 })();
 
@@ -1135,6 +1108,30 @@ async function loadMerchantProductsFromJson() {
     hydrateTopQuickTabIcons();
     renderSideCategoriesList();
     updateCartUI();
+    applyUrlDeepLinkParams();
+}
+
+function applyUrlDeepLinkParams() {
+    try {
+        const params = new URLSearchParams(window.location.search || "");
+        const merchantParam = (params.get("merchant") || "").trim();
+        const productParam = (params.get("product") || "").trim();
+        const catParam = (params.get("category") || "").trim();
+
+        if (merchantParam) {
+            filterByMerchant(merchantParam, true);
+        } else if (catParam && CATEGORY_NAMES[catParam]) {
+            const tabEl = document.querySelector(`.quick-top-tabs .quick-tab-item[data-quick="${catParam}"]`);
+            filterByCategory(catParam, tabEl || null, true);
+        }
+
+        if (productParam && PRODUCTS.length) {
+            const found = PRODUCTS.find(p => String(p.id) === productParam);
+            if (found) {
+                setTimeout(() => openImageModal(found.img, found.id), 350);
+            }
+        }
+    } catch (e) {}
 }
 
 let currentCategory = "all";
@@ -1145,6 +1142,11 @@ function setPriceFilter(maxPrice) {
     currentMaxPrice = Number(maxPrice) || 0;
     renderProducts(currentCategory);
     scrollToProductsTop();
+}
+
+function setSortMode(mode) {
+    currentSortMode = mode || "smart";
+    renderProducts(currentCategory);
 }
 
 function renderSmartPriceChips(baseList) {
@@ -1173,10 +1175,31 @@ function renderSmartPriceChips(baseList) {
     container.innerHTML = html;
 }
 
+function getSavedSearchHistory() {
+    try {
+        const raw = localStorage.getItem(SEARCH_HISTORY_KEY);
+        const arr = raw ? JSON.parse(raw) : [];
+        return Array.isArray(arr) ? arr.filter(Boolean).slice(0, 4) : [];
+    } catch (e) {
+        return [];
+    }
+}
+
+function saveSearchTermToHistory(term) {
+    const clean = String(term || "").trim();
+    if (clean.length < 2) return;
+    try {
+        const existing = getSavedSearchHistory().filter(t => normalizeText(t) !== normalizeText(clean));
+        const next = [clean, ...existing].slice(0, 4);
+        localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(next));
+    } catch (e) {}
+}
+
 function renderSmartSearchSuggestions() {
     const container = document.getElementById("smartSearchSuggestions");
     if (!container) return;
 
+    const recent = getSavedSearchHistory();
     const defaults = ["عطر", "هاند ميد", "مطبخ", "كشكول", "هدية"];
     const freqMap = new Map();
     const stopWords = new Set(["من", "في", "على", "مع", "او", "و", "ال", "قطعه", "منتج", "جنيه", "مقاس", "لون"]);
@@ -1193,11 +1216,15 @@ function renderSmartSearchSuggestions() {
     const dynamicChips = Array.from(freqMap.entries())
         .sort((a, b) => b[1] - a[1])
         .map(([w]) => w)
-        .filter(w => !defaults.some(d => normalizeText(d) === w));
+        .filter(w => !defaults.some(d => normalizeText(d) === w) && !recent.some(r => normalizeText(r) === w));
 
-    const chips = [...defaults, ...dynamicChips.slice(0, 4)];
-    container.innerHTML = chips.map(term =>
-        `<button type="button" class="search-suggest-chip" onclick="applyQuickSearch('${escapeHtmlAttr(term)}')">${escapeHtmlAttr(term)}</button>`
+    const chips = [
+        ...recent.map(term => ({ label: `🕒 ${term}`, term })),
+        ...[...defaults, ...dynamicChips.slice(0, 4)].map(term => ({ label: term, term }))
+    ];
+
+    container.innerHTML = chips.map(item =>
+        `<button type="button" class="search-suggest-chip" onclick="applyQuickSearch('${escapeHtmlAttr(item.term)}')">${escapeHtmlAttr(item.label)}</button>`
     ).join("");
 }
 
@@ -1205,7 +1232,9 @@ function applyQuickSearch(term) {
     const input = document.getElementById("homeSearchInput");
     if (!input) return;
     input.value = term;
-    handleSearchInput();
+    saveSearchTermToHistory(term);
+    renderSmartSearchSuggestions();
+    performSearchRender();
     scrollToProductsTop();
 }
 
@@ -1225,6 +1254,7 @@ let renderedCount = 0;
 let feedCycle = 0;
 let continuationItems = [];
 let continuationBatchIndex = 0;
+let continuationCursor = 0;
 let cart = [];
 let overlayStack = [];
 let interestData = { categories: {}, keywords: {}, seenIds: [], sessionRoll: Math.random() };
@@ -1281,6 +1311,27 @@ try {
         };
     }
 } catch (e) {}
+
+function loadCustomerProfileToInputs() {
+    try {
+        const raw = localStorage.getItem(CUSTOMER_PROFILE_KEY);
+        if (!raw) return;
+        const prof = JSON.parse(raw);
+        const nameEl = document.getElementById("checkoutCustomerName");
+        const phoneEl = document.getElementById("checkoutCustomerPhone");
+        if (nameEl && prof.name && !nameEl.value) nameEl.value = prof.name;
+        if (phoneEl && prof.phone && !phoneEl.value) phoneEl.value = prof.phone;
+    } catch (e) {}
+}
+
+function saveCustomerProfileInputs(name, phone) {
+    try {
+        localStorage.setItem(CUSTOMER_PROFILE_KEY, JSON.stringify({
+            name: String(name || "").trim(),
+            phone: String(phone || "").trim()
+        }));
+    } catch (e) {}
+}
 
 function saveCart() {
     try { localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart)); } catch (e) {}
@@ -1579,21 +1630,38 @@ function updateSearchCancelButton() {
     btn.style.display = input.value.length > 0 ? "inline-flex" : "none";
 }
 
-function handleSearchInput() {
+function performSearchRender() {
     updateSearchCancelButton();
     const val = document.getElementById("homeSearchInput")?.value || "";
     const tokens = extractTokens(val).filter(t => t.length >= 2);
     if (tokens.length > 0) {
         tokens.forEach(token => { interestData.keywords[token] = (interestData.keywords[token] || 0) + 0.5; });
         saveInterest();
-        renderSpotlightBoxes();
     }
     renderProducts(currentCategory);
 }
 
+const debouncedSearchRender = createDebounced(performSearchRender, 170);
+
+function handleSearchInput() {
+    updateSearchCancelButton();
+    debouncedSearchRender();
+}
+
 function handleSearchKeyDown(event) {
-    if (event.key === "Enter") { event.preventDefault(); handleSearchInput(); scrollToProductsTop(); }
-    else if (event.key === "Escape") { event.preventDefault(); cancelSearchMode(); }
+    if (event.key === "Enter") {
+        event.preventDefault();
+        const val = (document.getElementById("homeSearchInput")?.value || "").trim();
+        if (val.length >= 2) {
+            saveSearchTermToHistory(val);
+            renderSmartSearchSuggestions();
+        }
+        performSearchRender();
+        scrollToProductsTop();
+    } else if (event.key === "Escape") {
+        event.preventDefault();
+        cancelSearchMode();
+    }
 }
 
 function cancelSearchMode(event) {
@@ -1619,10 +1687,6 @@ function trackProductInterest(product, weight = 1, markSeen = true) {
         if (interestData.seenIds.length > 140) interestData.seenIds.shift();
     }
     saveInterest();
-    renderSpotlightBoxes();
-    if (currentFeedMode === "for-you") {
-        renderProducts(currentCategory);
-    }
 }
 
 function scoreProductForUser(product, seedOffset = 0) {
@@ -1671,7 +1735,7 @@ function paintSpotlightSlide(kind) {
     if (!container) return;
 
     if (!list.length) {
-        container.innerHTML = `<div class="visual-motion-card" style="display:flex;align-items:center;justify-content:center;padding:12px;text-align:center;font-size:0.78rem;font-weight:800;color:var(--text-muted);">${isLoadingJsonProducts ? "جاري التحميل..." : "لا توجد منتجات"}</div>`;
+        container.innerHTML = `<div class="visual-motion-card spotlight-empty-card">${isLoadingJsonProducts ? "جاري التحميل..." : "لا توجد منتجات"}</div>`;
         return;
     }
 
@@ -1688,7 +1752,7 @@ function paintSpotlightSlide(kind) {
     }
 
     const p = list[idx];
-    const displayPrice = p.priceLabel || p.price;
+    const displayPrice = formatPriceNumber(p.priceLabel || p.price);
     const imgSrc = normalizeProductImageUrl(p.img);
 
     const dotsHTML = list.map((_, i) =>
@@ -1872,7 +1936,13 @@ function buildOtherProductsWave(limit = CONTINUATION_STEP) {
         });
     }
     if (!pool.length) pool = [...PRODUCTS];
-    return interleaveMerchantsSmartly(shuffleArray(pool)).slice(0, limit);
+    const ordered = interleaveMerchantsSmartly(shuffleArray(pool));
+    const wave = [];
+    for (let i = 0; i < Math.min(limit, ordered.length); i++) {
+        wave.push(ordered[(continuationCursor + i) % ordered.length]);
+    }
+    continuationCursor = (continuationCursor + limit) % Math.max(1, ordered.length);
+    return wave;
 }
 
 function appendMoreContinuationCards() {
@@ -1890,10 +1960,12 @@ function renderContinuationAfterSection() {
     if (!isFullSelectionMode() || !PRODUCTS.length) {
         continuationItems = [];
         continuationBatchIndex = 0;
+        continuationCursor = 0;
         container.innerHTML = "";
         return;
     }
     continuationBatchIndex = 0;
+    continuationCursor = 0;
     continuationItems = buildOtherProductsWave(CONTINUATION_STEP);
     if (!continuationItems.length) { container.innerHTML = ""; return; }
 
@@ -1969,8 +2041,22 @@ function buildSpecialRequestCardHTML() {
     return "";
 }
 
+function buildSkeletonGridHTML(count = 8) {
+    return Array.from({ length: count }, () => `
+        <div class="product-card skeleton-card" aria-hidden="true">
+            <div class="product-img-box skeleton-shimmer"></div>
+            <div class="product-details">
+                <div class="skeleton-line skeleton-shimmer w-82 h-14"></div>
+                <div class="skeleton-line skeleton-shimmer w-45 h-18 mt-6"></div>
+                <div class="skeleton-line skeleton-shimmer w-65 h-12 mt-6"></div>
+                <div class="skeleton-line skeleton-shimmer w-100 h-34 mt-10 rounded-12"></div>
+            </div>
+        </div>
+    `).join("");
+}
+
 function buildProductCardHTML(product, instanceTag = "base") {
-    const displayPrice = product.priceLabel || product.price;
+    const displayPrice = formatPriceNumber(product.priceLabel || product.price);
     const merchantName = product.merchant || "متجر كارامل";
     const imgs = getProductImagesList(product);
     const imgSrc = imgs[0] || "";
@@ -2073,6 +2159,13 @@ function getFilteredProducts(category, rawQuery) {
         return [...list].sort((a, b) => getProductSearchScore(b, rawQuery) - getProductSearchScore(a, rawQuery));
     }
 
+    if (currentSortMode === "price-asc") {
+        return [...list].sort((a, b) => (Number(a.price) || 999999) - (Number(b.price) || 999999));
+    }
+    if (currentSortMode === "price-desc") {
+        return [...list].sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0));
+    }
+
     if (currentFeedMode === "deals") {
         list = sortEconomicAcrossCategories(list);
     } else if (currentFeedMode === "new") {
@@ -2091,9 +2184,7 @@ function getFilteredProducts(category, rawQuery) {
 function buildFeedPool(category, rawQuery) {
     const base = getFilteredProducts(category, rawQuery);
     if (base.length === 0) return [];
-
-    const items = base.map(product => ({ type: "product", product, tag: "p0" }));
-    return items;
+    return base.map(product => ({ type: "product", product, tag: "p0" }));
 }
 
 function appendContinuationWave(category, rawQuery) {
@@ -2106,33 +2197,39 @@ function appendContinuationWave(category, rawQuery) {
 }
 
 function renderMoreFeedItems() {
-    const grid = document.getElementById("productsGrid");
-    const sentinel = document.getElementById("feedSentinel");
-    if (!grid) return;
+    if (isAppendingBatch) return;
+    isAppendingBatch = true;
+    try {
+        const grid = document.getElementById("productsGrid");
+        const sentinel = document.getElementById("feedSentinel");
+        if (!grid) return;
 
-    const rawQuery = document.getElementById("homeSearchInput")?.value || "";
-    if (currentFeedItems.length === 0) return;
+        const rawQuery = document.getElementById("homeSearchInput")?.value || "";
+        if (currentFeedItems.length === 0) return;
 
-    if (isFullSelectionMode()) {
-        if (renderedCount < currentFeedItems.length) {
-            const remainingSlice = currentFeedItems.slice(renderedCount);
-            grid.insertAdjacentHTML("beforeend", remainingSlice.map(entry => entry.type === "special" ? buildSpecialRequestCardHTML() : buildProductCardHTML(entry.product, entry.tag)).join(""));
-            renderedCount = currentFeedItems.length;
+        if (isFullSelectionMode()) {
+            if (renderedCount < currentFeedItems.length) {
+                const remainingSlice = currentFeedItems.slice(renderedCount);
+                grid.insertAdjacentHTML("beforeend", remainingSlice.map(entry => entry.type === "special" ? buildSpecialRequestCardHTML() : buildProductCardHTML(entry.product, entry.tag)).join(""));
+                renderedCount = currentFeedItems.length;
+            }
+            if (!document.getElementById("continuationAfterGrid")) renderContinuationAfterSection();
+            else if (sentinel) appendMoreContinuationCards();
+            if (sentinel) sentinel.textContent = "انزل للأسفل أو اضغط للمزيد من المنتجات المتنوعة";
+            return;
         }
-        if (!document.getElementById("continuationAfterGrid")) renderContinuationAfterSection();
-        else if (sentinel) appendMoreContinuationCards();
-        if (sentinel) sentinel.textContent = "انزل للأسفل أو اضغط للمزيد من المنتجات المتنوعة";
-        return;
+
+        if (renderedCount >= currentFeedItems.length) appendContinuationWave(currentCategory, rawQuery);
+
+        const nextSlice = currentFeedItems.slice(renderedCount, renderedCount + BATCH_SIZE);
+        if (!nextSlice.length) return;
+
+        grid.insertAdjacentHTML("beforeend", nextSlice.map(entry => entry.type === "special" ? buildSpecialRequestCardHTML() : buildProductCardHTML(entry.product, entry.tag)).join(""));
+        renderedCount += nextSlice.length;
+        if (sentinel) sentinel.textContent = "اكتشف المزيد بالأسفل أو اطلب أي منتج خاص";
+    } finally {
+        isAppendingBatch = false;
     }
-
-    if (renderedCount >= currentFeedItems.length) appendContinuationWave(currentCategory, rawQuery);
-
-    const nextSlice = currentFeedItems.slice(renderedCount, renderedCount + BATCH_SIZE);
-    if (!nextSlice.length) return;
-
-    grid.insertAdjacentHTML("beforeend", nextSlice.map(entry => entry.type === "special" ? buildSpecialRequestCardHTML() : buildProductCardHTML(entry.product, entry.tag)).join(""));
-    renderedCount += nextSlice.length;
-    if (sentinel) sentinel.textContent = "اكتشف المزيد بالأسفل أو اطلب أي منتج خاص";
 }
 
 function renderProducts(category = currentCategory) {
@@ -2182,11 +2279,7 @@ function renderProducts(category = currentCategory) {
         if (sentinel) sentinel.textContent = "";
 
         if (isLoadingJsonProducts && !PRODUCTS.length) {
-            grid.innerHTML = `
-                <div style="grid-column: 1 / -1; background: var(--surface-elevated); padding: 26px; border-radius: 20px; text-align: center; border: 1px solid var(--accent-glow);">
-                    <p style="font-weight: 800; color: var(--text-main);">جاري تحميل منتجات التجار من ملفات الـ JSON...</p>
-                </div>
-            `;
+            grid.innerHTML = buildSkeletonGridHTML(8);
             return;
         }
 
@@ -2198,15 +2291,15 @@ function renderProducts(category = currentCategory) {
                 : "لا توجد منتجات مطابقة للتصفية الحالية.. جرّب قسماً آخر أو تواصل معنا.");
 
         const suggestionBtnHtml = suggestionTerm
-            ? `<button type="button" class="add-cart-btn" style="max-width: 240px;" onclick="applyQuickSearch('${escapeHtmlAttr(suggestionTerm)}')">هل تقصد: ${escapeHtmlAttr(suggestionTerm)}؟</button>`
+            ? `<button type="button" class="add-cart-btn max-w-240" onclick="applyQuickSearch('${escapeHtmlAttr(suggestionTerm)}')">هل تقصد: ${escapeHtmlAttr(suggestionTerm)}؟</button>`
             : "";
 
         grid.innerHTML = `
-            <div style="grid-column: 1 / -1; background: var(--surface-elevated); padding: 26px; border-radius: 20px; text-align: center; border: 1px solid var(--accent-glow);">
-                <p style="font-weight: 800; margin-bottom: 12px;">${escapeHtmlAttr(emptyMsg)}</p>
-                <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+            <div class="empty-state-box">
+                <p class="empty-state-msg">${escapeHtmlAttr(emptyMsg)}</p>
+                <div class="empty-state-actions">
                     ${suggestionBtnHtml}
-                    <a href="https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("أريد طلب منتج: " + (trimmedQuery || "منتج خاص"))}" class="add-cart-btn" style="max-width: 240px;" target="_blank" rel="noopener noreferrer" onclick="event.preventDefault(); launchWhatsAppTarget(this.href);">اطلب المنتج على واتساب</a>
+                    <a href="https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("أريد طلب منتج: " + (trimmedQuery || "منتج خاص"))}" class="add-cart-btn max-w-240" target="_blank" rel="noopener noreferrer" onclick="event.preventDefault(); launchWhatsAppTarget(this.href);">اطلب المنتج على واتساب</a>
                 </div>
             </div>
         `;
@@ -2230,16 +2323,12 @@ function renderProducts(category = currentCategory) {
 const feedSentinelEl = document.getElementById("feedSentinel");
 if (feedSentinelEl && "IntersectionObserver" in window) {
     const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => { if (entry.isIntersecting) renderMoreFeedItems(); });
-    }, { rootMargin: "240px" });
+        entries.forEach(entry => {
+            if (entry.isIntersecting) renderMoreFeedItems();
+        });
+    }, { rootMargin: "260px" });
     observer.observe(feedSentinelEl);
 }
-
-window.addEventListener("scroll", () => {
-    if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 420)) {
-        renderMoreFeedItems();
-    }
-}, { passive: true });
 
 function filterByCategory(category, tabEl, shouldScroll = false) {
     currentMerchant = "";
@@ -2249,7 +2338,6 @@ function filterByCategory(category, tabEl, shouldScroll = false) {
     updateSearchCancelButton();
     if (category && category !== "all") interestData.categories[category] = (interestData.categories[category] || 0) + 1.5;
     saveInterest();
-    renderSpotlightBoxes();
     if (tabEl) {
         document.querySelectorAll(".quick-top-tabs .quick-tab-item").forEach(item => item.classList.remove("active"));
         tabEl.classList.add("active");
@@ -2263,6 +2351,9 @@ function resetHomeFresh() {
     currentMerchant = "";
     currentCategory = "all";
     currentMaxPrice = 0;
+    currentSortMode = "smart";
+    const sortSel = document.getElementById("productsSortSelect");
+    if (sortSel) sortSel.value = "smart";
     applyCategoryPageMood("all");
     const input = document.getElementById("homeSearchInput");
     if (input) input.value = "";
@@ -2362,8 +2453,8 @@ function refreshOptionModalPriceDisplay() {
     pendingOptionSelection.currentPrice = unitPrice;
     const totalLine = unitPrice * (pendingOptionSelection.qty || 1);
     priceEl.innerHTML = (pendingOptionSelection.qty || 1) > 1
-        ? `${totalLine} <span>جنيه (${unitPrice} للقطعة)</span>`
-        : `${unitPrice} <span>جنيه</span>`;
+        ? `${formatPriceNumber(totalLine)} <span>جنيه (${formatPriceNumber(unitPrice)} للقطعة)</span>`
+        : `${formatPriceNumber(unitPrice)} <span>جنيه</span>`;
 }
 
 function changeModalQty(delta) {
@@ -2411,45 +2502,45 @@ function openProductOptionModal(productId, clickedBtnId = null, preferredImgSrc 
     };
 
     if (qtyValEl) qtyValEl.textContent = "1";
-    if (imgEl) { imgEl.style.visibility = "visible"; imgEl.src = initialImg; imgEl.alt = product.title; }
+    if (imgEl) { imgEl.classList.remove("img-hidden"); imgEl.src = initialImg; imgEl.alt = product.title; }
 
     if (thumbsRow) {
         if (imgs.length > 1) {
-            thumbsRow.style.display = "flex";
+            thumbsRow.classList.remove("is-hidden");
             thumbsRow.innerHTML = imgs.map((u, idx) => `
                 <button type="button" class="preview-thumb-btn ${u === initialImg ? "active" : ""}" onclick="selectOptionModalImage('${escapeHtmlAttr(u)}', this)">
                     <img src="${escapeHtmlAttr(u)}" alt="${escapeHtmlAttr(product.title)} ${idx + 1}">
                 </button>
             `).join("");
         } else {
-            thumbsRow.style.display = "none";
+            thumbsRow.classList.add("is-hidden");
             thumbsRow.innerHTML = "";
         }
     }
 
     if (titleEl) titleEl.textContent = `${product.title} — التاجر: ${product.merchant || "متجر كارامل"}`;
-    if (priceEl) priceEl.innerHTML = `${initialUnitPrice} <span>جنيه</span>`;
+    if (priceEl) priceEl.innerHTML = `${formatPriceNumber(initialUnitPrice)} <span>جنيه</span>`;
     if (noteInput) noteInput.value = "";
 
     if (sizeGroup && sizePills) {
         if (sizes.length) {
-            sizeGroup.style.display = "flex";
+            sizeGroup.classList.remove("is-hidden");
             sizePills.innerHTML = sizes.map((s, idx) => {
                 const sLabel = typeof s === "string" ? s : s.label;
                 return `<button type="button" class="option-pill-btn ${idx === 0 ? "selected" : ""}" onclick="selectOptionPill('size', this, '${escapeHtmlAttr(sLabel)}')">${escapeHtmlAttr(sLabel)}</button>`;
             }).join("");
         } else {
-            sizeGroup.style.display = "none";
+            sizeGroup.classList.add("is-hidden");
             sizePills.innerHTML = "";
         }
     }
 
     if (colorGroup && colorPills) {
         if (colors.length) {
-            colorGroup.style.display = "flex";
+            colorGroup.classList.remove("is-hidden");
             colorPills.innerHTML = colors.map((c, idx) => `<button type="button" class="option-pill-btn ${idx === 0 ? "selected" : ""}" onclick="selectOptionPill('color', this, '${escapeHtmlAttr(c)}')">${escapeHtmlAttr(c)}</button>`).join("");
         } else {
-            colorGroup.style.display = "none";
+            colorGroup.classList.add("is-hidden");
             colorPills.innerHTML = "";
         }
     }
@@ -2461,7 +2552,7 @@ function selectOptionModalImage(imgUrl, btnEl) {
     const cleanUrl = normalizeProductImageUrl(imgUrl);
     pendingOptionSelection.selectedImg = cleanUrl;
     const imgEl = document.getElementById("optionModalImg");
-    if (imgEl && cleanUrl) { imgEl.style.visibility = "visible"; imgEl.src = cleanUrl; }
+    if (imgEl && cleanUrl) { imgEl.classList.remove("img-hidden"); imgEl.src = cleanUrl; }
     document.querySelectorAll("#optionModalThumbsRow .preview-thumb-btn").forEach(b => b.classList.remove("active"));
     if (btnEl) btnEl.classList.add("active");
 }
@@ -2597,7 +2688,7 @@ function updateCartUI() {
     const totalAmountEl = document.getElementById("cartTotalAmount");
     if (distinctEl) distinctEl.textContent = cart.length;
     if (piecesEl) piecesEl.textContent = totalPieces;
-    if (totalAmountEl) totalAmountEl.textContent = `${totalAmount} جنيه`;
+    if (totalAmountEl) totalAmountEl.textContent = `${formatPriceNumber(totalAmount)} جنيه`;
 
     const container = document.getElementById("cartItemsContainer");
     if (!container) return;
@@ -2636,7 +2727,7 @@ function updateCartUI() {
                     <div class="cart-item-info">
                         <div class="cart-item-title">${escapeHtmlAttr(item.title)}</div>
                         <div class="cart-item-meta-line">
-                            <span class="cart-item-price">${item.price * item.qty} جنيه</span>
+                            <span class="cart-item-price">${formatPriceNumber(item.price * item.qty)} جنيه</span>
                             <span class="cart-item-merchant">• ${escapeHtmlAttr(item.merchant || "متجر كارامل")}</span>
                         </div>
                     </div>
@@ -2675,6 +2766,7 @@ function clearCart() {
 }
 
 function openCart() {
+    loadCustomerProfileToInputs();
     const drawer = document.getElementById("cartDrawer");
     const backdrop = document.getElementById("cartBackdrop");
     if (drawer) drawer.classList.add("open");
@@ -2705,13 +2797,13 @@ function updateCustomerLocationUI() {
         btn.classList.add("located");
         btnText.textContent = "تم تحديد اللوكيشن بنجاح ✓";
         clearBtn.classList.add("visible");
-        preview.style.display = "block";
+        preview.classList.remove("is-hidden");
         preview.textContent = customerLocationData.summaryText || customerLocationData.mapsUrl;
     } else {
         btn.classList.remove("located");
         btnText.textContent = "تحديد موقعي الحالي (اللوكيشن)";
         clearBtn.classList.remove("visible");
-        preview.style.display = "none";
+        preview.classList.add("is-hidden");
         preview.textContent = "";
     }
 }
@@ -2796,6 +2888,8 @@ function checkoutOnWhatsApp() {
         return;
     }
 
+    saveCustomerProfileInputs(customerName, customerPhone);
+
     const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
     const lines = cart.map((item, i) => {
         const extras = [];
@@ -2824,6 +2918,40 @@ function checkoutOnWhatsApp() {
     launchWhatsAppTarget(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`);
 }
 
+function renderRelatedInPreviewModal(product) {
+    const box = document.getElementById("previewRelatedSection");
+    const listEl = document.getElementById("previewRelatedList");
+    if (!box || !listEl) return;
+
+    if (!product || !PRODUCTS.length) {
+        box.classList.add("is-hidden");
+        listEl.innerHTML = "";
+        return;
+    }
+
+    const candidates = PRODUCTS.filter(p =>
+        p.id !== product.id &&
+        (p.merchant === product.merchant || p.category === product.category)
+    ).slice(0, 4);
+
+    if (!candidates.length) {
+        box.classList.add("is-hidden");
+        listEl.innerHTML = "";
+        return;
+    }
+
+    box.classList.remove("is-hidden");
+    listEl.innerHTML = candidates.map(rel => `
+        <button type="button" class="preview-related-chip" onclick="openImageModal('${escapeHtmlAttr(rel.img)}', '${escapeHtmlAttr(rel.id)}')">
+            <img src="${escapeHtmlAttr(rel.img)}" alt="${escapeHtmlAttr(rel.title)}" onerror="this.classList.add('img-hidden')">
+            <span class="preview-related-meta">
+                <span class="preview-related-title">${escapeHtmlAttr(rel.title)}</span>
+                <span class="preview-related-price">${formatPriceNumber(rel.priceLabel || rel.price)} ج</span>
+            </span>
+        </button>
+    `).join("");
+}
+
 function syncPreviewModalMedia() {
     const imgEl = document.getElementById("modalImagePreview");
     const prevBtn = document.getElementById("previewPrevBtn");
@@ -2840,19 +2968,19 @@ function syncPreviewModalMedia() {
     }
 
     const hasMulti = imgs.length > 1;
-    if (prevBtn) prevBtn.style.display = hasMulti ? "inline-flex" : "none";
-    if (nextBtn) nextBtn.style.display = hasMulti ? "inline-flex" : "none";
+    if (prevBtn) prevBtn.classList.toggle("is-hidden", !hasMulti);
+    if (nextBtn) nextBtn.classList.toggle("is-hidden", !hasMulti);
 
     if (thumbsRow) {
         if (hasMulti) {
-            thumbsRow.style.display = "flex";
+            thumbsRow.classList.remove("is-hidden");
             thumbsRow.innerHTML = imgs.map((u, idx) => `
                 <button type="button" class="preview-thumb-btn ${idx === safeIdx ? "active" : ""}" onclick="selectPreviewThumb(${idx}, event)">
                     <img src="${escapeHtmlAttr(u)}" alt="صورة ${idx + 1}">
                 </button>
             `).join("");
         } else {
-            thumbsRow.style.display = "none";
+            thumbsRow.classList.add("is-hidden");
             thumbsRow.innerHTML = "";
         }
     }
@@ -2912,7 +3040,7 @@ function openImageModal(src, productId = null) {
     const catLabel = product ? (CATEGORY_NAMES[product.category] || "متجر كارامل") : "متجر كارامل";
     const merchantLabel = product ? (product.merchant || "متجر كارامل") : "متجر كارامل";
     const titleText = product ? product.title : "منتج مميز من متجر كارامل";
-    const displayPrice = product ? (product.priceLabel || product.price) : "";
+    const displayPrice = product ? formatPriceNumber(product.priceLabel || product.price) : "";
     const storyText = product
         ? (product.desc || `${product.title} متوفر الآن لدى متجر كارامل بجودة مختارة وسعر مناسب.`)
         : "قطعة مميزة من تشكيلة متجر كارامل.";
@@ -2921,20 +3049,22 @@ function openImageModal(src, productId = null) {
     if (catChip) catChip.textContent = catLabel;
     if (merchantChip) {
         merchantChip.textContent = `التاجر: ${merchantLabel}`;
-        merchantChip.style.cursor = product ? "pointer" : "default";
+        merchantChip.classList.toggle("is-clickable", Boolean(product));
         merchantChip.onclick = product ? () => { closeImageModal(); filterByMerchant(merchantLabel, true); } : null;
     }
     if (titleEl) titleEl.textContent = titleText;
     if (mainPriceEl) {
         mainPriceEl.innerHTML = displayPrice ? `${displayPrice} <span>جنيه</span>` : "";
-        mainPriceEl.style.display = displayPrice ? "block" : "none";
+        mainPriceEl.classList.toggle("is-hidden", !displayPrice);
     }
     if (subPriceEl) {
-        if (product && product.subPrice) { subPriceEl.textContent = product.subPrice; subPriceEl.style.display = "inline-block"; }
-        else { subPriceEl.style.display = "none"; }
+        if (product && product.subPrice) { subPriceEl.textContent = product.subPrice; subPriceEl.classList.remove("is-hidden"); }
+        else { subPriceEl.classList.add("is-hidden"); }
     }
     if (storyTextEl) storyTextEl.textContent = storyText;
     if (hookNoteEl) hookNoteEl.textContent = hookText;
+
+    renderRelatedInPreviewModal(product);
 
     if (addBtn) {
         addBtn.onclick = () => {
@@ -3130,5 +3260,6 @@ renderSmartSearchSuggestions();
 renderSpotlightBoxes();
 renderProducts("all");
 updateCartUI();
+loadCustomerProfileToInputs();
 initCaramelPushUI();
 loadMerchantProductsFromJson();
