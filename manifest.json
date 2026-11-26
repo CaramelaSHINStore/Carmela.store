@@ -1,27 +1,26 @@
 {
   "name": "متجر كارامل - Caramel Store",
-  "short_name": "كارامل ستور",
-  "description": "كل حاجة تحتاجها عند كارامل بأرخص الأسعار والتوصيل لباب المنزل في أسرع وقت.",
+  "short_name": "كارامل",
+  "description": "متجر كارامل الإلكتروني لتشكيلة واسعة من المنتجات والهدايا والحرف اليدوية والعروض اليومية.",
   "start_url": "./index.html",
-  "scope": "./",
   "display": "standalone",
-  "orientation": "portrait-primary",
-  "dir": "rtl",
-  "lang": "ar",
+  "orientation": "portrait",
   "background_color": "#12100e",
-  "theme_color": "#12100e",
+  "theme_color": "#14110f",
+  "lang": "ar",
+  "dir": "rtl",
   "icons": [
     {
       "src": "https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg",
       "sizes": "192x192",
       "type": "image/jpeg",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg",
       "sizes": "512x512",
       "type": "image/jpeg",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }
