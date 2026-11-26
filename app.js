@@ -3118,15 +3118,12 @@ function initCaramelSplashScreen() {
     let typingTimer = null;
 
     const rectEl = document.getElementById("caramelSplashSubRect") || document.getElementById("caramelSplashSlogan");
-    if (rectEl) {
-        rectEl.style.opacity = "1";
-        rectEl.style.visibility = "visible";
-    }
     if (typedTextEl) {
         typedTextEl.textContent = splashBadgeText;
-        typedTextEl.style.opacity = "1";
-        typedTextEl.style.visibility = "visible";
     }
+    setTimeout(() => {
+        if (rectEl) rectEl.classList.add("descend-in");
+    }, 1050);
 
     function playHeaderSloganEntrance() {
         if (!headerSloganEl) return;
