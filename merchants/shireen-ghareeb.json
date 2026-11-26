@@ -22,7 +22,8 @@
     "price": 60,
     "category": "perfume",
     "categories": [
-      "perfume"
+      "perfume",
+      "women"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795606431057.webp",
@@ -38,7 +39,8 @@
     "price": 75,
     "category": "perfume",
     "categories": [
-      "perfume"
+      "perfume",
+      "women"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795606430658.webp",
@@ -53,7 +55,8 @@
     "price": 75,
     "category": "perfume",
     "categories": [
-      "perfume"
+      "perfume",
+      "women"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795606430585.webp",
@@ -193,8 +196,7 @@
     "price": 1800,
     "category": "home",
     "categories": [
-      "home",
-      "gifts"
+      "home"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795523069014.webp",
@@ -271,8 +273,7 @@
     "price": 1250,
     "category": "home",
     "categories": [
-      "home",
-      "gifts"
+      "home"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795523069912.webp",
@@ -303,7 +304,8 @@
     "category": "tafse",
     "categories": [
       "tafse",
-      "home"
+      "home",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525683537.webp",
@@ -331,9 +333,9 @@
     "title": "طقم كوبايات زجاج بيد 6 قطع بلانك ماكس",
     "desc": "طقم كوبايات زجاج شفافة بيد بتصميم حلزوني منقوش وقاعدة متينة 6 قطع بلانك ماكس للمشروبات الباردة والساخنة والزبادي والحلويات بسعر 250 جنيه.",
     "price": 250,
-    "category": "women",
+    "category": "home",
     "categories": [
-      "women"
+      "home"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525683448.webp",
@@ -348,8 +350,7 @@
     "price": 225,
     "category": "home",
     "categories": [
-      "home",
-      "gifts"
+      "home"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525683211.webp",
@@ -365,8 +366,8 @@
     "category": "perfume",
     "categories": [
       "perfume",
-      "gifts",
-      "men"
+      "men",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525683381.webp",
@@ -396,8 +397,7 @@
     "price": 300,
     "category": "home",
     "categories": [
-      "home",
-      "gifts"
+      "home"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525682768.webp",
@@ -442,7 +442,8 @@
     "price": 70,
     "category": "perfume",
     "categories": [
-      "perfume"
+      "perfume",
+      "home"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525682551.webp",
@@ -455,9 +456,10 @@
     "title": "طقم بولات صيني برسومات غزال 6 قطع",
     "desc": "طقم بولات وأطباق خزف صيني برسومات غزال وأوراق شجر في علبة هدايا مقسمة 6 قطع للشوربة والحلويات والزبادي بسعر 240 جنيه.",
     "price": 240,
-    "category": "women",
+    "category": "home",
     "categories": [
-      "women"
+      "home",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525682338.webp",
@@ -488,8 +490,8 @@
     "category": "perfume",
     "categories": [
       "perfume",
-      "gifts",
-      "men"
+      "men",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525682015.webp",
@@ -505,8 +507,8 @@
     "category": "perfume",
     "categories": [
       "perfume",
-      "gifts",
-      "women"
+      "women",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525682101.webp",
@@ -537,8 +539,7 @@
     "price": 80,
     "category": "home",
     "categories": [
-      "home",
-      "gifts"
+      "home"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525681784.webp",
@@ -568,7 +569,8 @@
     "price": 110,
     "category": "perfume",
     "categories": [
-      "perfume"
+      "perfume",
+      "women"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525681609.webp",
@@ -583,8 +585,7 @@
     "price": 260,
     "category": "home",
     "categories": [
-      "home",
-      "gifts"
+      "home"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525681397.webp",
@@ -599,8 +600,7 @@
     "price": 180,
     "category": "home",
     "categories": [
-      "home",
-      "gifts"
+      "home"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525681467.webp",
@@ -616,7 +616,7 @@
     "category": "perfume",
     "categories": [
       "perfume",
-      "men"
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525681338.webp",
@@ -631,7 +631,9 @@
     "price": 120,
     "category": "perfume",
     "categories": [
-      "perfume"
+      "perfume",
+      "women",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525681083.webp",
@@ -677,7 +679,8 @@
     "price": 65,
     "category": "perfume",
     "categories": [
-      "perfume"
+      "perfume",
+      "women"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525680918.webp",
@@ -690,8 +693,9 @@
     "title": "بادي سبلاش Azuva روائح متنوعة",
     "desc": "معطر جسم بادي سبلاش Body Splash من Azuva ببخاخ رشاش برسومات الورود والفواكه Cherry Blossom و Floral و Vanilla Coconut بسعر 80 جنيه.",
     "price": 80,
-    "category": "women",
+    "category": "perfume",
     "categories": [
+      "perfume",
       "women"
     ],
     "merchant": "شيرين غريب",
@@ -723,8 +727,8 @@
     "category": "home",
     "categories": [
       "home",
-      "gifts",
-      "kids"
+      "kids",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525680554.webp",
@@ -784,7 +788,8 @@
     "price": 140,
     "category": "perfume",
     "categories": [
-      "perfume"
+      "perfume",
+      "women"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525680134.webp",
@@ -861,8 +866,8 @@
     "category": "perfume",
     "categories": [
       "perfume",
-      "gifts",
-      "women"
+      "women",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525679587.webp",
@@ -878,8 +883,8 @@
     "category": "perfume",
     "categories": [
       "perfume",
-      "gifts",
-      "men"
+      "men",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525679436.webp",
@@ -925,8 +930,8 @@
     "category": "perfume",
     "categories": [
       "perfume",
-      "gifts",
-      "women"
+      "women",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525679120.webp",
@@ -942,8 +947,8 @@
     "category": "perfume",
     "categories": [
       "perfume",
-      "gifts",
-      "women"
+      "women",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525678955.webp",
@@ -959,7 +964,6 @@
     "category": "perfume",
     "categories": [
       "perfume",
-      "gifts",
       "women"
     ],
     "merchant": "شيرين غريب",
@@ -975,7 +979,8 @@
     "price": 275,
     "category": "home",
     "categories": [
-      "home"
+      "home",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525678854.webp",
@@ -991,7 +996,6 @@
     "category": "perfume",
     "categories": [
       "perfume",
-      "gifts",
       "women"
     ],
     "merchant": "شيرين غريب",
@@ -1008,7 +1012,6 @@
     "category": "perfume",
     "categories": [
       "perfume",
-      "gifts",
       "women"
     ],
     "merchant": "شيرين غريب",
@@ -1071,8 +1074,7 @@
     "price": 500,
     "category": "home",
     "categories": [
-      "home",
-      "gifts"
+      "home"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525678207.webp",
@@ -1102,8 +1104,7 @@
     "price": 350,
     "category": "home",
     "categories": [
-      "home",
-      "gifts"
+      "home"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525677806.webp",
@@ -1134,8 +1135,8 @@
     "category": "perfume",
     "categories": [
       "perfume",
-      "gifts",
-      "women"
+      "women",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525677659.webp",
@@ -1166,8 +1167,7 @@
     "price": 250,
     "category": "home",
     "categories": [
-      "home",
-      "gifts"
+      "home"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525677144.webp",
@@ -1198,8 +1198,8 @@
     "category": "perfume",
     "categories": [
       "perfume",
-      "gifts",
-      "women"
+      "women",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525676515.webp",
@@ -1245,8 +1245,8 @@
     "category": "perfume",
     "categories": [
       "perfume",
-      "gifts",
-      "women"
+      "women",
+      "gifts"
     ],
     "merchant": "شيرين غريب",
     "img": "Shren/compressed_1795525676873.webp",
