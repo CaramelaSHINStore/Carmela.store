@@ -3113,29 +3113,10 @@ function initCaramelSplashScreen() {
     }
 
     function startRectTypewriter() {
-        if (!typedTextEl) return;
-        typedTextEl.textContent = "";
-        if (caretEl) caretEl.classList.remove("done");
-        let idx = 0;
-        const stepMs = Math.max(75, Math.floor(420 / splashBadgeText.length));
-        clearInterval(typingTimer);
-        typingTimer = setInterval(() => {
-            idx += 1;
-            typedTextEl.textContent = splashBadgeText.slice(0, idx);
-            if (idx >= splashBadgeText.length) {
-                clearInterval(typingTimer);
-                if (caretEl) caretEl.classList.add("done");
-            }
-        }, stepMs);
+        typedTextEl.textContent = splashBadgeText;
     }
 
-    setTimeout(() => {
-        if (rectEl) {
-            rectEl.classList.add("descend-in");
-            setTimeout(startRectTypewriter, 160);
-        }
-    }, 520);
-
+    
     function finishSplash() {
         if (dismissed) return;
         dismissed = true;
