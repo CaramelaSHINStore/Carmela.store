@@ -165,7 +165,7 @@
                 <span id="appendOrderBannerText">أضف أي منتجات جديدة وستُضاف تلقائياً لطلبك الحالي.</span>
             </div>
             <div class="append-mode-actions">
-                <button type="button" class="append-open-cart-btn" onclick="openCart()">عرض الطلب</button>
+                <button type="button" class="append-open-cart-btn" onclick="openCart('active')">عرض الطلب</button>
                 <button type="button" class="append-cancel-btn" onclick="cancelAppendToOrderMode()">إنهاء الإضافة</button>
             </div>
         </div>
@@ -214,7 +214,6 @@
                         <span class="merchant-banner-kicker">واجهة متجر التاجر المعتمد لدى كارامل</span>
                         <div class="merchant-banner-title">
                             <span id="merchantBannerName"></span>
-                            <span class="merchant-count-pill" id="merchantBannerCount"></span>
                         </div>
                     </div>
                 </div>
@@ -232,7 +231,6 @@
 
         <div class="section-heading" id="productsSectionHeading">
             <h2 id="activeCategoryTitle">كل المنتجات</h2>
-            <span class="smart-tag" id="resultsCountBadge"></span>
         </div>
 
         <section class="products-grid" id="productsGrid"></section>
@@ -293,6 +291,22 @@
             <div class="option-modal-body" id="serviceInfoModalBody"></div>
             <div class="option-modal-footer">
                 <button type="button" class="option-confirm-btn" onclick="closeServiceInfoModal()">تمام</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="option-modal-backdrop" id="confirmActionModal" onclick="closeConfirmModal(false)">
+        <div class="option-modal-card" onclick="event.stopPropagation()">
+            <div class="option-modal-header">
+                <h3 id="confirmModalTitle">تأكيد الإجراء</h3>
+                <button type="button" class="option-modal-close" onclick="closeConfirmModal(false)" aria-label="إغلاق">&times;</button>
+            </div>
+            <div class="option-modal-body">
+                <div class="service-info-item" id="confirmModalMessage"></div>
+            </div>
+            <div class="option-modal-footer">
+                <button type="button" class="option-confirm-btn" id="confirmModalOkBtn">تأكيد</button>
+                <button type="button" class="option-cancel-btn" onclick="closeConfirmModal(false)">إلغاء</button>
             </div>
         </div>
     </div>
@@ -365,34 +379,47 @@
                 <button type="button" class="close-cart-btn" onclick="closeCart()" aria-label="إغلاق السلة">&times;</button>
             </div>
         </div>
-        <div class="cart-summary-strip" id="cartSummaryStrip">
-            <span>الطلبات المسجلة: <strong id="cartDistinctCount">0</strong></span>
-            <span>إجمالي القطع: <strong id="cartTotalPieces">0</strong></span>
+
+        <div class="cart-tabs-bar" role="tablist" aria-label="أقسام المشتريات">
+            <button type="button" class="cart-tab-btn active" data-cart-tab="current" onclick="switchCartTab('current', this)">
+                <span>السلة</span>
+                <span class="cart-tab-pill" id="cartTabCurrentCount">0</span>
+            </button>
+            <button type="button" class="cart-tab-btn" data-cart-tab="active" onclick="switchCartTab('active', this)">
+                <span>قيد التنفيذ</span>
+                <span class="cart-tab-pill" id="cartTabActiveCount">0</span>
+            </button>
+            <button type="button" class="cart-tab-btn" data-cart-tab="received" onclick="switchCartTab('received', this)">
+                <span>المستلمة</span>
+                <span class="cart-tab-pill" id="cartTabReceivedCount">0</span>
+            </button>
         </div>
+
         <div class="cart-body">
-            <div class="cart-section-block">
-                <div class="cart-section-label">سلة المشتريات الحالية</div>
+            <div class="cart-tab-panel active" id="cartTabPanelCurrent">
+                <div class="cart-mini-stats">
+                    <span>المنتجات: <strong id="cartDistinctCount">0</strong></span>
+                    <span>القطع: <strong id="cartTotalPieces">0</strong></span>
+                    <span>الإجمالي: <strong id="cartCurrentTabTotal">0 جنيه</strong></span>
+                </div>
                 <div id="cartItemsContainer"></div>
             </div>
 
-            <div class="cart-section-block" id="activeOrdersSection">
-                <div class="cart-section-label">
-                    <span>الطلبات قيد التنفيذ</span>
-                    <span class="active-orders-count-badge" id="activeOrdersCountBadge">0</span>
-                </div>
+            <div class="cart-tab-panel" id="cartTabPanelActive">
                 <div id="activeOrdersContainer"></div>
             </div>
 
-            <div class="cart-section-block" id="receivedOrdersSection">
-                <div class="cart-section-label">
-                    <span>الأوردرات المستلمة</span>
-                    <span class="received-orders-count-badge" id="receivedOrdersCountBadge">0</span>
-                </div>
+            <div class="cart-tab-panel" id="cartTabPanelReceived">
                 <div id="receivedOrdersContainer"></div>
             </div>
         </div>
-        <div class="cart-footer">
-            <div class="cart-customer-box">
+
+        <div class="cart-footer" id="cartCheckoutFooter">
+            <button type="button" class="cart-details-toggle-btn" id="cartCustomerToggleBtn" onclick="toggleCartCustomerBox()">
+                <span id="cartCustomerToggleText">بيانات التوصيل واللوكيشن (مطلوب للإرسال)</span>
+                <span id="cartCustomerToggleArrow">▼</span>
+            </button>
+            <div class="cart-customer-box" id="cartCustomerCollapsible">
                 <div class="cart-customer-row">
                     <input type="text" id="checkoutCustomerName" class="cart-customer-input" placeholder="الاسم بالكامل *" required>
                     <input type="tel" id="checkoutCustomerPhone" class="cart-customer-input" placeholder="رقم التواصل *" required>
@@ -405,15 +432,17 @@
                     <button type="button" class="cart-location-clear-btn" id="cartLocationClearBtn" onclick="clearCustomerLocation()" aria-label="إلغاء اللوكيشن">&times;</button>
                 </div>
                 <div class="cart-location-preview is-hidden" id="cartLocationPreview"></div>
+                <div class="cart-policy-note">السويس: الدفع عند الاستلام • المحافظات الأخرى: إنستا باي أو فوري أو كاش • التوصيل خلال يوم عمل.</div>
             </div>
-            <div class="cart-policy-note">السويس: الدفع عند الاستلام • المحافظات الأخرى: إنستا باي أو فوري أو كاش • التوصيل خلال يوم عمل.</div>
             <div class="cart-total-row">
                 <span>الإجمالي:</span>
                 <span class="cart-total-amount" id="cartTotalAmount">0 جنيه</span>
             </div>
             <button type="button" class="checkout-wa-btn" onclick="checkoutOnWhatsApp()">إتمام الطلب عبر واتساب</button>
-            <button type="button" class="checkout-wa-direct-btn" onclick="openWhatsAppChatDirect()">الدخول إلى واتساب</button>
-            <button type="button" class="clear-cart-btn" onclick="clearCart()">تفريغ المشتريات</button>
+            <div class="cart-secondary-btns">
+                <button type="button" class="checkout-wa-direct-btn" onclick="openWhatsAppChatDirect()">محادثة واتساب</button>
+                <button type="button" class="clear-cart-btn" onclick="clearCart()">تفريغ السلة</button>
+            </div>
         </div>
     </aside>
 
@@ -453,7 +482,8 @@
 
                 <div class="preview-actions-row">
                     <button type="button" class="add-cart-btn" id="previewAddToCartBtn">أضف للمشتريات</button>
-                    <a href="#" class="direct-wa-link" id="previewWhatsAppBtn" target="_blank" rel="noopener noreferrer">طلب سريع واتساب</a>
+                    <button type="button" class="preview-share-btn" id="previewShareProductBtn" onclick="shareCurrentPreviewProduct()">مشاركة</button>
+                    <a href="#" class="direct-wa-link" id="previewWhatsAppBtn" target="_blank" rel="noopener noreferrer">واتساب</a>
                 </div>
             </div>
         </div>
