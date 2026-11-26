@@ -1,33 +1,27 @@
 {
   "name": "متجر كارامل - Caramel Store",
-  "short_name": "كارامل",
+  "short_name": "كارامل ستور",
   "description": "كل حاجة تحتاجها عند كارامل بأرخص الأسعار والتوصيل لباب المنزل في أسرع وقت.",
-  "start_url": "./",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#181512",
-  "theme_color": "#181512",
   "dir": "rtl",
   "lang": "ar",
+  "background_color": "#12100e",
+  "theme_color": "#12100e",
   "icons": [
     {
-      "src": "https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/80512-cutout.png",
+      "src": "https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
+      "type": "image/jpeg",
+      "purpose": "any maskable"
     },
     {
-      "src": "https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/80512-cutout.png",
+      "src": "https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/80512-cutout.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
+      "type": "image/jpeg",
+      "purpose": "any maskable"
     }
   ]
 }
