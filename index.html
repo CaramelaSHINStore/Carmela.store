@@ -74,6 +74,10 @@
         body.cat-mode-kids { --accent: #0e7490; --accent-soft: #67e8f9; --accent-deep: #155e75; --accent-glow: rgba(14, 116, 144, 0.28); --accent-tint: rgba(14, 116, 144, 0.085); --page-mood-bg: #eef8fa; }
         body.cat-mode-women { --accent: #d97706; --accent-soft: #fcd34d; --accent-deep: #b45309; --accent-glow: rgba(217, 119, 6, 0.28); --accent-tint: rgba(217, 119, 6, 0.085); --page-mood-bg: #fcf6ed; }
         body.cat-mode-men { --accent: #334155; --accent-soft: #cbd5e1; --accent-deep: #1e293b; --accent-glow: rgba(51, 65, 85, 0.28); --accent-tint: rgba(51, 65, 85, 0.085); --page-mood-bg: #f1f4f8; }
+
+        body.cat-mode-appliances { --accent: #0ea5e9; --accent-soft: #7dd3fc; --accent-deep: #0369a1; --accent-glow: rgba(14, 165, 233, 0.28); --accent-tint: rgba(14, 165, 233, 0.085); --page-mood-bg: #eef7fc; }
+        body.cat-mode-phones { --accent: #6366f1; --accent-soft: #a5b4fc; --accent-deep: #4338ca; --accent-glow: rgba(99, 102, 241, 0.28); --accent-tint: rgba(99, 102, 241, 0.085); --page-mood-bg: #f1f2fe; }
+        body.cat-mode-jewelry { --accent: #e11d48; --accent-soft: #fda4af; --accent-deep: #be123c; --accent-glow: rgba(225, 29, 72, 0.28); --accent-tint: rgba(225, 29, 72, 0.085); --page-mood-bg: #fdf1f4; }
         body.cat-mode-gifts { --accent: #db2777; --accent-soft: #f9a8d4; --accent-deep: #9d174d; --accent-glow: rgba(219, 39, 119, 0.28); --accent-tint: rgba(219, 39, 119, 0.085); --page-mood-bg: #fcf1f7; }
         body.cat-mode-perfume { --accent: #3b82f6; --accent-soft: #93c5fd; --accent-deep: #1d4ed8; --accent-glow: rgba(59, 130, 246, 0.3); --accent-tint: rgba(59, 130, 246, 0.09); --page-mood-bg: #eff5ff; }
 
@@ -2321,9 +2325,278 @@
             font-weight: 900;
         }
 
+
+/* 1. شاشة البداية الاحترافية */
+.caramel-splash-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: radial-gradient(circle at center, #241e1a 0%, #12100e 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 24px;
+    text-align: center;
+    transition: opacity 0.55s ease, visibility 0.55s ease;
+}
+.caramel-splash-screen.hide {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+.splash-logo-ring {
+    width: 126px;
+    height: 126px;
+    border-radius: 50%;
+    padding: 5px;
+    background: linear-gradient(135deg, var(--caramel-light), var(--caramel), var(--caramel-dark));
+    box-shadow: 0 0 40px rgba(200, 150, 102, 0.45);
+    animation: splashScaleIn 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.splash-logo-ring img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+}
+.splash-brand-name {
+    font-size: 1.65rem;
+    font-weight: 900;
+    color: #ffffff;
+    letter-spacing: 3px;
+}
+.splash-slogan {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--caramel-light);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(200, 150, 102, 0.35);
+    padding: 6px 18px;
+    border-radius: 999px;
+}
+@keyframes splashScaleIn {
+    0% { opacity: 0; transform: scale(0.82); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* 2. شريط الأسعار الذكي المثبت */
+.sticky-price-bar {
+    position: sticky;
+    top: 57px;
+    z-index: 104;
+    background: var(--surface-elevated);
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 7px 14px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    box-shadow: 0 6px 16px -12px rgba(18, 16, 14, 0.25);
+}
+.sticky-price-bar::-webkit-scrollbar { display: none; }
+.price-bar-label {
+    font-size: 0.74rem;
+    font-weight: 900;
+    color: var(--accent-deep);
+    white-space: nowrap;
+    margin-left: 2px;
+}
+.price-chip-btn {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--text-main);
+    background: var(--surface-soft);
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    padding: 4px 12px;
+    white-space: nowrap;
+    transition: all 0.18s ease;
+}
+.price-chip-btn:hover { border-color: var(--accent); }
+.price-chip-btn.active {
+    background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+    color: #ffffff;
+    border-color: transparent;
+    font-weight: 900;
+}
+
+/* 3. اقتراحات البحث الذكي */
+.smart-search-suggestions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-top: 7px;
+}
+.smart-search-suggestions::-webkit-scrollbar { display: none; }
+.search-suggest-chip {
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: var(--accent-soft);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(200, 150, 102, 0.35);
+    padding: 3px 11px;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
+/* 4. واجهة التاجر المنفصلة */
+body.merchant-storefront-mode .dual-spotlight-row,
+body.merchant-storefront-mode .payment-service-strip {
+    display: none !important;
+}
+.merchant-banner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 18px;
+    border: 1.5px solid var(--caramel);
+    box-shadow: 0 16px 34px -16px rgba(18, 16, 14, 0.45);
+}
+.merchant-banner-top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.merchant-avatar-badge {
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--caramel-light), var(--caramel));
+    color: var(--espresso);
+    font-size: 1.25rem;
+    font-weight: 900;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.merchant-actions-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.merchant-share-btn {
+    background: rgba(255, 255, 255, 0.14);
+    color: var(--accent-soft);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    padding: 7px 13px;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+/* 5. ظهور ذكي ناعم للكروت */
+@keyframes cardSmartReveal {
+    0% { opacity: 0; transform: translateY(14px) scale(0.98); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+.product-card {
+    animation: cardSmartReveal 0.32s ease both;
+}
+
+
+/* الفئات السلسلة والبحث الذكي وخدمة العملاء */
+.promo-actions-pair {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+.promo-cs-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--espresso);
+    color: var(--accent-soft);
+    border: 1px solid var(--accent);
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 0.74rem;
+    font-weight: 900;
+    transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+.promo-cs-link:hover {
+    transform: translateY(-1px);
+    background: var(--accent);
+    color: #ffffff;
+}
+.quick-top-tabs {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+.quick-tab-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.quick-tab-icon {
+    width: 16px;
+    height: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.quick-tab-icon svg {
+    width: 15px;
+    height: 15px;
+    display: block;
+}
+.search-results-summary-bar {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    background: var(--surface-elevated);
+    border: 1px solid var(--accent-glow);
+    border-radius: 16px;
+    padding: 9px 13px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow-main);
+}
+.search-results-summary-bar.visible {
+    display: flex;
+}
+.search-summary-text {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--text-main);
+}
+.search-summary-text strong {
+    color: var(--accent-deep);
+    font-weight: 900;
+}
+.search-clear-inline-btn {
+    background: var(--accent-tint);
+    color: var(--accent-deep);
+    border: 1px solid var(--accent-glow);
+    border-radius: 999px;
+    padding: 3px 11px;
+    font-size: 0.73rem;
+    font-weight: 900;
+}
+
     </style>
 </head>
 <body class="cat-mode-all">
+
+    <div class="caramel-splash-screen" id="caramelSplashScreen" aria-hidden="true">
+        <div class="splash-logo-ring">
+            <img src="https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg" alt="متجر كارامل">
+        </div>
+        <div class="splash-brand-name">CARAMEL</div>
+        <div class="splash-slogan">كارامل ستور • كل قطعة وليها دور</div>
+    </div>
 
     <div class="scroll-progress-track" aria-hidden="true">
         <div class="scroll-progress-fill" id="scrollProgressFill"></div>
@@ -2376,21 +2649,36 @@
                         <path d="m20 20-3.8-3.8"></path>
                     </svg>
                 </button>
+                <div class="smart-search-suggestions" id="smartSearchSuggestions">
+                <button type="button" class="search-suggest-chip" onclick="applyQuickSearch('عطر')">عطور</button>
+                <button type="button" class="search-suggest-chip" onclick="applyQuickSearch('هاند ميد')">هاند ميد</button>
+                <button type="button" class="search-suggest-chip" onclick="applyQuickSearch('مطبخ')">أدوات مطبخ</button>
+                <button type="button" class="search-suggest-chip" onclick="applyQuickSearch('كشكول')">مدرسة</button>
+                <button type="button" class="search-suggest-chip" onclick="applyQuickSearch('هدية')">هدايا</button>
             </div>
+        </div>
         </div>
     </header>
 
-    <nav class="quick-top-tabs" aria-label="أقسام المتجر العلوية">
+    <nav class="quick-top-tabs" id="quickTopTabs" aria-label="أقسام المتجر العلوية">
         <button type="button" class="quick-tab-item active" data-quick="all" onclick="selectTopQuickTab('all', this)">الكل</button>
         <button type="button" class="quick-tab-item" data-quick="home" onclick="selectTopQuickTab('home', this)">المنزل</button>
-        <button type="button" class="quick-tab-item" data-quick="perfume" onclick="selectTopQuickTab('perfume', this)">العناية والعطور</button>
+        <button type="button" class="quick-tab-item" data-quick="appliances" onclick="selectTopQuickTab('appliances', this)">الأدوات الكهربائية</button>
+        <button type="button" class="quick-tab-item" data-quick="phones" onclick="selectTopQuickTab('phones', this)">الهواتف والإكسسوارات</button>
+        <button type="button" class="quick-tab-item" data-quick="jewelry" onclick="selectTopQuickTab('jewelry', this)">مجوهرات وإكسسوارات</button>
+        <button type="button" class="quick-tab-item" data-quick="perfume" onclick="selectTopQuickTab('perfume', this)">الجمال والصحة</button>
+        <button type="button" class="quick-tab-item" data-quick="school" onclick="selectTopQuickTab('school', this)">اللوازم المكتبية والمدرسة</button>
         <button type="button" class="quick-tab-item" data-quick="gifts" onclick="selectTopQuickTab('gifts', this)">الهدايا</button>
         <button type="button" class="quick-tab-item" data-quick="tafse" onclick="selectTopQuickTab('tafse', this)">هاند ميد</button>
-        <button type="button" class="quick-tab-item" data-quick="school" onclick="selectTopQuickTab('school', this)">المدرسة</button>
         <button type="button" class="quick-tab-item" data-quick="women" onclick="selectTopQuickTab('women', this)">النساء</button>
         <button type="button" class="quick-tab-item" data-quick="men" onclick="selectTopQuickTab('men', this)">الرجال</button>
         <button type="button" class="quick-tab-item" data-quick="kids" onclick="selectTopQuickTab('kids', this)">الأطفال</button>
     </nav>
+
+    <div class="sticky-price-bar" id="stickyPriceBar" role="region" aria-label="تصنيف الأسعار الذكي">
+        <span class="price-bar-label">السعر:</span>
+        <div id="smartPriceChipsContainer" style="display:flex;align-items:center;gap:6px;"></div>
+    </div>
 
     <main class="container">
         <div class="payment-service-strip" role="region" aria-label="الدفع والتوصيل والاسترجاع">
@@ -2417,9 +2705,14 @@
                 </button>
             </div>
 
-            <a href="https://wa.me/201055436305?text=%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%AA%D9%88%D8%A7%D8%B5%D9%84%20%D9%84%D9%84%D8%B7%D9%84%D8%A8%D8%A7%D8%AA%20%D8%A7%D9%84%D8%AE%D8%A7%D8%B5%D8%A9%20%28%D9%85%D9%86%D8%AA%D8%AC%20%D8%BA%D9%8A%D8%B1%20%D9%85%D9%88%D8%AC%D9%88%D8%AF%29" target="_blank" rel="noopener noreferrer" class="promo-special-link">
-                <span>مش لاقي منتج؟ نجيبهولك</span>
-            </a>
+            <div class="promo-actions-pair">
+                <a href="https://wa.me/201055436305?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D8%AE%D8%AF%D9%85%D8%A9%20%D8%B9%D9%85%D9%84%D8%A7%D8%A1%20%D9%85%D8%AA%D8%AC%D8%B1%20%D9%83%D8%A7%D8%B1%D8%A7%D9%85%D9%84%D8%8C%20%D8%A3%D8%AD%D8%AA%D8%A7%D8%AC%20%D9%85%D8%B3%D8%A7%D8%B9%D8%AF%D8%A9" target="_blank" rel="noopener noreferrer" class="promo-cs-link" onclick="event.preventDefault(); launchWhatsAppTarget(this.href);">
+                    <span>خدمة العملاء</span>
+                </a>
+                <a href="https://wa.me/201055436305?text=%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%AA%D9%88%D8%A7%D8%B5%D9%84%20%D9%84%D9%84%D8%B7%D9%84%D8%A8%D8%A7%D8%AA%20%D8%A7%D9%84%D8%AE%D8%A7%D8%B5%D8%A9%20%28%D9%85%D9%86%D8%AA%D8%AC%20%D8%BA%D9%8A%D8%B1%20%D9%85%D9%88%D8%AC%D9%88%D8%AF%29" target="_blank" rel="noopener noreferrer" class="promo-special-link" onclick="event.preventDefault(); launchWhatsAppTarget(this.href);">
+                    <span>مش لاقي منتج؟ نجيبهولك</span>
+                </a>
+            </div>
         </div>
 
         <section class="dual-spotlight-row" aria-label="قبل نفاذ الكمية وأسعار مميزة">
@@ -2451,15 +2744,28 @@
         </div>
 
         <section class="merchant-banner" id="activeMerchantBanner" aria-live="polite">
-            <div class="merchant-banner-info">
-                <span class="merchant-banner-kicker">عرض منتجات التاجر</span>
-                <div class="merchant-banner-title">
-                    <span id="merchantBannerName"></span>
-                    <span class="merchant-count-pill" id="merchantBannerCount"></span>
+            <div class="merchant-banner-top-row">
+                <div style="display:flex;align-items:center;gap:12px;">
+                    <div class="merchant-avatar-badge" id="merchantAvatarInitial">ك</div>
+                    <div class="merchant-banner-info">
+                        <span class="merchant-banner-kicker">واجهة متجر التاجر المعتمد لدى كارامل</span>
+                        <div class="merchant-banner-title">
+                            <span id="merchantBannerName"></span>
+                            <span class="merchant-count-pill" id="merchantBannerCount"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="merchant-actions-group">
+                    <button type="button" class="merchant-share-btn" onclick="shareCurrentMerchantPage()">مشاركة صفحة التاجر</button>
+                    <button type="button" class="merchant-back-btn" onclick="clearMerchantFilter()">العودة للمتجر الرئيسي</button>
                 </div>
             </div>
-            <button type="button" class="merchant-back-btn" onclick="clearMerchantFilter()">العودة لكل المنتجات</button>
         </section>
+
+        <div class="search-results-summary-bar" id="searchResultsSummaryBar" aria-live="polite">
+            <span class="search-summary-text" id="searchResultsSummaryText"></span>
+            <button type="button" class="search-clear-inline-btn" onclick="cancelSearchMode()">مسح البحث</button>
+        </div>
 
         <div class="section-heading" id="productsSectionHeading">
             <h2 id="activeCategoryTitle">كل المنتجات</h2>
@@ -3338,42 +3644,68 @@
 
         const CATEGORY_NAMES = {
             all: "كل المنتجات",
-            school: "المدرسة",
             home: "المنزل",
-            kids: "الأطفال",
+            appliances: "الأدوات الكهربائية",
+            phones: "الهواتف والإكسسوارات",
+            jewelry: "مجوهرات وإكسسوارات",
+            perfume: "الجمال والصحة",
+            school: "اللوازم المكتبية والمدرسة",
+            gifts: "الهدايا",
             tafse: "هاند ميد",
-            men: "الرجال",
             women: "النساء",
-            perfume: "العناية والعطور",
-            gifts: "الهدايا"
+            men: "الرجال",
+            kids: "الأطفال"
         };
 
         const CATEGORY_SUBTITLES = {
             all: "تشكيلة المتجر بالكامل من كل التجار",
-            school: "أدوات دراسة وكتابة يومية",
             home: "تنظيم، مطبخ، ومفروشات",
-            kids: "مستلزمات وتفاصيل للأطفال",
+            appliances: "أجهزة وأدوات كهربائية منزلية وعملية",
+            phones: "هواتف، شواحن، سماعات، وكفرات",
+            jewelry: "إكسسوارات، سلاسل، أساور، وخواتم",
+            perfume: "عطور، عناية شخصية، تجميل، وصحة",
+            school: "أدوات مكتبية، كشاكيل، وأدوات دراسة",
+            gifts: "هدايا مخصصة وذكريات",
             tafse: "شغل يدوي ومكرميات وعبايات",
-            men: "اختيارات عملية للرجال",
             women: "أزياء وعناية نسائية",
-            perfume: "عطور، سبراي، وعناية شخصية",
-            gifts: "هدايا مخصصة وذكريات"
+            men: "اختيارات عملية للرجال",
+            kids: "مستلزمات وتفاصيل للأطفال"
         };
 
         const CATEGORY_THEME_META = {
-            all:     { bar: "#c89666", bg: "rgba(200, 150, 102, 0.16)" },
-            school:  { bar: "#0284c7", bg: "#e0f2fe" },
-            home:    { bar: "#b88656", bg: "#f7efe4" },
-            kids:    { bar: "#0e7490", bg: "#cffafe" },
-            tafse:   { bar: "#52624b", bg: "#e6ede3" },
-            men:     { bar: "#334155", bg: "#e2e8f0" },
-            women:   { bar: "#d97706", bg: "#fef3c7" },
-            perfume: { bar: "#3b82f6", bg: "#dbeafe" },
-            gifts:   { bar: "#db2777", bg: "#fce7f3" }
+            all:        { bar: "#c89666", bg: "rgba(200, 150, 102, 0.16)", stroke: "#e5be96" },
+            home:       { bar: "#b88656", bg: "#f7efe4", stroke: "#996738" },
+            appliances: { bar: "#0ea5e9", bg: "#e0f2fe", stroke: "#0369a1" },
+            phones:     { bar: "#6366f1", bg: "#e0e7ff", stroke: "#4338ca" },
+            jewelry:    { bar: "#e11d48", bg: "#ffe4e6", stroke: "#be123c" },
+            perfume:    { bar: "#3b82f6", bg: "#dbeafe", stroke: "#1d4ed8" },
+            school:     { bar: "#0284c7", bg: "#e0f2fe", stroke: "#0284c7" },
+            gifts:      { bar: "#db2777", bg: "#fce7f3", stroke: "#db2777" },
+            tafse:      { bar: "#52624b", bg: "#e6ede3", stroke: "#384532" },
+            women:      { bar: "#d97706", bg: "#fef3c7", stroke: "#d97706" },
+            men:        { bar: "#334155", bg: "#e2e8f0", stroke: "#334155" },
+            kids:       { bar: "#0e7490", bg: "#cffafe", stroke: "#0e7490" }
         };
 
-        function buildCategoryGraphicSvg(catKey) {
+        function buildCategoryGraphicSvg(catKey, customStroke = "") {
+            const s = customStroke || (CATEGORY_THEME_META[catKey]?.stroke || "#996738");
             switch (catKey) {
+                case "appliances":
+                    return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M18 4L8 18h8l-2 10 10-14h-8l2-10z"></path>
+                    </svg>`;
+                case "phones":
+                    return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="9.5" y="4.5" width="13" height="23" rx="2.8"></rect>
+                        <path d="M14 7.5h4"></path>
+                        <circle cx="16" cy="24" r="1" fill="${s}" stroke="none"></circle>
+                    </svg>`;
+                case "jewelry":
+                    return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M9 7l7 5 7-5"></path>
+                        <circle cx="16" cy="18.5" r="7"></circle>
+                        <path d="M16 14.5l2.2 2.2-2.2 2.2-2.2-2.2 2.2-2.2z"></path>
+                    </svg>`;
                 case "school":
                     return `<svg viewBox="0 0 32 32" fill="none" stroke="#0284c7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <rect x="6" y="5" width="16" height="22" rx="2.5"></rect>
@@ -3432,7 +3764,7 @@
         }
 
         function applyCategoryPageMood(category) {
-            const validModes = ["all", "home", "school", "tafse", "kids", "women", "men", "gifts", "perfume"];
+            const validModes = ["all", "home", "appliances", "phones", "jewelry", "school", "tafse", "kids", "women", "men", "gifts", "perfume"];
             const mode = validModes.includes(category) ? category : "all";
             document.body.className = document.body.className
                 .split(/\s+/)
@@ -3490,6 +3822,11 @@
 
             const catAliases = {
                 "المنزل": "home", "منزل": "home", "مطبخ": "home", "ادوات منزليه": "home", "ديكور": "home",
+                "الادوات الكهربائيه": "appliances", "ادوات كهربائيه": "appliances", "كهربائيات": "appliances", "اجهزه كهربائيه": "appliances", "كهرباء": "appliances",
+                "الهواتف والاكسسوارات": "phones", "هواتف": "phones", "موبايل": "phones", "موبايلات": "phones", "اكسسوارات موبايل": "phones", "شواحن": "phones", "سماعات": "phones",
+                "مجوهرات واكسسوارات": "jewelry", "مجوهرات": "jewelry", "اكسسوارات": "jewelry", "حلي": "jewelry", "سلاسل": "jewelry", "خواتم": "jewelry", "اساور": "jewelry",
+                "الجمال والصحه": "perfume", "الجمال": "perfume", "الصحه": "perfume", "صحه": "perfume", "تجميل": "perfume",
+                "اللوازم المكتبيه والمدرسه": "school", "لوازم مكتبيه": "school", "مكتبيه": "school",
                 "المدرسه": "school", "مدرسه": "school", "مكتبه": "school", "ادوات مدرسيه": "school", "قرطاسيه": "school",
                 "هاند ميد": "tafse", "هاندميد": "tafse", "يدوي": "tafse", "مكرميه": "tafse", "تفصيل": "tafse",
                 "الاطفال": "kids", "اطفال": "kids", "بيبي": "kids", "العاب": "kids",
@@ -3501,14 +3838,30 @@
             if (catAliases[normCat]) return catAliases[normCat];
 
             const combined = normalizeText(`${rawCat || ""} ${title} ${desc}`);
-            if (/(عطر|برفان|سبلاش|اسبلش|مخمريه|بادي|لوشن|كريم|شامبو)/.test(combined)) return "perfume";
-            if (/(كشكول|نوت بوك|قلم|اقلام|استيكه|برايه|مسطره|كراسه|مدرس|شنطه مدرس)/.test(combined)) return "school";
+            if (/(موبايل|هاتف|تليفون|ايفون|سامسونج|ريلمي|شاومي|انفنكس|شاحن|باور بنك|كفر|سكرينه|سماعه بلوتوث|ايربودز|وصله|كابل)/.test(combined)) return "phones";
+            if (/(خلاط|مكواه|مكواة|كاتل|غلايه|مضرب|هاند بلندر|ميكروويف|سشوار|مجفف شعر|مروحه|لمبه|ليد|فيشه|مشترك|كهربائيه|كهربائي)/.test(combined)) return "appliances";
+            if (/(مجوهرات|ذهب|فضه|فضة|انسيال|سلسله|سلسلة|خاتم|حلق|اسوره|اسواره|خلخال|دبله|تعليقه|اكسسوارات حريمي|اكسسوار)/.test(combined)) return "jewelry";
+            if (/(عطر|برفان|سبلاش|اسبلش|مخمريه|بادي|لوشن|كريم|شامبو|ماسك|تجميل|ميك اب|مكياج|روج|واقي شمس|سيروم|صحه|طبي|عنايه)/.test(combined)) return "perfume";
+            if (/(كشكول|نوت بوك|قلم|اقلام|استيكه|برايه|مسطره|كراسه|دفتر|ملف|مكتب|سبوره|الوان|مدرس|مكتبي|قرطاسيه)/.test(combined)) return "school";
             if (/(هاند ميد|مكرميه|خرز|لولي|كروشيه|تطريز|عبايه|ملحفه)/.test(combined)) return "tafse";
             if (/(هديه|هدايا|بوكس|مرايا سحريه|طباعه|مج حراري)/.test(combined)) return "gifts";
             if (/(اطفال|طفل|بيبي|لعبه|العاب)/.test(combined)) return "kids";
             if (/(حريمي|نسائي|طرحه|بلوزه|دريس|فستان|بيجامه حريمي)/.test(combined)) return "women";
             if (/(رجالي|شبابي|محفظه رجالي|تيشيرت رجالي)/.test(combined)) return "men";
             return "home";
+        }
+
+        function inferAdditionalCategoriesSmartly(primaryCat, title = "", desc = "") {
+            const combined = normalizeText(`${title} ${desc}`);
+            const extras = new Set();
+            if (primaryCat) extras.add(primaryCat);
+            if (/(هديه|هدية|هدايا|بوكس|تغليف)/.test(combined)) extras.add("gifts");
+            if (/(شاحن|سماعه|كفر|موبايل|هاتف)/.test(combined)) extras.add("phones");
+            if (/(خلاط|مكواه|مكواة|كاتل|غلايه|مروحه|كهربائيه)/.test(combined)) extras.add("appliances");
+            if (/(سلسله|خاتم|اسوره|حلق|مجوهرات|اكسسوار)/.test(combined)) extras.add("jewelry");
+            if (/(عطر|برفان|سبلاش|كريم|تجميل|عنايه|صحه)/.test(combined)) extras.add("perfume");
+            if (/(كشكول|قلم|دفتر|مكتب|مدرسه|مكتبيه)/.test(combined)) extras.add("school");
+            return Array.from(extras);
         }
 
         function inferMerchantForProduct(product, fallbackMerchant = "") {
@@ -3607,6 +3960,8 @@
             };
 
             normalized.merchant = inferMerchantForProduct(normalized, fileMerchant);
+            const existingExtraCats = Array.isArray(rawItem.categories) ? rawItem.categories.map(c => inferCategorySmartly(c, itemTitle, itemDesc)) : [];
+            normalized.categories = Array.from(new Set([...existingExtraCats, ...inferAdditionalCategoriesSmartly(resolvedCategory, itemTitle, itemDesc)]));
             return normalized;
         }
 
@@ -3718,12 +4073,65 @@
 
             renderSpotlightBoxes();
             renderProducts(currentCategory);
-            renderSideCategoriesList();
+            hydrateTopQuickTabIcons();
+        renderSideCategoriesList();
             updateCartUI();
         }
 
         let currentCategory = "all";
         let currentMerchant = "";
+        let currentMaxPrice = 0; // 0 تعني كل الأسعار
+
+        function setPriceFilter(maxPrice) {
+            currentMaxPrice = Number(maxPrice) || 0;
+            renderProducts(currentCategory);
+            scrollToProductsTop();
+        }
+
+        function renderSmartPriceChips(baseList) {
+            const container = document.getElementById("smartPriceChipsContainer");
+            if (!container) return;
+
+            const prices = (baseList || [])
+                .map(p => Number(p.price) || 0)
+                .filter(val => val > 0);
+
+            const tiers = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000];
+            const availableTiers = tiers.filter(tier => prices.some(pr => pr <= tier));
+            const hasAbove1000 = prices.some(pr => pr > 1000);
+
+            if (currentMaxPrice > 0 && currentMaxPrice <= 1000 && !availableTiers.includes(currentMaxPrice)) {
+                currentMaxPrice = 0;
+            }
+
+            let html = `<button type="button" class="price-chip-btn ${currentMaxPrice === 0 ? "active" : ""}" onclick="setPriceFilter(0)">الكل</button>`;
+            availableTiers.forEach(tier => {
+                html += `<button type="button" class="price-chip-btn ${currentMaxPrice === tier ? "active" : ""}" onclick="setPriceFilter(${tier})">حتى ${tier} ج</button>`;
+            });
+            if (hasAbove1000) {
+                html += `<button type="button" class="price-chip-btn ${currentMaxPrice === 1001 ? "active" : ""}" onclick="setPriceFilter(1001)">أكثر من 1000 ج</button>`;
+            }
+            container.innerHTML = html;
+        }
+
+        function applyQuickSearch(term) {
+            const input = document.getElementById("homeSearchInput");
+            if (!input) return;
+            input.value = term;
+            handleSearchInput();
+            scrollToProductsTop();
+        }
+
+        function shareCurrentMerchantPage() {
+            if (!currentMerchant) return;
+            const shareUrl = `${STORE_URL}?merchant=${encodeURIComponent(currentMerchant)}`;
+            const shareText = `تصفح تشكيلة منتجات "${currentMerchant}" في متجر كارامل:\n${shareUrl}`;
+            if (navigator.share) {
+                navigator.share({ title: `${currentMerchant} - متجر كارامل`, text: shareText, url: shareUrl }).catch(() => {});
+            } else {
+                window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, "_blank", "noopener,noreferrer");
+            }
+        }
         let currentFeedItems = [];
         let renderedCount = 0;
         let feedCycle = 0;
@@ -3827,6 +4235,22 @@
         }
 
         const SEARCH_SYNONYMS = {
+            "كهرباء": ["كهربائيه", "كهربائية", "خلاط", "مكواه", "مكواة", "كاتل", "غلايه", "مروحه", "اجهزه"],
+            "خلاط": ["كهربائيه", "مطبخ", "هاند بلندر", "كبه"],
+            "موبايل": ["هاتف", "هواتف", "تليفون", "شاحن", "سماعه", "كفر", "باور بنك", "ايربودز"],
+            "هاتف": ["موبايل", "هواتف", "تليفون", "شاحن", "سماعه", "كفر"],
+            "شاحن": ["موبايل", "هواتف", "وصله", "كابل", "باور بنك"],
+            "سماعه": ["سماعات", "ايربودز", "بلوتوث", "موبايل", "هواتف"],
+            "مجوهرات": ["اكسسوارات", "سلسله", "خاتم", "اسوره", "انسيال", "حلق", "فضه", "ذهب"],
+            "اكسسوارات": ["مجوهرات", "سلسله", "خاتم", "اسوره", "انسيال", "حلق", "موبايل"],
+            "سلسله": ["مجوهرات", "اكسسوارات", "تعليقه", "عقد"],
+            "خاتم": ["مجوهرات", "اكسسوارات", "دبله"],
+            "اسوره": ["مجوهرات", "اكسسوارات", "انسيال", "حظاظه"],
+            "جمال": ["صحه", "تجميل", "عنايه", "عطور", "برفان", "كريم", "ماسك", "مكياج"],
+            "صحه": ["جمال", "عنايه", "طبي", "عطور", "كريم"],
+            "مكتبيه": ["مدرسه", "لوازم مكتبيه", "كشكول", "قلم", "دفتر", "ملف", "مسطره"],
+            "قلم": ["اقلام", "كشكول", "دفتر", "مدرسه", "مكتبيه"],
+            "دفتر": ["كشكول", "نوت بوك", "كراسه", "مدرسه", "مكتبيه"],
             "كوبايات": ["كوب", "اكواب", "كاس", "كاسات", "مج", "مجات"],
             "كوب": ["كوبايات", "اكواب", "كاس", "كاسات", "مج", "مجات"],
             "اكواب": ["كوب", "كوبايات", "كاس", "كاسات", "مج", "مجات"],
@@ -4242,9 +4666,24 @@
             if (!fromPopState) removeOverlayState("cats");
         }
 
+
+        function hydrateTopQuickTabIcons() {
+            document.querySelectorAll(".quick-top-tabs .quick-tab-item").forEach(btn => {
+                const catKey = btn.getAttribute("data-quick");
+                if (!catKey || btn.querySelector(".quick-tab-icon")) return;
+                const labelText = btn.textContent.trim();
+                const strokeColor = catKey === "all" ? "#e5be96" : (CATEGORY_THEME_META[catKey]?.stroke || "currentColor");
+                const iconSvg = buildCategoryGraphicSvg(catKey, strokeColor);
+                btn.innerHTML = `<span class="quick-tab-icon" aria-hidden="true">${iconSvg}</span><span>${escapeHtmlAttr(labelText)}</span>`;
+            });
+        }
+
         function selectTopQuickTab(cat, tabEl) {
             document.querySelectorAll(".quick-top-tabs .quick-tab-item").forEach(el => el.classList.remove("active"));
-            if (tabEl) tabEl.classList.add("active");
+            if (tabEl) {
+                tabEl.classList.add("active");
+                try { tabEl.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" }); } catch (e) {}
+            }
             filterByCategory(cat, tabEl, true);
         }
 
@@ -4333,7 +4772,10 @@
             const banner = document.getElementById("activeMerchantBanner");
             const nameEl = document.getElementById("merchantBannerName");
             const countEl = document.getElementById("merchantBannerCount");
+            const avatarEl = document.getElementById("merchantAvatarInitial");
             if (!banner || !nameEl || !countEl) return;
+
+            document.body.classList.toggle("merchant-storefront-mode", Boolean(currentMerchant));
 
             if (!currentMerchant) {
                 banner.classList.remove("visible");
@@ -4345,7 +4787,8 @@
             const totalForMerchant = PRODUCTS.filter(p => p.merchant === currentMerchant).length;
             const visibleCount = Array.isArray(merchantProductsList) ? merchantProductsList.length : totalForMerchant;
             nameEl.textContent = currentMerchant;
-            countEl.textContent = visibleCount === totalForMerchant ? `${totalForMerchant} منتج` : `${visibleCount} من ${totalForMerchant} منتج`;
+            if (avatarEl) avatarEl.textContent = currentMerchant.trim().charAt(0) || "ك";
+            countEl.textContent = visibleCount === totalForMerchant ? `${totalForMerchant} منتج متاح` : `${visibleCount} من ${totalForMerchant} منتج`;
             banner.classList.add("visible");
         }
 
@@ -4449,10 +4892,19 @@
 
         function getFilteredProducts(category, rawQuery) {
             const hasSearch = Boolean(normalizeText(rawQuery));
-            let list = PRODUCTS.filter(p => {
+            let baseCategoryList = PRODUCTS.filter(p => {
                 const catMatch = category === "all" || p.category === category || (Array.isArray(p.categories) && p.categories.includes(category));
                 const merchantMatch = !currentMerchant || p.merchant === currentMerchant;
                 return catMatch && merchantMatch && matchesSearchQuery(p, rawQuery);
+            });
+
+            renderSmartPriceChips(baseCategoryList);
+
+            let list = baseCategoryList.filter(p => {
+                if (!currentMaxPrice) return true;
+                const pPrice = Number(p.price) || 0;
+                if (currentMaxPrice === 1001) return pPrice > 1000;
+                return pPrice > 0 && pPrice <= currentMaxPrice;
             });
 
             if (hasSearch) {
@@ -4542,6 +4994,18 @@
             const filteredList = getFilteredProducts(category, rawQuery);
             updateMerchantBanner(filteredList);
 
+            const searchSummaryBar = document.getElementById("searchResultsSummaryBar");
+            const searchSummaryText = document.getElementById("searchResultsSummaryText");
+            if (searchSummaryBar && searchSummaryText) {
+                if (trimmedQuery) {
+                    searchSummaryText.innerHTML = `نتائج البحث الذكي عن "<strong>${escapeHtmlAttr(trimmedQuery)}</strong>": <strong>${filteredList.length}</strong> منتج`;
+                    searchSummaryBar.classList.add("visible");
+                } else {
+                    searchSummaryBar.classList.remove("visible");
+                    searchSummaryText.textContent = "";
+                }
+            }
+
             const modeSuffix = currentFeedMode === "new"
                 ? " — مدخلات جديدة"
                 : (currentFeedMode === "deals" ? " — أسعار اقتصادية" : " — من أجلك");
@@ -4594,6 +5058,7 @@
 
         function resetFilters() {
             currentMerchant = "";
+            currentMaxPrice = 0;
             currentFeedMode = "for-you";
             document.querySelectorAll("#feedFilterPills .feed-pill-btn").forEach(b => b.classList.toggle("active", b.getAttribute("data-mode") === "for-you"));
             document.querySelectorAll(".quick-top-tabs .quick-tab-item").forEach(b => b.classList.toggle("active", b.getAttribute("data-quick") === "all"));
@@ -5847,7 +6312,28 @@
         renderSideCategoriesList();
         updateCartUI();
         initFeedSentinelObserver();
-        loadMerchantProductsFromJson();
+        loadMerchantProductsFromJson().then(() => {
+            try {
+                const params = new URLSearchParams(window.location.search);
+                const merchantParam = params.get("merchant");
+                if (merchantParam && PRODUCTS.some(p => p.merchant === merchantParam)) {
+                    filterByMerchant(merchantParam, false);
+                }
+            } catch (e) {}
+        });
+
+        window.addEventListener("DOMContentLoaded", () => {
+            const splash = document.getElementById("caramelSplashScreen");
+            if (splash) {
+                setTimeout(() => splash.classList.add("hide"), 1450);
+            }
+        });
+        if (document.readyState !== "loading") {
+            const splash = document.getElementById("caramelSplashScreen");
+            if (splash) {
+                setTimeout(() => splash.classList.add("hide"), 1450);
+            }
+        }
     </script>
 </body>
 </html>
