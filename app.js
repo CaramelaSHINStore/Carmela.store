@@ -3091,14 +3091,14 @@ async function enableCaramelPush() {
 
 function initCaramelSplashScreen() {
     const splash = document.getElementById("caramelSplashScreen");
-    const sloganEl = document.getElementById("caramelSplashSlogan");
+    const rectEl = document.getElementById("caramelSplashSubRect") || document.getElementById("caramelSplashSlogan");
     const typedTextEl = document.getElementById("caramelSplashTypedText");
     const caretEl = document.getElementById("caramelSplashCaret");
     const headerSloganEl = document.querySelector(".logo-sub");
 
-    const sloganText = "كل قطعة وليها دور";
-    const minSplashMs = 1550;
-    const maxSafetyMs = 3000;
+    const splashBadgeText = "سبوجن";
+    const minSplashMs = 1750;
+    const maxSafetyMs = 3200;
     const startTime = Date.now();
     let dismissed = false;
     let typingTimer = null;
@@ -3112,17 +3112,17 @@ function initCaramelSplashScreen() {
         headerSloganEl.classList.add("slogan-reenter", "play");
     }
 
-    function startSloganTypewriter() {
+    function startRectTypewriter() {
         if (!typedTextEl) return;
         typedTextEl.textContent = "";
         if (caretEl) caretEl.classList.remove("done");
         let idx = 0;
-        const stepMs = Math.max(45, Math.floor(620 / sloganText.length));
+        const stepMs = Math.max(75, Math.floor(420 / splashBadgeText.length));
         clearInterval(typingTimer);
         typingTimer = setInterval(() => {
             idx += 1;
-            typedTextEl.textContent = sloganText.slice(0, idx);
-            if (idx >= sloganText.length) {
+            typedTextEl.textContent = splashBadgeText.slice(0, idx);
+            if (idx >= splashBadgeText.length) {
                 clearInterval(typingTimer);
                 if (caretEl) caretEl.classList.add("done");
             }
@@ -3130,9 +3130,9 @@ function initCaramelSplashScreen() {
     }
 
     setTimeout(() => {
-        if (sloganEl) {
-            sloganEl.classList.add("descend-in");
-            startSloganTypewriter();
+        if (rectEl) {
+            rectEl.classList.add("descend-in");
+            setTimeout(startRectTypewriter, 160);
         }
     }, 520);
 
@@ -3140,7 +3140,7 @@ function initCaramelSplashScreen() {
         if (dismissed) return;
         dismissed = true;
         clearInterval(typingTimer);
-        if (typedTextEl) typedTextEl.textContent = sloganText;
+        if (typedTextEl) typedTextEl.textContent = splashBadgeText;
         if (caretEl) caretEl.classList.add("done");
         if (!splash) { playHeaderSloganEntrance(); return; }
         splash.classList.add("hide");
