@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" style="background-color:#12100e;color-scheme:dark;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -2056,11 +2056,14 @@
     gap: 16px;
     padding: 24px;
     text-align: center;
-    transition: opacity 0.55s ease, visibility 0.55s ease;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .caramel-splash-screen.hide {
     opacity: 0;
     visibility: hidden;
+    transform: scale(1.03);
     pointer-events: none;
 }
 .splash-logo-ring {
@@ -2069,8 +2072,13 @@
     border-radius: 50%;
     padding: 5px;
     background: linear-gradient(135deg, var(--caramel-light), var(--caramel), var(--caramel-dark));
-    box-shadow: 0 0 40px rgba(200, 150, 102, 0.45);
-    animation: splashScaleIn 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow: 0 0 32px rgba(200, 150, 102, 0.35);
+    opacity: 0;
+    transform: scale(0.82);
+    animation:
+        splashLogoAppear 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.08s forwards,
+        splashLogoHeartbeat 1.5s ease-in-out 0.75s infinite;
+    will-change: transform, opacity, box-shadow;
 }
 .splash-logo-ring img {
     width: 100%;
@@ -2084,19 +2092,53 @@
     font-weight: 900;
     color: #ffffff;
     letter-spacing: 3px;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: splashBrandFadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.45s forwards;
 }
 .splash-slogan {
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(14px);
+    clip-path: inset(0 0 100% 0);
     font-size: 0.95rem;
     font-weight: 800;
     color: var(--caramel-light);
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(200, 150, 102, 0.35);
-    padding: 6px 18px;
+    padding: 7px 20px;
     border-radius: 999px;
+    animation: sloganRevealSmooth 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.95s forwards;
+    will-change: transform, opacity, clip-path;
 }
-@keyframes splashScaleIn {
+.splash-slogan::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 54px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.42), transparent);
+    animation: shimmerSweep 1.35s ease-in-out 1.25s 1 forwards;
+    pointer-events: none;
+}
+@keyframes splashLogoAppear {
     0% { opacity: 0; transform: scale(0.82); }
     100% { opacity: 1; transform: scale(1); }
+}
+@keyframes splashLogoHeartbeat {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 28px rgba(200, 150, 102, 0.35); }
+    25% { transform: scale(1.07); box-shadow: 0 0 46px rgba(200, 150, 102, 0.65); }
+    45% { transform: scale(0.99); box-shadow: 0 0 30px rgba(200, 150, 102, 0.4); }
+    65% { transform: scale(1.05); box-shadow: 0 0 42px rgba(200, 150, 102, 0.58); }
+}
+@keyframes splashBrandFadeUp {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes sloganRevealSmooth {
+    0% { opacity: 0; transform: translateY(14px); clip-path: inset(0 0 100% 0); letter-spacing: 1.5px; }
+    100% { opacity: 1; transform: translateY(0); clip-path: inset(0 0 0% 0); letter-spacing: 0.2px; }
 }
 
 .sticky-price-bar {
@@ -2291,78 +2333,9 @@ body.merchant-storefront-mode .payment-service-strip {
     font-weight: 900;
 }
     
-/* حركة دخول احترافية حديثة للسلوجن داخل البرنامج والواجهة */
-@keyframes sloganProEntrance {
-    0% {
-        opacity: 0;
-        transform: translateY(14px) scale(0.95);
-        letter-spacing: 2px;
-        filter: blur(4px);
-    }
-    65% {
-        opacity: 1;
-        filter: blur(0);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-        letter-spacing: 0.2px;
-        filter: blur(0);
-    }
-}
-
-@keyframes sloganHeaderEntrance {
-    0% {
-        opacity: 0;
-        transform: translateY(8px);
-        clip-path: inset(0 0 100% 0);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-        clip-path: inset(0 0 0% 0);
-    }
-}
-
-.splash-slogan {
-    position: relative;
-    overflow: hidden;
-    opacity: 0;
-    animation: sloganProEntrance 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.22s forwards;
-    will-change: transform, opacity, filter;
-}
-
-.splash-slogan::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 48px;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.38), transparent);
-    animation: shimmerSweep 2.4s ease-in-out 0.65s 1 forwards;
-    pointer-events: none;
-}
-
-.logo-sub {
-    opacity: 0;
-    animation: sloganHeaderEntrance 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.35s forwards;
-    will-change: transform, opacity;
-}
-
-.logo-sub.slogan-reenter {
-    animation: none;
-    opacity: 0;
-    transform: translateY(8px);
-    clip-path: inset(0 0 100% 0);
-}
-
-.logo-sub.slogan-reenter.play {
-    animation: sloganHeaderEntrance 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-    </style>
+</style>
 </head>
-<body class="cat-mode-all">
+<body class="cat-mode-all" style="background-color:#12100e;">
 
     <div class="caramel-splash-screen" id="caramelSplashScreen" aria-hidden="true">
         <div class="splash-logo-ring">
@@ -5848,9 +5821,9 @@ body.merchant-storefront-mode .payment-service-strip {
                 const splash = document.getElementById("caramelSplashScreen");
                 if (splash) {
                     splash.classList.add("hide");
-                    setTimeout(() => splash.remove(), 600);
+                    setTimeout(() => splash.remove(), 650);
                 }
-            }, 950);
+            }, 2450);
         });
     </script>
 </body>
