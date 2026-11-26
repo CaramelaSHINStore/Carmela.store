@@ -2052,6 +2052,7 @@
     position: fixed;
     inset: 0;
     z-index: 9999;
+    background-color: #12100e;
     background: radial-gradient(circle at center, #241e1a 0%, #12100e 100%);
     display: flex;
     flex-direction: column;
@@ -2339,7 +2340,7 @@ body.merchant-storefront-mode .payment-service-strip {
     
 </style>
 </head>
-<body class="cat-mode-all" style="background-color:#12100e;">
+<body class="cat-mode-all" style="background-color:#12100e;;background-color:#12100e;color:#f7f3ed;">
 
     <div class="caramel-splash-screen" id="caramelSplashScreen" aria-hidden="true">
         <div class="splash-logo-ring">
@@ -5821,14 +5822,40 @@ body.merchant-storefront-mode .payment-service-strip {
             }
 
             replaySloganEntrance();
-            setTimeout(() => {
-                const splash = document.getElementById("caramelSplashScreen");
-                if (splash) {
-                    splash.classList.add("hide");
-                    setTimeout(() => splash.remove(), 650);
-                }
-            }, 2450);
+            dismissSplashSafely(1400);
         });
+
+        function dismissSplashSafely(delayMs = 1200) {
+            const hideNow = () => {
+                try {
+                    const splash = document.getElementById("caramelSplashScreen");
+                    if (splash) {
+                        splash.classList.add("hide");
+                        splash.style.opacity = "0";
+                        splash.style.pointerEvents = "none";
+                        setTimeout(() => {
+                            try { splash.remove(); } catch (e) {}
+                        }, 450);
+                    }
+                } catch (e) {}
+            };
+            setTimeout(hideNow, delayMs);
+            setTimeout(hideNow, 2600);
+        }
+
+        // Fallback safety net even if DOMContentLoaded is delayed or interrupted
+        window.addEventListener("load", () => {
+            dismissSplashSafely(600);
+        });
+        setTimeout(() => {
+            const splash = document.getElementById("caramelSplashScreen");
+            if (splash && !splash.classList.contains("hide")) {
+                splash.classList.add("hide");
+                splash.style.opacity = "0";
+                splash.style.pointerEvents = "none";
+                setTimeout(() => { try { splash.remove(); } catch (e) {} }, 450);
+            }
+        }, 3000);
     </script>
 </body>
 </html>
