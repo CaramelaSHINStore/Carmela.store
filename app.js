@@ -34,26 +34,52 @@ function buildWhatsAppDeepLink(url) {
 }
 
 function launchWhatsAppTarget(url) {
-    const { schemeUrl, apiUrl } = buildWhatsAppDeepLink(url);
+    const { schemeUrl, intentUrl, apiUrl } = buildWhatsAppDeepLink(url);
     const isAndroid = /Android/i.test(navigator.userAgent || "");
 
     if (isAndroid) {
+        let switchedAway = false;
+        const onVisChange = () => {
+            if (document.hidden) {
+                switchedAway = true;
+                document.removeEventListener("visibilitychange", onVisChange);
+            }
+        };
+        document.addEventListener("visibilitychange", onVisChange);
+
         try {
-            window.location.href = schemeUrl;
-            setTimeout(() => {
-                if (document.visibilityState === "visible") {
+            window.location.href = intentUrl || schemeUrl;
+        } catch (e) {
+            try {
+                window.location.href = schemeUrl;
+            } catch (err) {}
+        }
+
+        setTimeout(() => {
+            document.removeEventListener("visibilitychange", onVisChange);
+            if (!switchedAway && document.visibilityState === "visible") {
+                try {
+                    const win = window.open(apiUrl, "_blank", "noopener,noreferrer");
+                    if (!win) window.location.href = apiUrl;
+                } catch (e) {
                     window.location.href = apiUrl;
                 }
-            }, 900);
-            return;
-        } catch (e) {}
+            }
+        }, 1600);
+        return;
     }
 
-    window.location.href = apiUrl;
+    try {
+        const win = window.open(apiUrl, "_blank", "noopener,noreferrer");
+        if (!win) window.location.href = apiUrl;
+    } catch (e) {
+        window.location.href = apiUrl;
+    }
 }
 
 const STORE_URL = "https://caramelstoresuez.github.io/Carmelastore/";
 const CART_STORAGE_KEY = "caramel_store_cart_v1";
+const ACTIVE_ORDERS_STORAGE_KEY = "caramel_active_orders_v1";
 const INTEREST_STORAGE_KEY = "caramel_smart_interest_v1";
 const THEME_STORAGE_KEY = "caramel_store_theme_mode_v1";
 const CUSTOMER_PROFILE_KEY = "caramel_customer_profile_v1";
@@ -97,6 +123,7 @@ let isAppendingBatch = false;
 let currentFeedMode = "for-you";
 let currentSortMode = "smart";
 let isLoadingJsonProducts = true;
+let appendTargetOrderId = null;
 let pendingOptionSelection = {
     productId: null,
     clickedBtnId: null,
@@ -620,7 +647,7 @@ async function shareStoreApp() {
         }
         showCaramelToast("تم نسخ رابط متجر كارامل بنجاح!");
     } catch (e) {
-        window.location.href = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+        launchWhatsAppTarget(`https://wa.me/?text=${encodeURIComponent(shareText)}`);
     }
 }
 
@@ -1105,8 +1132,6 @@ async function loadMerchantProductsFromJson() {
     renderSmartSearchSuggestions();
     renderSpotlightBoxes();
     renderProducts(currentCategory);
-    hydrateTopQuickTabIcons();
-    renderSideCategoriesList();
     updateCartUI();
     applyUrlDeepLinkParams();
 }
@@ -1245,7 +1270,7 @@ function shareCurrentMerchantPage() {
     if (navigator.share) {
         navigator.share({ title: `${currentMerchant} - متجر كارامل`, text: shareText, url: shareUrl }).catch(() => {});
     } else {
-        window.location.href = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+        launchWhatsAppTarget(`https://wa.me/?text=${encodeURIComponent(shareText)}`);
     }
 }
 
@@ -1256,6 +1281,7 @@ let continuationItems = [];
 let continuationBatchIndex = 0;
 let continuationCursor = 0;
 let cart = [];
+let activeOrders = [];
 let overlayStack = [];
 let interestData = { categories: {}, keywords: {}, seenIds: [], sessionRoll: Math.random() };
 
@@ -1297,7 +1323,23 @@ function loadCartFromStorage() {
     } catch (e) { return []; }
 }
 
+function loadActiveOrdersFromStorage() {
+    try {
+        const raw = localStorage.getItem(ACTIVE_ORDERS_STORAGE_KEY);
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed.filter(o => o && o.orderId) : [];
+    } catch (e) { return []; }
+}
+
+function saveActiveOrders() {
+    try {
+        localStorage.setItem(ACTIVE_ORDERS_STORAGE_KEY, JSON.stringify(activeOrders));
+    } catch (e) {}
+}
+
 cart = loadCartFromStorage();
+activeOrders = loadActiveOrdersFromStorage();
 
 try {
     const savedInterest = localStorage.getItem(INTEREST_STORAGE_KEY);
@@ -2063,6 +2105,7 @@ function buildProductCardHTML(product, instanceTag = "base") {
     const hasMultiImgs = imgs.length > 1;
     const waUrl = buildProductWhatsAppUrl(product, imgSrc);
     const btnId = `btn-${instanceTag}-${product.id}`;
+    const addLabel = appendTargetOrderId ? "+ للطلب الحالي" : "+ للمشتريات";
 
     const styleClass = product.cardStyle === "gold"
         ? "card-style-gold"
@@ -2104,7 +2147,7 @@ function buildProductCardHTML(product, instanceTag = "base") {
                 </div>
                 <div class="card-btns">
                     <button type="button" class="add-cart-btn" id="${btnId}" onclick="const _c = this.closest('.product-card'); const _p = PRODUCTS.find(x => x.id === _c.dataset.productId); openProductOptionModal(_c.dataset.productId, '${btnId}', getActiveCardImageSrc(_c, _p))">
-                        <span>+ للمشتريات</span>
+                        <span>${addLabel}</span>
                     </button>
                     <a href="${escapeHtmlAttr(waUrl)}" class="direct-wa-link" target="_blank" rel="noopener noreferrer" onclick="event.preventDefault(); const _c = this.closest('.product-card'); const _id = _c.dataset.productId; const _p = PRODUCTS.find(x => x.id === _id); const _u = buildProductWhatsAppUrl(_p, getActiveCardImageSrc(_c, _p)); this.href = _u; onDirectWhatsAppClick(_id); launchWhatsAppTarget(_u);">
                         <span>واتساب</span>
@@ -2480,6 +2523,7 @@ function openProductOptionModal(productId, clickedBtnId = null, preferredImgSrc 
     const colorGroup = document.getElementById("optionModalColorGroup");
     const colorPills = document.getElementById("optionModalColorPills");
     const noteInput = document.getElementById("optionModalNoteInput");
+    const confirmBtn = document.getElementById("optionModalConfirmBtn");
 
     const variantConfig = getProductVariantConfig(product);
     const sizes = (variantConfig && variantConfig.sizes) ? variantConfig.sizes : [];
@@ -2521,6 +2565,9 @@ function openProductOptionModal(productId, clickedBtnId = null, preferredImgSrc 
     if (titleEl) titleEl.textContent = `${product.title} — التاجر: ${product.merchant || "متجر كارامل"}`;
     if (priceEl) priceEl.innerHTML = `${formatPriceNumber(initialUnitPrice)} <span>جنيه</span>`;
     if (noteInput) noteInput.value = "";
+    if (confirmBtn) {
+        confirmBtn.textContent = appendTargetOrderId ? "إضافة للطلب قيد التنفيذ" : "تأكيد وإضافة للسلة";
+    }
 
     if (sizeGroup && sizePills) {
         if (sizes.length) {
@@ -2577,6 +2624,51 @@ function closeProductOptionModal(fromPopState = false) {
     if (!fromPopState) removeOverlayState("option");
 }
 
+function buildLineItemFromProduct(product, options = {}) {
+    const variantConfig = getProductVariantConfig(product);
+    const availableSizes = (variantConfig && variantConfig.sizes) ? variantConfig.sizes : [];
+    const availableColors = (variantConfig && variantConfig.colors) ? variantConfig.colors : [];
+    const defaultSize = availableSizes.length ? (typeof availableSizes[0] === "string" ? availableSizes[0] : availableSizes[0].label) : "";
+    const chosenSize = options.selectedSize || defaultSize;
+    const chosenColor = options.selectedColor || (availableColors[0] || "");
+    const chosenNote = (options.customNote || "").trim();
+    const imgs = getProductImagesList(product);
+    const chosenImg = normalizeProductImageUrl(options.selectedImg) || (imgs[0] || "");
+    const addQty = Math.max(1, Number(options.qty) || 1);
+    const effectiveUnitPrice = Number(options.customPrice) > 0
+        ? Number(options.customPrice)
+        : getOptionVariantPrice(product, chosenSize, product.price);
+
+    return {
+        id: product.id,
+        title: product.title,
+        price: effectiveUnitPrice,
+        img: chosenImg,
+        selectedImg: chosenImg,
+        merchant: product.merchant || "متجر كارامل",
+        qty: addQty,
+        selectedSize: chosenSize,
+        selectedColor: chosenColor,
+        customNote: chosenNote
+    };
+}
+
+function mergeLineItemIntoList(list, newItem) {
+    const existingIndex = list.findIndex(item =>
+        item.id === newItem.id &&
+        (item.selectedSize || "") === (newItem.selectedSize || "") &&
+        (item.selectedColor || "") === (newItem.selectedColor || "") &&
+        (item.customNote || "") === (newItem.customNote || "") &&
+        (item.selectedImg || "") === (newItem.selectedImg || "") &&
+        (Number(item.price) || 0) === (Number(newItem.price) || 0)
+    );
+    if (existingIndex > -1) {
+        list[existingIndex].qty += newItem.qty;
+    } else {
+        list.push(newItem);
+    }
+}
+
 function confirmAddProductWithOptions() {
     const { productId, clickedBtnId, selectedSize, selectedColor, selectedImg, currentPrice, qty } = pendingOptionSelection;
     if (!productId) return;
@@ -2599,50 +2691,38 @@ function addToCart(productId, btnId = null, options = {}) {
     if (!product) return;
     trackProductInterest(product, 2, true);
 
-    const variantConfig = getProductVariantConfig(product);
-    const availableSizes = (variantConfig && variantConfig.sizes) ? variantConfig.sizes : [];
-    const availableColors = (variantConfig && variantConfig.colors) ? variantConfig.colors : [];
-    const defaultSize = availableSizes.length ? (typeof availableSizes[0] === "string" ? availableSizes[0] : availableSizes[0].label) : "";
-    const chosenSize = options.selectedSize || defaultSize;
-    const chosenColor = options.selectedColor || (availableColors[0] || "");
-    const chosenNote = (options.customNote || "").trim();
-    const imgs = getProductImagesList(product);
-    const chosenImg = normalizeProductImageUrl(options.selectedImg) || (imgs[0] || "");
-    const addQty = Math.max(1, Number(options.qty) || 1);
-    const effectiveUnitPrice = Number(options.customPrice) > 0
-        ? Number(options.customPrice)
-        : getOptionVariantPrice(product, chosenSize, product.price);
+    const newItem = buildLineItemFromProduct(product, options);
 
-    const existingIndex = cart.findIndex(item =>
-        item.id === productId &&
-        (item.selectedSize || "") === chosenSize &&
-        (item.selectedColor || "") === chosenColor &&
-        (item.customNote || "") === chosenNote &&
-        (item.selectedImg || "") === chosenImg &&
-        (Number(item.price) || 0) === effectiveUnitPrice
-    );
-
-    if (existingIndex > -1) {
-        cart[existingIndex].qty += addQty;
-    } else {
-        cart.push({
-            id: product.id,
-            title: product.title,
-            price: effectiveUnitPrice,
-            img: chosenImg,
-            selectedImg: chosenImg,
-            merchant: product.merchant || "متجر كارامل",
-            qty: addQty,
-            selectedSize: chosenSize,
-            selectedColor: chosenColor,
-            customNote: chosenNote
-        });
+    if (appendTargetOrderId) {
+        const targetOrder = activeOrders.find(o => o.orderId === appendTargetOrderId && o.status === "pending");
+        if (targetOrder) {
+            mergeLineItemIntoList(targetOrder.items, newItem);
+            targetOrder.updatedAt = new Date().toISOString();
+            saveActiveOrders();
+            updateCartUI();
+            pulseBottomNavButton("navCartBtn");
+            showCaramelToast(`تمت إضافة "${product.title}" للطلب ${targetOrder.orderId}`);
+            if (btnId) {
+                const btn = document.getElementById(btnId);
+                if (btn) {
+                    const orig = btn.innerHTML;
+                    btn.classList.add("added");
+                    btn.innerHTML = "<span>✓ أُضيف للطلب</span>";
+                    setTimeout(() => { btn.classList.remove("added"); btn.innerHTML = orig; }, 1100);
+                }
+            }
+            return;
+        } else {
+            appendTargetOrderId = null;
+            updateAppendOrderBannerUI();
+        }
     }
 
+    mergeLineItemIntoList(cart, newItem);
     saveCart();
     updateCartUI();
     pulseBottomNavButton("navCartBtn");
-    showCaramelToast(`تمت إضافة "${product.title}" (${addQty} قطعة) للمشتريات`);
+    showCaramelToast(`تمت إضافة "${product.title}" (${newItem.qty} قطعة) للمشتريات`);
 
     if (btnId) {
         const btn = document.getElementById(btnId);
@@ -2674,75 +2754,301 @@ function updateCartItemOption(index, field, value) {
 }
 
 function updateCartUI() {
-    const totalPieces = cart.reduce((sum, item) => sum + item.qty, 0);
-    const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+    const cartPieces = cart.reduce((sum, item) => sum + item.qty, 0);
+    const cartAmount = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+    const pendingOrdersList = activeOrders.filter(o => o.status === "pending");
 
     const bottomBadge = document.getElementById("bottomCartCount");
+    const badgeTotal = cartPieces + pendingOrdersList.length;
     if (bottomBadge) {
-        bottomBadge.textContent = totalPieces;
-        bottomBadge.classList.toggle("visible", totalPieces > 0);
+        bottomBadge.textContent = badgeTotal;
+        bottomBadge.classList.toggle("visible", badgeTotal > 0);
     }
 
     const distinctEl = document.getElementById("cartDistinctCount");
     const piecesEl = document.getElementById("cartTotalPieces");
     const totalAmountEl = document.getElementById("cartTotalAmount");
     if (distinctEl) distinctEl.textContent = cart.length;
-    if (piecesEl) piecesEl.textContent = totalPieces;
-    if (totalAmountEl) totalAmountEl.textContent = `${formatPriceNumber(totalAmount)} جنيه`;
+    if (piecesEl) piecesEl.textContent = cartPieces;
+    if (totalAmountEl) totalAmountEl.textContent = `${formatPriceNumber(cartAmount)} جنيه`;
 
     const container = document.getElementById("cartItemsContainer");
-    if (!container) return;
+    if (container) {
+        if (cart.length === 0) {
+            container.innerHTML = `<div class="cart-empty">سلة المشتريات الحالية فارغة — أضف أي منتج أو راجع طلباتك قيد التنفيذ بالأسفل.</div>`;
+        } else {
+            container.innerHTML = cart.map((item, idx) => {
+                const product = PRODUCTS.find(p => p.id === item.id);
+                const variantConfig = getProductVariantConfig(product);
+                const sizes = (variantConfig && variantConfig.sizes) ? variantConfig.sizes : [];
+                const colors = (variantConfig && variantConfig.colors) ? variantConfig.colors : [];
+                const itemImg = normalizeProductImageUrl(item.selectedImg || item.img) || (product?.img || "");
 
-    if (cart.length === 0) {
-        container.innerHTML = `<div class="cart-empty">سلة المشتريات فارغة حالياً — أضف أي منتج لبدء طلبك.</div>`;
+                const sizeSelectHTML = sizes.length ? `
+                    <select class="cart-option-select" onchange="updateCartItemOption(${idx}, 'selectedSize', this.value)" aria-label="المقاس">
+                        ${sizes.map(s => {
+                            const sLabel = typeof s === "string" ? s : s.label;
+                            return `<option value="${escapeHtmlAttr(sLabel)}" ${item.selectedSize === sLabel ? "selected" : ""}>المقاس: ${escapeHtmlAttr(sLabel)}</option>`;
+                        }).join("")}
+                    </select>
+                ` : "";
+
+                const colorSelectHTML = colors.length ? `
+                    <select class="cart-option-select" onchange="updateCartItemOption(${idx}, 'selectedColor', this.value)" aria-label="اللون">
+                        ${colors.map(c => `<option value="${escapeHtmlAttr(c)}" ${item.selectedColor === c ? "selected" : ""}>اللون: ${escapeHtmlAttr(c)}</option>`).join("")}
+                    </select>
+                ` : "";
+
+                return `
+                    <div class="cart-item">
+                        <div class="cart-item-top">
+                            <img src="${escapeHtmlAttr(itemImg)}" alt="${escapeHtmlAttr(item.title)}" onerror="handleProductImageError(this, '${escapeHtmlAttr(item.id)}')">
+                            <div class="cart-item-info">
+                                <div class="cart-item-title">${escapeHtmlAttr(item.title)}</div>
+                                <div class="cart-item-meta-line">
+                                    <span class="cart-item-price">${formatPriceNumber(item.price * item.qty)} جنيه</span>
+                                    <span class="cart-item-merchant">• ${escapeHtmlAttr(item.merchant || "متجر كارامل")}</span>
+                                </div>
+                            </div>
+                            <div class="qty-controls">
+                                <button type="button" class="qty-btn" onclick="changeCartQty(${idx}, 1)">+</button>
+                                <span class="qty-val">${item.qty}</span>
+                                <button type="button" class="qty-btn" onclick="changeCartQty(${idx}, -1)">-</button>
+                                <button type="button" class="remove-item-btn" onclick="removeCartItem(${idx})" aria-label="حذف">✕</button>
+                            </div>
+                        </div>
+                        ${(sizeSelectHTML || colorSelectHTML) ? `<div class="cart-item-options">${sizeSelectHTML}${colorSelectHTML}</div>` : ""}
+                        <input type="text" class="cart-item-note-input" value="${escapeHtmlAttr(item.customNote || "")}" placeholder="تفاصيل إضافية لهذه القطعة (اختياري)..." onchange="updateCartItemOption(${idx}, 'customNote', this.value)">
+                    </div>
+                `;
+            }).join("");
+        }
+    }
+
+    renderActiveOrdersInCart();
+    updateAppendOrderBannerUI();
+}
+
+function renderActiveOrdersInCart() {
+    const ordersContainer = document.getElementById("activeOrdersContainer");
+    const countBadge = document.getElementById("activeOrdersCountBadge");
+    if (!ordersContainer) return;
+
+    const visibleOrders = activeOrders.filter(o => o && o.status === "pending");
+    if (countBadge) countBadge.textContent = String(visibleOrders.length);
+
+    if (!visibleOrders.length) {
+        ordersContainer.innerHTML = `<div class="active-orders-empty">لا توجد طلبات قيد التنفيذ حالياً. أي طلب ترسله سيظهر هنا لتعديله أو الإضافة عليه أو إلغائه.</div>`;
         return;
     }
 
-    container.innerHTML = cart.map((item, idx) => {
-        const product = PRODUCTS.find(p => p.id === item.id);
-        const variantConfig = getProductVariantConfig(product);
-        const sizes = (variantConfig && variantConfig.sizes) ? variantConfig.sizes : [];
-        const colors = (variantConfig && variantConfig.colors) ? variantConfig.colors : [];
-        const itemImg = normalizeProductImageUrl(item.selectedImg || item.img) || (product?.img || "");
+    ordersContainer.innerHTML = visibleOrders.map(order => {
+        const orderTotal = (order.items || []).reduce((sum, it) => sum + ((Number(it.price) || 0) * (Number(it.qty) || 1)), 0);
+        const orderPieces = (order.items || []).reduce((sum, it) => sum + (Number(it.qty) || 1), 0);
+        const isAppendingThis = appendTargetOrderId === order.orderId;
 
-        const sizeSelectHTML = sizes.length ? `
-            <select class="cart-option-select" onchange="updateCartItemOption(${idx}, 'selectedSize', this.value)" aria-label="المقاس">
-                ${sizes.map(s => {
-                    const sLabel = typeof s === "string" ? s : s.label;
-                    return `<option value="${escapeHtmlAttr(sLabel)}" ${item.selectedSize === sLabel ? "selected" : ""}>المقاس: ${escapeHtmlAttr(sLabel)}</option>`;
-                }).join("")}
-            </select>
-        ` : "";
+        const itemsHtml = (order.items || []).map((item, itemIdx) => {
+            const product = PRODUCTS.find(p => p.id === item.id);
+            const variantConfig = getProductVariantConfig(product);
+            const sizes = (variantConfig && variantConfig.sizes) ? variantConfig.sizes : [];
+            const colors = (variantConfig && variantConfig.colors) ? variantConfig.colors : [];
+            const itemImg = normalizeProductImageUrl(item.selectedImg || item.img) || (product?.img || "");
 
-        const colorSelectHTML = colors.length ? `
-            <select class="cart-option-select" onchange="updateCartItemOption(${idx}, 'selectedColor', this.value)" aria-label="اللون">
-                ${colors.map(c => `<option value="${escapeHtmlAttr(c)}" ${item.selectedColor === c ? "selected" : ""}>اللون: ${escapeHtmlAttr(c)}</option>`).join("")}
-            </select>
-        ` : "";
+            const sizeSel = sizes.length ? `
+                <select class="cart-option-select" onchange="updateOrderItemOption('${escapeHtmlAttr(order.orderId)}', ${itemIdx}, 'selectedSize', this.value)">
+                    ${sizes.map(s => {
+                        const sLabel = typeof s === "string" ? s : s.label;
+                        return `<option value="${escapeHtmlAttr(sLabel)}" ${item.selectedSize === sLabel ? "selected" : ""}>المقاس: ${escapeHtmlAttr(sLabel)}</option>`;
+                    }).join("")}
+                </select>
+            ` : "";
 
-        return `
-            <div class="cart-item">
-                <div class="cart-item-top">
-                    <img src="${escapeHtmlAttr(itemImg)}" alt="${escapeHtmlAttr(item.title)}" onerror="handleProductImageError(this, '${escapeHtmlAttr(item.id)}')">
-                    <div class="cart-item-info">
-                        <div class="cart-item-title">${escapeHtmlAttr(item.title)}</div>
-                        <div class="cart-item-meta-line">
-                            <span class="cart-item-price">${formatPriceNumber(item.price * item.qty)} جنيه</span>
-                            <span class="cart-item-merchant">• ${escapeHtmlAttr(item.merchant || "متجر كارامل")}</span>
+            const colSel = colors.length ? `
+                <select class="cart-option-select" onchange="updateOrderItemOption('${escapeHtmlAttr(order.orderId)}', ${itemIdx}, 'selectedColor', this.value)">
+                    ${colors.map(c => `<option value="${escapeHtmlAttr(c)}" ${item.selectedColor === c ? "selected" : ""}>اللون: ${escapeHtmlAttr(c)}</option>`).join("")}
+                </select>
+            ` : "";
+
+            return `
+                <div class="active-order-item">
+                    <div class="active-order-item-row">
+                        <img src="${escapeHtmlAttr(itemImg)}" alt="${escapeHtmlAttr(item.title)}" onerror="handleProductImageError(this, '${escapeHtmlAttr(item.id)}')">
+                        <div class="active-order-item-meta">
+                            <div class="cart-item-title">${escapeHtmlAttr(item.title)}</div>
+                            <div class="cart-item-price">${formatPriceNumber((Number(item.price) || 0) * (Number(item.qty) || 1))} جنيه</div>
+                        </div>
+                        <div class="qty-controls">
+                            <button type="button" class="qty-btn" onclick="changeOrderItemQty('${escapeHtmlAttr(order.orderId)}', ${itemIdx}, 1)">+</button>
+                            <span class="qty-val">${item.qty}</span>
+                            <button type="button" class="qty-btn" onclick="changeOrderItemQty('${escapeHtmlAttr(order.orderId)}', ${itemIdx}, -1)">-</button>
+                            <button type="button" class="remove-item-btn" onclick="removeOrderItem('${escapeHtmlAttr(order.orderId)}', ${itemIdx})" aria-label="حذف">✕</button>
                         </div>
                     </div>
-                    <div class="qty-controls">
-                        <button type="button" class="qty-btn" onclick="changeCartQty(${idx}, 1)">+</button>
-                        <span class="qty-val">${item.qty}</span>
-                        <button type="button" class="qty-btn" onclick="changeCartQty(${idx}, -1)">-</button>
-                        <button type="button" class="remove-item-btn" onclick="removeCartItem(${idx})" aria-label="حذف">✕</button>
-                    </div>
+                    ${(sizeSel || colSel) ? `<div class="cart-item-options">${sizeSel}${colSel}</div>` : ""}
+                    <input type="text" class="cart-item-note-input" value="${escapeHtmlAttr(item.customNote || "")}" placeholder="ملاحظة على القطعة..." onchange="updateOrderItemOption('${escapeHtmlAttr(order.orderId)}', ${itemIdx}, 'customNote', this.value)">
                 </div>
-                ${(sizeSelectHTML || colorSelectHTML) ? `<div class="cart-item-options">${sizeSelectHTML}${colorSelectHTML}</div>` : ""}
-                <input type="text" class="cart-item-note-input" value="${escapeHtmlAttr(item.customNote || "")}" placeholder="تفاصيل إضافية لهذه القطعة (اختياري)..." onchange="updateCartItemOption(${idx}, 'customNote', this.value)">
+            `;
+        }).join("");
+
+        return `
+            <div class="active-order-card ${isAppendingThis ? "appending-target" : ""}">
+                <div class="active-order-head">
+                    <div>
+                        <div class="active-order-id">طلب ${escapeHtmlAttr(order.orderId)}</div>
+                        <div class="active-order-time">${escapeHtmlAttr(order.createdAtLabel || "")} • ${orderPieces} قطعة</div>
+                    </div>
+                    <span class="active-order-status-pill">قيد التنفيذ</span>
+                </div>
+                <div class="active-order-items-list">${itemsHtml || `<div class="active-orders-empty">لا توجد منتجات متبقية في هذا الطلب.</div>`}</div>
+                <div class="active-order-total-line">
+                    <span>إجمالي الطلب بعد التعديل:</span>
+                    <strong>${formatPriceNumber(orderTotal)} جنيه</strong>
+                </div>
+                <div class="active-order-actions">
+                    <button type="button" class="order-add-more-btn ${isAppendingThis ? "active" : ""}" onclick="toggleAppendToOrder('${escapeHtmlAttr(order.orderId)}')">
+                        ${isAppendingThis ? "جاري الإضافة للطلب..." : "+ إضافة منتجات"}
+                    </button>
+                    <button type="button" class="order-send-update-btn" onclick="sendOrderUpdateWhatsApp('${escapeHtmlAttr(order.orderId)}', 'تعديل')">
+                        إرسال التعديل للواتساب
+                    </button>
+                    <button type="button" class="order-cancel-btn" onclick="cancelActiveOrder('${escapeHtmlAttr(order.orderId)}')">
+                        إلغاء الطلب
+                    </button>
+                </div>
             </div>
         `;
     }).join("");
+}
+
+function toggleAppendToOrder(orderId) {
+    if (appendTargetOrderId === orderId) {
+        appendTargetOrderId = null;
+        showCaramelToast("تم إيقاف وضع الإضافة للطلب");
+    } else {
+        appendTargetOrderId = orderId;
+        closeCart();
+        showCaramelToast(`اختر أي منتج لإضافته للطلب ${orderId}`);
+    }
+    updateAppendOrderBannerUI();
+    renderActiveOrdersInCart();
+    renderProducts(currentCategory);
+}
+
+function cancelAppendToOrderMode() {
+    appendTargetOrderId = null;
+    updateAppendOrderBannerUI();
+    renderActiveOrdersInCart();
+    renderProducts(currentCategory);
+}
+
+function updateAppendOrderBannerUI() {
+    const banner = document.getElementById("appendOrderBanner");
+    const textEl = document.getElementById("appendOrderBannerText");
+    if (!banner || !textEl) return;
+
+    const target = appendTargetOrderId ? activeOrders.find(o => o.orderId === appendTargetOrderId && o.status === "pending") : null;
+    if (!target) {
+        appendTargetOrderId = null;
+        banner.classList.add("is-hidden");
+        return;
+    }
+
+    textEl.textContent = `أي منتج تضيفه الآن يُضاف مباشرة إلى الطلب ${target.orderId}.`;
+    banner.classList.remove("is-hidden");
+}
+
+function changeOrderItemQty(orderId, itemIdx, delta) {
+    const order = activeOrders.find(o => o.orderId === orderId);
+    if (!order || !order.items[itemIdx]) return;
+    order.items[itemIdx].qty += delta;
+    if (order.items[itemIdx].qty <= 0) {
+        order.items.splice(itemIdx, 1);
+    }
+    order.updatedAt = new Date().toISOString();
+    saveActiveOrders();
+    updateCartUI();
+}
+
+function removeOrderItem(orderId, itemIdx) {
+    const order = activeOrders.find(o => o.orderId === orderId);
+    if (!order || !order.items[itemIdx]) return;
+    order.items.splice(itemIdx, 1);
+    order.updatedAt = new Date().toISOString();
+    saveActiveOrders();
+    updateCartUI();
+}
+
+function updateOrderItemOption(orderId, itemIdx, field, value) {
+    const order = activeOrders.find(o => o.orderId === orderId);
+    if (!order || !order.items[itemIdx]) return;
+    order.items[itemIdx][field] = value;
+    if (field === "selectedSize") {
+        const product = PRODUCTS.find(p => p.id === order.items[itemIdx].id);
+        if (product) {
+            order.items[itemIdx].price = getOptionVariantPrice(product, value, product.price);
+        }
+    }
+    order.updatedAt = new Date().toISOString();
+    saveActiveOrders();
+    updateCartUI();
+}
+
+function buildOrderMessageText(order, actionPrefix = "تعديل على الطلب") {
+    const totalAmount = (order.items || []).reduce((sum, it) => sum + ((Number(it.price) || 0) * (Number(it.qty) || 1)), 0);
+    const lines = (order.items || []).map((item, i) => {
+        const extras = [];
+        if (item.selectedSize) extras.push(`المقاس: ${item.selectedSize}`);
+        if (item.selectedColor) extras.push(`اللون: ${item.selectedColor}`);
+        if (item.customNote) extras.push(`تفاصيل: ${item.customNote}`);
+        if (item.merchant) extras.push(`التاجر: ${item.merchant}`);
+        const extraText = extras.length ? ` (${extras.join(" | ")})` : "";
+        return `${i + 1}. ${item.title}${extraText} × ${item.qty} = ${(Number(item.price) || 0) * (Number(item.qty) || 1)} جنيه`;
+    });
+
+    const headerLines = [
+        `رقم الطلب: ${order.orderId}`,
+        `الاسم: ${order.customerName || "غير محدد"}`,
+        `رقم التواصل: ${order.customerPhone || "غير محدد"}`
+    ];
+    if (order.locationSummary) {
+        headerLines.push(`العنوان/اللوكيشن: ${order.locationSummary}`);
+    }
+
+    return `مرحباً متجر كارامل، هذا (${actionPrefix}):\n\n${headerLines.join("\n")}\n\n${lines.length ? lines.join("\n") : "(تم تفريغ المنتجات)"}\n\nالإجمالي: ${totalAmount} جنيه`;
+}
+
+function sendOrderUpdateWhatsApp(orderId, actionLabel = "تعديل") {
+    const order = activeOrders.find(o => o.orderId === orderId);
+    if (!order) return;
+    if (appendTargetOrderId === orderId) {
+        appendTargetOrderId = null;
+        updateAppendOrderBannerUI();
+    }
+    const msg = buildOrderMessageText(order, `${actionLabel} على الطلب`);
+    launchWhatsAppTarget(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`);
+}
+
+function cancelActiveOrder(orderId) {
+    const order = activeOrders.find(o => o.orderId === orderId);
+    if (!order) return;
+    const confirmed = window.confirm(`هل تريد إلغاء الطلب ${orderId}؟`);
+    if (!confirmed) return;
+
+    if (appendTargetOrderId === orderId) {
+        appendTargetOrderId = null;
+    }
+
+    const cancelMsg = `مرحباً متجر كارامل، أود (إلغاء الطلب) رقم: ${order.orderId}\nالاسم: ${order.customerName || "-"}\nرقم التواصل: ${order.customerPhone || "-"}`;
+    order.status = "cancelled";
+    order.updatedAt = new Date().toISOString();
+    saveActiveOrders();
+    updateCartUI();
+    showCaramelToast(`تم إلغاء الطلب ${orderId}`);
+
+    const notifyWa = window.confirm("هل تحب إرسال إشعار الإلغاء على واتساب الآن؟");
+    if (notifyWa) {
+        launchWhatsAppTarget(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(cancelMsg)}`);
+    }
 }
 
 function changeCartQty(index, delta) {
@@ -2767,6 +3073,7 @@ function clearCart() {
 
 function openCart() {
     loadCustomerProfileToInputs();
+    updateCartUI();
     const drawer = document.getElementById("cartDrawer");
     const backdrop = document.getElementById("cartBackdrop");
     if (drawer) drawer.classList.add("open");
@@ -2890,6 +3197,33 @@ function checkoutOnWhatsApp() {
 
     saveCustomerProfileInputs(customerName, customerPhone);
 
+    const orderId = `ORD-${Date.now().toString().slice(-6)}`;
+    const nowLabel = new Date().toLocaleString("ar-EG", {
+        day: "2-digit",
+        month: "short",
+        hour: "2-digit",
+        minute: "2-digit"
+    });
+    const locationSummary = customerLocationData && customerLocationData.mapsUrl
+        ? (customerLocationData.addressLabel
+            ? `${customerLocationData.addressLabel} - ${customerLocationData.mapsUrl}`
+            : customerLocationData.mapsUrl)
+        : "";
+
+    const newOrder = {
+        orderId,
+        status: "pending",
+        createdAt: new Date().toISOString(),
+        createdAtLabel: nowLabel,
+        customerName,
+        customerPhone,
+        locationSummary,
+        items: cart.map(it => ({ ...it }))
+    };
+
+    activeOrders.unshift(newOrder);
+    saveActiveOrders();
+
     const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
     const lines = cart.map((item, i) => {
         const extras = [];
@@ -2903,16 +3237,17 @@ function checkoutOnWhatsApp() {
     });
 
     const customerHeaderLines = [
+        `رقم الطلب: ${orderId}`,
         `الاسم: ${customerName}`,
         `رقم التواصل: ${customerPhone}`
     ];
-    if (customerLocationData && customerLocationData.mapsUrl) {
-        customerHeaderLines.push(
-            customerLocationData.addressLabel
-                ? `العنوان/اللوكيشن: ${customerLocationData.addressLabel} - ${customerLocationData.mapsUrl}`
-                : `اللوكيشن: ${customerLocationData.mapsUrl}`
-        );
+    if (locationSummary) {
+        customerHeaderLines.push(`العنوان/اللوكيشن: ${locationSummary}`);
     }
+
+    cart = [];
+    saveCart();
+    updateCartUI();
 
     const message = `مرحباً متجر كارامل، أود تأكيد الطلب التالي:\n\n${customerHeaderLines.join("\n")}\n\n${lines.join("\n")}\n\nالإجمالي: ${totalAmount} جنيه\n(السويس: الدفع عند الاستلام • المحافظات الأخرى: إنستا باي أو فوري أو كاش • التوصيل خلال يوم عمل)`;
     launchWhatsAppTarget(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`);
@@ -3067,6 +3402,7 @@ function openImageModal(src, productId = null) {
     renderRelatedInPreviewModal(product);
 
     if (addBtn) {
+        addBtn.textContent = appendTargetOrderId ? "أضف للطلب الحالي" : "أضف للمشتريات";
         addBtn.onclick = () => {
             const activeSrc = previewModalState.imgs[previewModalState.idx] || src;
             closeImageModal();
@@ -3258,7 +3594,6 @@ hydrateTopQuickTabIcons();
 renderSideCategoriesList();
 renderSmartSearchSuggestions();
 renderSpotlightBoxes();
-renderProducts("all");
 updateCartUI();
 loadCustomerProfileToInputs();
 initCaramelPushUI();
