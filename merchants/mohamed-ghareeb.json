@@ -4,9 +4,8 @@
     "title": "لانش بوكس وعلب حفظ طعام تشكيلة متنوعة تبدأ من 70 جنيه",
     "desc": "مجموعة متنوعة من لانش بوكس وعلب حفظ الطعام البلاستيكية بأشكال مستطيلة ومقسمة وموديلات متعددة مثل SUN GROUP بألوان أحمر ووردي وأزرق وبنفسجي وأخضر وبيج وأبيض، الأسعار تبدأ من 70 و90 و120 جنيه.",
     "price": 70,
-    "category": "school",
+    "category": "home",
     "categories": [
-      "school",
       "home"
     ],
     "merchant": "محمد غريب",
@@ -93,9 +92,8 @@
     "title": "لانش بوكس وعلبة حفظ طعام SUN GROUP أحمر ورمادي 70 جنيه",
     "desc": "علبة حفظ طعام ولانش بوكس بلاستيك مستطيلة بغطاء محكم من SUN GROUP بألوان أحمر ورمادي زيتي بسعر 70 جنيه.",
     "price": 70,
-    "category": "school",
+    "category": "home",
     "categories": [
-      "school",
       "home"
     ],
     "merchant": "محمد غريب",
@@ -144,7 +142,7 @@
     "category": "school",
     "categories": [
       "school",
-      "gifts"
+      "kids"
     ],
     "merchant": "محمد غريب",
     "img": "Momaled/compressed_1795582041077.webp",
@@ -238,8 +236,7 @@
     "price": 20,
     "category": "home",
     "categories": [
-      "home",
-      "school"
+      "home"
     ],
     "merchant": "محمد غريب",
     "img": "Momaled/compressed_1795582038827.webp",
@@ -379,7 +376,6 @@
     "category": "school",
     "categories": [
       "school",
-      "home",
       "kids"
     ],
     "merchant": "محمد غريب",
