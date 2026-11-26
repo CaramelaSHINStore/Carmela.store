@@ -1301,22 +1301,30 @@
         }
 
         .bento-cat-art-frame {
-            width: 52px;
-            height: 52px;
-            border-radius: 15px;
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
             background: var(--cat-art-bg, #f7efe4);
+            border: 1.5px solid var(--cat-top-bar, var(--accent));
+            box-shadow: 0 6px 14px -8px rgba(18, 16, 14, 0.25);
+            transition: transform 0.22s ease, box-shadow 0.22s ease;
+        }
+
+        .bento-cat-card:hover .bento-cat-art-frame {
+            transform: scale(1.06);
+            box-shadow: 0 8px 18px -8px var(--accent-glow);
         }
 
         .bento-cat-card.featured-all .bento-cat-art-frame {
-            width: 54px;
-            height: 54px;
-            border-radius: 16px;
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
             background: rgba(255, 255, 255, 0.12);
-            border: 1px solid rgba(200, 150, 102, 0.35);
+            border: 1.5px solid rgba(200, 150, 102, 0.65);
         }
 
         .bento-cat-art-frame svg { width: 28px; height: 28px; display: block; }
@@ -2622,7 +2630,7 @@ body.merchant-storefront-mode .payment-service-strip {
             </button>
 
             <div class="header-actions">
-                <button type="button" class="icon-circle-btn" id="headerSearchToggleBtn" onclick="toggleHeaderSearchBar()" aria-label="بحث" title="بحث">
+                <button type="button" class="icon-circle-btn" id="headerSearchToggleBtn" onclick="openGlobalSearchBar()" aria-label="بحث" title="بحث">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                         <circle cx="11" cy="11" r="7"></circle>
                         <path d="m20 20-3.8-3.8"></path>
@@ -3140,8 +3148,16 @@ body.merchant-storefront-mode .payment-service-strip {
             wrap.classList.toggle("open", shouldOpen);
             if (toggleBtn) toggleBtn.classList.toggle("active", shouldOpen);
             if (shouldOpen && input) {
-                setTimeout(() => input.focus(), 60);
+                setTimeout(() => {
+                    input.focus();
+                    try { input.scrollIntoView({ behavior: "smooth", block: "center" }); } catch (e) {}
+                }, 60);
             }
+        }
+
+        function openGlobalSearchBar() {
+            closeAllOverlays();
+            toggleHeaderSearchBar(true);
         }
 
         function openServiceInfoModal(type) {
@@ -4069,6 +4085,7 @@ body.merchant-storefront-mode .payment-service-strip {
 
             const loadedList = Array.from(jsonProductsById.values());
             PRODUCTS.splice(0, PRODUCTS.length, ...loadedList);
+            rebuildSearchIndex();
             isLoadingJsonProducts = false;
 
             renderSpotlightBoxes();
@@ -4349,15 +4366,16 @@ body.merchant-storefront-mode .payment-service-strip {
             const normalizedQuery = normalizeText(rawQuery);
             if (!normalizedQuery) return 1;
 
-            const normTitle = normalizeText(product.title || "");
-            const normDesc = normalizeText(product.desc || "");
-            const normMerchant = normalizeText(product.merchant || "");
+            const idxEntry = SEARCH_INDEX_MAP.get(product.id);
+            const normTitle = idxEntry ? idxEntry.normTitle : normalizeText(product.title || "");
+            const normDesc = idxEntry ? idxEntry.normDesc : normalizeText(product.desc || "");
+            const normMerchant = idxEntry ? idxEntry.normMerchant : normalizeText(product.merchant || "");
             const allCats = [product.category, ...(Array.isArray(product.categories) ? product.categories : [])];
-            const normCats = normalizeText(allCats.map(c => CATEGORY_NAMES[c] || c || "").join(" "));
+            const normCats = idxEntry ? idxEntry.normCats : normalizeText(allCats.map(c => CATEGORY_NAMES[c] || c || "").join(" "));
             const normPrice = normalizeText(`${product.price || ""} ${product.priceLabel || ""} ${product.subPrice || ""}`);
-            const fullHaystack = `${normTitle} ${normDesc} ${normMerchant} ${normCats} ${normPrice}`;
-            const words = fullHaystack.split(" ").filter(Boolean);
-            const titleWords = normTitle.split(" ").filter(Boolean);
+            const fullHaystack = idxEntry ? idxEntry.fullHaystack : `${normTitle} ${normDesc} ${normMerchant} ${normCats} ${normPrice}`;
+            const words = idxEntry ? idxEntry.words : fullHaystack.split(" ").filter(Boolean);
+            const titleWords = idxEntry ? idxEntry.titleWords : normTitle.split(" ").filter(Boolean);
 
             const queryTerms = normalizedQuery.split(" ").filter(Boolean);
             let totalScore = 0;
@@ -4387,6 +4405,66 @@ body.merchant-storefront-mode .payment-service-strip {
             }
 
             return totalScore;
+        }
+
+        // فهرس بحث ذكي يُبنى تلقائياً عند تحميل منتجات الـ JSON لتسريع التصفح والبحث
+        let SEARCH_INDEX_MAP = new Map();
+
+        function rebuildSearchIndex() {
+            const nextMap = new Map();
+            PRODUCTS.forEach(p => {
+                if (!p || !p.id) return;
+                const allCats = [p.category, ...(Array.isArray(p.categories) ? p.categories : [])];
+                const catNames = allCats.map(c => CATEGORY_NAMES[c] || c || "").join(" ");
+                const normTitle = normalizeText(p.title || "");
+                const normDesc = normalizeText(p.desc || "");
+                const normMerchant = normalizeText(p.merchant || "");
+                const normCats = normalizeText(catNames);
+                const normPrice = normalizeText(`${p.price || ""} ${p.priceLabel || ""} ${p.subPrice || ""}`);
+                const fullHaystack = `${normTitle} ${normDesc} ${normMerchant} ${normCats} ${normPrice}`;
+                nextMap.set(p.id, {
+                    normTitle,
+                    normDesc,
+                    normMerchant,
+                    normCats,
+                    fullHaystack,
+                    words: fullHaystack.split(" ").filter(Boolean),
+                    titleWords: normTitle.split(" ").filter(Boolean),
+                    catSet: new Set(allCats.filter(Boolean))
+                });
+            });
+            SEARCH_INDEX_MAP = nextMap;
+        }
+
+        function getSmartQuerySuggestion(rawQuery) {
+            const normQ = normalizeText(rawQuery);
+            if (!normQ || normQ.length < 2 || !PRODUCTS.length) return "";
+            const qTokens = normQ.split(" ").filter(Boolean);
+            let bestCandidate = "";
+            let bestScore = 0;
+
+            for (const p of PRODUCTS) {
+                const title = String(p.title || "").trim();
+                const normT = normalizeText(title);
+                if (!normT) continue;
+                const tWords = normT.split(" ").filter(Boolean);
+                let score = 0;
+                for (const qt of qTokens) {
+                    const variants = expandTermVariants(qt);
+                    for (const v of variants) {
+                        if (tWords.some(w => w.startsWith(v) || v.startsWith(w))) {
+                            score += 3;
+                        } else if (tWords.some(w => w.length >= 3 && v.length >= 3 && boundedLevenshtein(v, w, 2) <= 2)) {
+                            score += 2;
+                        }
+                    }
+                }
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestCandidate = tWords.slice(0, 2).join(" ") || title;
+                }
+            }
+            return bestScore >= 2 ? bestCandidate : "";
         }
 
         function matchesSearchQuery(product, rawQuery) {
@@ -5032,16 +5110,22 @@ body.merchant-storefront-mode .payment-service-strip {
                     return;
                 }
 
+                const suggestionTerm = trimmedQuery ? getSmartQuerySuggestion(trimmedQuery) : "";
                 const emptyMsg = trimmedQuery
                     ? `ملقيناش نتيجة مطابقة لـ "${trimmedQuery}".. وحتى لو المنتج مش موجود بنجيبهولك!`
                     : (!PRODUCTS.length
                         ? "لم يتم العثور على منتجات صالحة داخل ملفات الـ JSON حالياً."
                         : "لا توجد منتجات مطابقة للتصفية الحالية.. وحتى لو المنتج مش موجود بنجيبهولك!");
 
+                const suggestionBtnHtml = suggestionTerm
+                    ? `<button type="button" class="add-cart-btn" style="max-width: 240px;" onclick="applyQuickSearch('${escapeHtmlAttr(suggestionTerm)}')">هل تقصد: ${escapeHtmlAttr(suggestionTerm)}؟</button>`
+                    : "";
+
                 grid.innerHTML = `
                     <div style="grid-column: 1 / -1; background: var(--surface-elevated); padding: 26px; border-radius: 20px; text-align: center; border: 1px solid var(--accent-glow);">
-                        <p style="font-weight: 800; margin-bottom: 10px;">${escapeHtmlAttr(emptyMsg)}</p>
+                        <p style="font-weight: 800; margin-bottom: 12px;">${escapeHtmlAttr(emptyMsg)}</p>
                         <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+                            ${suggestionBtnHtml}
                             <a href="https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("أريد طلب منتج غير موجود في المتجر: " + trimmedQuery)}" class="add-cart-btn" style="max-width: 220px;" target="_blank" rel="noopener noreferrer">طلب خاص على واتساب</a>
                             <button type="button" class="direct-wa-link" style="max-width: 170px;" onclick="${currentMerchant ? "clearMerchantFilter()" : "cancelSearchMode()"}">العودة لكل المنتجات</button>
                         </div>
