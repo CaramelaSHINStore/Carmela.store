@@ -42,17 +42,14 @@ function launchWhatsAppTarget(url) {
             window.location.href = schemeUrl;
             setTimeout(() => {
                 if (document.visibilityState === "visible") {
-                    window.open(apiUrl, "_blank", "noopener,noreferrer");
+                    window.location.href = apiUrl;
                 }
             }, 900);
             return;
         } catch (e) {}
     }
 
-    const waWin = window.open(apiUrl, "_blank", "noopener,noreferrer");
-    if (!waWin) {
-        window.location.href = apiUrl;
-    }
+    window.location.href = apiUrl;
 }
 
 const STORE_URL = "https://caramelstoresuez.github.io/Carmelastore/";
@@ -602,7 +599,7 @@ async function shareStoreApp() {
         }
         showCaramelToast("تم نسخ رابط متجر كارامل بنجاح!");
     } catch (e) {
-        window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, "_blank", "noopener,noreferrer");
+        window.location.href = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
     }
 }
 
@@ -1219,7 +1216,7 @@ function shareCurrentMerchantPage() {
     if (navigator.share) {
         navigator.share({ title: `${currentMerchant} - متجر كارامل`, text: shareText, url: shareUrl }).catch(() => {});
     } else {
-        window.open(`https://wa.me/?text=${encodeURIComponent(shareText)}`, "_blank", "noopener,noreferrer");
+        window.location.href = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
     }
 }
 
@@ -1539,19 +1536,29 @@ function getSmartQuerySuggestion(rawQuery) {
         if (!normT) continue;
         const tWords = normT.split(" ").filter(Boolean);
         let score = 0;
+        let matchedWord = "";
+
         for (const qt of qTokens) {
             const variants = expandTermVariants(qt);
             for (const v of variants) {
-                if (tWords.some(w => w.startsWith(v) || v.startsWith(w))) {
+                const prefixMatch = tWords.find(w => w.startsWith(v) || v.startsWith(w));
+                if (prefixMatch) {
                     score += 3;
-                } else if (tWords.some(w => w.length >= 3 && v.length >= 3 && boundedLevenshtein(v, w, 2) <= 2)) {
+                    if (!matchedWord) matchedWord = prefixMatch;
+                    break;
+                }
+                const fuzzyMatch = tWords.find(w => w.length >= 3 && v.length >= 3 && boundedLevenshtein(v, w, 2) <= 2);
+                if (fuzzyMatch) {
                     score += 2;
+                    if (!matchedWord) matchedWord = fuzzyMatch;
+                    break;
                 }
             }
         }
+
         if (score > bestScore) {
             bestScore = score;
-            bestCandidate = tWords.slice(0, 2).join(" ") || title;
+            bestCandidate = matchedWord || tWords[0] || title;
         }
     }
     return bestScore >= 2 ? bestCandidate : "";
@@ -2235,47 +2242,32 @@ function renderProducts(category = currentCategory) {
     }
 }
 
-const feedObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting && currentFeedItems.length > 0) renderMoreFeedItems();
-    });
-}, { rootMargin: "420px 0px" });
-
-const sentinelEl = document.getElementById("feedSentinel");
-if (sentinelEl) feedObserver.observe(sentinelEl);
-
-function scrollToProductsTop() {
-    const target = document.getElementById("activeMerchantBanner")?.classList.contains("visible")
-        ? document.getElementById("activeMerchantBanner")
-        : document.getElementById("productsSectionHeading");
-    if (!target) return;
-    const bar = document.querySelector(".top-app-bar");
-    const quickTabs = document.querySelector(".quick-top-tabs");
-    const priceBar = document.querySelector(".sticky-price-bar");
-    const offset = (bar ? bar.offsetHeight : 0) + (quickTabs ? quickTabs.offsetHeight : 0) + (priceBar ? priceBar.offsetHeight : 0) + 12;
-    const y = target.getBoundingClientRect().top + window.scrollY - offset;
-    window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
+const feedSentinelEl = document.getElementById("feedSentinel");
+if (feedSentinelEl && "IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => { if (entry.isIntersecting) renderMoreFeedItems(); });
+    }, { rootMargin: "240px" });
+    observer.observe(feedSentinelEl);
 }
 
-function filterByCategory(category, tabEl = null, shouldScroll = false) {
+window.addEventListener("scroll", () => {
+    if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 420)) {
+        renderMoreFeedItems();
+    }
+}, { passive: true });
+
+function filterByCategory(category, tabEl, shouldScroll = false) {
     currentMerchant = "";
     currentMaxPrice = 0;
-    const searchInput = document.getElementById("homeSearchInput");
-    if (searchInput && searchInput.value) {
-        searchInput.value = "";
-        updateSearchCancelButton();
-    }
+    const input = document.getElementById("homeSearchInput");
+    if (input) input.value = "";
+    updateSearchCancelButton();
+    if (category && category !== "all") interestData.categories[category] = (interestData.categories[category] || 0) + 1.5;
+    saveInterest();
+    renderSpotlightBoxes();
     if (tabEl) {
-        document.querySelectorAll(".quick-top-tabs .quick-tab-item").forEach(el => el.classList.remove("active"));
+        document.querySelectorAll(".quick-top-tabs .quick-tab-item").forEach(item => item.classList.remove("active"));
         tabEl.classList.add("active");
-    } else {
-        document.querySelectorAll(".quick-top-tabs .quick-tab-item").forEach(el => {
-            el.classList.toggle("active", el.getAttribute("data-quick") === category);
-        });
-    }
-    if (category && category !== "all") {
-        interestData.categories[category] = (interestData.categories[category] || 0) + 1.5;
-        saveInterest();
     }
     renderProducts(category);
     if (shouldScroll) scrollToProductsTop();
@@ -2284,86 +2276,109 @@ function filterByCategory(category, tabEl = null, shouldScroll = false) {
 function resetHomeFresh() {
     closeAllOverlays();
     currentMerchant = "";
+    currentCategory = "all";
     currentMaxPrice = 0;
-    currentFeedMode = "for-you";
-    document.querySelectorAll("#feedFilterPills .feed-pill-btn").forEach(b => b.classList.toggle("active", b.dataset.mode === "for-you"));
-    const searchInput = document.getElementById("homeSearchInput");
-    if (searchInput) searchInput.value = "";
+    applyCategoryPageMood("all");
+    const input = document.getElementById("homeSearchInput");
+    if (input) input.value = "";
     updateSearchCancelButton();
-    toggleHeaderSearchBar(false);
-    interestData.sessionRoll = Math.random();
-    document.querySelectorAll(".quick-top-tabs .quick-tab-item").forEach(el => el.classList.toggle("active", el.getAttribute("data-quick") === "all"));
-    renderSpotlightBoxes();
+    document.querySelectorAll(".quick-top-tabs .quick-tab-item").forEach(item => {
+        item.classList.toggle("active", item.getAttribute("data-quick") === "all");
+    });
     renderProducts("all");
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-function pulseBottomNav(navId) {
-    const btn = document.getElementById(navId);
+function scrollToProductsTop() {
+    const heading = document.getElementById("productsSectionHeading");
+    if (!heading) return;
+    const rect = heading.getBoundingClientRect();
+    const headerHeight = document.querySelector(".top-app-bar")?.offsetHeight || 70;
+    window.scrollTo({ top: Math.max(0, window.scrollY + rect.top - headerHeight - 54), behavior: "smooth" });
+}
+
+function pulseBottomNavButton(btnId) {
+    const btn = document.getElementById(btnId);
     if (!btn) return;
     btn.classList.remove("pop");
     void btn.offsetWidth;
     btn.classList.add("pop");
-    setTimeout(() => btn.classList.remove("pop"), 320);
 }
 
-function getCartItemKey(id, size, color, note, img) {
-    return `${id}__${size || ""}__${color || ""}__${(note || "").trim()}__${img || ""}`;
+function syncBodyScrollLock() {
+    const anyOpen = Boolean(
+        document.getElementById("cartDrawer")?.classList.contains("open") ||
+        document.getElementById("catsDrawer")?.classList.contains("open") ||
+        document.getElementById("imageModal")?.classList.contains("open") ||
+        document.getElementById("productOptionModal")?.classList.contains("open") ||
+        document.getElementById("serviceInfoModal")?.classList.contains("open")
+    );
+    document.body.style.overflow = anyOpen ? "hidden" : "";
 }
 
-function addProductToCartDirect(productId, btnId = null, customSize = "", customColor = "", customNote = "", customImg = "", customPrice = null, customQty = 1) {
-    const product = PRODUCTS.find(p => p.id === productId);
-    if (!product) return;
-
-    const variantConfig = getProductVariantConfig(product);
-    const firstSizeEntry = variantConfig && variantConfig.sizes ? variantConfig.sizes[0] : null;
-    const defaultSize = typeof firstSizeEntry === "object" ? (firstSizeEntry.label || "") : (firstSizeEntry || "");
-    const defaultSizePrice = typeof firstSizeEntry === "object" && Number(firstSizeEntry.price) > 0 ? Number(firstSizeEntry.price) : 0;
-    const defaultColor = variantConfig && variantConfig.colors ? variantConfig.colors[0] : "";
-
-    const finalSize = customSize || defaultSize;
-    const finalColor = customColor || defaultColor;
-    const finalNote = (customNote || "").trim();
-    const imgs = getProductImagesList(product);
-    const finalImg = normalizeProductImageUrl(customImg) || (imgs[0] || "");
-    const unitPrice = (typeof customPrice === "number" && customPrice > 0)
-        ? customPrice
-        : (defaultSizePrice > 0 ? defaultSizePrice : (Number(product.price) || 0));
-    const addQty = Math.max(1, parseInt(customQty, 10) || 1);
-
-    const itemKey = getCartItemKey(product.id, finalSize, finalColor, finalNote, finalImg);
-    const existing = cart.find(item => (item.cartKey || getCartItemKey(item.id, item.size, item.color, item.note, item.img)) === itemKey);
-
-    if (existing) existing.qty += addQty;
-    else {
-        cart.push({
-            cartKey: itemKey,
-            id: product.id,
-            title: product.title,
-            price: unitPrice,
-            img: finalImg,
-            merchant: product.merchant || "متجر كارامل",
-            qty: addQty,
-            size: finalSize,
-            color: finalColor,
-            note: finalNote
-        });
+function pushOverlayState(name) {
+    if (!window.history || !window.history.pushState) return;
+    if (overlayStack[overlayStack.length - 1] !== name) {
+        overlayStack.push(name);
+        try { window.history.pushState({ caramelOverlay: name }, "", window.location.href); } catch (e) {}
     }
+}
 
-    saveCart();
-    updateCartUI();
-    trackProductInterest(product, 2, true);
-    pulseBottomNav("navCartBtn");
+function removeOverlayState(name) {
+    const idx = overlayStack.lastIndexOf(name);
+    if (idx !== -1) overlayStack.splice(idx, 1);
+}
 
-    if (btnId) {
-        const btn = document.getElementById(btnId);
-        if (btn) {
-            const origHTML = btn.innerHTML;
-            btn.classList.add("added");
-            btn.innerHTML = `<span>تمت الإضافة</span>`;
-            setTimeout(() => { btn.classList.remove("added"); btn.innerHTML = origHTML; }, 1100);
-        }
+function closeTopOverlayFromPopState() {
+    const top = overlayStack.pop();
+    if (!top) return;
+    if (top === "cart") closeCart(true);
+    else if (top === "cats") closeCategoriesDrawer(true);
+    else if (top === "image") closeImageModal(true);
+    else if (top === "option") closeProductOptionModal(true);
+    else if (top === "serviceInfo") closeServiceInfoModal(true);
+}
+
+window.addEventListener("popstate", () => {
+    if (overlayStack.length > 0) closeTopOverlayFromPopState();
+});
+
+function closeAllOverlays() {
+    closeCart(true);
+    closeCategoriesDrawer(true);
+    closeImageModal(true);
+    closeProductOptionModal(true);
+    closeServiceInfoModal(true);
+    overlayStack = [];
+    syncBodyScrollLock();
+}
+
+function getOptionVariantPrice(product, rawSizeValue, fallbackPrice) {
+    const baseP = Number(fallbackPrice) || Number(product?.price) || 0;
+    if (!rawSizeValue) return baseP;
+    const config = getProductVariantConfig(product);
+    if (config && Array.isArray(config.sizes)) {
+        const matchedObj = config.sizes.find(s => typeof s === "object" && s !== null && s.label === rawSizeValue);
+        if (matchedObj && Number(matchedObj.price) > 0) return Number(matchedObj.price);
     }
+    const m = String(rawSizeValue).match(/(\d+(?:\.\d+)?)\s*(?:جنيه|\bج\b|egp)/i);
+    if (m) {
+        const parsed = parseNumericPrice(m[1]);
+        if (parsed > 0) return parsed;
+    }
+    return baseP;
+}
+
+function refreshOptionModalPriceDisplay() {
+    const product = PRODUCTS.find(p => p.id === pendingOptionSelection.productId);
+    const priceEl = document.getElementById("optionModalPrice");
+    if (!product || !priceEl) return;
+    const unitPrice = getOptionVariantPrice(product, pendingOptionSelection.selectedSize, product.price);
+    pendingOptionSelection.currentPrice = unitPrice;
+    const totalLine = unitPrice * (pendingOptionSelection.qty || 1);
+    priceEl.innerHTML = (pendingOptionSelection.qty || 1) > 1
+        ? `${totalLine} <span>جنيه (${unitPrice} للقطعة)</span>`
+        : `${unitPrice} <span>جنيه</span>`;
 }
 
 function changeModalQty(delta) {
@@ -2371,67 +2386,54 @@ function changeModalQty(delta) {
     pendingOptionSelection.qty = nextQty;
     const valEl = document.getElementById("optionModalQtyVal");
     if (valEl) valEl.textContent = String(nextQty);
+    refreshOptionModalPriceDisplay();
 }
 
-function selectModalPreviewThumb(thumbIdx) {
-    const imgs = pendingOptionSelection.imgs || [];
-    if (!imgs.length) return;
-    const safeIdx = ((thumbIdx % imgs.length) + imgs.length) % imgs.length;
-    pendingOptionSelection.selectedImg = imgs[safeIdx];
-    const mainImg = document.getElementById("optionModalImg");
-    if (mainImg) mainImg.src = imgs[safeIdx];
-    const thumbsRow = document.getElementById("optionModalThumbsRow");
-    if (thumbsRow) {
-        thumbsRow.querySelectorAll(".preview-thumb-btn").forEach((b, idx) => b.classList.toggle("active", idx === safeIdx));
-    }
-}
-
-function openProductOptionModal(productId, btnId = null, activeCardImg = "") {
+function openProductOptionModal(productId, clickedBtnId = null, preferredImgSrc = "") {
     const product = PRODUCTS.find(p => p.id === productId);
     if (!product) return;
 
-    const variantConfig = getProductVariantConfig(product);
-    const imgs = getProductImagesList(product);
-    const chosenImg = normalizeProductImageUrl(activeCardImg) || (imgs[0] || "");
-    const activeIdx = Math.max(0, imgs.indexOf(chosenImg));
+    const modal = document.getElementById("productOptionModal");
+    const imgEl = document.getElementById("optionModalImg");
+    const titleEl = document.getElementById("optionModalTitle");
+    const priceEl = document.getElementById("optionModalPrice");
+    const thumbsRow = document.getElementById("optionModalThumbsRow");
+    const qtyValEl = document.getElementById("optionModalQtyVal");
+    const sizeGroup = document.getElementById("optionModalSizeGroup");
+    const sizePills = document.getElementById("optionModalSizePills");
+    const colorGroup = document.getElementById("optionModalColorGroup");
+    const colorPills = document.getElementById("optionModalColorPills");
+    const noteInput = document.getElementById("optionModalNoteInput");
 
-    let initialSize = "";
-    let initialPrice = Number(product.price) || 0;
-    if (variantConfig && variantConfig.sizes && variantConfig.sizes.length) {
-        const firstEntry = variantConfig.sizes[0];
-        if (typeof firstEntry === "object") {
-            initialSize = firstEntry.label || "";
-            if (Number(firstEntry.price) > 0) initialPrice = Number(firstEntry.price);
-        } else {
-            initialSize = firstEntry;
-        }
-    }
+    const variantConfig = getProductVariantConfig(product);
+    const sizes = (variantConfig && variantConfig.sizes) ? variantConfig.sizes : [];
+    const colors = (variantConfig && variantConfig.colors) ? variantConfig.colors : [];
+    const imgs = getProductImagesList(product);
+    const initialImg = normalizeProductImageUrl(preferredImgSrc) || (imgs[0] || "");
+
+    const defaultSize = sizes.length ? (typeof sizes[0] === "string" ? sizes[0] : sizes[0].label) : "";
+    const defaultColor = colors.length ? colors[0] : "";
+    const initialUnitPrice = getOptionVariantPrice(product, defaultSize, product.price);
 
     pendingOptionSelection = {
-        productId: product.id,
-        clickedBtnId: btnId,
-        selectedSize: initialSize,
-        selectedColor: variantConfig && variantConfig.colors ? variantConfig.colors[0] : "",
-        selectedImg: chosenImg,
-        currentPrice: initialPrice,
-        imgs,
+        productId,
+        clickedBtnId,
+        selectedSize: defaultSize,
+        selectedColor: defaultColor,
+        selectedImg: initialImg,
+        currentPrice: initialUnitPrice,
         qty: 1
     };
 
-    const qtyValEl = document.getElementById("optionModalQtyVal");
     if (qtyValEl) qtyValEl.textContent = "1";
+    if (imgEl) { imgEl.style.visibility = "visible"; imgEl.src = initialImg; imgEl.alt = product.title; }
 
-    document.getElementById("optionModalImg").src = chosenImg;
-    document.getElementById("optionModalTitle").textContent = product.title;
-    document.getElementById("optionModalPrice").innerHTML = `${pendingOptionSelection.currentPrice} <span>جنيه</span>`;
-
-    const thumbsRow = document.getElementById("optionModalThumbsRow");
     if (thumbsRow) {
         if (imgs.length > 1) {
             thumbsRow.style.display = "flex";
-            thumbsRow.innerHTML = imgs.map((u, i) => `
-                <button type="button" class="preview-thumb-btn ${i === activeIdx ? "active" : ""}" onclick="selectModalPreviewThumb(${i})" aria-label="صورة ${i + 1}">
-                    <img src="${escapeHtmlAttr(u)}" alt="${escapeHtmlAttr(product.title)} ${i + 1}">
+            thumbsRow.innerHTML = imgs.map((u, idx) => `
+                <button type="button" class="preview-thumb-btn ${u === initialImg ? "active" : ""}" onclick="selectOptionModalImage('${escapeHtmlAttr(u)}', this)">
+                    <img src="${escapeHtmlAttr(u)}" alt="${escapeHtmlAttr(product.title)} ${idx + 1}">
                 </button>
             `).join("");
         } else {
@@ -2440,69 +2442,55 @@ function openProductOptionModal(productId, btnId = null, activeCardImg = "") {
         }
     }
 
-    const sizeGroup = document.getElementById("optionModalSizeGroup");
-    const sizePills = document.getElementById("optionModalSizePills");
-    if (variantConfig && variantConfig.sizes && variantConfig.sizes.length) {
-        sizeGroup.style.display = "flex";
-        sizePills.innerHTML = variantConfig.sizes.map((sz, idx) => {
-            const labelText = typeof sz === "object" ? sz.label : sz;
-            const optPrice = typeof sz === "object" && Number(sz.price) > 0 ? Number(sz.price) : (Number(product.price) || 0);
-            return `<button type="button" class="option-pill-btn ${idx === 0 ? "selected" : ""}" onclick="selectOptionPill('size', ${idx}, this)">${escapeHtmlAttr(labelText)}${typeof sz === "object" && optPrice > 0 && !labelText.includes("جنيه") ? ` — ${optPrice} ج` : ""}</button>`;
-        }).join("");
-    } else {
-        sizeGroup.style.display = "none";
-        sizePills.innerHTML = "";
-    }
+    if (titleEl) titleEl.textContent = `${product.title} — التاجر: ${product.merchant || "متجر كارامل"}`;
+    if (priceEl) priceEl.innerHTML = `${initialUnitPrice} <span>جنيه</span>`;
+    if (noteInput) noteInput.value = "";
 
-    const colorGroup = document.getElementById("optionModalColorGroup");
-    const colorPills = document.getElementById("optionModalColorPills");
-    if (variantConfig && variantConfig.colors && variantConfig.colors.length) {
-        colorGroup.style.display = "flex";
-        colorPills.innerHTML = variantConfig.colors.map((cl, idx) =>
-            `<button type="button" class="option-pill-btn ${idx === 0 ? "selected" : ""}" onclick="selectOptionPill('color', ${idx}, this)">${escapeHtmlAttr(cl)}</button>`
-        ).join("");
-    } else {
-        colorGroup.style.display = "none";
-        colorPills.innerHTML = "";
-    }
-
-    document.getElementById("optionModalNoteInput").value = "";
-    document.getElementById("productOptionModal").classList.add("open");
-    syncBodyScrollLock();
-    pushOverlayState("optionModal");
-}
-
-function selectOptionPill(type, idx, btnEl) {
-    const product = PRODUCTS.find(p => p.id === pendingOptionSelection.productId);
-    const variantConfig = getProductVariantConfig(product);
-    if (!variantConfig) return;
-
-    if (type === "size" && variantConfig.sizes) {
-        const chosen = variantConfig.sizes[idx];
-        if (typeof chosen === "object") {
-            pendingOptionSelection.selectedSize = chosen.label || "";
-            if (Number(chosen.price) > 0) {
-                pendingOptionSelection.currentPrice = Number(chosen.price);
-            }
+    if (sizeGroup && sizePills) {
+        if (sizes.length) {
+            sizeGroup.style.display = "flex";
+            sizePills.innerHTML = sizes.map((s, idx) => {
+                const sLabel = typeof s === "string" ? s : s.label;
+                return `<button type="button" class="option-pill-btn ${idx === 0 ? "selected" : ""}" onclick="selectOptionPill('size', this, '${escapeHtmlAttr(sLabel)}')">${escapeHtmlAttr(sLabel)}</button>`;
+            }).join("");
         } else {
-            pendingOptionSelection.selectedSize = chosen;
-            pendingOptionSelection.currentPrice = Number(product?.price) || pendingOptionSelection.currentPrice;
+            sizeGroup.style.display = "none";
+            sizePills.innerHTML = "";
         }
-        const priceEl = document.getElementById("optionModalPrice");
-        if (priceEl) priceEl.innerHTML = `${pendingOptionSelection.currentPrice} <span>جنيه</span>`;
-        document.querySelectorAll("#optionModalSizePills .option-pill-btn").forEach(b => b.classList.remove("selected"));
-    } else if (type === "color" && variantConfig.colors) {
-        pendingOptionSelection.selectedColor = variantConfig.colors[idx];
-        document.querySelectorAll("#optionModalColorPills .option-pill-btn").forEach(b => b.classList.remove("selected"));
     }
-    if (btnEl) btnEl.classList.add("selected");
+
+    if (colorGroup && colorPills) {
+        if (colors.length) {
+            colorGroup.style.display = "flex";
+            colorPills.innerHTML = colors.map((c, idx) => `<button type="button" class="option-pill-btn ${idx === 0 ? "selected" : ""}" onclick="selectOptionPill('color', this, '${escapeHtmlAttr(c)}')">${escapeHtmlAttr(c)}</button>`).join("");
+        } else {
+            colorGroup.style.display = "none";
+            colorPills.innerHTML = "";
+        }
+    }
+
+    if (modal) { modal.classList.add("open"); syncBodyScrollLock(); pushOverlayState("option"); }
 }
 
-function confirmAddProductWithOptions() {
-    const noteVal = (document.getElementById("optionModalNoteInput")?.value || "").trim();
-    const { productId, clickedBtnId, selectedSize, selectedColor, selectedImg, currentPrice, qty } = pendingOptionSelection;
-    closeProductOptionModal();
-    addProductToCartDirect(productId, clickedBtnId, selectedSize, selectedColor, noteVal, selectedImg, currentPrice, qty);
+function selectOptionModalImage(imgUrl, btnEl) {
+    const cleanUrl = normalizeProductImageUrl(imgUrl);
+    pendingOptionSelection.selectedImg = cleanUrl;
+    const imgEl = document.getElementById("optionModalImg");
+    if (imgEl && cleanUrl) { imgEl.style.visibility = "visible"; imgEl.src = cleanUrl; }
+    document.querySelectorAll("#optionModalThumbsRow .preview-thumb-btn").forEach(b => b.classList.remove("active"));
+    if (btnEl) btnEl.classList.add("active");
+}
+
+function selectOptionPill(kind, btnEl, value) {
+    const parent = btnEl?.parentElement;
+    if (parent) parent.querySelectorAll(".option-pill-btn").forEach(b => b.classList.remove("selected"));
+    if (btnEl) btnEl.classList.add("selected");
+    if (kind === "size") {
+        pendingOptionSelection.selectedSize = value;
+        refreshOptionModalPriceDisplay();
+    } else if (kind === "color") {
+        pendingOptionSelection.selectedColor = value;
+    }
 }
 
 function closeProductOptionModal(fromPopState = false) {
@@ -2510,7 +2498,85 @@ function closeProductOptionModal(fromPopState = false) {
     if (modal) modal.classList.remove("open");
     pendingOptionSelection.productId = null;
     syncBodyScrollLock();
-    if (!fromPopState) removeOverlayState("optionModal");
+    if (!fromPopState) removeOverlayState("option");
+}
+
+function confirmAddProductWithOptions() {
+    const { productId, clickedBtnId, selectedSize, selectedColor, selectedImg, currentPrice, qty } = pendingOptionSelection;
+    if (!productId) return;
+    const noteVal = (document.getElementById("optionModalNoteInput")?.value || "").trim();
+    const product = PRODUCTS.find(p => p.id === productId);
+    const finalUnitPrice = currentPrice > 0 ? currentPrice : (Number(product?.price) || 0);
+    closeProductOptionModal();
+    addToCart(productId, clickedBtnId, {
+        selectedSize,
+        selectedColor,
+        customNote: noteVal,
+        selectedImg,
+        customPrice: finalUnitPrice,
+        qty: qty || 1
+    });
+}
+
+function addToCart(productId, btnId = null, options = {}) {
+    const product = PRODUCTS.find(p => p.id === productId);
+    if (!product) return;
+    trackProductInterest(product, 2, true);
+
+    const variantConfig = getProductVariantConfig(product);
+    const availableSizes = (variantConfig && variantConfig.sizes) ? variantConfig.sizes : [];
+    const availableColors = (variantConfig && variantConfig.colors) ? variantConfig.colors : [];
+    const defaultSize = availableSizes.length ? (typeof availableSizes[0] === "string" ? availableSizes[0] : availableSizes[0].label) : "";
+    const chosenSize = options.selectedSize || defaultSize;
+    const chosenColor = options.selectedColor || (availableColors[0] || "");
+    const chosenNote = (options.customNote || "").trim();
+    const imgs = getProductImagesList(product);
+    const chosenImg = normalizeProductImageUrl(options.selectedImg) || (imgs[0] || "");
+    const addQty = Math.max(1, Number(options.qty) || 1);
+    const effectiveUnitPrice = Number(options.customPrice) > 0
+        ? Number(options.customPrice)
+        : getOptionVariantPrice(product, chosenSize, product.price);
+
+    const existingIndex = cart.findIndex(item =>
+        item.id === productId &&
+        (item.selectedSize || "") === chosenSize &&
+        (item.selectedColor || "") === chosenColor &&
+        (item.customNote || "") === chosenNote &&
+        (item.selectedImg || "") === chosenImg &&
+        (Number(item.price) || 0) === effectiveUnitPrice
+    );
+
+    if (existingIndex > -1) {
+        cart[existingIndex].qty += addQty;
+    } else {
+        cart.push({
+            id: product.id,
+            title: product.title,
+            price: effectiveUnitPrice,
+            img: chosenImg,
+            selectedImg: chosenImg,
+            merchant: product.merchant || "متجر كارامل",
+            qty: addQty,
+            selectedSize: chosenSize,
+            selectedColor: chosenColor,
+            customNote: chosenNote
+        });
+    }
+
+    saveCart();
+    updateCartUI();
+    pulseBottomNavButton("navCartBtn");
+    showCaramelToast(`تمت إضافة "${product.title}" (${addQty} قطعة) للمشتريات`);
+
+    if (btnId) {
+        const btn = document.getElementById(btnId);
+        if (btn) {
+            const orig = btn.innerHTML;
+            btn.classList.add("added");
+            btn.innerHTML = "<span>✓ تمت الإضافة</span>";
+            setTimeout(() => { btn.classList.remove("added"); btn.innerHTML = orig; }, 1100);
+        }
+    }
 }
 
 function onDirectWhatsAppClick(productId) {
@@ -2521,96 +2587,89 @@ function onDirectWhatsAppClick(productId) {
 function updateCartItemOption(index, field, value) {
     if (!cart[index]) return;
     cart[index][field] = value;
-    cart[index].cartKey = getCartItemKey(cart[index].id, cart[index].size, cart[index].color, cart[index].note, cart[index].img);
+    if (field === "selectedSize") {
+        const product = PRODUCTS.find(p => p.id === cart[index].id);
+        if (product) {
+            cart[index].price = getOptionVariantPrice(product, value, product.price);
+        }
+    }
     saveCart();
+    updateCartUI();
 }
 
 function updateCartUI() {
-    const totalItems = cart.reduce((sum, item) => sum + (Number(item.qty) || 1), 0);
-    const distinctCount = cart.length;
-    const totalPrice = cart.reduce((sum, item) => sum + ((Number(item.price) || 0) * (Number(item.qty) || 1)), 0);
+    const totalPieces = cart.reduce((sum, item) => sum + item.qty, 0);
+    const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
 
     const bottomBadge = document.getElementById("bottomCartCount");
     if (bottomBadge) {
-        bottomBadge.textContent = totalItems;
-        bottomBadge.classList.toggle("visible", totalItems > 0);
+        bottomBadge.textContent = totalPieces;
+        bottomBadge.classList.toggle("visible", totalPieces > 0);
     }
 
     const distinctEl = document.getElementById("cartDistinctCount");
     const piecesEl = document.getElementById("cartTotalPieces");
-    if (distinctEl) distinctEl.textContent = distinctCount;
-    if (piecesEl) piecesEl.textContent = totalItems;
-
-    document.getElementById("cartTotalAmount").textContent = `${totalPrice} جنيه`;
+    const totalAmountEl = document.getElementById("cartTotalAmount");
+    if (distinctEl) distinctEl.textContent = cart.length;
+    if (piecesEl) piecesEl.textContent = totalPieces;
+    if (totalAmountEl) totalAmountEl.textContent = `${totalAmount} جنيه`;
 
     const container = document.getElementById("cartItemsContainer");
-    if (!cart.length) {
-        container.innerHTML = `<div class="cart-empty">سلة المشتريات فارغة حالياً.. أضف أي منتج يعجبك بضغطة واحدة!</div>`;
+    if (!container) return;
+
+    if (cart.length === 0) {
+        container.innerHTML = `<div class="cart-empty">سلة المشتريات فارغة حالياً — أضف أي منتج لبدء طلبك.</div>`;
         return;
     }
 
     container.innerHTML = cart.map((item, idx) => {
         const product = PRODUCTS.find(p => p.id === item.id);
         const variantConfig = getProductVariantConfig(product);
-        const merchantName = item.merchant || product?.merchant || "متجر كارامل";
-        const itemImg = normalizeProductImageUrl(item.img) || normalizeProductImageUrl(product?.img) || "";
+        const sizes = (variantConfig && variantConfig.sizes) ? variantConfig.sizes : [];
+        const colors = (variantConfig && variantConfig.colors) ? variantConfig.colors : [];
+        const itemImg = normalizeProductImageUrl(item.selectedImg || item.img) || (product?.img || "");
 
-        let sizeControlHTML = "";
-        if (variantConfig && variantConfig.sizes && variantConfig.sizes.length) {
-            const sizeLabels = variantConfig.sizes.map(s => typeof s === "object" ? s.label : s);
-            const hasCurrent = !item.size || sizeLabels.includes(item.size);
-            sizeControlHTML = `
-                <select class="cart-option-select" aria-label="المقاس" onchange="updateCartItemOption(${idx}, 'size', this.value)">
-                    ${!hasCurrent ? `<option value="${escapeHtmlAttr(item.size)}" selected>المقاس: ${escapeHtmlAttr(item.size)}</option>` : ""}
-                    ${variantConfig.sizes.map(sz => {
-                        const lbl = typeof sz === "object" ? sz.label : sz;
-                        return `<option value="${escapeHtmlAttr(lbl)}" ${item.size === lbl ? "selected" : ""}>المقاس: ${escapeHtmlAttr(lbl)}</option>`;
-                    }).join("")}
-                </select>
-            `;
-        } else if (item.size) {
-            sizeControlHTML = `<select class="cart-option-select" aria-label="المقاس" onchange="updateCartItemOption(${idx}, 'size', this.value)"><option value="${escapeHtmlAttr(item.size)}" selected>المقاس: ${escapeHtmlAttr(item.size)}</option></select>`;
-        }
+        const sizeSelectHTML = sizes.length ? `
+            <select class="cart-option-select" onchange="updateCartItemOption(${idx}, 'selectedSize', this.value)" aria-label="المقاس">
+                ${sizes.map(s => {
+                    const sLabel = typeof s === "string" ? s : s.label;
+                    return `<option value="${escapeHtmlAttr(sLabel)}" ${item.selectedSize === sLabel ? "selected" : ""}>المقاس: ${escapeHtmlAttr(sLabel)}</option>`;
+                }).join("")}
+            </select>
+        ` : "";
 
-        let colorControlHTML = "";
-        if (variantConfig && variantConfig.colors && variantConfig.colors.length) {
-            const hasCurrentColor = !item.color || variantConfig.colors.includes(item.color);
-            colorControlHTML = `
-                <select class="cart-option-select" aria-label="اللون" onchange="updateCartItemOption(${idx}, 'color', this.value)">
-                    ${!hasCurrentColor ? `<option value="${escapeHtmlAttr(item.color)}" selected>اللون: ${escapeHtmlAttr(item.color)}</option>` : ""}
-                    ${variantConfig.colors.map(cl => `<option value="${escapeHtmlAttr(cl)}" ${item.color === cl ? "selected" : ""}>اللون: ${escapeHtmlAttr(cl)}</option>`).join("")}
-                </select>
-            `;
-        } else if (item.color) {
-            colorControlHTML = `<select class="cart-option-select" aria-label="اللون" onchange="updateCartItemOption(${idx}, 'color', this.value)"><option value="${escapeHtmlAttr(item.color)}" selected>اللون: ${escapeHtmlAttr(item.color)}</option></select>`;
-        }
+        const colorSelectHTML = colors.length ? `
+            <select class="cart-option-select" onchange="updateCartItemOption(${idx}, 'selectedColor', this.value)" aria-label="اللون">
+                ${colors.map(c => `<option value="${escapeHtmlAttr(c)}" ${item.selectedColor === c ? "selected" : ""}>اللون: ${escapeHtmlAttr(c)}</option>`).join("")}
+            </select>
+        ` : "";
 
         return `
             <div class="cart-item">
                 <div class="cart-item-top">
-                    <img src="${escapeHtmlAttr(itemImg)}" alt="${escapeHtmlAttr(item.title)}" onerror="this.style.visibility='hidden'">
+                    <img src="${escapeHtmlAttr(itemImg)}" alt="${escapeHtmlAttr(item.title)}" onerror="handleProductImageError(this, '${escapeHtmlAttr(item.id)}')">
                     <div class="cart-item-info">
                         <div class="cart-item-title">${escapeHtmlAttr(item.title)}</div>
                         <div class="cart-item-meta-line">
-                            <span class="cart-item-price">${(Number(item.price) || 0) * (Number(item.qty) || 1)} جنيه</span>
-                            <span class="cart-item-merchant">• ${escapeHtmlAttr(merchantName)}</span>
+                            <span class="cart-item-price">${item.price * item.qty} جنيه</span>
+                            <span class="cart-item-merchant">• ${escapeHtmlAttr(item.merchant || "متجر كارامل")}</span>
                         </div>
                     </div>
                     <div class="qty-controls">
-                        <button type="button" class="qty-btn" onclick="changeQty(${idx}, 1)" aria-label="زيادة الكمية">+</button>
+                        <button type="button" class="qty-btn" onclick="changeCartQty(${idx}, 1)">+</button>
                         <span class="qty-val">${item.qty}</span>
-                        <button type="button" class="qty-btn" onclick="changeQty(${idx}, -1)" aria-label="تقليل الكمية">-</button>
-                        <button type="button" class="remove-item-btn" onclick="removeCartItem(${idx})" aria-label="حذف المنتج">&times;</button>
+                        <button type="button" class="qty-btn" onclick="changeCartQty(${idx}, -1)">-</button>
+                        <button type="button" class="remove-item-btn" onclick="removeCartItem(${idx})" aria-label="حذف">✕</button>
                     </div>
                 </div>
-                ${(sizeControlHTML || colorControlHTML) ? `<div class="cart-item-options">${sizeControlHTML}${colorControlHTML}</div>` : ""}
-                <input type="text" class="cart-item-note-input" placeholder="ملاحظات إضافية لهذا المنتج (اختياري)..." value="${escapeHtmlAttr(item.note || "")}" oninput="updateCartItemOption(${idx}, 'note', this.value)">
+                ${(sizeSelectHTML || colorSelectHTML) ? `<div class="cart-item-options">${sizeSelectHTML}${colorSelectHTML}</div>` : ""}
+                <input type="text" class="cart-item-note-input" value="${escapeHtmlAttr(item.customNote || "")}" placeholder="تفاصيل إضافية لهذه القطعة (اختياري)..." onchange="updateCartItemOption(${idx}, 'customNote', this.value)">
             </div>
         `;
     }).join("");
 }
 
-function changeQty(index, delta) {
+function changeCartQty(index, delta) {
     if (!cart[index]) return;
     cart[index].qty += delta;
     if (cart[index].qty <= 0) cart.splice(index, 1);
@@ -2619,7 +2678,6 @@ function changeQty(index, delta) {
 }
 
 function removeCartItem(index) {
-    if (!cart[index]) return;
     cart.splice(index, 1);
     saveCart();
     updateCartUI();
@@ -2631,68 +2689,25 @@ function clearCart() {
     updateCartUI();
 }
 
-function syncBodyScrollLock() {
-    const cartOpen = document.getElementById("cartDrawer")?.classList.contains("open");
-    const catsOpen = document.getElementById("catsDrawer")?.classList.contains("open");
-    const imgOpen = document.getElementById("imageModal")?.classList.contains("open");
-    const optOpen = document.getElementById("productOptionModal")?.classList.contains("open");
-    const srvOpen = document.getElementById("serviceInfoModal")?.classList.contains("open");
-    document.body.style.overflow = (cartOpen || catsOpen || imgOpen || optOpen || srvOpen) ? "hidden" : "";
-}
-
-function pushOverlayState(name) {
-    if (overlayStack[overlayStack.length - 1] !== name) overlayStack.push(name);
-    try { history.pushState({ caramelOverlay: name, ts: Date.now() }, "", window.location.href); } catch (e) {}
-}
-
-function removeOverlayState(name) {
-    const idx = overlayStack.lastIndexOf(name);
-    if (idx !== -1) overlayStack.splice(idx, 1);
-}
-
-function closeTopOverlayFromPopState() {
-    const top = overlayStack.pop();
-    if (top === "cart") closeCart(true);
-    else if (top === "cats") closeCategoriesDrawer(true);
-    else if (top === "image") closeImageModal(true);
-    else if (top === "optionModal") closeProductOptionModal(true);
-    else if (top === "serviceInfo") closeServiceInfoModal(true);
-    else {
-        closeCart(true);
-        closeCategoriesDrawer(true);
-        closeImageModal(true);
-        closeProductOptionModal(true);
-        closeServiceInfoModal(true);
-    }
-}
-
-function closeAllOverlays() {
-    overlayStack = [];
-    closeCart(true);
-    closeCategoriesDrawer(true);
-    closeImageModal(true);
-    closeProductOptionModal(true);
-    closeServiceInfoModal(true);
-}
-
-window.addEventListener("popstate", () => { closeTopOverlayFromPopState(); });
-
 function openCart() {
-    updateCartUI();
-    document.getElementById("cartBackdrop").classList.add("open");
-    document.getElementById("cartDrawer").classList.add("open");
+    const drawer = document.getElementById("cartDrawer");
+    const backdrop = document.getElementById("cartBackdrop");
+    if (drawer) drawer.classList.add("open");
+    if (backdrop) backdrop.classList.add("open");
     syncBodyScrollLock();
     pushOverlayState("cart");
 }
 
 function closeCart(fromPopState = false) {
-    document.getElementById("cartBackdrop").classList.remove("open");
-    document.getElementById("cartDrawer").classList.remove("open");
+    const drawer = document.getElementById("cartDrawer");
+    const backdrop = document.getElementById("cartBackdrop");
+    if (drawer) drawer.classList.remove("open");
+    if (backdrop) backdrop.classList.remove("open");
     syncBodyScrollLock();
     if (!fromPopState) removeOverlayState("cart");
 }
 
-let customerLocationState = null;
+let customerLocationData = null;
 
 function updateCustomerLocationUI() {
     const btn = document.getElementById("cartLocationBtn");
@@ -2701,12 +2716,12 @@ function updateCustomerLocationUI() {
     const preview = document.getElementById("cartLocationPreview");
     if (!btn || !btnText || !clearBtn || !preview) return;
 
-    if (customerLocationState && customerLocationState.mapsUrl) {
+    if (customerLocationData && customerLocationData.mapsUrl) {
         btn.classList.add("located");
-        btnText.textContent = "تم تحديد اللوكيشن بنجاح";
+        btnText.textContent = "تم تحديد اللوكيشن بنجاح ✓";
         clearBtn.classList.add("visible");
         preview.style.display = "block";
-        preview.textContent = customerLocationState.mapsUrl;
+        preview.textContent = customerLocationData.summaryText || customerLocationData.mapsUrl;
     } else {
         btn.classList.remove("located");
         btnText.textContent = "تحديد موقعي الحالي (اللوكيشن)";
@@ -2717,43 +2732,68 @@ function updateCustomerLocationUI() {
 }
 
 function clearCustomerLocation() {
-    customerLocationState = null;
+    customerLocationData = null;
     updateCustomerLocationUI();
+    showCaramelToast("تم إلغاء اللوكيشن المحدد");
 }
 
 function requestCustomerLocation() {
     const btnText = document.getElementById("cartLocationBtnText");
     if (!navigator.geolocation) {
-        showCaramelToast("المتصفح لا يدعم تحديد الموقع تلقائياً");
+        showCaramelToast("المتصفح لا يدعم تحديد الموقع الجغرافي");
         return;
     }
+
     if (btnText) btnText.textContent = "جاري تحديد موقعك...";
+    showCaramelToast("جاري تحديد موقعك الحالي...");
+
     navigator.geolocation.getCurrentPosition(
-        pos => {
-            const lat = pos.coords.latitude.toFixed(6);
-            const lng = pos.coords.longitude.toFixed(6);
-            customerLocationState = {
+        async pos => {
+            const lat = Number(pos.coords.latitude).toFixed(6);
+            const lng = Number(pos.coords.longitude).toFixed(6);
+            const mapsUrl = `https://maps.google.com/?q=${lat},${lng}`;
+            let addressLabel = "";
+
+            try {
+                const resp = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&accept-language=ar`, { cache: "no-store" });
+                if (resp && resp.ok) {
+                    const data = await resp.json();
+                    if (data && data.display_name) {
+                        addressLabel = data.display_name.split(",").slice(0, 3).join(" - ").trim();
+                    }
+                }
+            } catch (e) {}
+
+            customerLocationData = {
                 lat,
                 lng,
-                mapsUrl: `https://maps.google.com/?q=${lat},${lng}`
+                mapsUrl,
+                addressLabel,
+                summaryText: addressLabel ? `${addressLabel} (${mapsUrl})` : mapsUrl
             };
             updateCustomerLocationUI();
-            showCaramelToast("تم تحديد موقعك بنجاح");
+            showCaramelToast("تم تحديد موقعك وإرفاق رابط الخريطة للطلب");
         },
-        () => {
+        err => {
             updateCustomerLocationUI();
-            showCaramelToast("تعذر الوصول للموقع، تأكد من تفعيل GPS");
+            if (err && err.code === 1) {
+                showCaramelToast("يرجى السماح بصلاحية الموقع من إعدادات المتصفح");
+            } else {
+                showCaramelToast("تعذر تحديد الموقع حالياً، يمكنك إرسال العنوان يدوياً");
+            }
         },
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+        { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 }
     );
 }
 
 function openWhatsAppChatDirect() {
-    launchWhatsAppTarget(`https://wa.me/${WHATSAPP_NUMBER}`);
+    const msg = encodeURIComponent("مرحباً متجر كارامل، أود التواصل معكم.");
+    launchWhatsAppTarget(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`);
 }
 
 function checkoutOnWhatsApp() {
-    if (!cart.length) return;
+    if (cart.length === 0) return;
+
     const nameInput = document.getElementById("checkoutCustomerName");
     const phoneInput = document.getElementById("checkoutCustomerPhone");
     const customerName = (nameInput?.value || "").trim();
@@ -2764,54 +2804,54 @@ function checkoutOnWhatsApp() {
         if (nameInput) nameInput.focus();
         return;
     }
+
     if (!customerPhone) {
         showCaramelToast("من فضلك اكتب رقم التواصل أولاً");
         if (phoneInput) phoneInput.focus();
         return;
     }
 
-    let total = 0;
-    const lines = cart.map((item, idx) => {
-        const product = PRODUCTS.find(p => p.id === item.id);
-        const merchantName = item.merchant || product?.merchant || "متجر كارامل";
-        const itemImg = normalizeProductImageUrl(item.img) || normalizeProductImageUrl(product?.img) || "";
-        const itemSubtotal = (Number(item.price) || 0) * (Number(item.qty) || 1);
-        total += itemSubtotal;
-        const details = [];
-        if (item.size) details.push(`المقاس: ${item.size}`);
-        if (item.color) details.push(`اللون: ${item.color}`);
-        if (item.note) details.push(`ملاحظات: ${item.note}`);
-        if (itemImg) details.push(`الصورة المختارة: ${itemImg}`);
-        const detailsStr = details.length ? ` (${details.join(" | ")})` : "";
-        return `${idx + 1}. ${item.title}${detailsStr} — التاجر: ${merchantName} — العدد: ${item.qty} — السعر: ${itemSubtotal} جنيه`;
+    const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+    const lines = cart.map((item, i) => {
+        const extras = [];
+        if (item.selectedSize) extras.push(`المقاس: ${item.selectedSize}`);
+        if (item.selectedColor) extras.push(`اللون: ${item.selectedColor}`);
+        if (item.customNote) extras.push(`تفاصيل: ${item.customNote}`);
+        if (item.merchant) extras.push(`التاجر: ${item.merchant}`);
+        if (item.selectedImg) extras.push(`الصورة: ${item.selectedImg}`);
+        const extraText = extras.length ? ` (${extras.join(" | ")})` : "";
+        return `${i + 1}. ${item.title}${extraText} × ${item.qty} = ${item.price * item.qty} جنيه`;
     });
 
-    const headerLines = [
+    const customerHeaderLines = [
         `الاسم: ${customerName}`,
         `رقم التواصل: ${customerPhone}`
     ];
-    if (customerLocationState && customerLocationState.mapsUrl) {
-        headerLines.push(`اللوكيشن: ${customerLocationState.mapsUrl}`);
+    if (customerLocationData && customerLocationData.mapsUrl) {
+        customerHeaderLines.push(
+            customerLocationData.addressLabel
+                ? `العنوان/اللوكيشن: ${customerLocationData.addressLabel} - ${customerLocationData.mapsUrl}`
+                : `اللوكيشن: ${customerLocationData.mapsUrl}`
+        );
     }
 
-    const message = `مرحباً متجر كارامل، أرغب في إتمام الطلب التالي:\n\n${headerLines.join("\n")}\n\n${lines.join("\n")}\n\nالإجمالي الكلي: ${total} جنيه`;
+    const message = `مرحباً متجر كارامل، أود تأكيد الطلب التالي:\n\n${customerHeaderLines.join("\n")}\n\n${lines.join("\n")}\n\nالإجمالي: ${totalAmount} جنيه\n(السويس: الدفع عند الاستلام • المحافظات الأخرى: إنستا باي أو فوري أو كاش • التوصيل خلال يوم عمل)`;
     launchWhatsAppTarget(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`);
 }
 
-function paintPreviewMedia() {
-    const modalImg = document.getElementById("modalImagePreview");
+function syncPreviewModalMedia() {
+    const imgEl = document.getElementById("modalImagePreview");
     const prevBtn = document.getElementById("previewPrevBtn");
     const nextBtn = document.getElementById("previewNextBtn");
     const thumbsRow = document.getElementById("previewThumbsRow");
     const imgs = previewModalState.imgs || [];
-
-    if (!imgs.length) return;
-    const safeIdx = ((previewModalState.idx % imgs.length) + imgs.length) % imgs.length;
+    const safeIdx = imgs.length ? ((previewModalState.idx % imgs.length) + imgs.length) % imgs.length : 0;
     previewModalState.idx = safeIdx;
 
-    if (modalImg) {
-        modalImg.style.opacity = "1";
-        modalImg.src = imgs[safeIdx];
+    if (imgEl && imgs.length) {
+        imgEl.style.opacity = "1";
+        imgEl.removeAttribute("data-retry-step");
+        imgEl.src = imgs[safeIdx];
     }
 
     const hasMulti = imgs.length > 1;
@@ -2821,9 +2861,9 @@ function paintPreviewMedia() {
     if (thumbsRow) {
         if (hasMulti) {
             thumbsRow.style.display = "flex";
-            thumbsRow.innerHTML = imgs.map((u, i) => `
-                <button type="button" class="preview-thumb-btn ${i === safeIdx ? "active" : ""}" onclick="selectPreviewThumb(${i})" aria-label="صورة ${i + 1}">
-                    <img src="${escapeHtmlAttr(u)}" alt="صورة ${i + 1}">
+            thumbsRow.innerHTML = imgs.map((u, idx) => `
+                <button type="button" class="preview-thumb-btn ${idx === safeIdx ? "active" : ""}" onclick="selectPreviewThumb(${idx}, event)">
+                    <img src="${escapeHtmlAttr(u)}" alt="صورة ${idx + 1}">
                 </button>
             `).join("");
         } else {
@@ -2833,77 +2873,109 @@ function paintPreviewMedia() {
     }
 
     const product = PRODUCTS.find(p => p.id === previewModalState.productId);
-    if (product) {
-        const waBtn = document.getElementById("previewWhatsAppBtn");
-        if (waBtn) waBtn.href = buildProductWhatsAppUrl(product, imgs[safeIdx]);
-        const addBtn = document.getElementById("previewAddToCartBtn");
-        if (addBtn) {
-            addBtn.onclick = () => {
-                const chosenUrl = imgs[safeIdx];
-                closeImageModal();
-                openProductOptionModal(product.id, null, chosenUrl);
-            };
-        }
+    const waBtn = document.getElementById("previewWhatsAppBtn");
+    if (product && waBtn) {
+        waBtn.href = buildProductWhatsAppUrl(product, imgs[safeIdx] || "");
     }
 }
 
 function stepPreviewImage(delta, event) {
-    if (event) {
-        event.preventDefault();
-        event.stopPropagation();
-    }
-    if (!previewModalState.imgs || previewModalState.imgs.length <= 1) return;
-    previewModalState.idx += delta;
-    paintPreviewMedia();
+    if (event) { event.preventDefault(); event.stopPropagation(); }
+    const imgs = previewModalState.imgs || [];
+    if (imgs.length <= 1) return;
+    previewModalState.idx = (previewModalState.idx + delta + imgs.length) % imgs.length;
+    syncPreviewModalMedia();
 }
 
-function selectPreviewThumb(idx) {
+function selectPreviewThumb(idx, event) {
+    if (event) { event.preventDefault(); event.stopPropagation(); }
     previewModalState.idx = Number(idx) || 0;
-    paintPreviewMedia();
+    syncPreviewModalMedia();
 }
 
 function openImageModal(src, productId = null) {
-    const product = productId ? PRODUCTS.find(p => p.id === productId) : null;
-    const prodImgs = product ? getProductImagesList(product) : [];
-    const normSrc = normalizeProductImageUrl(src);
-    const imgs = prodImgs.length ? prodImgs : (normSrc ? [normSrc] : []);
-    if (!imgs.length) return;
-
-    const startIdx = normSrc && imgs.indexOf(normSrc) >= 0 ? imgs.indexOf(normSrc) : 0;
-    previewModalState = { productId: product ? product.id : null, imgs, idx: startIdx };
-
     const modal = document.getElementById("imageModal");
+    const imgEl = document.getElementById("modalImagePreview");
     const catChip = document.getElementById("previewCategoryChip");
     const merchantChip = document.getElementById("previewMerchantChip");
     const titleEl = document.getElementById("previewProductTitle");
-    const priceEl = document.getElementById("previewMainPrice");
+    const mainPriceEl = document.getElementById("previewMainPrice");
     const subPriceEl = document.getElementById("previewSubPrice");
-    const storyEl = document.getElementById("previewStoryText");
-    const hookEl = document.getElementById("previewHookNote");
+    const storyTextEl = document.getElementById("previewStoryText");
+    const hookNoteEl = document.getElementById("previewHookNote");
+    const addBtn = document.getElementById("previewAddToCartBtn");
+    const waBtn = document.getElementById("previewWhatsAppBtn");
+    if (!modal || !imgEl) return;
 
-    if (product) {
-        trackProductInterest(product, 1.5, true);
-        if (catChip) catChip.textContent = CATEGORY_NAMES[product.category] || "متجر كارامل";
-        if (merchantChip) merchantChip.textContent = `التاجر: ${product.merchant || "كارامل"}`;
-        if (titleEl) titleEl.textContent = product.title;
-        if (priceEl) priceEl.innerHTML = `${product.priceLabel || product.price} <span>جنيه</span>`;
-        if (subPriceEl) {
-            if (product.subPrice) { subPriceEl.style.display = "inline-flex"; subPriceEl.textContent = product.subPrice; }
-            else { subPriceEl.style.display = "none"; subPriceEl.textContent = ""; }
-        }
-        if (storyEl) storyEl.textContent = product.desc || "اختيار مميز بجودة عالية من متجر كارامل يناسب استخدامك اليومي.";
-        if (hookEl) hookEl.textContent = buildEngagingHookForProduct(product);
-    } else {
-        if (catChip) catChip.textContent = "متجر كارامل";
-        if (merchantChip) merchantChip.textContent = "التاجر: كارامل";
-        if (titleEl) titleEl.textContent = "معاينة المنتج";
-        if (priceEl) priceEl.textContent = "";
-        if (subPriceEl) subPriceEl.style.display = "none";
-        if (storyEl) storyEl.textContent = "منتج مختار بعناية من متجر كارامل.";
-        if (hookEl) hookEl.textContent = "";
+    const product = productId ? PRODUCTS.find(p => p.id === productId) : null;
+    if (product) trackProductInterest(product, 1.5, true);
+
+    const imgs = product ? getProductImagesList(product) : [normalizeProductImageUrl(src)].filter(Boolean);
+    const clickedNorm = normalizeProductImageUrl(src);
+    const foundIdx = clickedNorm && imgs.length ? imgs.indexOf(clickedNorm) : 0;
+
+    previewModalState = {
+        productId: product ? product.id : null,
+        imgs: imgs.length ? imgs : [normalizeProductImageUrl(src)],
+        idx: foundIdx >= 0 ? foundIdx : 0
+    };
+
+    imgEl.alt = product ? product.title : "معاينة المنتج";
+    imgEl.setAttribute("data-product-id", product ? product.id : "");
+    syncPreviewModalMedia();
+
+    const catLabel = product ? (CATEGORY_NAMES[product.category] || "متجر كارامل") : "متجر كارامل";
+    const merchantLabel = product ? (product.merchant || "متجر كارامل") : "متجر كارامل";
+    const titleText = product ? product.title : "منتج مميز من متجر كارامل";
+    const displayPrice = product ? (product.priceLabel || product.price) : "";
+    const storyText = product
+        ? (product.desc || `${product.title} متوفر الآن لدى متجر كارامل بجودة مختارة وسعر مناسب.`)
+        : "قطعة مميزة من تشكيلة متجر كارامل.";
+    const hookText = buildEngagingHookForProduct(product);
+
+    if (catChip) catChip.textContent = catLabel;
+    if (merchantChip) {
+        merchantChip.textContent = `التاجر: ${merchantLabel}`;
+        merchantChip.style.cursor = product ? "pointer" : "default";
+        merchantChip.onclick = product ? () => { closeImageModal(); filterByMerchant(merchantLabel, true); } : null;
+    }
+    if (titleEl) titleEl.textContent = titleText;
+    if (mainPriceEl) {
+        mainPriceEl.innerHTML = displayPrice ? `${displayPrice} <span>جنيه</span>` : "";
+        mainPriceEl.style.display = displayPrice ? "block" : "none";
+    }
+    if (subPriceEl) {
+        if (product && product.subPrice) { subPriceEl.textContent = product.subPrice; subPriceEl.style.display = "inline-block"; }
+        else { subPriceEl.style.display = "none"; }
+    }
+    if (storyTextEl) storyTextEl.textContent = storyText;
+    if (hookNoteEl) hookNoteEl.textContent = hookText;
+
+    if (addBtn) {
+        addBtn.onclick = () => {
+            const activeSrc = previewModalState.imgs[previewModalState.idx] || src;
+            closeImageModal();
+            if (product) openProductOptionModal(product.id, null, activeSrc);
+            else {
+                const msg = encodeURIComponent(`أريد طلب هذا المنتج: ${src}`);
+                launchWhatsAppTarget(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`);
+            }
+        };
     }
 
-    paintPreviewMedia();
+    if (waBtn) {
+        const activeSrc = previewModalState.imgs[previewModalState.idx] || src;
+        waBtn.href = product ? buildProductWhatsAppUrl(product, activeSrc) : `https://wa.me/${WHATSAPP_NUMBER}`;
+        waBtn.onclick = e => {
+            e.preventDefault();
+            const currentSrc = previewModalState.imgs[previewModalState.idx] || src;
+            const targetUrl = product ? buildProductWhatsAppUrl(product, currentSrc) : `https://wa.me/${WHATSAPP_NUMBER}`;
+            waBtn.href = targetUrl;
+            if (product) onDirectWhatsAppClick(product.id);
+            launchWhatsAppTarget(targetUrl);
+        };
+    }
+
     modal.classList.add("open");
     syncBodyScrollLock();
     pushOverlayState("image");
@@ -2911,155 +2983,190 @@ function openImageModal(src, productId = null) {
 
 function closeImageModal(fromPopState = false) {
     const modal = document.getElementById("imageModal");
-    if (!modal || !modal.classList.contains("open")) return;
-    modal.classList.remove("open");
-    const modalImg = document.getElementById("modalImagePreview");
-    if (modalImg) { modalImg.src = ""; modalImg.style.opacity = "1"; }
-    previewModalState = { productId: null, imgs: [], idx: 0 };
+    if (modal) modal.classList.remove("open");
     syncBodyScrollLock();
     if (!fromPopState) removeOverlayState("image");
 }
 
-(function initCaramelSplashScreen() {
-    const SPLASH_SLOGAN_TEXT = "كل قطعة وليها دور";
-    const TYPE_INTERVAL_MS = 52;
-    const HOLD_AFTER_TYPING_MS = 280;
-    const MIN_SPLASH_MS = 1050;
-    const MAX_SPLASH_MS = 2400;
-    const startTime = Date.now();
-    let dismissed = false, typingTimer = null, holdTimer = null, maxTimer = null, headerSloganTimer = null;
+const ONESIGNAL_APP_ID = "d35fc670-898a-4e20-bb33-9f97e48f3e4f";
+const PUSH_PERMISSION_STORAGE_KEY = "caramel_push_enabled_v1";
+const PUSH_ICON_URL = "https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg";
+let oneSignalReadyPromise = null;
 
-    function replayHeaderSloganEntrance() {
-        const headerSlogan = document.querySelector(".logo-sub");
-        if (!headerSlogan) return;
-        headerSlogan.classList.remove("slogan-reenter", "play");
-        void headerSlogan.offsetWidth;
-        headerSlogan.classList.add("slogan-reenter");
-        headerSloganTimer = setTimeout(() => { headerSlogan.classList.add("play"); }, 90);
-    }
+function isPushAlreadyEnabled() {
+    if ("Notification" in window && Notification.permission === "granted") return true;
+    try { return localStorage.getItem(PUSH_PERMISSION_STORAGE_KEY) === "1"; } catch (e) { return false; }
+}
 
-    function startSplashSloganTypewriter() {
-        const sloganEl = document.getElementById("caramelSplashSlogan");
-        const typedEl = document.getElementById("caramelSplashTypedText");
-        const caretEl = document.getElementById("caramelSplashCaret");
-        if (!sloganEl || !typedEl) return;
-        typedEl.textContent = "";
-        if (caretEl) caretEl.classList.remove("done");
-        sloganEl.classList.remove("descend-in");
-        requestAnimationFrame(() => { requestAnimationFrame(() => { sloganEl.classList.add("descend-in"); }); });
-        let charIndex = 0;
-        function typeNextChar() {
-            if (dismissed) return;
-            if (charIndex < SPLASH_SLOGAN_TEXT.length) {
-                typedEl.textContent += SPLASH_SLOGAN_TEXT.charAt(charIndex);
-                charIndex += 1;
-                typingTimer = setTimeout(typeNextChar, TYPE_INTERVAL_MS);
-            } else {
-                if (caretEl) caretEl.classList.add("done");
-                holdTimer = setTimeout(() => { hideSplashScreen(); }, HOLD_AFTER_TYPING_MS);
-            }
-        }
-        typingTimer = setTimeout(typeNextChar, 240);
-    }
-
-    function hideSplashScreen() {
-        if (dismissed) return;
-        dismissed = true;
-        clearTimeout(typingTimer); clearTimeout(holdTimer); clearTimeout(maxTimer);
-        const splash = document.getElementById("caramelSplashScreen");
-        if (!splash) { replayHeaderSloganEntrance(); return; }
-        splash.classList.add("hide");
-        replayHeaderSloganEntrance();
-        setTimeout(() => { if (splash && splash.parentNode) splash.parentNode.removeChild(splash); }, 700);
-    }
-
-    function scheduleSplashDismiss() {
-        const elapsed = Date.now() - startTime;
-        const remaining = Math.max(0, MIN_SPLASH_MS - elapsed);
-        setTimeout(hideSplashScreen, remaining);
-    }
-
-    if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", startSplashSloganTypewriter, { once: true });
-    } else {
-        startSplashSloganTypewriter();
-    }
-
-    if (document.readyState === "complete") scheduleSplashDismiss();
-    else window.addEventListener("load", scheduleSplashDismiss, { once: true });
-    maxTimer = setTimeout(hideSplashScreen, MAX_SPLASH_MS);
-})();
-
-const PUSH_SUB_STORAGE_KEY = "caramel_push_subscribed_v1";
-
-function setCaramelPushButtonToSubscribed(animate = false) {
+function setPushButtonEnabledState(enabled, animateHide = false) {
     const btn = document.getElementById("caramelPushBtn");
-    const iconEl = document.getElementById("caramelPushIcon");
+    const icon = document.getElementById("caramelPushIcon");
+    const text = document.getElementById("caramelPushBtnText");
     if (!btn) return;
-    btn.classList.add("visible");
-    if (iconEl) {
-        iconEl.innerHTML = `<svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg>`;
-    }
-    if (animate) {
-        btn.classList.add("circle-check-only");
-        setTimeout(() => { btn.classList.add("hiding-smooth"); }, 1800);
-        setTimeout(() => { btn.classList.remove("visible", "circle-check-only", "hiding-smooth"); }, 2250);
+    try { localStorage.setItem(PUSH_PERMISSION_STORAGE_KEY, enabled ? "1" : "0"); } catch (e) {}
+    if (enabled) {
+        btn.classList.add("visible", "circle-check-only");
+        if (icon) icon.innerHTML = `<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+        if (text) text.textContent = "الإشعارات مفعّلة";
+        btn.title = "إشعارات متجر كارامل مفعّلة";
+        btn.setAttribute("aria-label", "إشعارات متجر كارامل مفعّلة");
+        if (animateHide) setTimeout(() => btn.classList.add("hiding-smooth"), 1200);
+        else btn.classList.add("hiding-smooth");
     } else {
-        btn.classList.remove("visible", "circle-check-only", "hiding-smooth");
+        btn.classList.remove("circle-check-only", "hiding-smooth");
+        btn.classList.add("visible");
+        if (icon) icon.innerHTML = `<svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg>`;
+        if (text) text.textContent = "فعّل إشعارات العروض";
+        btn.title = "تفعيل إشعارات متجر كارامل";
+        btn.setAttribute("aria-label", "تفعيل إشعارات متجر كارامل");
     }
 }
 
 function initCaramelPushUI() {
-    const btn = document.getElementById("caramelPushBtn");
-    if (!btn) return;
-    let isSubscribed = false;
-    try { isSubscribed = localStorage.getItem(PUSH_SUB_STORAGE_KEY) === "1"; } catch (e) {}
-    if (isSubscribed || ("Notification" in window && Notification.permission === "granted")) {
-        btn.classList.remove("visible");
-        return;
+    if (isPushAlreadyEnabled()) setPushButtonEnabledState(true, false);
+    else setPushButtonEnabledState(false, false);
+}
+
+function ensureOneSignalSDK() {
+    if (oneSignalReadyPromise) return oneSignalReadyPromise;
+    oneSignalReadyPromise = new Promise(resolve => {
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+        window.OneSignalDeferred.push(async function(OneSignal) {
+            try {
+                if (!window.__caramelOneSignalInitialized) {
+                    await OneSignal.init({
+                        appId: ONESIGNAL_APP_ID,
+                        allowLocalhostAsSecureOrigin: true,
+                        notifyButton: { enable: false },
+                        promptOptions: { slidedown: { prompts: [{ type: "push", autoPrompt: false }] } }
+                    });
+                    window.__caramelOneSignalInitialized = true;
+                }
+                resolve(OneSignal);
+            } catch (err) { resolve(null); }
+        });
+        if (!document.getElementById("onesignal-sdk-script")) {
+            const script = document.createElement("script");
+            script.id = "onesignal-sdk-script";
+            script.src = "https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js";
+            script.defer = true;
+            script.onerror = () => resolve(null);
+            document.head.appendChild(script);
+        }
+    });
+    return oneSignalReadyPromise;
+}
+
+function showWelcomeCaramelNotification() {
+    const title = "متجر كارامل - Caramel Store";
+    const body = "أهلاً بك! تم تفعيل الإشعارات لتصلك أحدث العروض والمنتجات أولاً بأول.";
+    if ("Notification" in window && Notification.permission === "granted") {
+        try {
+            if ("serviceWorker" in navigator && navigator.serviceWorker.ready) {
+                navigator.serviceWorker.ready.then(reg => reg.showNotification(title, { body, icon: PUSH_ICON_URL, badge: PUSH_ICON_URL, dir: "rtl", lang: "ar", tag: "caramel-welcome-notif" })).catch(() => new Notification(title, { body, icon: PUSH_ICON_URL }));
+            } else new Notification(title, { body, icon: PUSH_ICON_URL });
+        } catch (e) {}
     }
-    btn.classList.add("visible");
+    showCaramelToast("تم تفعيل إشعارات متجر كارامل بنجاح!");
 }
 
 async function enableCaramelPush() {
-    if (!("Notification" in window)) {
-        showCaramelToast("متصفحك لا يدعم الإشعارات، يمكنك متابعة عروضنا عبر واتساب");
-        return;
-    }
+    if (isPushAlreadyEnabled()) { setPushButtonEnabledState(true, true); showCaramelToast("الإشعارات مفعّلة بالفعل"); return; }
     try {
-        let permission = Notification.permission;
-        if (permission === "default") permission = await Notification.requestPermission();
-        if (permission !== "granted") {
-            showCaramelToast("لم يتم تفعيل الإشعارات.. يمكنك السماح بها من إعدادات المتصفح");
-            return;
+        const OneSignal = await ensureOneSignalSDK();
+        if (OneSignal && OneSignal.Notifications) {
+            if (!OneSignal.Notifications.permission) await OneSignal.Notifications.requestPermission();
+            if (OneSignal.Notifications.permission) { setPushButtonEnabledState(true, true); showWelcomeCaramelNotification(); return; }
         }
-        try { localStorage.setItem(PUSH_SUB_STORAGE_KEY, "1"); } catch (e) {}
-        setCaramelPushButtonToSubscribed(true);
-        showCaramelToast("تم تفعيل إشعارات متجر كارامل بنجاح!");
-        if ("serviceWorker" in navigator) {
-            const reg = await navigator.serviceWorker.ready;
-            if (reg && reg.showNotification) {
-                reg.showNotification("متجر كارامل - Caramel Store", {
-                    body: "تم تفعيل الإشعارات بنجاح! هنبلغك بأحدث المنتجات والعروض أول بأول.",
-                    icon: "https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg",
-                    badge: "https://raw.githubusercontent.com/CaramelaSHINStore/Carmela.store/refs/heads/main/compressed_1795355576678.jpeg",
-                    dir: "rtl",
-                    lang: "ar"
-                });
-            }
-        }
-    } catch (err) {
-        showCaramelToast("حدثت مشكلة أثناء تفعيل الإشعارات، حاول مرة أخرى");
+    } catch (e) {}
+
+    if ("Notification" in window) {
+        try {
+            const perm = await Notification.requestPermission();
+            if (perm === "granted") { setPushButtonEnabledState(true, true); showWelcomeCaramelNotification(); return; }
+        } catch (e) {}
     }
+    showCaramelToast("يرجى السماح بالإشعارات من إعدادات المتصفح");
+}
+
+function initCaramelSplashScreen() {
+    const splash = document.getElementById("caramelSplashScreen");
+    const sloganEl = document.getElementById("caramelSplashSlogan");
+    const typedTextEl = document.getElementById("caramelSplashTypedText");
+    const caretEl = document.getElementById("caramelSplashCaret");
+    const headerSloganEl = document.querySelector(".logo-sub");
+
+    const sloganText = "كل قطعة وليها دور";
+    const minSplashMs = 1550;
+    const maxSafetyMs = 3000;
+    const startTime = Date.now();
+    let dismissed = false;
+    let typingTimer = null;
+
+    if (typedTextEl) typedTextEl.textContent = "";
+
+    function playHeaderSloganEntrance() {
+        if (!headerSloganEl) return;
+        headerSloganEl.classList.remove("slogan-reenter", "play");
+        void headerSloganEl.offsetWidth;
+        headerSloganEl.classList.add("slogan-reenter", "play");
+    }
+
+    function startSloganTypewriter() {
+        if (!typedTextEl) return;
+        typedTextEl.textContent = "";
+        if (caretEl) caretEl.classList.remove("done");
+        let idx = 0;
+        const stepMs = Math.max(45, Math.floor(620 / sloganText.length));
+        clearInterval(typingTimer);
+        typingTimer = setInterval(() => {
+            idx += 1;
+            typedTextEl.textContent = sloganText.slice(0, idx);
+            if (idx >= sloganText.length) {
+                clearInterval(typingTimer);
+                if (caretEl) caretEl.classList.add("done");
+            }
+        }, stepMs);
+    }
+
+    setTimeout(() => {
+        if (sloganEl) {
+            sloganEl.classList.add("descend-in");
+            startSloganTypewriter();
+        }
+    }, 520);
+
+    function finishSplash() {
+        if (dismissed) return;
+        dismissed = true;
+        clearInterval(typingTimer);
+        if (typedTextEl) typedTextEl.textContent = sloganText;
+        if (caretEl) caretEl.classList.add("done");
+        if (!splash) { playHeaderSloganEntrance(); return; }
+        splash.classList.add("hide");
+        playHeaderSloganEntrance();
+        setTimeout(() => { if (splash && splash.parentNode) splash.parentNode.removeChild(splash); }, 720);
+    }
+
+    function scheduleDismiss() {
+        const elapsed = Date.now() - startTime;
+        const waitMs = Math.max(0, minSplashMs - elapsed);
+        setTimeout(finishSplash, waitMs);
+    }
+
+    if (document.readyState === "complete") scheduleDismiss();
+    else window.addEventListener("load", scheduleDismiss, { once: true });
+    setTimeout(finishSplash, maxSafetyMs);
 }
 
 initThemeMode();
+initCaramelSplashScreen();
 syncHeaderStickyOffsets();
+hydrateTopQuickTabIcons();
+renderSideCategoriesList();
 renderSmartSearchSuggestions();
 renderSpotlightBoxes();
 renderProducts("all");
-hydrateTopQuickTabIcons();
-renderSideCategoriesList();
 updateCartUI();
 initCaramelPushUI();
 loadMerchantProductsFromJson();
