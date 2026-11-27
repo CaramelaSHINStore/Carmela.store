@@ -30,6 +30,17 @@
     "images": [
       "Shren/compressed_1795606431057.webp",
       "Shren/compressed_1795606430736.webp"
+    ],
+    "sizeLabel": "اختر النوع:",
+    "sizes": [
+      {
+        "label": "Goddess",
+        "price": 60
+      },
+      {
+        "label": "Vanilla Freak",
+        "price": 60
+      }
     ]
   },
   {
@@ -80,6 +91,21 @@
       "Shren/compressed_1795518358072.webp",
       "Shren/compressed_1795518358135.webp",
       "Shren/compressed_1795518357923.webp"
+    ],
+    "sizeLabel": "اختر الموديل:",
+    "sizes": [
+      {
+        "label": "مستطيلة بنقش زخرفي في المنتصف",
+        "price": 1600
+      },
+      {
+        "label": "مستطيلة بإطار منقوش وسطح أملس",
+        "price": 1600
+      },
+      {
+        "label": "بيضاوية بحافة مزخرفة",
+        "price": 1600
+      }
     ]
   },
   {
@@ -187,6 +213,17 @@
     "img": "Shren/compressed_1795523068619.webp",
     "images": [
       "Shren/compressed_1795523068619.webp"
+    ],
+    "sizeLabel": "اختر النوع:",
+    "sizes": [
+      {
+        "label": "شامبو (140 جنيه)",
+        "price": 140
+      },
+      {
+        "label": "بلسم (140 جنيه)",
+        "price": 140
+      }
     ]
   },
   {
@@ -530,6 +567,21 @@
     "img": "Shren/compressed_1795525681936.webp",
     "images": [
       "Shren/compressed_1795525681936.webp"
+    ],
+    "sizeLabel": "اختر الرائحة:",
+    "sizes": [
+      {
+        "label": "Purple Garden",
+        "price": 100
+      },
+      {
+        "label": "Ocean Breeze",
+        "price": 100
+      },
+      {
+        "label": "Love Story",
+        "price": 100
+      }
     ]
   },
   {
@@ -591,6 +643,17 @@
     "img": "Shren/compressed_1795525681397.webp",
     "images": [
       "Shren/compressed_1795525681397.webp"
+    ],
+    "sizeLabel": "اختر الشكل:",
+    "sizes": [
+      {
+        "label": "مدورة (260 جنيه)",
+        "price": 260
+      },
+      {
+        "label": "مستطيلة (260 جنيه)",
+        "price": 260
+      }
     ]
   },
   {
@@ -639,6 +702,33 @@
     "img": "Shren/compressed_1795525681083.webp",
     "images": [
       "Shren/compressed_1795525681083.webp"
+    ],
+    "sizeLabel": "اختر الرائحة:",
+    "sizes": [
+      {
+        "label": "Tahiti",
+        "price": 120
+      },
+      {
+        "label": "Vienna",
+        "price": 120
+      },
+      {
+        "label": "Latino",
+        "price": 120
+      },
+      {
+        "label": "Bali",
+        "price": 120
+      },
+      {
+        "label": "Santorini",
+        "price": 120
+      },
+      {
+        "label": "Hawaii",
+        "price": 120
+      }
     ]
   },
   {
@@ -702,6 +792,21 @@
     "img": "Shren/compressed_1795525680633.webp",
     "images": [
       "Shren/compressed_1795525680633.webp"
+    ],
+    "sizeLabel": "اختر الرائحة:",
+    "sizes": [
+      {
+        "label": "Cherry Blossom",
+        "price": 80
+      },
+      {
+        "label": "Floral",
+        "price": 80
+      },
+      {
+        "label": "Vanilla Coconut",
+        "price": 80
+      }
     ]
   },
   {
