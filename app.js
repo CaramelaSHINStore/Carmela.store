@@ -1,18 +1,18 @@
-const APP_BUILD_VERSION = "v20261127-14";
+const APP_BUILD_VERSION = "v20261128-01";
 const APPLIED_BUILD_KEY = "caramel_applied_build_version_v1";
 const LIVE_CATALOG_POLL_MS = 20000;
 const LIVE_CATALOG_MIN_GAP_MS = 3500;
 
 let WHATSAPP_NUMBER = "201055436305";
 let STORE_URL = "https://caramelstoresuez.github.io/Carmelastore/";
-let BRAND_LOGO_URL = "./compressed_1795766509611.jpeg?v=v20261127-14";
+let BRAND_LOGO_URL = "./compressed_1795766509611.jpeg?v=v20261128-01";
 
 function isSafeMediaOrUrl(rawUrl) {
     const val = String(rawUrl || "").trim();
     if (!val) return false;
-    if (/^(https?:\/\/|data:image\/|blob:)/i.test(val)) return true;
-    if (/^(javascript:|vbscript:|file:)/i.test(val)) return false;
-    return true;
+    if (/^(https?:\/\/|data:image\/(?:png|jpe?g|webp|gif|svg\+xml);base64,|blob:)/i.test(val)) return true;
+    if (/^[a-z][a-z0-9+.-]*:/i.test(val)) return false;
+    return /^[.\/a-zA-Z0-9_\-\u0600-\u06FF%?=&+.~]+$/.test(val);
 }
 
 function buildWhatsAppDeepLink(url) {
@@ -182,11 +182,25 @@ function syncSupportWhatsAppLinks() {
     }
 }
 
+let resolvedStoreConfigUrl = null;
+let storeConfigCheckedOnce = false;
+
 async function loadStoreConfigFromJson(forceRefresh = false) {
+    if (storeConfigCheckedOnce && !resolvedStoreConfigUrl && !forceRefresh) return null;
     const qSuffix = `?ts=${Date.now()}&r=${Math.random().toString(36).slice(2, 7)}`;
-    for (const basePath of STORE_CONFIG_JSON_CANDIDATES) {
-        const rawFallback = `https://raw.githubusercontent.com/${GITHUB_MERCHANTS_CONFIG.owner}/${GITHUB_MERCHANTS_CONFIG.repo}/${GITHUB_MERCHANTS_CONFIG.branch}/${basePath.replace(/^\.\//, "")}`;
-        const urls = [`${basePath}${qSuffix}`, `${rawFallback}${qSuffix}`];
+    const candidates = resolvedStoreConfigUrl
+        ? [resolvedStoreConfigUrl]
+        : STORE_CONFIG_JSON_CANDIDATES;
+
+    for (const basePath of candidates) {
+        const cleanBase = basePath.split("?")[0];
+        const rawFallback = /^https?:\/\//i.test(cleanBase)
+            ? cleanBase
+            : `https://raw.githubusercontent.com/${GITHUB_MERCHANTS_CONFIG.owner}/${GITHUB_MERCHANTS_CONFIG.repo}/${GITHUB_MERCHANTS_CONFIG.branch}/${cleanBase.replace(/^\.\//, "")}`;
+        const urls = resolvedStoreConfigUrl
+            ? [`${cleanBase}${qSuffix}`]
+            : [`${cleanBase}${qSuffix}`, `${rawFallback}${qSuffix}`];
+
         for (const url of urls) {
             try {
                 const resp = await fetch(url, { cache: "no-store" });
@@ -194,6 +208,8 @@ async function loadStoreConfigFromJson(forceRefresh = false) {
                     const text = (await resp.text()).replace(/^\uFEFF/, "").trim();
                     if (!text) continue;
                     const parsed = JSON.parse(text);
+                    resolvedStoreConfigUrl = url.split("?")[0];
+                    storeConfigCheckedOnce = true;
                     const targetObj = (parsed && typeof parsed === "object" && parsed.storeConfig && typeof parsed.storeConfig === "object")
                         ? parsed.storeConfig
                         : ((parsed && typeof parsed === "object" && parsed.config && typeof parsed.config === "object")
@@ -202,10 +218,12 @@ async function loadStoreConfigFromJson(forceRefresh = false) {
                     if (applyStoreConfigFromPayload(targetObj)) {
                         return targetObj;
                     }
+                    return targetObj;
                 }
             } catch (e) {}
         }
     }
+    storeConfigCheckedOnce = true;
     return null;
 }
 
@@ -1627,7 +1645,7 @@ async function loadMerchantProductsFromJson(forceRefresh = false, options = {}) 
     }
 
     try {
-        await loadStoreConfigFromJson(true);
+        await loadStoreConfigFromJson(!hadProductsBefore);
 
         const merchantSources = await discoverMerchantJsonSources(true);
         const jsonProductsById = new Map();
@@ -1899,7 +1917,7 @@ function handleProductImageError(imgEl, productId) {
 
     if (retryStep <= 1 && currentSrc && !/^https?:\/\//i.test(currentSrc)) {
         imgEl.setAttribute("data-retry-step", "2");
-        const cleanPath = currentSrc.replace(/^\.\?\//, "");
+        const cleanPath = currentSrc.replace(/^\.\//, "").replace(/^\/+/, "");
         imgEl.src = `https://raw.githubusercontent.com/${GITHUB_MERCHANTS_CONFIG.owner}/${GITHUB_MERCHANTS_CONFIG.repo}/${GITHUB_MERCHANTS_CONFIG.branch}/${cleanPath}`;
         return;
     }
