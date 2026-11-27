@@ -210,9 +210,18 @@ function syncThemeIcon() {
 
 function syncBrandLogos() {
     document.querySelectorAll("[data-brand-logo]").forEach(img => {
-        if (img.tagName === "IMG" && img.getAttribute("src") !== BRAND_LOGO_URL) {
+        if (img.tagName === "IMG") {
             img.src = BRAND_LOGO_URL;
+            img.alt = "لوجو متجر كارامل - Caramel Store";
         }
+    });
+
+    document.querySelectorAll("[data-brand-bg]").forEach(el => {
+        el.style.backgroundImage = `url("${BRAND_LOGO_URL}")`;
+    });
+
+    document.querySelectorAll('link[rel="icon"], link[rel="shortcut icon"], link[rel="apple-touch-icon"]').forEach(linkEl => {
+        linkEl.href = BRAND_LOGO_URL;
     });
 }
 
