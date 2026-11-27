@@ -516,6 +516,25 @@ function escapeHtml(str) {
 window.addEventListener("popstate", () => {
     if (overlayStack.length > 0) {
         closeTopOverlay(true);
+        return;
+    }
+    suppressHistoryStep = true;
+    try {
+        if (document.getElementById("imageModal")?.classList.contains("open")) {
+            closeImageModal(true);
+        } else if (document.getElementById("productOptionModal")?.classList.contains("open")) {
+            closeProductOptionModal(true);
+        } else if (document.getElementById("serviceInfoModal")?.classList.contains("open")) {
+            closeServiceInfoModal(true);
+        } else if (document.getElementById("becomeMerchantModal")?.classList.contains("open")) {
+            closeBecomeMerchantModal(true);
+        } else if (document.getElementById("cartDrawer")?.classList.contains("open")) {
+            closeCart(true);
+        } else if (document.getElementById("catsDrawer")?.classList.contains("open")) {
+            closeCategoriesDrawer(true);
+        }
+    } finally {
+        setTimeout(() => { suppressHistoryStep = false; }, 0);
     }
 });
 
@@ -1284,7 +1303,7 @@ function inferCategorySmartly(rawCat, title = "", desc = "") {
     if (/(خلاط|مكواه|مكواة|كاتل|غلايه|مضرب|هاند بلندر|ميكروويف|سشوار|مجفف شعر|مروحه|لمبه|ليد|فيشه|مشترك|كهربائيه|كهربائي)/.test(combined)) return "appliances";
     if (/(مجوهرات|ذهب|فضه|فضة|انسيال|سلسله|سلسلة|خاتم|حلق|اسوره|اسواره|خلخال|دبله|تعليقه|اكسسوارات حريمي|اكسسوار)/.test(combined)) return "jewelry";
     if (/(عطر|برفان|سبلاش|اسبلش|مخمريه|بادي|لوشن|كريم|شامبو|ماسك|تجميل|ميك اب|مكياج|روج|واقي شمس|سيروم|صحه|طبي|عنايه)/.test(combined)) return "perfume";
-    if (/(كشكول|نوت بوك|قلم|اقلام|استيكه|برايه|مسطره|كراسه|دفتر|ملف|مكتب|سبوره|الوان|مدرس|مكتبي|قرطاسيه)/.test(combined)) return "school";
+    if (/(كشكول|نوت بوك|دفتر|قلم|اقلام|استيكه|برايه|مسطره|كراسه|دفتر|ملف|مكتب|سبوره|الوان|مدرس|مكتبي|قرطاسيه)/.test(combined)) return "school";
     if (/(هاند ميد|مكرميه|خرز|لولي|كروشيه|تطريز|عبايه|ملحفه)/.test(combined)) return "tafse";
     if (/(هديه|هدايا|بوكس|مرايا سحريه|طباعه|مج حراري)/.test(combined)) return "gifts";
     if (/(اطفال|طفل|بيبي|لعبه|العاب)/.test(combined)) return "kids";
@@ -3391,13 +3410,26 @@ function pulseBottomNavButton(btnId) {
     setTimeout(() => btn.classList.remove("pop"), 300);
 }
 
+let suppressHistoryStep = false;
+
 function pushOverlayState(name) {
     overlayStack = overlayStack.filter(n => n !== name);
     overlayStack.push(name);
+    if (!suppressHistoryStep) {
+        try {
+            history.pushState({ caramelOverlay: name, ts: Date.now() }, "");
+        } catch (e) {}
+    }
 }
 
 function removeOverlayState(name) {
+    const hadOverlay = overlayStack.includes(name);
     overlayStack = overlayStack.filter(n => n !== name);
+    if (hadOverlay && !suppressHistoryStep && history.state && history.state.caramelOverlay === name) {
+        try {
+            history.back();
+        } catch (e) {}
+    }
 }
 
 function isAnyOverlayOpen() {
@@ -3420,13 +3452,18 @@ function syncBodyScrollLock() {
 function closeTopOverlay(fromPopState = false) {
     if (!overlayStack.length) { syncBodyScrollLock(); return false; }
     const topName = overlayStack.pop();
-    if (topName === "cart") closeCart(true);
-    else if (topName === "cats") closeCategoriesDrawer(true);
-    else if (topName === "image") closeImageModal(true);
-    else if (topName === "option") closeProductOptionModal(true);
-    else if (topName === "serviceInfo") closeServiceInfoModal(true);
-    else if (topName === "becomeMerchant") closeBecomeMerchantModal(true);
-    else if (topName === "confirm") closeConfirmModal(true, true);
+    suppressHistoryStep = true;
+    try {
+        if (topName === "cart") closeCart(true);
+        else if (topName === "cats") closeCategoriesDrawer(true);
+        else if (topName === "image") closeImageModal(true);
+        else if (topName === "option") closeProductOptionModal(true);
+        else if (topName === "serviceInfo") closeServiceInfoModal(true);
+        else if (topName === "becomeMerchant") closeBecomeMerchantModal(true);
+        else if (topName === "confirm") closeConfirmModal(true, true);
+    } finally {
+        setTimeout(() => { suppressHistoryStep = false; }, 0);
+    }
     syncBodyScrollLock();
     return true;
 }
