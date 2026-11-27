@@ -1,4 +1,4 @@
-const CACHE_NAME = "caramel-store-v20261127-9";
+const CACHE_NAME = "caramel-store-v20261127-10";
 const CORE_ASSETS = [
   "./",
   "./index.html",
