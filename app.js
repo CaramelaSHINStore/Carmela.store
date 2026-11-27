@@ -1,6 +1,3 @@
-const WHATSAPP_NUMBER = "201055436305";
-const BRAND_LOGO_URL = "./compressed_1795766509611.jpeg?v=5";
-
 function buildWhatsAppDeepLink(url) {
     try {
         const parsed = new URL(url);
@@ -97,7 +94,6 @@ function launchWhatsAppTarget(url) {
     }, 1300);
 }
 
-const STORE_URL = "https://caramelstoresuez.github.io/Carmelastore/";
 const CART_STORAGE_KEY = "caramel_store_cart_v1";
 const WISHLIST_STORAGE_KEY = "caramel_wishlist_v1";
 const ACTIVE_ORDERS_STORAGE_KEY = "caramel_active_orders_v1";
@@ -116,6 +112,84 @@ const GITHUB_MERCHANTS_CONFIG = {
     branch: "main",
     folder: "merchants"
 };
+
+const STORE_CONFIG_JSON_CANDIDATES = [
+    "./store-config.json",
+    "./config.json",
+    "./data/store-config.json",
+    "./data/config.json"
+];
+
+let WHATSAPP_NUMBER = "201055436305";
+let STORE_URL = "https://caramelstoresuez.github.io/Carmelastore/";
+let BRAND_LOGO_URL = "./compressed_1795766509611.jpeg?v=5";
+
+function applyStoreConfigFromPayload(cfg) {
+    if (!cfg || typeof cfg !== "object") return false;
+    let changed = false;
+
+    const rawWa = cfg.whatsappNumber ?? cfg.whatsapp ?? cfg.waNumber ?? cfg.phone ?? cfg.supportPhone ?? "";
+    const cleanWa = String(rawWa || "").replace(/\D/g, "").trim();
+    if (cleanWa && cleanWa.length >= 8) {
+        WHATSAPP_NUMBER = cleanWa;
+        changed = true;
+    }
+
+    const rawStoreUrl = cfg.storeUrl ?? cfg.siteUrl ?? cfg.url ?? cfg.website ?? "";
+    if (typeof rawStoreUrl === "string" && rawStoreUrl.trim()) {
+        const trimmedUrl = rawStoreUrl.trim();
+        STORE_URL = trimmedUrl.endsWith("/") ? trimmedUrl : `${trimmedUrl}/`;
+        changed = true;
+    }
+
+    const rawLogo = cfg.brandLogoUrl ?? cfg.logoUrl ?? cfg.logo ?? cfg.brandLogo ?? "";
+    if (typeof rawLogo === "string" && rawLogo.trim()) {
+        BRAND_LOGO_URL = normalizeProductImageUrl(rawLogo.trim()) || BRAND_LOGO_URL;
+        changed = true;
+    }
+
+    if (changed) {
+        syncSupportWhatsAppLinks();
+        syncBrandLogos();
+    }
+    return changed;
+}
+
+function syncSupportWhatsAppLinks() {
+    const csLink = document.querySelector(".promo-cs-link");
+    if (csLink) {
+        const defaultMsg = encodeURIComponent("مرحباً دعم متجر كارامل");
+        csLink.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${defaultMsg}`;
+    }
+}
+
+async function loadStoreConfigFromJson(forceRefresh = false) {
+    const qSuffix = forceRefresh ? `?ts=${Date.now()}` : "";
+    for (const basePath of STORE_CONFIG_JSON_CANDIDATES) {
+        const rawFallback = `https://raw.githubusercontent.com/${GITHUB_MERCHANTS_CONFIG.owner}/${GITHUB_MERCHANTS_CONFIG.repo}/${GITHUB_MERCHANTS_CONFIG.branch}/${basePath.replace(/^\.\//, "")}`;
+        const urls = [`${basePath}${qSuffix}`, `${rawFallback}${qSuffix}`];
+        for (const url of urls) {
+            try {
+                const resp = await fetch(url, { cache: forceRefresh ? "no-store" : "default" });
+                if (resp && resp.ok) {
+                    const text = (await resp.text()).replace(/^\uFEFF/, "").trim();
+                    if (!text) continue;
+                    const parsed = JSON.parse(text);
+                    const targetObj = (parsed && typeof parsed === "object" && parsed.storeConfig && typeof parsed.storeConfig === "object")
+                        ? parsed.storeConfig
+                        : ((parsed && typeof parsed === "object" && parsed.config && typeof parsed.config === "object")
+                            ? parsed.config
+                            : parsed);
+                    if (applyStoreConfigFromPayload(targetObj)) {
+                        return targetObj;
+                    }
+                }
+            } catch (e) {}
+        }
+    }
+    return null;
+}
+
 
 const KNOWN_MERCHANT_SLUGS = {
     "mohamed-ghareeb": "محمد غريب",
@@ -977,7 +1051,7 @@ function showCaramelToast(message) {
     toastTimer = setTimeout(() => { toastEl.classList.remove("show"); }, 3200);
 }
 
-const APP_BUILD_VERSION = "v20261127-10";
+const APP_BUILD_VERSION = "v20261127-12";
 const APPLIED_BUILD_KEY = "caramel_applied_build_version_v1";
 let pendingUpdateAvailable = false;
 
@@ -1540,6 +1614,7 @@ async function fetchJsonWithFallback(source, forceRefresh = false) {
 async function loadMerchantProductsFromJson(forceRefresh = false) {
     isLoadingJsonProducts = true;
     renderProducts(currentCategory);
+    await loadStoreConfigFromJson(forceRefresh);
 
     const merchantSources = await discoverMerchantJsonSources(forceRefresh);
     const jsonProductsById = new Map();
@@ -4435,7 +4510,9 @@ function initApp() {
     updateCartUI();
     syncPushButtonState();
     syncHeaderInstallOrUpdateButton();
+    syncSupportWhatsAppLinks();
     setupInfiniteScrollObserver();
+    loadStoreConfigFromJson(false);
     loadMerchantProductsFromJson(false);
 }
 
