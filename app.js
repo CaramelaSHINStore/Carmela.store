@@ -170,6 +170,11 @@ let autoHoverSlideTimer = null;
 let activeHoveredCard = null;
 let previewModalState = { productId: null, imgs: [], idx: 0 };
 let feedObserver = null;
+// Per-render recommendation caches: avoid repeating cart/product scans inside Array.sort().
+let recommendationScoreCache = new Map();
+let recommendationCartCategories = null;
+let recommendationWishlistSet = null;
+const productTokenCache = new WeakMap();
 
 function createDebounced(fn, delay = 180) {
     let timer = null;
@@ -2182,28 +2187,41 @@ function trackProductInterest(product, weight = 1, markSeen = true) {
 }
 
 function scoreProductForUser(product, seedOffset = 0) {
-    const cats = [product.category, ...(Array.isArray(product.categories) ? product.categories : [])];
+    if (!product) return 0;
+    const cacheKey = `${String(product.id)}:${seedOffset}`;
+    if (recommendationScoreCache.has(cacheKey)) return recommendationScoreCache.get(cacheKey);
+
+    if (!recommendationCartCategories) {
+        recommendationCartCategories = new Set();
+        const productsById = new Map(PRODUCTS.map(item => [String(item.id), item]));
+        cart.forEach(item => {
+            const matched = productsById.get(String(item.id));
+            if (matched && matched.category) recommendationCartCategories.add(matched.category);
+        });
+    }
+    if (!recommendationWishlistSet) recommendationWishlistSet = new Set(wishlistIds.map(String));
+
+    const cats = [product.category, ...(Array.isArray(product.categories) ? product.categories : [])].filter(Boolean);
     let catScore = 0;
-    cats.forEach(c => {
-        catScore = Math.max(catScore, (interestData.categories[c] || 0) * 12);
-    });
+    cats.forEach(c => { catScore = Math.max(catScore, (interestData.categories[c] || 0) * 12); });
+    if (cats.some(c => recommendationCartCategories.has(c))) catScore += 14;
+    if (recommendationWishlistSet.has(String(product.id))) catScore += 16;
 
-    const inCartCat = cart.some(ci => {
-        const match = PRODUCTS.find(p => p.id === ci.id);
-        return match && cats.includes(match.category);
-    });
-    if (inCartCat) catScore += 14;
-
-    if (wishlistIds.includes(String(product.id))) catScore += 16;
-
-    const tokens = extractTokens(product.title).filter(t => t.length >= 2);
+    let tokens = productTokenCache.get(product);
+    if (!tokens) {
+        tokens = extractTokens(product.title).filter(t => t.length >= 2);
+        productTokenCache.set(product, tokens);
+    }
     let kwScore = 0;
     tokens.forEach(t => { kwScore += (interestData.keywords[t] || 0) * 5; });
 
     const isSeen = interestData.seenIds.includes(product.id);
     const freshnessBonus = isSeen ? -5 : 10;
-    const dynamicJitter = ((product.id.charCodeAt(product.id.length - 1) * 13 + seedOffset * 17 + Math.floor(interestData.sessionRoll * 100)) % 9) * 0.8;
-    return catScore + kwScore + freshnessBonus + dynamicJitter;
+    const idText = String(product.id || "0");
+    const dynamicJitter = ((idText.charCodeAt(idText.length - 1) * 13 + seedOffset * 17 + Math.floor(interestData.sessionRoll * 100)) % 9) * 0.8;
+    const score = catScore + kwScore + freshnessBonus + dynamicJitter;
+    recommendationScoreCache.set(cacheKey, score);
+    return score;
 }
 
 function buildEngagingHookForProduct(product) {
@@ -2681,6 +2699,9 @@ function setupInfiniteScrollObserver() {
 }
 
 function renderProducts(category = "all") {
+    recommendationScoreCache = new Map();
+    recommendationCartCategories = null;
+    recommendationWishlistSet = null;
     currentCategory = category;
     applyCategoryPageMood(currentMerchant ? "all" : category);
     const grid = document.getElementById("productsGrid");
