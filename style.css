@@ -630,6 +630,54 @@ body.dark-theme .merchant-chip-btn.active {
     color: #14110f;
 }
 
+/* Inner Merchant Category Filter Strip */
+.merchant-inner-cats-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin-top: 11px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(229, 190, 150, 0.25);
+}
+.merchant-inner-cats-wrap::-webkit-scrollbar { display: none; }
+.merchant-inner-cat-btn {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(229, 190, 150, 0.28);
+    color: #fff5e6;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 800;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+.merchant-inner-cat-btn:hover {
+    background: rgba(229, 190, 150, 0.18);
+}
+.merchant-inner-cat-btn.active {
+    background: linear-gradient(135deg, var(--caramel-light), var(--caramel));
+    color: #14110f;
+    border-color: var(--caramel-light);
+}
+.merchant-inner-cat-count {
+    font-size: 0.62rem;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.22);
+    color: inherit;
+}
+.merchant-inner-cat-btn.active .merchant-inner-cat-count {
+    background: rgba(20, 17, 15, 0.16);
+}
+
 /* Main Container */
 .container {
     max-width: 1220px;
