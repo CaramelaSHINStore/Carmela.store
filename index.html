@@ -7,6 +7,7 @@
 <meta name="description" content="متجر كارامل - تسوق منتجات متنوعة وعروض مميزة بسهولة عبر واتساب">
 <meta name="theme-color" content="#14110f">
 
+<!-- Open Graph / WhatsApp / Facebook -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="CARAMEL STORE - متجر كارامل">
 <meta property="og:url" content="https://caramelstoresuez.github.io/Carmelastore/">
@@ -17,6 +18,7 @@
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:alt" content="لوجو متجر كارامل - Caramel Store">
 
+<!-- Twitter Cards -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="متجر كارامل - Caramel Store | كل قطعة وليها دور">
 <meta name="twitter:description" content="متجر كارامل - تسوق منتجات متنوعة وعروض مميزة بسهولة عبر واتساب">
@@ -68,6 +70,7 @@
     <div class="scroll-progress-fill" id="scrollProgressFill"></div>
 </div>
 
+<!-- Splash Screen -->
 <div class="caramel-splash-screen" id="caramelSplashScreen" aria-label="جاري تحميل متجر كارامل">
     <div class="splash-logo-stage">
         <div class="splash-logo-ring">
@@ -82,6 +85,7 @@
     </div>
 </div>
 
+<!-- Header -->
 <header class="top-app-bar">
     <div class="top-brand-row">
         <div class="header-left-slot">
@@ -125,6 +129,7 @@
     </div>
 </header>
 
+<!-- Quick Top Tabs -->
 <nav class="quick-top-tabs" aria-label="الأقسام السريعة">
     <button type="button" class="quick-tab-item active" data-quick="all" onclick="selectTopQuickTab('all', this)">الكل</button>
     <button type="button" class="quick-tab-item" data-quick="home" onclick="selectTopQuickTab('home', this)">المنزل</button>
@@ -140,12 +145,17 @@
     <button type="button" class="quick-tab-item" data-quick="kids" onclick="selectTopQuickTab('kids', this)">الأطفال</button>
 </nav>
 
+<!-- Price Filter Strip -->
 <div class="sticky-price-bar" id="stickyPriceBar">
     <span class="price-bar-label">السعر:</span>
     <div class="price-chips-row" id="smartPriceChipsContainer"></div>
 </div>
 
+<!-- Merchants Quick Strip -->
+
+<!-- Main Container -->
 <main class="container">
+    <!-- Service & Support Strip -->
     <section class="payment-service-strip" aria-label="معلومات الدفع والتوصيل">
         <div class="service-pills-group">
             <button type="button" class="service-action-btn" onclick="openServiceInfoModal('payment')">
@@ -174,6 +184,7 @@
         </div>
     </section>
 
+    <!-- Append Mode Banner -->
     <div class="append-mode-banner is-hidden" id="appendOrderBanner">
         <span id="appendOrderBannerText"></span>
         <div class="append-mode-actions">
@@ -182,6 +193,7 @@
         </div>
     </div>
 
+    <!-- Dual Spotlight Boxes -->
     <section class="dual-spotlight-row" aria-label="مختارات وأسعار مميزة">
         <div class="spotlight-box" onmouseenter="setMotionPaused('trends', true)" onmouseleave="setMotionPaused('trends', false)" ontouchstart="setMotionPaused('trends', true)">
             <div class="spotlight-box-header">
@@ -204,6 +216,7 @@
         </div>
     </section>
 
+    <!-- Feed Controls -->
     <div class="feed-controls-row">
         <div class="feed-filter-pills" id="feedFilterPills">
             <button type="button" class="feed-pill-btn active" data-mode="for-you" onclick="setFeedMode('for-you', this)">من أجلك</button>
@@ -217,11 +230,13 @@
         </select>
     </div>
 
+    <!-- Search Results Summary -->
     <div class="search-results-summary-bar" id="searchResultsSummaryBar">
         <span id="searchResultsSummaryText"></span>
         <button type="button" class="search-clear-inline-btn" onclick="cancelSearchMode()">إلغاء البحث</button>
     </div>
 
+    <!-- Featured Merchant Storefront Banner -->
     <section class="merchant-storefront-banner" id="activeMerchantBanner" aria-live="polite">
         <div class="merchant-banner-top">
             <div class="merchant-banner-identity">
@@ -240,27 +255,34 @@
         <div class="merchant-inner-cats-wrap is-hidden" id="merchantInnerCatsWrap" aria-label="أقسام التاجر"></div>
     </section>
 
+    <!-- Main Products Heading -->
     <div class="section-heading" id="productsSectionHeading">
         <h2 id="activeCategoryTitle">الكل — من أجلك</h2>
         <span class="smart-tag is-hidden" id="resultsCountBadge"></span>
     </div>
 
+    <!-- Products Grid -->
     <section class="products-grid" id="productsGrid"></section>
 
+    <!-- Continuation Section -->
     <div id="continuationAfterRecommendations"></div>
 
+    <!-- Sentinel -->
     <div class="feed-sentinel" id="feedSentinel"></div>
 </main>
 
+<!-- Push Button -->
 <button type="button" class="floating-notification-pill" id="caramelPushBtn" onclick="enableCaramelPush()">
     <span class="push-pill-icon" id="caramelPushIcon"></span>
     <span class="push-pill-label" id="caramelPushBtnText">فعّل إشعارات العروض</span>
 </button>
 
+<!-- Back To Top -->
 <button type="button" class="back-to-top-fab" id="backToTopFab" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })" aria-label="العودة للأعلى">
     <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="18 15 12 9 6 15"></polyline></svg>
 </button>
 
+<!-- Bottom Navigation Bar -->
 <nav class="bottom-nav-bar" aria-label="التنقل السفلي">
     <button type="button" class="bottom-nav-btn active" id="navHomeBtn" onclick="pulseBottomNavButton('navHomeBtn'); resetHomeFresh();">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
@@ -281,9 +303,11 @@
     </button>
 </nav>
 
+<!-- Drawers Backdrops -->
 <div class="drawer-backdrop" id="cartBackdrop" onclick="closeCart()"></div>
 <div class="drawer-backdrop" id="catsBackdrop" onclick="closeCategoriesDrawer()"></div>
 
+<!-- Cart & Orders Drawer -->
 <aside class="cart-drawer" id="cartDrawer" aria-label="سلة المشتريات والطلبات">
     <div class="drawer-header">
         <h3>المشتريات والطلبات</h3>
@@ -309,6 +333,7 @@
     </div>
 
     <div class="cart-drawer-body" id="cartDrawerPagesContainer">
+        <!-- Customer Profile Panel -->
         <div class="my-data-editor-panel is-hidden" id="myDataEditorPanel">
             <div class="my-data-panel-title">بيانات التوصيل والعميل</div>
             <div class="checkout-customer-fields">
@@ -326,6 +351,7 @@
             <button type="button" class="save-profile-panel-btn" onclick="saveCustomerProfileFromPanel()">حفظ بياناتي</button>
         </div>
 
+        <!-- Current Cart Section -->
         <div id="currentCartSection">
             <div class="cart-page-header-row">
                 <span class="cart-page-title">منتجات السلة الجارية</span>
@@ -334,6 +360,7 @@
             <div id="cartItemsContainer"></div>
         </div>
 
+        <!-- Active Pending Orders Section -->
         <div class="is-hidden" id="activeOrdersSection">
             <div class="cart-page-header-row">
                 <span class="cart-page-title">طلبات قيد التنفيذ</span>
@@ -342,6 +369,7 @@
             <div id="activeOrdersContainer"></div>
         </div>
 
+        <!-- Received Orders Section -->
         <div class="is-hidden" id="receivedOrdersSection">
             <div class="cart-page-header-row">
                 <span class="cart-page-title">الأوردرات المستلمة</span>
@@ -378,6 +406,7 @@
     </div>
 </aside>
 
+<!-- Categories Drawer -->
 <aside class="cats-drawer" id="catsDrawer" aria-label="أقسام المتجر">
     <div class="drawer-header">
         <h3>أقسام المتجر</h3>
@@ -386,6 +415,7 @@
     <div class="cats-drawer-body" id="sideCategoriesList"></div>
 </aside>
 
+<!-- Image & Product Preview Modal -->
 <div class="image-modal" id="imageModal" onclick="if(event.target===this) closeImageModal()">
     <div class="product-preview-card" role="dialog" aria-modal="true">
         <button type="button" class="close-modal-btn" onclick="closeImageModal()" aria-label="إغلاق">✕</button>
@@ -422,6 +452,7 @@
     </div>
 </div>
 
+<!-- Product Option Modal -->
 <div class="image-modal" id="productOptionModal" onclick="if(event.target===this) closeProductOptionModal()">
     <div class="option-modal-card" role="dialog" aria-modal="true">
         <button type="button" class="close-modal-btn" onclick="closeProductOptionModal()" aria-label="إغلاق">✕</button>
@@ -462,6 +493,7 @@
     </div>
 </div>
 
+<!-- Service Info Modal -->
 <div class="image-modal" id="serviceInfoModal" onclick="if(event.target===this) closeServiceInfoModal()">
     <div class="service-info-modal-card" role="dialog" aria-modal="true">
         <button type="button" class="close-modal-btn" onclick="closeServiceInfoModal()" aria-label="إغلاق">✕</button>
@@ -470,6 +502,7 @@
     </div>
 </div>
 
+<!-- Confirm Modal -->
 <div class="image-modal" id="confirmActionModal" onclick="if(event.target===this) closeConfirmModal(false, true)">
     <div class="confirm-modal-card" role="dialog" aria-modal="true">
         <div class="confirm-modal-title" id="confirmModalTitle">تأكيد العملية</div>
@@ -481,6 +514,7 @@
     </div>
 </div>
 
+<!-- Become a Merchant Modal -->
 <div class="image-modal" id="becomeMerchantModal" onclick="if(event.target===this) closeBecomeMerchantModal()">
     <div class="service-info-modal-card merchant-signup-card" role="dialog" aria-modal="true" aria-labelledby="becomeMerchantTitle">
         <button type="button" class="close-modal-btn" onclick="closeBecomeMerchantModal()" aria-label="إغلاق">✕</button>
@@ -504,6 +538,7 @@
     </div>
 </div>
 
+<!-- Toast -->
 <div class="caramel-toast" id="caramelToast" role="status" aria-live="polite"></div>
 
 <script src="./app.js?v=v20261127-13"></script>
