@@ -1,15 +1,15 @@
-ط<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>متجر كارامل - Caramel Store</title>
 <meta name="description" content="متجر كارامل - تسوق منتجات متنوعة وعروض مميزة بسهولة عبر واتساب">
 <meta name="theme-color" content="#14110f">
-<link rel="icon" type="image/jpeg" href="./compressed_1795766509611.jpeg?v=3">
-<link rel="shortcut icon" type="image/jpeg" href="./compressed_1795766509611.jpeg?v=3">
-<link rel="apple-touch-icon" href="./compressed_1795766509611.jpeg?v=3">
-<link rel="manifest" href="./manifest.json?v=3">
+<link rel="icon" type="image/jpeg" href="./compressed_1795766509611.jpeg?v=4">
+<link rel="shortcut icon" type="image/jpeg" href="./compressed_1795766509611.jpeg?v=4">
+<link rel="apple-touch-icon" href="./compressed_1795766509611.jpeg?v=4">
+<link rel="manifest" href="./manifest.json?v=4">
 <script>
 (function() {
     var v = Date.now();
@@ -32,7 +32,7 @@
     } catch (e) {}
 })();
 </script>
-<link rel="stylesheet" href="./style.css">
+<link rel="stylesheet" href="./style.css?v=4">
 <style>
 .caramel-logo-mark {
     object-fit: cover;
@@ -56,7 +56,7 @@
 <div class="caramel-splash-screen" id="caramelSplashScreen" aria-label="جاري تحميل متجر كارامل">
     <div class="splash-logo-stage">
         <div class="splash-logo-ring">
-            <img src="./compressed_1795766509611.jpeg?v=3" data-brand-logo="1" class="caramel-logo-mark" alt="لوجو متجر كارامل">
+            <img src="./compressed_1795766509611.jpeg?v=4" data-brand-logo="1" class="caramel-logo-mark" alt="لوجو متجر كارامل">
         </div>
     </div>
     <div class="splash-brand-name">CARAMEL STORE</div>
@@ -81,7 +81,7 @@
         </div>
 
         <button type="button" class="logo-pill" onclick="resetHomeFresh()" aria-label="متجر كارامل - الرئيسية">
-            <img src="./compressed_1795766509611.jpeg?v=3" data-brand-logo="1" alt="لوجو متجر كارامل" class="header-brand-img caramel-logo-mark">
+            <img src="./compressed_1795766509611.jpeg?v=4" data-brand-logo="1" alt="لوجو متجر كارامل" class="header-brand-img caramel-logo-mark">
             <div class="logo-text-group">
                 <div class="logo">CARAMEL STORE</div>
                 <div class="logo-sub">كل قطعة وليها دور</div>
@@ -101,7 +101,7 @@
 
     <div class="collapsible-search-wrap" id="collapsibleSearchWrap">
         <div class="app-search-bar">
-            <input type="text" id="homeSearchInput" oninput="handleSearchInput()" onkeydown="handleSearchKeyDown(event)" placeholder="ابحث عن منتج، عطر، هاند ميد، كشكول..." autocomplete="off">
+            <input type="text" id="homeSearchInput" oninput="handleSearchInput()" onkeydown="handleSearchKeyDown(event)" placeholder="ابحث عن منتج، تاجر، عطر، هاند ميد..." autocomplete="off">
             <button type="button" class="search-cancel-btn" id="searchCancelBtn" onclick="cancelSearchMode(event)">مسح</button>
             <button type="button" class="app-search-submit-btn" onclick="performSearchRender(); scrollToProductsTop();" aria-label="تنفيذ البحث">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -133,8 +133,8 @@
     <div class="price-chips-row" id="smartPriceChipsContainer"></div>
 </div>
 
-<!-- Merchants Quick Strip (Hidden per request) -->
-<div class="is-hidden" id="merchantsQuickStrip"></div>
+<!-- Merchants Quick Strip -->
+<div class="merchants-quick-strip" id="merchantsQuickStrip" aria-label="التجار في المتجر"></div>
 
 <!-- Main Container -->
 <main class="container">
@@ -162,7 +162,7 @@
         </div>
 
         <div class="promo-actions-pair">
-            <a href="https://wa.me/201055436305?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D9%85%D8%AA%D8%AC%D8%B1%20%D9%83%D8%A7%D8%B1%D8%A7%D9%85%D9%84%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%B7%D9%84%D8%A8%20%D9%85%D9%86%D8%AA%D8%AC%20%D8%AE%D8%A7%D8%B5" class="promo-special-link" target="_blank" rel="noopener noreferrer" onclick="event.preventDefault(); launchWhatsAppTarget(this.href);">اطلب منتج خاص</a>
+            <a href="https://wa.me/201055436305?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D9%85%D8%AA%D8%AC%D8%B1%20%D9%83%D8%A7%D8%B1%D8%A7%D9%85%D9%84%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%A7%D9%86%D8%B6%D9%85%D8%A7%D9%85%20%D9%83%D8%AA%D8%A7%D8%AC%D8%B1%20%D9%81%D9%8A%20%D8%A7%D9%84%D9%85%D8%AA%D8%AC%D8%B1" class="promo-special-link" target="_blank" rel="noopener noreferrer" onclick="event.preventDefault(); launchWhatsAppTarget(this.href);">كن تاجر</a>
             <a href="https://wa.me/201055436305?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D8%AF%D8%B9%D9%85%20%D9%85%D8%AA%D8%AC%D8%B1%20%D9%83%D8%A7%D8%B1%D8%A7%D9%85%D9%84" class="promo-cs-link" target="_blank" rel="noopener noreferrer" onclick="event.preventDefault(); launchWhatsAppTarget(this.href);">خدمة العملاء</a>
         </div>
     </section>
@@ -219,12 +219,23 @@
         <button type="button" class="search-clear-inline-btn" onclick="cancelSearchMode()">إلغاء البحث</button>
     </div>
 
-    <!-- Merchant Banner Placeholder -->
-    <div id="activeMerchantBanner">
-        <span id="merchantBannerName"></span>
-        <span id="merchantBannerCount"></span>
-        <span id="merchantAvatarInitial"></span>
-    </div>
+    <!-- Featured Merchant Storefront Banner -->
+    <section class="merchant-storefront-banner" id="activeMerchantBanner" aria-live="polite">
+        <div class="merchant-banner-top">
+            <div class="merchant-banner-identity">
+                <div class="merchant-avatar-badge" id="merchantAvatarInitial" aria-hidden="true">ت</div>
+                <div>
+                    <div class="merchant-banner-eyebrow">صفحة التاجر الرسمية في كارامل</div>
+                    <h2 class="merchant-banner-name" id="merchantBannerName"></h2>
+                    <div class="merchant-banner-meta" id="merchantBannerCount"></div>
+                </div>
+            </div>
+            <div class="merchant-banner-actions">
+                <button type="button" class="merchant-share-btn" onclick="shareCurrentMerchantPage()">مشاركة صفحة التاجر</button>
+                <button type="button" class="merchant-back-btn" onclick="clearMerchantFilter(true)">← كل التجار</button>
+            </div>
+        </div>
+    </section>
 
     <!-- Main Products Heading -->
     <div class="section-heading" id="productsSectionHeading">
@@ -397,9 +408,9 @@
         <div class="preview-thumbs-row is-hidden" id="previewThumbsRow"></div>
         <div class="preview-body">
             <div class="preview-meta-chips">
-                <div style="display:flex;gap:6px;align-items:center;">
+                <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
                     <span class="preview-chip" id="previewCategoryChip">متجر كارامل</span>
-                    <span class="preview-chip is-hidden" id="previewMerchantChip"></span>
+                    <button type="button" class="preview-merchant-btn is-hidden" id="previewMerchantChip"></button>
                 </div>
                 <button type="button" class="preview-copy-link-btn" id="previewCopyLinkBtn">نسخ الرابط</button>
             </div>
@@ -411,7 +422,7 @@
             <div class="preview-story-text" id="previewStoryText"></div>
             <div class="preview-hook-note" id="previewHookNote"></div>
             <div class="preview-related-section is-hidden" id="previewRelatedSection">
-                <div class="preview-related-title-heading">منتجات مشابهة</div>
+                <div class="preview-related-title-heading">منتجات مشابهة أو لنفس التاجر</div>
                 <div class="preview-related-list" id="previewRelatedList"></div>
             </div>
             <div class="preview-actions-row">
@@ -487,6 +498,6 @@
 <!-- Toast -->
 <div class="caramel-toast" id="caramelToast" role="status" aria-live="polite"></div>
 
-<script src="./app.js"></script>
+<script src="./app.js?v=4"></script>
 </body>
 </html>
