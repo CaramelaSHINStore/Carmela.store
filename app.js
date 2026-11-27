@@ -170,21 +170,6 @@ let autoHoverSlideTimer = null;
 let activeHoveredCard = null;
 let previewModalState = { productId: null, imgs: [], idx: 0 };
 let feedObserver = null;
-let overlayStack = [];
-let currentCategory = "all";
-let currentMerchant = "";
-let currentMaxPrice = 0;
-let currentFeedItems = [];
-let renderedCount = 0;
-let feedCycle = 0;
-let continuationItems = [];
-let continuationBatchIndex = 0;
-let continuationCursor = 0;
-let cart = [];
-let activeOrders = [];
-let receivedOrders = [];
-let interestData = { categories: {}, keywords: {}, seenIds: [], sessionRoll: Math.random() };
-let customerLocationCoords = null;
 
 function createDebounced(fn, delay = 180) {
     let timer = null;
@@ -398,35 +383,8 @@ function copyProductShareLink(productId, event) {
 function renderMerchantsQuickStrip() {
     const strip = document.getElementById("merchantsQuickStrip");
     if (!strip) return;
-    if (!PRODUCTS.length) {
-        strip.innerHTML = "";
-        strip.classList.add("is-hidden");
-        return;
-    }
-
-    const counts = new Map();
-    PRODUCTS.forEach(p => {
-        const m = (p.merchant || "متجر كارامل").trim();
-        counts.set(m, (counts.get(m) || 0) + 1);
-    });
-
-    const merchants = Array.from(counts.entries());
-    if (!merchants.length) {
-        strip.innerHTML = "";
-        strip.classList.add("is-hidden");
-        return;
-    }
-
-    strip.classList.remove("is-hidden");
-    const allActive = !currentMerchant ? "active" : "";
-    let html = `<span class="merchants-strip-label">التجار:</span>`;
-    html += `<button type="button" class="merchant-chip-btn ${allActive}" onclick="clearMerchantFilter(true)">الكل <span class="merchant-chip-count">${PRODUCTS.length}</span></button>`;
-
-    merchants.forEach(([mName, count]) => {
-        const activeCls = currentMerchant === mName ? "active" : "";
-        html += `<button type="button" class="merchant-chip-btn ${activeCls}" onclick="filterByMerchant('${escapeHtmlAttr(mName)}', true)">${escapeHtmlAttr(mName)} <span class="merchant-chip-count">${count}</span></button>`;
-    });
-    strip.innerHTML = html;
+    strip.innerHTML = "";
+    strip.classList.add("is-hidden");
 }
 
 function renderMerchantInnerCategories(merchantName) {
@@ -560,15 +518,9 @@ window.addEventListener("scroll", () => {
     }
 }, { passive: true });
 
-window.addEventListener("popstate", () => {
-    if (overlayStack.length > 0) {
-        closeTopOverlay(true);
-    }
-});
-
 document.addEventListener("keydown", e => {
     if (e.key === "Escape" && overlayStack.length > 0) {
-        closeTopOverlay(false);
+        closeAllOverlays();
     }
 });
 
@@ -874,8 +826,7 @@ function normalizeSizeOrOptionEntry(entry, fallbackPrice = 0) {
     if (typeof entry === "string") {
         const label = entry.trim();
         if (!label) return null;
-        const normalizedDigitsLabel = normalizeArabicDigits(label);
-        const priceMatch = normalizedDigitsLabel.match(/(\d+(?:\.\d+)?)\s*(?:جنيه|ج(?:نيه)?\b|egp)/i);
+        const priceMatch = label.match(/(\d+(?:\.\d+)?)\s*(?:جنيه| ج |egp)/i);
         const parsed = priceMatch ? parseNumericPrice(priceMatch[1]) : 0;
         return { label, price: parsed > 0 ? parsed : (Number(fallbackPrice) || 0) };
     }
@@ -929,7 +880,7 @@ function showCaramelToast(message) {
     toastTimer = setTimeout(() => { toastEl.classList.remove("show"); }, 3200);
 }
 
-const APP_BUILD_VERSION = "v20261127-9";
+const APP_BUILD_VERSION = "v20261127-8";
 const APPLIED_BUILD_KEY = "caramel_applied_build_version_v1";
 let pendingUpdateAvailable = false;
 
@@ -1553,6 +1504,10 @@ function applyUrlDeepLinkParams() {
     } catch (e) {}
 }
 
+let currentCategory = "all";
+let currentMerchant = "";
+let currentMaxPrice = 0;
+
 function setPriceFilter(maxPrice) {
     currentMaxPrice = Number(maxPrice) || 0;
     renderProducts(currentCategory);
@@ -1669,6 +1624,18 @@ function shareCurrentMerchantPage() {
         launchWhatsAppTarget(`https://wa.me/?text=${encodeURIComponent(shareText)}`);
     }
 }
+
+let currentFeedItems = [];
+let renderedCount = 0;
+let feedCycle = 0;
+let continuationItems = [];
+let continuationBatchIndex = 0;
+let continuationCursor = 0;
+let cart = [];
+let activeOrders = [];
+let receivedOrders = [];
+let overlayStack = [];
+let interestData = { categories: {}, keywords: {}, seenIds: [], sessionRoll: Math.random() };
 
 function isFullSelectionMode() {
     return Boolean(currentMerchant) || Boolean(currentCategory && currentCategory !== "all");
@@ -3286,6 +3253,8 @@ function clearReceivedOrdersHistory() {
     }, "مسح");
 }
 
+let customerLocationCoords = null;
+
 function setCustomerLocationStatus(text, isLocated = false, previewText = "") {
     const btn = document.getElementById("cartLocationBtn");
     const btnText = document.getElementById("cartLocationBtnText");
@@ -3349,11 +3318,6 @@ function pulseBottomNavButton(btnId) {
 function pushOverlayState(name) {
     overlayStack = overlayStack.filter(n => n !== name);
     overlayStack.push(name);
-    try {
-        if (window.history && typeof window.history.pushState === "function") {
-            window.history.pushState({ caramelOverlay: name }, "");
-        }
-    } catch (e) {}
 }
 
 function removeOverlayState(name) {
@@ -3367,6 +3331,7 @@ function isAnyOverlayOpen() {
         document.getElementById("imageModal")?.classList.contains("open") ||
         document.getElementById("productOptionModal")?.classList.contains("open") ||
         document.getElementById("serviceInfoModal")?.classList.contains("open") ||
+        document.getElementById("becomeMerchantModal")?.classList.contains("open") ||
         document.getElementById("confirmActionModal")?.classList.contains("open")
     );
 }
@@ -3384,6 +3349,7 @@ function closeTopOverlay(fromPopState = false) {
     else if (topName === "image") closeImageModal(true);
     else if (topName === "option") closeProductOptionModal(true);
     else if (topName === "serviceInfo") closeServiceInfoModal(true);
+    else if (topName === "becomeMerchant") closeBecomeMerchantModal(true);
     else if (topName === "confirm") closeConfirmModal(true, true);
     syncBodyScrollLock();
     return true;
@@ -3396,6 +3362,7 @@ function closeAllOverlays() {
     closeImageModal(true);
     closeProductOptionModal(true);
     closeServiceInfoModal(true);
+    closeBecomeMerchantModal(true);
     closeConfirmModal(true, true);
     overlayStack = [];
     syncBodyScrollLock();
@@ -3656,8 +3623,6 @@ function syncOptionModalGallery(product) {
     if (imgEl && currentSrc) {
         imgEl.style.opacity = "1";
         imgEl.removeAttribute("data-broken");
-        imgEl.setAttribute("data-retry-step", "0");
-        imgEl.setAttribute("data-product-id", product.id || "");
         imgEl.src = currentSrc;
     }
 
@@ -4194,6 +4159,57 @@ function initCaramelSplashScreen() {
     splash.addEventListener("click", finishSplash, { once: true });
 }
 
+
+function openBecomeMerchantModal() {
+    const modal = document.getElementById("becomeMerchantModal");
+    if (!modal) return;
+    modal.classList.add("open");
+    syncBodyScrollLock();
+    pushOverlayState("becomeMerchant");
+    setTimeout(() => {
+        document.getElementById("merchantRegName")?.focus();
+    }, 60);
+}
+
+function closeBecomeMerchantModal(fromPopState = false) {
+    const modal = document.getElementById("becomeMerchantModal");
+    if (modal) modal.classList.remove("open");
+    syncBodyScrollLock();
+    if (!fromPopState) removeOverlayState("becomeMerchant");
+}
+
+function submitBecomeMerchantForm(event) {
+    if (event) event.preventDefault();
+    const nameInput = document.getElementById("merchantRegName");
+    const activityInput = document.getElementById("merchantRegActivity");
+    const phoneInput = document.getElementById("merchantRegPhone");
+
+    const merchantName = (nameInput?.value || "").trim();
+    const activityName = (activityInput?.value || "").trim();
+    const contactPhone = (phoneInput?.value || "").trim();
+
+    if (!merchantName || !activityName || !contactPhone) {
+        showCaramelToast("برجاء إدخال الاسم واسم النشاط ورقم التواصل");
+        return;
+    }
+
+    const message = [
+        "طلب انضمام تاجر جديد — *متجر كارامل*",
+        "",
+        `*الاسم:* ${merchantName}`,
+        `*اسم النشاط:* ${activityName}`,
+        `*رقم التواصل:* ${contactPhone}`
+    ].join("\n");
+
+    closeBecomeMerchantModal(false);
+    if (nameInput) nameInput.value = "";
+    if (activityInput) activityInput.value = "";
+    if (phoneInput) phoneInput.value = "";
+
+    showCaramelToast("جاري تحويلك إلى واتساب لإرسال طلب الانضمام...");
+    launchWhatsAppTarget(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`);
+}
+
 function initApp() {
     initThemeMode();
     syncBrandLogos();
@@ -4214,8 +4230,4 @@ function initApp() {
     loadMerchantProductsFromJson(false);
 }
 
-if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initApp, { once: true });
-} else {
-    initApp();
-}
+initApp();
