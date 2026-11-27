@@ -1,4 +1,4 @@
-const CACHE_VERSION = "caramel-store-v20261127-5";
+const CACHE_VERSION = "caramel-store-v20261127-6";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
