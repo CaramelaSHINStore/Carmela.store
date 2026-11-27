@@ -901,7 +901,7 @@ function showCaramelToast(message) {
     toastTimer = setTimeout(() => { toastEl.classList.remove("show"); }, 3200);
 }
 
-const APP_BUILD_VERSION = "v20261127-9";
+const APP_BUILD_VERSION = "v20261127-10";
 const APPLIED_BUILD_KEY = "caramel_applied_build_version_v1";
 let pendingUpdateAvailable = false;
 
@@ -2798,7 +2798,8 @@ function renderProducts(category = "all") {
     }
 
     if (badgeEl) {
-        badgeEl.textContent = `${filtered.length} منتج`;
+        badgeEl.textContent = "";
+        badgeEl.style.display = "none";
     }
 
     if (summaryBar && summaryText) {
@@ -4175,46 +4176,28 @@ function initCaramelSplashScreen() {
     const typedTextEl = document.getElementById("caramelSplashTypedText");
     if (!splash) return;
 
-    const fullSlogan = "كل قطعة وليها دور";
-    let typedIndex = 0;
-    let typeTimer = null;
     let dismissTimer = null;
     let dismissed = false;
 
     const finishSplash = () => {
         if (dismissed) return;
         dismissed = true;
-        if (typeTimer) clearInterval(typeTimer);
         if (dismissTimer) clearTimeout(dismissTimer);
         splash.classList.add("hide");
         setTimeout(() => { if (splash && splash.parentNode) splash.remove(); }, 480);
     };
 
-    if (typedTextEl) typedTextEl.textContent = "";
+    if (typedTextEl) typedTextEl.textContent = "كل قطعة وليها دور";
 
-    // Phase 1: Logo & brand name settle, then rectangular box descends smoothly under the logo
+    // Logo & brand name appear first, then the slogan plaque descends smoothly underneath as one complete piece
     setTimeout(() => {
         if (dismissed) return;
         if (subRect) subRect.classList.add("descend-in");
-
-        // Phase 2: Slogan text appears clearly inside the rectangle at a calm, readable pace
-        setTimeout(() => {
-            if (dismissed || !typedTextEl) return;
-            typeTimer = setInterval(() => {
-                if (dismissed) { clearInterval(typeTimer); return; }
-                typedIndex += 1;
-                typedTextEl.textContent = fullSlogan.slice(0, typedIndex);
-                if (typedIndex >= fullSlogan.length) {
-                    clearInterval(typeTimer);
-                    // Hold so the user enjoys the finished slogan & rectangular frame
-                    dismissTimer = setTimeout(finishSplash, 900);
-                }
-            }, 85);
-        }, 260);
-    }, 280);
+        dismissTimer = setTimeout(finishSplash, 1450);
+    }, 340);
 
     // Safety ceiling so splash never stays stuck
-    setTimeout(finishSplash, 3400);
+    setTimeout(finishSplash, 2600);
     splash.addEventListener("click", finishSplash, { once: true });
 }
 
