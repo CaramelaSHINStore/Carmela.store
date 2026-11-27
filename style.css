@@ -55,6 +55,13 @@ body.dark-theme[class*="cat-mode-"] {
     --page-mood-bg: #12100e;
 }
 
+body.merchant-storefront-mode {
+    --page-mood-bg: #f4efe8;
+}
+body.dark-theme.merchant-storefront-mode {
+    --page-mood-bg: #14110d;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -483,6 +490,146 @@ body.dark-theme .price-chip-btn.active {
     border-color: var(--caramel);
 }
 
+/* Merchants Quick Strip */
+.merchants-quick-strip {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 12px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    background: var(--surface-elevated);
+    border-bottom: 1px solid var(--border-subtle);
+}
+.merchants-quick-strip::-webkit-scrollbar { display: none; }
+.merchants-strip-label {
+    font-size: 0.72rem;
+    font-weight: 900;
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+.merchant-chip-btn {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 11px;
+    border-radius: 999px;
+    background: var(--surface-soft);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-main);
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.73rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+.merchant-chip-btn:hover {
+    border-color: var(--border-gold);
+}
+.merchant-chip-btn.active {
+    background: linear-gradient(135deg, var(--espresso), var(--espresso-soft));
+    color: #f8e4c8;
+    border-color: var(--caramel);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
+}
+body.dark-theme .merchant-chip-btn.active {
+    background: linear-gradient(135deg, var(--caramel-light), var(--caramel));
+    color: #14110f;
+}
+.merchant-chip-count {
+    font-size: 0.65rem;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: rgba(200, 150, 102, 0.18);
+}
+
+/* Featured Merchant Storefront Banner */
+.merchant-storefront-banner {
+    display: none;
+    background: linear-gradient(135deg, #1d1814, #2f251d);
+    color: #fff8ef;
+    border: 1px solid rgba(229, 190, 150, 0.45);
+    border-radius: 18px;
+    padding: 14px;
+    margin-bottom: 12px;
+    box-shadow: 0 14px 30px -14px rgba(18, 16, 14, 0.45);
+}
+.merchant-storefront-banner.visible {
+    display: block;
+    animation: bannerReveal 0.25s ease;
+}
+@keyframes bannerReveal {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.merchant-banner-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.merchant-banner-identity {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+.merchant-avatar-badge {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--caramel-light), var(--caramel-dark));
+    color: #14110f;
+    font-size: 1.15rem;
+    font-weight: 900;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+.merchant-banner-eyebrow {
+    font-size: 0.68rem;
+    font-weight: 800;
+    color: var(--caramel-light);
+}
+.merchant-banner-name {
+    font-size: 1.08rem;
+    font-weight: 900;
+    line-height: 1.25;
+}
+.merchant-banner-meta {
+    font-size: 0.74rem;
+    color: rgba(255, 248, 239, 0.82);
+    margin-top: 2px;
+}
+.merchant-banner-actions {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+.merchant-share-btn, .merchant-back-btn {
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.74rem;
+    font-weight: 800;
+    cursor: pointer;
+}
+.merchant-share-btn {
+    background: rgba(229, 190, 150, 0.18);
+    border: 1px solid rgba(229, 190, 150, 0.45);
+    color: #fff5e6;
+}
+.merchant-back-btn {
+    background: #ffffff;
+    border: none;
+    color: #14110f;
+}
+
 /* Main Container */
 .container {
     max-width: 1220px;
@@ -556,7 +703,7 @@ body.dark-theme .price-chip-btn.active {
 }
 body.dark-theme .promo-cs-link { color: #4ade80; }
 .promo-special-link {
-    background: var(--accent-tint);
+    background: linear-gradient(135deg, var(--accent-tint), rgba(200, 150, 102, 0.18));
     color: var(--accent-deep);
     border: 1px solid var(--border-gold);
 }
@@ -800,6 +947,9 @@ body.dark-theme .smart-tag { color: var(--caramel-light); }
 .product-card.card-style-gold {
     border-color: rgba(217, 119, 6, 0.45);
 }
+body.merchant-storefront-mode .product-card {
+    border-color: rgba(200, 150, 102, 0.36);
+}
 .card-json-badge {
     position: absolute;
     top: 8px;
@@ -917,6 +1067,29 @@ body.dark-theme .smart-tag { color: var(--caramel-light); }
     justify-content: space-between;
     gap: 8px;
     flex: 1;
+}
+.product-merchant-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 3px;
+}
+.product-merchant-link {
+    background: var(--accent-tint);
+    border: 1px solid var(--border-gold);
+    color: var(--accent-deep);
+    border-radius: 999px;
+    padding: 1px 8px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 800;
+    cursor: pointer;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+body.dark-theme .product-merchant-link {
+    color: var(--caramel-light);
 }
 .product-title {
     font-size: 0.82rem;
@@ -1820,6 +1993,17 @@ body.dark-theme .order-id-code { color: var(--caramel-light); }
     color: var(--accent-deep);
 }
 body.dark-theme .preview-chip { color: var(--caramel-light); }
+.preview-merchant-btn {
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 2px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border-gold);
+    background: var(--espresso);
+    color: #f8e4c8;
+    cursor: pointer;
+}
 .preview-copy-link-btn {
     border: 1px solid var(--border-subtle);
     background: var(--surface-soft);
