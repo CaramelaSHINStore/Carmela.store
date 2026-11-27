@@ -1,4 +1,4 @@
-const CACHE_VERSION = "v20261128-01";
+const CACHE_VERSION = "v20261128-02";
 const STATIC_CACHE = `caramel-static-${CACHE_VERSION}`;
 const IMAGE_CACHE = `caramel-images-${CACHE_VERSION}`;
 const MAX_CACHED_IMAGES = 140;
@@ -6,9 +6,9 @@ const MAX_CACHED_IMAGES = 140;
 const CORE_ASSETS = [
   "./",
   "./index.html",
-  "./style.css?v=v20261128-01",
-  "./app.js?v=v20261128-01",
-  "./manifest.json?v=v20261128-01",
+  "./style.css?v=v20261128-02",
+  "./app.js?v=v20261128-02",
+  "./manifest.json?v=v20261128-02",
   "./compressed_1795766509611.jpeg"
 ];
 
