@@ -678,12 +678,15 @@ function setCardImageByIndex(card, product, targetIdx) {
     const dots = card.querySelectorAll(".card-img-dot");
     const waLinkEl = card.querySelector(".direct-wa-link");
 
+    const nextImgSrc = imgs[safeIdx];
+    const isNextSoldOut = isProductImageSoldOut(product, nextImgSrc);
     if (imgEl) {
         imgEl.setAttribute("data-img-idx", String(safeIdx));
         imgEl.setAttribute("data-retry-step", "0");
         imgEl.style.opacity = "1";
         imgEl.removeAttribute("data-broken");
-        imgEl.src = imgs[safeIdx];
+        imgEl.src = nextImgSrc;
+        syncSoldOutOverlayOnElement(imgEl, isNextSoldOut);
     }
     if (counterEl && imgs.length > 1) {
         counterEl.textContent = `${safeIdx + 1}/${imgs.length}`;
@@ -1447,6 +1450,9 @@ function normalizeRawJsonProduct(rawItem, index, slugPrefix, fileMerchant, fileS
 
     normalized.merchant = inferMerchantForProduct(normalized, fileMerchant);
     const existingExtraCats = Array.isArray(rawItem.categories) ? rawItem.categories.map(c => inferCategorySmartly(c, itemTitle, itemDesc)) : [];
+    normalized.soldOutImages = Array.isArray(rawItem.soldOutImages)
+        ? rawItem.soldOutImages.map(u => normalizeProductImageUrl(u)).filter(Boolean)
+        : [];
     normalized.categories = Array.from(new Set([...existingExtraCats, ...inferAdditionalCategoriesSmartly(resolvedCategory, itemTitle, itemDesc)]));
     return normalized;
 }
@@ -2579,8 +2585,12 @@ function buildProductCardHTML(product, isContinuation = false) {
         </div>
     ` : "";
 
+    const isPrimarySoldOut = isProductImageSoldOut(product, primaryImg);
     const imgTag = primaryImg
-        ? `<img src="${escapeHtmlAttr(primaryImg)}" alt="${escapeHtmlAttr(product.title)}" data-img-idx="0" data-retry-step="0" loading="lazy" decoding="async" onload="this.style.opacity='1'" onerror="handleProductImageError(this, '${escapeHtmlAttr(product.id)}')">`
+        ? `<span class="media-soldout-wrap ${isPrimarySoldOut ? "is-soldout" : ""}">
+            <img src="${escapeHtmlAttr(primaryImg)}" alt="${escapeHtmlAttr(product.title)}" data-img-idx="0" data-retry-step="0" loading="lazy" decoding="async" onload="this.style.opacity='1'" onerror="handleProductImageError(this, '${escapeHtmlAttr(product.id)}')">
+            ${isPrimarySoldOut ? `<span class="soldout-badge-overlay">نفدت الكمية</span>` : ""}
+           </span>`
         : "";
 
     const merchantBadgeRow = `
@@ -3535,11 +3545,15 @@ function syncPreviewGalleryUI() {
     const idx = previewModalState.idx || 0;
     const currentSrc = imgs[idx] || "";
 
+    const previewProduct = PRODUCTS.find(p => p.id === previewModalState.productId);
+    const isMainSoldOut = isProductImageSoldOut(previewProduct, currentSrc);
+
     if (modalImg && currentSrc) {
         modalImg.style.opacity = "1";
         modalImg.removeAttribute("data-broken");
         modalImg.setAttribute("data-retry-step", "0");
         modalImg.src = currentSrc;
+        syncSoldOutOverlayOnElement(modalImg, isMainSoldOut);
     }
 
     const hasMany = imgs.length > 1;
@@ -3552,11 +3566,17 @@ function syncPreviewGalleryUI() {
             thumbsRow.classList.add("is-hidden");
         } else {
             thumbsRow.classList.remove("is-hidden");
-            thumbsRow.innerHTML = imgs.map((u, i) => `
-                <button type="button" class="preview-thumb-btn ${i === idx ? "active" : ""}" onclick="selectPreviewThumb(${i}, event)" aria-label="صورة ${i + 1}">
-                    <img src="${escapeHtmlAttr(u)}" alt="" onerror="handleProductImageError(this, '${escapeHtmlAttr(previewModalState.productId || "")}')">
+            thumbsRow.innerHTML = imgs.map((u, i) => {
+                const thumbSoldOut = isProductImageSoldOut(previewProduct, u);
+                return `
+                <button type="button" class="preview-thumb-btn ${i === idx ? "active" : ""} ${thumbSoldOut ? "is-soldout" : ""}" onclick="selectPreviewThumb(${i}, event)" aria-label="صورة ${i + 1}">
+                    <span class="media-soldout-wrap ${thumbSoldOut ? "is-soldout" : ""}">
+                        <img src="${escapeHtmlAttr(u)}" alt="" onerror="handleProductImageError(this, '${escapeHtmlAttr(previewModalState.productId || "")}')">
+                        ${thumbSoldOut ? `<span class="soldout-badge-overlay">نفدت الكمية</span>` : ""}
+                    </span>
                 </button>
-            `).join("");
+            `;
+            }).join("");
         }
     }
 
@@ -3732,11 +3752,13 @@ function syncOptionModalGallery(product) {
     const imgEl = document.getElementById("optionModalImg");
     const thumbsRow = document.getElementById("optionModalThumbsRow");
     const currentSrc = normalizeProductImageUrl(pendingOptionSelection.selectedImg) || imgs[0] || "";
+    const isCurrentSoldOut = isProductImageSoldOut(product, currentSrc);
 
     if (imgEl && currentSrc) {
         imgEl.style.opacity = "1";
         imgEl.removeAttribute("data-broken");
         imgEl.src = currentSrc;
+        syncSoldOutOverlayOnElement(imgEl, isCurrentSoldOut);
     }
 
     if (thumbsRow) {
@@ -3745,11 +3767,17 @@ function syncOptionModalGallery(product) {
             thumbsRow.classList.add("is-hidden");
         } else {
             thumbsRow.classList.remove("is-hidden");
-            thumbsRow.innerHTML = imgs.map((u, idx) => `
-                <button type="button" class="preview-thumb-btn ${u === currentSrc ? "active" : ""}" onclick="selectOptionModalThumb(${idx})" aria-label="صورة ${idx + 1}">
-                    <img src="${escapeHtmlAttr(u)}" alt="" onerror="handleProductImageError(this, '${escapeHtmlAttr(product.id)}')">
+            thumbsRow.innerHTML = imgs.map((u, idx) => {
+                const thumbSoldOut = isProductImageSoldOut(product, u);
+                return `
+                <button type="button" class="preview-thumb-btn ${u === currentSrc ? "active" : ""} ${thumbSoldOut ? "is-soldout" : ""}" onclick="selectOptionModalThumb(${idx})" aria-label="صورة ${idx + 1}">
+                    <span class="media-soldout-wrap ${thumbSoldOut ? "is-soldout" : ""}">
+                        <img src="${escapeHtmlAttr(u)}" alt="" onerror="handleProductImageError(this, '${escapeHtmlAttr(product.id)}')">
+                        ${thumbSoldOut ? `<span class="soldout-badge-overlay">نفدت الكمية</span>` : ""}
+                    </span>
                 </button>
-            `).join("");
+            `;
+            }).join("");
         }
     }
 }
@@ -4347,6 +4375,48 @@ function submitBecomeMerchantForm(event) {
 
     showCaramelToast("جاري تحويلك إلى واتساب لإرسال طلب الانضمام...");
     launchWhatsAppTarget(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`);
+}
+
+
+function isProductImageSoldOut(product, imgSrc) {
+    if (!product || !Array.isArray(product.soldOutImages) || !product.soldOutImages.length) {
+        return false;
+    }
+    const target = normalizeProductImageUrl(imgSrc);
+    if (!target) return false;
+    const soldSet = new Set(
+        product.soldOutImages.map(u => normalizeProductImageUrl(u)).filter(Boolean)
+    );
+    return soldSet.has(target);
+}
+
+function syncSoldOutOverlayOnElement(mediaEl, isSoldOut, labelText = "نفدت الكمية") {
+    if (!mediaEl || !mediaEl.parentElement) return;
+    let wrap = mediaEl.parentElement.classList.contains("media-soldout-wrap")
+        ? mediaEl.parentElement
+        : mediaEl.parentElement.closest(".media-soldout-wrap");
+
+    if (!wrap) {
+        wrap = document.createElement("div");
+        wrap.className = "media-soldout-wrap";
+        mediaEl.parentNode.insertBefore(wrap, mediaEl);
+        wrap.appendChild(mediaEl);
+    }
+
+    wrap.classList.toggle("is-soldout", Boolean(isSoldOut));
+    let badge = wrap.querySelector(":scope > .soldout-badge-overlay");
+    if (isSoldOut) {
+        if (!badge) {
+            badge = document.createElement("span");
+            badge.className = "soldout-badge-overlay";
+            badge.textContent = labelText;
+            wrap.appendChild(badge);
+        } else {
+            badge.textContent = labelText;
+        }
+    } else if (badge) {
+        badge.remove();
+    }
 }
 
 function initApp() {
