@@ -37,7 +37,51 @@
         "img": "Omwaled/compressed_1795517024344.webp",
         "status": "نفذت الكمية"
       }
-    ]
+    ],
+    "gallery": [
+      {
+        "index": 0,
+        "src": "Omwaled/compressed_1795517021993.webp",
+        "available": true,
+        "soldOut": false,
+        "badge": null,
+        "overlayText": null,
+        "statusLabel": "متوفر",
+        "disabled": false
+      },
+      {
+        "index": 1,
+        "src": "Omwaled/compressed_1795517010110.webp",
+        "available": true,
+        "soldOut": false,
+        "badge": null,
+        "overlayText": null,
+        "statusLabel": "متوفر",
+        "disabled": false
+      },
+      {
+        "index": 2,
+        "src": "Omwaled/compressed_1795517024344.webp",
+        "available": false,
+        "soldOut": true,
+        "badge": "نفذت الكمية",
+        "overlayText": "نفذت الكمية",
+        "statusLabel": "نفذت الكمية",
+        "disabled": true
+      },
+      {
+        "index": 3,
+        "src": "Omwaled/compressed_1795517014913.webp",
+        "available": true,
+        "soldOut": false,
+        "badge": null,
+        "overlayText": null,
+        "statusLabel": "متوفر",
+        "disabled": false
+      }
+    ],
+    "hasSoldOutImages": true,
+    "soldOutNotice": "بعض الصور المعروضة (نفذت الكمية) غير متاحة حالياً."
   },
   {
     "id": "om-waleed-watches-collection-200",
@@ -86,7 +130,61 @@
         "img": "Omwaled/compressed_1795517029070.webp",
         "status": "نفذت الكمية"
       }
-    ]
+    ],
+    "gallery": [
+      {
+        "index": 0,
+        "src": "Omwaled/compressed_1795517033781.webp",
+        "available": false,
+        "soldOut": true,
+        "badge": "نفذت الكمية",
+        "overlayText": "نفذت الكمية",
+        "statusLabel": "نفذت الكمية",
+        "disabled": true
+      },
+      {
+        "index": 1,
+        "src": "Omwaled/compressed_1795517031412.webp",
+        "available": true,
+        "soldOut": false,
+        "badge": null,
+        "overlayText": null,
+        "statusLabel": "متوفر",
+        "disabled": false
+      },
+      {
+        "index": 2,
+        "src": "Omwaled/compressed_1795517026716.webp",
+        "available": true,
+        "soldOut": false,
+        "badge": null,
+        "overlayText": null,
+        "statusLabel": "متوفر",
+        "disabled": false
+      },
+      {
+        "index": 3,
+        "src": "Omwaled/compressed_1795517029070.webp",
+        "available": false,
+        "soldOut": true,
+        "badge": "نفذت الكمية",
+        "overlayText": "نفذت الكمية",
+        "statusLabel": "نفذت الكمية",
+        "disabled": true
+      },
+      {
+        "index": 4,
+        "src": "Omwaled/compressed_1795517019607.webp",
+        "available": true,
+        "soldOut": false,
+        "badge": null,
+        "overlayText": null,
+        "statusLabel": "متوفر",
+        "disabled": false
+      }
+    ],
+    "hasSoldOutImages": true,
+    "soldOutNotice": "بعض الصور المعروضة (نفذت الكمية) غير متاحة حالياً."
   },
   {
     "id": "om-waleed-leather-watches-collection-150",
