@@ -1,5 +1,5 @@
 const WHATSAPP_NUMBER = "201055436305";
-const BRAND_LOGO_URL = "https://raw.githubusercontent.com/Caramelstoresuez/Carmelastore/main/IMG_%D9%A0%D9%A1%D9%A3%D9%A9%D9%A2%D9%A5_%D9%A2%D9%A0%D9%A2%D9%A6%D9%A1%D9%A1%D9%A2%D9%A7_048.jpg";
+const BRAND_LOGO_URL = "./compressed_1795766509611.jpeg";
 
 function buildWhatsAppDeepLink(url) {
     try {
