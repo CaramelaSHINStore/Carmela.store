@@ -19,8 +19,9 @@ self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
-    ).then(() => self.clients.claim())
+    )
   );
+  self.clients.claim();
 });
 
 self.addEventListener("message", event => {
@@ -34,6 +35,7 @@ self.addEventListener("fetch", event => {
   const url = new URL(event.request.url);
   if (url.origin !== self.location.origin) return;
 
+  // Always prefer fresh JSON catalog data with offline cache fallback
   if (url.pathname.endsWith(".json")) {
     event.respondWith(
       fetch(event.request)
@@ -44,14 +46,15 @@ self.addEventListener("fetch", event => {
           }
           return response;
         })
-        .catch(() => caches.match(event.request, { ignoreSearch: true }))
+        .catch(() => caches.match(event.request))
     );
     return;
   }
 
+  // Cache First for images and icons
   if (/\.(jpe?g|png|webp|gif|svg|ico)$/i.test(url.pathname)) {
     event.respondWith(
-      caches.match(event.request, { ignoreSearch: true }).then(cached => {
+      caches.match(event.request).then(cached => {
         const networkFetch = fetch(event.request).then(response => {
           if (response && response.status === 200) {
             const copy = response.clone();
@@ -65,8 +68,9 @@ self.addEventListener("fetch", event => {
     return;
   }
 
+  // Stale-While-Revalidate for HTML/CSS/JS/manifest
   event.respondWith(
-    caches.match(event.request, { ignoreSearch: true }).then(cached => {
+    caches.match(event.request).then(cached => {
       const networkFetch = fetch(event.request).then(response => {
         if (response && response.status === 200) {
           const copy = response.clone();
