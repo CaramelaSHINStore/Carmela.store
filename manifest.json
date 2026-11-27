@@ -1,8 +1,8 @@
 {
   "name": "متجر كارامل - Caramel Store",
   "short_name": "كارامل ستور",
-  "description": "متجر كارامل - تسوق منتجات متنوعة من تجار المتجر وعروض مميزة بسهولة عبر واتساب",
-  "start_url": "./",
+  "description": "تسوق منتجات متنوعة وعروض مميزة بسهولة عبر واتساب من متجر كارامل",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
@@ -12,44 +12,16 @@
   "lang": "ar",
   "icons": [
     {
-      "src": "./compressed_1795766509611.jpeg?v=4",
+      "src": "./compressed_1795766509611.jpeg",
       "sizes": "192x192",
       "type": "image/jpeg",
       "purpose": "any"
     },
     {
-      "src": "./compressed_1795766509611.jpeg?v=4",
+      "src": "./compressed_1795766509611.jpeg",
       "sizes": "512x512",
       "type": "image/jpeg",
-      "purpose": "any maskable"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "سلة المشتريات",
-      "short_name": "السلة",
-      "description": "عرض سلة المشتريات والطلبات الحالية",
-      "url": "./?openCart=1",
-      "icons": [
-        {
-          "src": "./compressed_1795766509611.jpeg?v=4",
-          "sizes": "192x192",
-          "type": "image/jpeg"
-        }
-      ]
-    },
-    {
-      "name": "قسم الهدايا",
-      "short_name": "الهدايا",
-      "description": "تصفح قسم الهدايا في متجر كارامل",
-      "url": "./?category=gifts",
-      "icons": [
-        {
-          "src": "./compressed_1795766509611.jpeg?v=4",
-          "sizes": "192x192",
-          "type": "image/jpeg"
-        }
-      ]
+      "purpose": "any"
     }
   ]
 }
