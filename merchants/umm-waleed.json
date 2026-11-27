@@ -13,7 +13,7 @@
     "images": [
       "Omwaled/compressed_1795517021993.webp",
       "Omwaled/compressed_1795517010110.webp",
-      "Omwaled/compressed_1795517024344_sold_out.webp",
+      "Omwaled/compressed_1795517024344.webp",
       "Omwaled/compressed_1795517014913.webp"
     ],
     "desc": "ساعات معدنية أنيقة متوفرة بعدة أشكال وألوان للميناء (ذهبي، أزرق، وأرقام رومانية) بسعر 250 جنيه. يرجى تحديد اللون أو الموديل المطلوب عند الطلب.",
@@ -31,6 +31,12 @@
         "label": "أرقام رومانية (250 جنيه)",
         "price": 250
       }
+    ],
+    "soldOutImages": [
+      {
+        "img": "Omwaled/compressed_1795517024344.webp",
+        "status": "نفذت الكمية"
+      }
     ]
   },
   {
@@ -43,12 +49,12 @@
       "gifts"
     ],
     "price": 200,
-    "img": "Omwaled/compressed_1795517033781.webp",
+    "img": "Omwaled/compressed_1795517031412.webp",
     "images": [
       "Omwaled/compressed_1795517033781.webp",
       "Omwaled/compressed_1795517031412.webp",
-      "Omwaled/compressed_1795517029070.webp",
       "Omwaled/compressed_1795517026716.webp",
+      "Omwaled/compressed_1795517029070.webp",
       "Omwaled/compressed_1795517019607.webp"
     ],
     "desc": "ساعات معدنية أنيقة متوفرة بعدة أشكال وألوان للميناء (أسود، أزرق، ذهبي، وفضي) بسعر 200 جنيه. يرجى تحديد اللون أو الموديل المطلوب عند الطلب.",
@@ -69,6 +75,16 @@
       {
         "label": "فضي (200 جنيه)",
         "price": 200
+      }
+    ],
+    "soldOutImages": [
+      {
+        "img": "Omwaled/compressed_1795517033781.webp",
+        "status": "نفذت الكمية"
+      },
+      {
+        "img": "Omwaled/compressed_1795517029070.webp",
+        "status": "نفذت الكمية"
       }
     ]
   },
@@ -779,7 +795,7 @@
     "desc": "تابلوه كبير مقاس 90×60 سم يجمع عدة صور وعبارات إهداء ليكون قطعة ديكور وذكرى بارزة على الحائط."
   },
   {
-    "id": "om-waleed-khair-home-dryer-1200",
+    "id": "om-waleed-khair-home-dryer-folding-1200",
     "title": "منشر خير هوم مقاوم للصدأ",
     "merchant": "أم وليد",
     "category": "home",
@@ -825,7 +841,7 @@
   },
   {
     "id": "om-waleed-strainers-set-3pcs-stainless-50",
-    "title": "طقم مصافى 3 قطع",
+    "title": "طقم مصافى 3 قطع ستانلس",
     "merchant": "أم وليد",
     "category": "home",
     "categories": [
@@ -870,7 +886,7 @@
   },
   {
     "id": "om-waleed-strainers-set-3pcs-colored-40",
-    "title": "طقم مصافى 3 قطع",
+    "title": "طقم مصافى 3 قطع ملون",
     "merchant": "أم وليد",
     "category": "home",
     "categories": [
