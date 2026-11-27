@@ -865,6 +865,54 @@ function normalizeSizeOrOptionEntry(entry, fallbackPrice = 0) {
     return null;
 }
 
+function resolveProductOptionHeading(product, fallback = "اختر المواصفات:") {
+    if (!product || typeof product !== "object") return fallback;
+    const customLabel = String(
+        product.sizeLabel || product.optionLabel || product.variantLabel || product.choiceLabel || ""
+    ).trim();
+    if (customLabel) {
+        return customLabel.endsWith(":") ? customLabel : `${customLabel}:`;
+    }
+    if (Array.isArray(product.options) && product.options.length) {
+        const firstOpt = product.options.find(o => o && typeof o === "object" && (o.label || o.name || o.title));
+        if (firstOpt) {
+            const lbl = String(firstOpt.label || firstOpt.name || firstOpt.title).trim();
+            if (lbl) return lbl.endsWith(":") ? lbl : `${lbl}:`;
+        }
+    }
+    const apparelCats = ["women", "men", "kids"];
+    const isApparel = !isBagOrNonApparelProduct(product) && (
+        apparelCats.includes(product.category) ||
+        (Array.isArray(product.categories) && product.categories.some(c => apparelCats.includes(c)))
+    );
+    return isApparel ? "اختر المقاس:" : fallback;
+}
+
+function resolveProductColorHeading(product, fallback = "اختر اللون:") {
+    if (!product || typeof product !== "object") return fallback;
+    const customColorLabel = String(product.colorLabel || "").trim();
+    if (customColorLabel) {
+        return customColorLabel.endsWith(":") ? customColorLabel : `${customColorLabel}:`;
+    }
+    return fallback;
+}
+
+function resolveCartOptionShortTag(product) {
+    if (!product || typeof product !== "object") return "الاختيار";
+    const customLabel = String(
+        product.sizeLabel || product.optionLabel || product.variantLabel || product.choiceLabel || ""
+    ).trim();
+    if (customLabel) {
+        return customLabel.replace(/^اختر\s+/, "").replace(/:+$/, "").trim() || "الاختيار";
+    }
+    const apparelCats = ["women", "men", "kids"];
+    const isApparel = !isBagOrNonApparelProduct(product) && (
+        apparelCats.includes(product.category) ||
+        (Array.isArray(product.categories) && product.categories.some(c => apparelCats.includes(c)))
+    );
+    return isApparel ? "المقاس" : "الاختيار";
+}
+
 function getProductVariantConfig(product) {
     if (!product) return null;
     const explicit = PRODUCT_VARIANTS[product.id] || {};
@@ -885,8 +933,14 @@ function getProductVariantConfig(product) {
         if (normalizedSizes.length) config.sizes = normalizedSizes;
     } else if (Array.isArray(explicit.sizes) && explicit.sizes.length) {
         config.sizes = explicit.sizes;
-    } else if (isApparelProduct(product)) {
-        config.sizes = DEFAULT_APPAREL_SIZES;
+    }
+
+    if (config.sizes && config.sizes.length) {
+        config.sizeHeading = resolveProductOptionHeading(product);
+        config.shortTag = resolveCartOptionShortTag(product);
+    }
+    if (config.colors && config.colors.length) {
+        config.colorHeading = resolveProductColorHeading(product);
     }
 
     return ((config.colors && config.colors.length) || (config.sizes && config.sizes.length)) ? config : null;
@@ -2983,7 +3037,7 @@ function renderActiveOrdersSection() {
         const isConfirmedStage = stage === "confirmed";
 
         const itemsHtml = (order.items || []).map(item => {
-            const optsText = [item.selectedSize ? `مقاس/نوع: ${item.selectedSize}` : "", item.selectedColor ? `لون: ${item.selectedColor}` : ""].filter(Boolean).join(" | ");
+            const optsText = [item.selectedSize ? `${resolveCartOptionShortTag(PRODUCTS.find(p => p.id === item.id))}: ${item.selectedSize}` : "", item.selectedColor ? `لون: ${item.selectedColor}` : ""].filter(Boolean).join(" | ");
             const safeItemImg = normalizeProductImageUrl(item.img);
             return `
                 <div class="active-order-item-row">
@@ -3061,7 +3115,7 @@ function renderReceivedOrdersSection() {
         const totalPcs = getOrderTotalPieces(order);
         const isExpanded = expandedOrderIds.has(order.orderId);
         const itemsHtml = (order.items || []).map(item => {
-            const optsText = [item.selectedSize ? `مقاس/نوع: ${item.selectedSize}` : "", item.selectedColor ? `لون: ${item.selectedColor}` : ""].filter(Boolean).join(" | ");
+            const optsText = [item.selectedSize ? `${resolveCartOptionShortTag(PRODUCTS.find(p => p.id === item.id))}: ${item.selectedSize}` : "", item.selectedColor ? `لون: ${item.selectedColor}` : ""].filter(Boolean).join(" | ");
             return `
                 <div class="received-order-item-row">
                     <div>
@@ -3205,7 +3259,7 @@ function sendOrderUpdateOnWhatsApp(orderId) {
     const customerAddress = (document.getElementById("checkoutCustomerAddress")?.value || order.customerAddress || "").trim();
     const locUrl = customerLocationCoords ? `https://maps.google.com/?q=${customerLocationCoords.lat},${customerLocationCoords.lng}` : (order.locationUrl || "");
     const lines = (order.items || []).map((item, idx) => {
-        const details = [item.selectedSize ? `مقاس/نوع: ${item.selectedSize}` : "", item.selectedColor ? `لون: ${item.selectedColor}` : "", item.note ? `ملاحظة: ${item.note}` : ""].filter(Boolean).join(" | ");
+        const details = [item.selectedSize ? `${resolveCartOptionShortTag(PRODUCTS.find(p => p.id === item.id))}: ${item.selectedSize}` : "", item.selectedColor ? `لون: ${item.selectedColor}` : "", item.note ? `ملاحظة: ${item.note}` : ""].filter(Boolean).join(" | ");
         const imgPart = item.img ? ` | صورة: ${item.img}` : "";
         return `${idx + 1}. ${item.title} (الكمية: ${item.qty} × ${formatPriceNumber(item.price)} جنيه = ${formatPriceNumber((Number(item.price) || 0) * (Number(item.qty) || 1))} جنيه)${details ? ` [${details}]` : ""}${imgPart}`;
     });
@@ -3721,7 +3775,9 @@ function handleAddOrSelectOptions(productId, clickedBtnId, sourceBtnEl = null, p
     if (qtyVal) qtyVal.textContent = "1";
     if (noteInput) noteInput.value = "";
 
+    const sizeLabelEl = document.getElementById("optionModalSizeLabel");
     if (variantCfg.sizes && variantCfg.sizes.length) {
+        if (sizeLabelEl) sizeLabelEl.textContent = variantCfg.sizeHeading || resolveProductOptionHeading(product);
         sizeGroup.classList.remove("is-hidden");
         sizePills.innerHTML = variantCfg.sizes.map((sz, idx) => {
             const label = resolveSizeOptionLabel(sz);
@@ -3729,7 +3785,9 @@ function handleAddOrSelectOptions(productId, clickedBtnId, sourceBtnEl = null, p
         }).join("");
     } else sizeGroup.classList.add("is-hidden");
 
+    const colorLabelEl = document.getElementById("optionModalColorLabel");
     if (variantCfg.colors && variantCfg.colors.length) {
+        if (colorLabelEl) colorLabelEl.textContent = variantCfg.colorHeading || resolveProductColorHeading(product);
         colorGroup.classList.remove("is-hidden");
         colorPills.innerHTML = variantCfg.colors.map((col, idx) => `<button type="button" class="option-pill-btn ${idx === 0 ? "selected" : ""}" onclick="selectOptionPill('color', '${escapeHtmlAttr(col)}', this)">${escapeHtmlAttr(col)}</button>`).join("");
     } else colorGroup.classList.add("is-hidden");
@@ -3865,11 +3923,12 @@ function updateCartUI() {
 
                 let sizeSelectHtml = "";
                 if (variantCfg?.sizes?.length) {
+                    const shortTag = variantCfg.shortTag || resolveCartOptionShortTag(product);
                     const opts = variantCfg.sizes.map(sz => {
                         const lbl = resolveSizeOptionLabel(sz);
                         return `<option value="${escapeHtmlAttr(lbl)}" ${item.selectedSize === lbl ? "selected" : ""}>${escapeHtmlAttr(lbl)}</option>`;
                     }).join("");
-                    sizeSelectHtml = `<select class="cart-option-select" onchange="updateCartItemOption(${index}, 'size', this.value)" aria-label="المقاس أو النوع"><option value="">المقاس / النوع</option>${opts}</select>`;
+                    sizeSelectHtml = `<select class="cart-option-select" onchange="updateCartItemOption(${index}, 'size', this.value)" aria-label="${escapeHtmlAttr(shortTag)}"><option value="">${escapeHtmlAttr(shortTag)}</option>${opts}</select>`;
                 }
 
                 let colorSelectHtml = "";
@@ -3963,7 +4022,7 @@ function copyOrderSummaryText() {
     const addr = (document.getElementById("checkoutCustomerAddress")?.value || "").trim();
     const { totalPieces, totalAmount } = getCartTotals();
     const lines = cart.map((item, i) => {
-        const opts = [item.selectedSize ? `نوع/مقاس: ${item.selectedSize}` : "", item.selectedColor ? `لون: ${item.selectedColor}` : "", item.note ? `ملاحظة: ${item.note}` : ""].filter(Boolean).join(" | ");
+        const opts = [item.selectedSize ? `${resolveCartOptionShortTag(PRODUCTS.find(p => p.id === item.id))}: ${item.selectedSize}` : "", item.selectedColor ? `لون: ${item.selectedColor}` : "", item.note ? `ملاحظة: ${item.note}` : ""].filter(Boolean).join(" | ");
         return `${i + 1}. ${item.title} (${item.qty} × ${formatPriceNumber(item.price)} ج)${opts ? ` — ${opts}` : ""}`;
     });
     let summary = `ملخص طلب متجر كارامل:\n${lines.join("\n")}\nعدد القطع: ${totalPieces}\nالإجمالي: ${formatPriceNumber(totalAmount)} جنيه`;
@@ -4019,7 +4078,7 @@ function checkoutOnWhatsApp() {
     saveActiveOrders();
 
     const lines = cart.map((item, idx) => {
-        const details = [item.selectedSize ? `مقاس/نوع: ${item.selectedSize}` : "", item.selectedColor ? `لون: ${item.selectedColor}` : "", item.note ? `ملاحظة: ${item.note}` : ""].filter(Boolean).join(" | ");
+        const details = [item.selectedSize ? `${resolveCartOptionShortTag(PRODUCTS.find(p => p.id === item.id))}: ${item.selectedSize}` : "", item.selectedColor ? `لون: ${item.selectedColor}` : "", item.note ? `ملاحظة: ${item.note}` : ""].filter(Boolean).join(" | ");
         const imgPart = item.img ? ` | صورة: ${item.img}` : "";
         return `${idx + 1}. ${item.title} (الكمية: ${item.qty} × ${formatPriceNumber(item.price)} جنيه = ${formatPriceNumber((Number(item.price) || 0) * (Number(item.qty) || 1))} جنيه)${details ? ` [${details}]` : ""}${imgPart}`;
     });
