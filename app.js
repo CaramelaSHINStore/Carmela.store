@@ -170,11 +170,6 @@ let autoHoverSlideTimer = null;
 let activeHoveredCard = null;
 let previewModalState = { productId: null, imgs: [], idx: 0 };
 let feedObserver = null;
-// Per-render recommendation caches: avoid repeating cart/product scans inside Array.sort().
-let recommendationScoreCache = new Map();
-let recommendationCartCategories = null;
-let recommendationWishlistSet = null;
-const productTokenCache = new WeakMap();
 
 function createDebounced(fn, delay = 180) {
     let timer = null;
@@ -509,18 +504,39 @@ function closeServiceInfoModal(fromPopState = false) {
     if (!fromPopState) removeOverlayState("serviceInfo");
 }
 
+function escapeHtml(str) {
+    return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
+window.addEventListener("popstate", () => {
+    if (overlayStack.length > 0) {
+        closeTopOverlay(true);
+    }
+});
+
+let scrollRafScheduled = false;
 window.addEventListener("scroll", () => {
-    const fill = document.getElementById("scrollProgressFill");
-    const btt = document.getElementById("backToTopFab");
-    const y = window.scrollY;
-    if (fill) {
-        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-        const pct = docHeight > 0 ? Math.min(100, Math.max(0, (y / docHeight) * 100)) : 0;
-        fill.style.width = `${pct}%`;
-    }
-    if (btt) {
-        btt.classList.toggle("visible", y > 420);
-    }
+    if (scrollRafScheduled) return;
+    scrollRafScheduled = true;
+    requestAnimationFrame(() => {
+        scrollRafScheduled = false;
+        const fill = document.getElementById("scrollProgressFill");
+        const btt = document.getElementById("backToTopFab");
+        const y = window.scrollY;
+        if (fill) {
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const pct = docHeight > 0 ? Math.min(100, Math.max(0, (y / docHeight) * 100)) : 0;
+            fill.style.width = `${pct}%`;
+        }
+        if (btt) {
+            btt.classList.toggle("visible", y > 420);
+        }
+    });
 }, { passive: true });
 
 document.addEventListener("keydown", e => {
@@ -885,7 +901,7 @@ function showCaramelToast(message) {
     toastTimer = setTimeout(() => { toastEl.classList.remove("show"); }, 3200);
 }
 
-const APP_BUILD_VERSION = "v20261127-8";
+const APP_BUILD_VERSION = "v20261127-9";
 const APPLIED_BUILD_KEY = "caramel_applied_build_version_v1";
 let pendingUpdateAvailable = false;
 
@@ -2187,41 +2203,28 @@ function trackProductInterest(product, weight = 1, markSeen = true) {
 }
 
 function scoreProductForUser(product, seedOffset = 0) {
-    if (!product) return 0;
-    const cacheKey = `${String(product.id)}:${seedOffset}`;
-    if (recommendationScoreCache.has(cacheKey)) return recommendationScoreCache.get(cacheKey);
-
-    if (!recommendationCartCategories) {
-        recommendationCartCategories = new Set();
-        const productsById = new Map(PRODUCTS.map(item => [String(item.id), item]));
-        cart.forEach(item => {
-            const matched = productsById.get(String(item.id));
-            if (matched && matched.category) recommendationCartCategories.add(matched.category);
-        });
-    }
-    if (!recommendationWishlistSet) recommendationWishlistSet = new Set(wishlistIds.map(String));
-
-    const cats = [product.category, ...(Array.isArray(product.categories) ? product.categories : [])].filter(Boolean);
+    const cats = [product.category, ...(Array.isArray(product.categories) ? product.categories : [])];
     let catScore = 0;
-    cats.forEach(c => { catScore = Math.max(catScore, (interestData.categories[c] || 0) * 12); });
-    if (cats.some(c => recommendationCartCategories.has(c))) catScore += 14;
-    if (recommendationWishlistSet.has(String(product.id))) catScore += 16;
+    cats.forEach(c => {
+        catScore = Math.max(catScore, (interestData.categories[c] || 0) * 12);
+    });
 
-    let tokens = productTokenCache.get(product);
-    if (!tokens) {
-        tokens = extractTokens(product.title).filter(t => t.length >= 2);
-        productTokenCache.set(product, tokens);
-    }
+    const inCartCat = cart.some(ci => {
+        const match = PRODUCTS.find(p => p.id === ci.id);
+        return match && cats.includes(match.category);
+    });
+    if (inCartCat) catScore += 14;
+
+    if (wishlistIds.includes(String(product.id))) catScore += 16;
+
+    const tokens = extractTokens(product.title).filter(t => t.length >= 2);
     let kwScore = 0;
     tokens.forEach(t => { kwScore += (interestData.keywords[t] || 0) * 5; });
 
     const isSeen = interestData.seenIds.includes(product.id);
     const freshnessBonus = isSeen ? -5 : 10;
-    const idText = String(product.id || "0");
-    const dynamicJitter = ((idText.charCodeAt(idText.length - 1) * 13 + seedOffset * 17 + Math.floor(interestData.sessionRoll * 100)) % 9) * 0.8;
-    const score = catScore + kwScore + freshnessBonus + dynamicJitter;
-    recommendationScoreCache.set(cacheKey, score);
-    return score;
+    const dynamicJitter = ((product.id.charCodeAt(product.id.length - 1) * 13 + seedOffset * 17 + Math.floor(interestData.sessionRoll * 100)) % 9) * 0.8;
+    return catScore + kwScore + freshnessBonus + dynamicJitter;
 }
 
 function buildEngagingHookForProduct(product) {
@@ -2699,9 +2702,6 @@ function setupInfiniteScrollObserver() {
 }
 
 function renderProducts(category = "all") {
-    recommendationScoreCache = new Map();
-    recommendationCartCategories = null;
-    recommendationWishlistSet = null;
     currentCategory = category;
     applyCategoryPageMood(currentMerchant ? "all" : category);
     const grid = document.getElementById("productsGrid");
@@ -3951,6 +3951,32 @@ function clearCart() {
     }, "تفريغ");
 }
 
+
+function copyOrderSummaryText() {
+    if (!cart.length) {
+        showCaramelToast("السلة فارغة — أضف منتجات أولاً");
+        return;
+    }
+    const name = (document.getElementById("checkoutCustomerName")?.value || "").trim();
+    const phone = (document.getElementById("checkoutCustomerPhone")?.value || "").trim();
+    const addr = (document.getElementById("checkoutCustomerAddress")?.value || "").trim();
+    const { totalPieces, totalAmount } = getCartTotals();
+    const lines = cart.map((item, i) => {
+        const opts = [item.selectedSize ? `نوع/مقاس: ${item.selectedSize}` : "", item.selectedColor ? `لون: ${item.selectedColor}` : "", item.note ? `ملاحظة: ${item.note}` : ""].filter(Boolean).join(" | ");
+        return `${i + 1}. ${item.title} (${item.qty} × ${formatPriceNumber(item.price)} ج)${opts ? ` — ${opts}` : ""}`;
+    });
+    let summary = `ملخص طلب متجر كارامل:\n${lines.join("\n")}\nعدد القطع: ${totalPieces}\nالإجمالي: ${formatPriceNumber(totalAmount)} جنيه`;
+    if (name) summary += `\nالاسم: ${name}`;
+    if (phone) summary += `\nالهاتف: ${phone}`;
+    if (addr) summary += `\nالعنوان: ${addr}`;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(summary).then(() => showCaramelToast("تم نسخ ملخص الطلب ✓")).catch(() => showCaramelToast("تعذر النسخ التلقائي"));
+    } else {
+        showCaramelToast("تم تجهيز ملخص الطلب");
+    }
+}
+
 function checkoutOnWhatsApp() {
     if (!cart.length) { showCaramelToast("سلتك فارغة! أضف منتجات أولاً."); return; }
 
@@ -4152,33 +4178,46 @@ function initCaramelSplashScreen() {
     const fullSlogan = "كل قطعة وليها دور";
     let typedIndex = 0;
     let typeTimer = null;
+    let dismissTimer = null;
     let dismissed = false;
 
     const finishSplash = () => {
         if (dismissed) return;
         dismissed = true;
         if (typeTimer) clearInterval(typeTimer);
+        if (dismissTimer) clearTimeout(dismissTimer);
         splash.classList.add("hide");
-        setTimeout(() => { if (splash && splash.parentNode) splash.remove(); }, 460);
+        setTimeout(() => { if (splash && splash.parentNode) splash.remove(); }, 480);
     };
 
     if (typedTextEl) typedTextEl.textContent = "";
+
+    // Phase 1: Logo & brand name settle, then rectangular box descends smoothly under the logo
     setTimeout(() => {
         if (dismissed) return;
         if (subRect) subRect.classList.add("descend-in");
-        if (!typedTextEl) return;
-        typeTimer = setInterval(() => {
-            if (dismissed) { clearInterval(typeTimer); return; }
-            typedIndex += 1;
-            typedTextEl.textContent = fullSlogan.slice(0, typedIndex);
-            if (typedIndex >= fullSlogan.length) clearInterval(typeTimer);
-        }, 42);
-    }, 140);
 
-    setTimeout(finishSplash, 1050);
-    window.addEventListener("load", () => setTimeout(finishSplash, 320), { once: true });
+        // Phase 2: Slogan text appears clearly inside the rectangle at a calm, readable pace
+        setTimeout(() => {
+            if (dismissed || !typedTextEl) return;
+            typeTimer = setInterval(() => {
+                if (dismissed) { clearInterval(typeTimer); return; }
+                typedIndex += 1;
+                typedTextEl.textContent = fullSlogan.slice(0, typedIndex);
+                if (typedIndex >= fullSlogan.length) {
+                    clearInterval(typeTimer);
+                    // Hold so the user enjoys the finished slogan & rectangular frame
+                    dismissTimer = setTimeout(finishSplash, 900);
+                }
+            }, 85);
+        }, 260);
+    }, 280);
+
+    // Safety ceiling so splash never stays stuck
+    setTimeout(finishSplash, 3400);
     splash.addEventListener("click", finishSplash, { once: true });
 }
+
 
 
 function openBecomeMerchantModal() {
