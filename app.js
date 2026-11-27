@@ -907,7 +907,7 @@ function showCaramelToast(message) {
     toastTimer = setTimeout(() => { toastEl.classList.remove("show"); }, 3200);
 }
 
-const APP_BUILD_VERSION = "v20261127-8";
+const APP_BUILD_VERSION = "v20261127-9";
 const APPLIED_BUILD_KEY = "caramel_applied_build_version_v1";
 let pendingUpdateAvailable = false;
 
@@ -4021,6 +4021,7 @@ function openWhatsAppChatDirect() {
 
 const PUSH_SUBSCRIBED_KEY = "caramel_push_subscribed_v1";
 const PUSH_PILL_COLLAPSED_KEY = "caramel_push_pill_collapsed_v1";
+const PUSH_SUBSCRIPTION_DATA_KEY = "caramel_push_subscription_v1";
 let pushPillHideTimer = null;
 
 function buildPushCheckIconSvg() {
@@ -4039,6 +4040,14 @@ function setUserPushSubscribed(val) {
     try {
         if (val) localStorage.setItem(PUSH_SUBSCRIBED_KEY, "1");
         else localStorage.removeItem(PUSH_SUBSCRIBED_KEY);
+    } catch (e) {}
+}
+
+function savePushSubscriptionInfo(subObj) {
+    try {
+        if (subObj) {
+            localStorage.setItem(PUSH_SUBSCRIPTION_DATA_KEY, JSON.stringify(subObj));
+        }
     } catch (e) {}
 }
 
@@ -4096,10 +4105,78 @@ function syncPushButtonState() {
     }
 }
 
+async function registerPushSubscriptionIfSupported(reg) {
+    try {
+        if (!reg || !reg.pushManager) return null;
+        const existing = await reg.pushManager.getSubscription();
+        if (existing) {
+            savePushSubscriptionInfo(existing.toJSON ? existing.toJSON() : { endpoint: existing.endpoint });
+            return existing;
+        }
+        const vapidPublicKey = window.CARAMEL_VAPID_PUBLIC_KEY || "";
+        if (vapidPublicKey && typeof vapidPublicKey === "string" && vapidPublicKey.trim().length > 20) {
+            const padding = "=".repeat((4 - (vapidPublicKey.length % 4)) % 4);
+            const base64 = (vapidPublicKey + padding).replace(/-/g, "+").replace(/_/g, "/");
+            const rawData = window.atob(base64);
+            const outputArray = new Uint8Array(rawData.length);
+            for (let i = 0; i < rawData.length; ++i) {
+                outputArray[i] = rawData.charCodeAt(i);
+            }
+            const sub = await reg.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: outputArray
+            });
+            savePushSubscriptionInfo(sub.toJSON ? sub.toJSON() : { endpoint: sub.endpoint });
+            return sub;
+        }
+    } catch (e) {}
+    return null;
+}
+
+async function showWelcomePushNotification(reg) {
+    const title = "كارامل ستور | Caramel Store";
+    const options = {
+        body: "تم تفعيل إشعارات العروض والمنتجات الجديدة بنجاح!",
+        icon: BRAND_LOGO_URL,
+        badge: BRAND_LOGO_URL,
+        dir: "rtl",
+        lang: "ar",
+        vibrate: [150, 75, 150],
+        tag: "caramel-welcome-push",
+        data: { url: STORE_URL }
+    };
+
+    try {
+        if (reg && typeof reg.showNotification === "function") {
+            await reg.showNotification(title, options);
+            return;
+        }
+    } catch (e) {}
+
+    try {
+        if ("serviceWorker" in navigator) {
+            const readyReg = await Promise.race([
+                navigator.serviceWorker.ready,
+                new Promise(resolve => setTimeout(() => resolve(null), 2000))
+            ]);
+            if (readyReg && typeof readyReg.showNotification === "function") {
+                await readyReg.showNotification(title, options);
+                return;
+            }
+        }
+    } catch (e) {}
+
+    try {
+        if ("Notification" in window && Notification.permission === "granted") {
+            new Notification(title, options);
+        }
+    } catch (e) {}
+}
+
 async function enableCaramelPush() {
-    if (isUserPushSubscribed()) {
-        syncPushButtonState();
-        showCaramelToast("الإشعارات مفعّلة بالفعل ✓");
+    const isSecure = window.isSecureContext || location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1";
+    if (!isSecure) {
+        showCaramelToast("إشعارات المتصفح تتطلب اتصالاً آمناً HTTPS");
         return;
     }
 
@@ -4111,10 +4188,24 @@ async function enableCaramelPush() {
         return;
     }
 
+    let activeReg = null;
+    if ("serviceWorker" in navigator) {
+        try {
+            activeReg = await navigator.serviceWorker.getRegistration("./") || await navigator.serviceWorker.ready;
+        } catch (e) {}
+    }
+
+    if (Notification.permission === "denied") {
+        showCaramelToast("الإشعارات محظورة من المتصفح — فعّلها من إعدادات الموقع (Site Settings)");
+        return;
+    }
+
     if (Notification.permission === "granted") {
         setUserPushSubscribed(true);
         setPushPillCollapsed(false);
         syncPushButtonState();
+        await registerPushSubscriptionIfSupported(activeReg);
+        await showWelcomePushNotification(activeReg);
         showCaramelToast("تم تفعيل إشعارات متجر كارامل بنجاح!");
         return;
     }
@@ -4125,27 +4216,20 @@ async function enableCaramelPush() {
             setUserPushSubscribed(true);
             setPushPillCollapsed(false);
             syncPushButtonState();
+            await registerPushSubscriptionIfSupported(activeReg);
+            await showWelcomePushNotification(activeReg);
             showCaramelToast("تم تفعيل إشعارات متجر كارامل بنجاح!");
-            try {
-                if ("serviceWorker" in navigator) {
-                    const reg = await navigator.serviceWorker.ready;
-                    if (reg && reg.showNotification) {
-                        await reg.showNotification("متجر كارامل", {
-                            body: "تم تفعيل إشعارات العروض والمنتجات الجديدة بنجاح!",
-                            icon: BRAND_LOGO_URL,
-                            badge: BRAND_LOGO_URL
-                        });
-                    }
-                }
-            } catch (notifErr) {}
         } else if (permission === "denied") {
-            showCaramelToast("تم رفض الإشعارات من إعدادات المتصفح");
+            setUserPushSubscribed(false);
+            syncPushButtonState();
+            showCaramelToast("تم رفض الإشعارات — يمكنك تفعيلها من إعدادات المتصفح");
+        } else {
+            showCaramelToast("لم يتم تأكيد إذن الإشعارات");
         }
     } catch (e) {
         showCaramelToast("تعذر طلب إذن الإشعارات حالياً");
     }
 }
-
 function initCaramelSplashScreen() {
     const splash = document.getElementById("caramelSplashScreen");
     const subRect = document.getElementById("caramelSplashSubRect");
