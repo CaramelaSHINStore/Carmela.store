@@ -520,15 +520,9 @@ function copyProductShareLink(productId, event) {
     }
     if (!productId) return;
     const shareUrl = `${STORE_URL}?product=${encodeURIComponent(productId)}`;
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(shareUrl).then(() => {
-            showCaramelToast("تم نسخ رابط المنتج المباشر!");
-        }).catch(() => {
-            showCaramelToast(shareUrl);
-        });
-    } else {
-        showCaramelToast("رابط المنتج: " + shareUrl);
-    }
+    copyTextWithFallback(shareUrl).then(copied => {
+        showCaramelToast(copied ? "تم نسخ رابط المنتج المباشر!" : "رابط المنتج: " + shareUrl);
+    });
 }
 
 function renderMerchantsQuickStrip() {
@@ -665,13 +659,11 @@ function escapeHtml(str) {
 }
 
 window.addEventListener("popstate", () => {
-    if (overlayStack.length > 0) {
-        closeTopOverlay(true);
-        return;
-    }
     suppressHistoryStep = true;
     try {
-        if (document.getElementById("imageModal")?.classList.contains("open")) {
+        if (overlayStack.length > 0) {
+            closeTopOverlay(true);
+        } else if (document.getElementById("imageModal")?.classList.contains("open")) {
             closeImageModal(true);
         } else if (document.getElementById("productOptionModal")?.classList.contains("open")) {
             closeProductOptionModal(true);
@@ -682,12 +674,12 @@ window.addEventListener("popstate", () => {
         } else if (document.getElementById("confirmActionModal")?.classList.contains("open")) {
             closeConfirmModal(true, true);
         } else if (document.getElementById("cartDrawer")?.classList.contains("open")) {
-            closeCart(true);
+            closeCart(true, true);
         } else if (document.getElementById("catsDrawer")?.classList.contains("open")) {
-            closeCategoriesDrawer(true);
+            closeCategoriesDrawer(true, true);
         }
     } finally {
-        setTimeout(() => { suppressHistoryStep = false; }, 0);
+        setTimeout(() => { suppressHistoryStep = false; }, 40);
     }
 });
 
@@ -1229,12 +1221,10 @@ async function shareStoreApp() {
             if (err && err.name === "AbortError") return;
         }
     }
-    try {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            await navigator.clipboard.writeText(STORE_URL);
-        }
+    const copied = await copyTextWithFallback(STORE_URL);
+    if (copied) {
         showCaramelToast("تم نسخ رابط متجر كارامل بنجاح!");
-    } catch (e) {
+    } else {
         launchWhatsAppTarget(`https://wa.me/?text=${encodeURIComponent(shareText)}`);
     }
 }
@@ -1312,8 +1302,17 @@ const CATEGORY_THEME_META = {
     kids:       { bar: "#22d3ee", bg: "#cffafe", stroke: "#0e7490" }
 };
 
+function sanitizeSvgColor(colorVal, fallback = "#996738") {
+    const raw = String(colorVal || "").trim();
+    if (/^#[0-9a-fA-F]{3,8}$/.test(raw) || /^rgba?\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}(?:\s*,\s*(?:0|1|0?\.\d+))?\s*\)$/.test(raw)) {
+        return raw;
+    }
+    return fallback;
+}
+
 function buildCategoryGraphicSvg(catKey, customStroke = "") {
-    const s = customStroke || (CATEGORY_THEME_META[catKey]?.stroke || "#996738");
+    const fallbackStroke = CATEGORY_THEME_META[catKey]?.stroke || "#996738";
+    const s = customStroke ? sanitizeSvgColor(customStroke, fallbackStroke) : fallbackStroke;
     switch (catKey) {
         case "appliances":
             return `<svg viewBox="0 0 32 32" fill="none" stroke="${s}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 4L8 18h8l-2 10 10-14h-8l2-10z"></path></svg>`;
@@ -1925,11 +1924,13 @@ function shareCurrentMerchantPage() {
     const shareText = `تصفح تشكيلة منتجات "${currentMerchant}" في متجر كارامل:\n${shareUrl}`;
     if (navigator.share) {
         navigator.share({ title: `${currentMerchant} - متجر كارامل`, text: shareText, url: shareUrl }).catch(() => {});
-    } else if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(shareUrl).then(() => {
-            showCaramelToast(`تم نسخ رابط صفحة ${currentMerchant}`);
-        }).catch(() => {
-            launchWhatsAppTarget(`https://wa.me/?text=${encodeURIComponent(shareText)}`);
+    } else {
+        copyTextWithFallback(shareUrl).then(copied => {
+            if (copied) {
+                showCaramelToast(`تم نسخ رابط صفحة ${currentMerchant}`);
+            } else {
+                launchWhatsAppTarget(`https://wa.me/?text=${encodeURIComponent(shareText)}`);
+            }
         });
     } else {
         launchWhatsAppTarget(`https://wa.me/?text=${encodeURIComponent(shareText)}`);
@@ -3530,15 +3531,9 @@ function toggleOrderAccordion(orderId) {
 function copyOrderIdToClipboard(orderId, event) {
     if (event) event.stopPropagation();
     if (!orderId) return;
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(String(orderId)).then(() => {
-            showCaramelToast(`تم نسخ رقم الأوردر #${orderId}`);
-        }).catch(() => {
-            showCaramelToast(`رقم الأوردر: #${orderId}`);
-        });
-    } else {
-        showCaramelToast(`رقم الأوردر: #${orderId}`);
-    }
+    copyTextWithFallback(String(orderId)).then(copied => {
+        showCaramelToast(copied ? `تم نسخ رقم الأوردر #${orderId}` : `رقم الأوردر: #${orderId}`);
+    });
 }
 
 function renderActiveOrdersSection() {
@@ -4032,15 +4027,9 @@ function copyOrderSummaryText() {
         return;
     }
     const summaryText = buildCurrentCartSummaryText();
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(summaryText).then(() => {
-            showCaramelToast("تم نسخ ملخص الطلب بنجاح!");
-        }).catch(() => {
-            showCaramelToast("تعذر النسخ التلقائي");
-        });
-    } else {
-        showCaramelToast("تم تجهيز ملخص الطلب");
-    }
+    copyTextWithFallback(summaryText).then(copied => {
+        showCaramelToast(copied ? "تم نسخ ملخص الطلب بنجاح!" : "تعذر النسخ التلقائي");
+    });
 }
 
 function openWhatsAppChatDirect() {
@@ -4508,6 +4497,34 @@ function submitBecomeMerchantForm(event) {
         event.target.reset();
     }
     launchWhatsAppTarget(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`);
+}
+
+async function copyTextWithFallback(text) {
+    const value = String(text ?? "");
+    if (!value) return false;
+    try {
+        if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+            await navigator.clipboard.writeText(value);
+            return true;
+        }
+    } catch (_) {}
+
+    try {
+        const ta = document.createElement("textarea");
+        ta.value = value;
+        ta.setAttribute("readonly", "");
+        ta.style.position = "fixed";
+        ta.style.top = "-9999px";
+        ta.style.left = "-9999px";
+        document.body.appendChild(ta);
+        ta.select();
+        ta.setSelectionRange(0, ta.value.length);
+        const ok = document.execCommand("copy");
+        document.body.removeChild(ta);
+        return Boolean(ok);
+    } catch (_) {
+        return false;
+    }
 }
 
 let suppressHistoryStep = false;
