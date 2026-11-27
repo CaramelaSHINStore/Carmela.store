@@ -76,15 +76,22 @@ body {
     line-height: 1.5;
     padding-bottom: 92px;
     transition: background-color 0.28s ease, color 0.25s ease;
-    overflow-x: hidden;
-}
-
-body.modal-open {
-    overflow: hidden;
+    overflow-x: clip;
 }
 
 .is-hidden { display: none !important; }
 .img-hidden { display: none !important; }
+
+.caramel-logo-mark {
+    object-fit: cover;
+    border-radius: 50%;
+    filter: contrast(1.04) saturate(1.06);
+}
+.splash-logo-ring .caramel-logo-mark {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
 
 /* Scroll progress bar */
 .scroll-progress-track {
@@ -734,6 +741,44 @@ body.dark-theme .promo-cs-link { color: #4ade80; }
 }
 body.dark-theme .promo-special-link { color: var(--caramel-light); }
 
+/* Merchant Pulse Button */
+@keyframes merchantPulseBeat {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(200, 150, 102, 0.58);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 8px rgba(200, 150, 102, 0);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(200, 150, 102, 0);
+    }
+}
+.merchant-pulse-btn {
+    font-family: 'Cairo', sans-serif;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--caramel-light), var(--caramel));
+    color: #16120f !important;
+    border: 1px solid var(--caramel-dark) !important;
+    font-weight: 900;
+    animation: merchantPulseBeat 1.85s ease-in-out infinite;
+    transition: transform 0.18s ease;
+}
+.merchant-pulse-btn:hover,
+.merchant-pulse-btn:active {
+    animation-play-state: paused;
+    transform: scale(0.97);
+}
+.merchant-signup-card { width: min(410px, 100%); }
+.merchant-signup-subtitle { font-size: 0.76rem; color: var(--text-muted); margin-bottom: 6px; }
+.merchant-signup-form .option-group { margin-top: 10px; }
+.merchant-wa-submit-btn {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    color: #ffffff;
+}
+
 /* Append Order Banner */
 .append-mode-banner {
     display: flex;
@@ -1034,6 +1079,48 @@ body.merchant-storefront-mode .product-card {
     display: block;
     transition: opacity 0.2s ease;
 }
+
+/* Sold Out Overlay States */
+.media-soldout-wrap {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.media-soldout-wrap.is-soldout img {
+    filter: grayscale(0.65) brightness(0.72);
+}
+.soldout-badge-overlay {
+    position: absolute;
+    inset: auto 8px 8px 8px;
+    z-index: 4;
+    background: rgba(20, 17, 15, 0.88);
+    color: #fde68a;
+    border: 1px solid rgba(253, 230, 138, 0.45);
+    border-radius: 8px;
+    padding: 3px 8px;
+    font-size: 0.66rem;
+    font-weight: 900;
+    text-align: center;
+    pointer-events: none;
+}
+.product-card.is-product-soldout {
+    opacity: 0.86;
+}
+.product-card.is-product-soldout .product-img-box img {
+    filter: grayscale(0.45);
+}
+.add-cart-btn.is-disabled,
+.add-cart-btn:disabled {
+    background: rgba(140, 130, 120, 0.22) !important;
+    color: var(--text-muted, #8e857c) !important;
+    border: 1px solid rgba(140, 130, 120, 0.35) !important;
+    cursor: not-allowed !important;
+    pointer-events: none;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
 .card-img-nav-btn {
     position: absolute;
     top: 50%;
@@ -1187,47 +1274,6 @@ body.dark-theme .product-price { color: var(--caramel-light); }
     justify-content: center;
 }
 body.dark-theme .direct-wa-link { color: #4ade80; }
-
-/* Sold Out States */
-.media-soldout-wrap {
-    position: relative;
-    display: block;
-    width: 100%;
-    height: 100%;
-}
-.media-soldout-wrap.is-soldout img {
-    filter: grayscale(0.65) brightness(0.75);
-}
-.soldout-badge-overlay {
-    position: absolute;
-    inset: auto 8px 8px 8px;
-    z-index: 4;
-    background: rgba(18, 16, 14, 0.88);
-    color: #ffd7d7;
-    border: 1px solid rgba(251, 113, 133, 0.45);
-    border-radius: 8px;
-    padding: 2px 8px;
-    font-size: 0.66rem;
-    font-weight: 900;
-    text-align: center;
-    pointer-events: none;
-}
-.product-card.is-product-soldout {
-    opacity: 0.85;
-}
-.product-card.is-product-soldout .product-img-box img {
-    filter: grayscale(0.45);
-}
-.add-cart-btn.is-disabled,
-.add-cart-btn:disabled {
-    background: rgba(140, 130, 120, 0.22) !important;
-    color: var(--text-muted, #8e857c) !important;
-    border: 1px solid rgba(140, 130, 120, 0.35) !important;
-    cursor: not-allowed !important;
-    pointer-events: none;
-    box-shadow: none !important;
-    transform: none !important;
-}
 
 /* Skeletons */
 .skeleton-card { pointer-events: none; }
@@ -1635,7 +1681,7 @@ body.dark-theme .cart-location-btn { color: var(--caramel-light); }
     border-radius: 12px;
 }
 
-.cart-item, .active-order-item {
+.cart-item {
     background: var(--surface-soft);
     border: 1px solid var(--border-subtle);
     border-radius: 12px;
@@ -1656,9 +1702,9 @@ body.dark-theme .cart-location-btn { color: var(--caramel-light); }
 }
 .cart-item-info, .active-order-item-meta { flex: 1; min-width: 0; }
 .cart-item-title { font-size: 0.78rem; font-weight: 800; }
-.cart-item-sub, .cart-item-note { font-size: 0.68rem; color: var(--text-muted); }
 .cart-item-price { font-size: 0.78rem; font-weight: 900; color: var(--accent-deep); }
 body.dark-theme .cart-item-price { color: var(--caramel-light); }
+.cart-item-sub, .cart-item-note { font-size: 0.68rem; color: var(--text-muted); }
 .qty-controls { display: flex; align-items: center; gap: 4px; }
 .qty-btn {
     width: 24px;
@@ -2297,55 +2343,3 @@ body.dark-theme .option-modal-price { color: var(--caramel-light); }
     text-align: center;
 }
 .caramel-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-/* Become a Merchant Button & Modal */
-@keyframes merchantPulseBeat {
-    0% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(200, 150, 102, 0.58);
-    }
-    50% {
-        transform: scale(1.05);
-        box-shadow: 0 0 0 8px rgba(200, 150, 102, 0);
-    }
-    100% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(200, 150, 102, 0);
-    }
-}
-
-.merchant-pulse-btn {
-    font-family: 'Cairo', sans-serif;
-    cursor: pointer;
-    background: linear-gradient(135deg, var(--caramel-light), var(--caramel));
-    color: #16120f !important;
-    border: 1px solid var(--caramel-dark) !important;
-    font-weight: 900;
-    animation: merchantPulseBeat 1.85s ease-in-out infinite;
-    transition: transform 0.18s ease;
-}
-
-.merchant-pulse-btn:hover,
-.merchant-pulse-btn:active {
-    animation-play-state: paused;
-    transform: scale(0.97);
-}
-
-.merchant-signup-card {
-    width: min(410px, 100%);
-}
-
-.merchant-signup-subtitle {
-    font-size: 0.76rem;
-    color: var(--text-muted);
-    margin-bottom: 6px;
-}
-
-.merchant-signup-form .option-group {
-    margin-top: 10px;
-}
-
-.merchant-wa-submit-btn {
-    background: linear-gradient(135deg, #16a34a, #15803d);
-    color: #ffffff;
-}
