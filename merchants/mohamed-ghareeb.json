@@ -12,6 +12,21 @@
     "img": "Momaled/compressed_1795582048118.webp",
     "images": [
       "Momaled/compressed_1795582048118.webp"
+    ],
+    "sizeLabel": "اختر الموديل / السعر:",
+    "sizes": [
+      {
+        "label": "موديل 70 جنيه",
+        "price": 70
+      },
+      {
+        "label": "موديل 90 جنيه",
+        "price": 90
+      },
+      {
+        "label": "موديل 120 جنيه",
+        "price": 120
+      }
     ]
   },
   {
@@ -28,6 +43,7 @@
     "images": [
       "Momaled/compressed_1795582045598.webp"
     ],
+    "sizeLabel": "اختر الكمية:",
     "sizes": [
       {
         "label": "كشكول (10 جنيه)",
@@ -53,6 +69,17 @@
     "img": "Momaled/compressed_1795582045299.webp",
     "images": [
       "Momaled/compressed_1795582045299.webp"
+    ],
+    "sizeLabel": "اختر المقاس:",
+    "sizes": [
+      {
+        "label": "8.5 بوصة (50 جنيه)",
+        "price": 50
+      },
+      {
+        "label": "10 بوصة (65 جنيه)",
+        "price": 65
+      }
     ]
   },
   {
@@ -242,6 +269,17 @@
     "img": "Momaled/compressed_1795582038827.webp",
     "images": [
       "Momaled/compressed_1795582038827.webp"
+    ],
+    "sizeLabel": "اختر النوع / السعر:",
+    "sizes": [
+      {
+        "label": "نوع 20 جنيه",
+        "price": 20
+      },
+      {
+        "label": "نوع 30 جنيه",
+        "price": 30
+      }
     ]
   },
   {
@@ -338,6 +376,7 @@
       "Momaled/compressed_1795582043295.webp",
       "Momaled/compressed_1795582035267.webp"
     ],
+    "sizeLabel": "اختر عدد الورق:",
     "sizes": [
       {
         "label": "100 ورقة (100 جنيه)",
@@ -398,6 +437,7 @@
     "images": [
       "Momaled/compressed_1795582040479.webp"
     ],
+    "sizeLabel": "اختر عدد الورق:",
     "sizes": [
       {
         "label": "80 ورقة (50 جنيه)",
