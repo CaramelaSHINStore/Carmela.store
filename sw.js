@@ -1,4 +1,4 @@
-const CACHE_VERSION = "caramel-store-v20261127-4";
+const CACHE_VERSION = "caramel-store-v20261127-5";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
@@ -7,8 +7,8 @@ const CORE_ASSETS = [
     "./index.html",
     "./style.css",
     "./app.js",
-    "./manifest.json?v=2",
-    "./compressed_1795766509611.jpeg?v=2"
+    "./manifest.json?v=3",
+    "./compressed_1795766509611.jpeg?v=3"
 ];
 
 self.addEventListener("install", event => {
