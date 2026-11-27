@@ -24,19 +24,11 @@
 <meta name="twitter:description" content="متجر كارامل - تسوق منتجات متنوعة وعروض مميزة بسهولة عبر واتساب">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/Caramelstoresuez/Carmelastore/main/compressed_1795766509611.jpeg">
 
-<link rel="icon" type="image/jpeg" href="./compressed_1795766509611.jpeg?v=v20261127-14">
-<link rel="shortcut icon" type="image/jpeg" href="./compressed_1795766509611.jpeg?v=v20261127-14">
-<link rel="apple-touch-icon" href="./compressed_1795766509611.jpeg?v=v20261127-14">
-<link rel="manifest" href="./manifest.json?v=v20261127-14">
-<script>
-(function() {
-    var v = Date.now();
-    document.querySelectorAll('link[rel="icon"], link[rel="shortcut icon"], link[rel="apple-touch-icon"]').forEach(function(el) {
-        var base = el.getAttribute("href").split("?")[0];
-        el.setAttribute("href", base + "?v=" + v);
-    });
-})();
-</script>
+<link rel="icon" type="image/jpeg" href="./compressed_1795766509611.jpeg?v=v20261128-01">
+<link rel="shortcut icon" type="image/jpeg" href="./compressed_1795766509611.jpeg?v=v20261128-01">
+<link rel="apple-touch-icon" href="./compressed_1795766509611.jpeg?v=v20261128-01">
+<link rel="manifest" href="./manifest.json?v=v20261128-01">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -50,19 +42,7 @@
     } catch (e) {}
 })();
 </script>
-<link rel="stylesheet" href="./style.css?v=v20261127-14">
-<style>
-.caramel-logo-mark {
-    object-fit: cover;
-    border-radius: 50%;
-    filter: contrast(1.04) saturate(1.06);
-}
-.splash-logo-ring .caramel-logo-mark {
-    width: 100%;
-    height: 100%;
-    display: block;
-}
-</style>
+<link rel="stylesheet" href="./style.css?v=v20261128-01">
 </head>
 <body>
 
@@ -74,7 +54,7 @@
 <div class="caramel-splash-screen" id="caramelSplashScreen" aria-label="جاري تحميل متجر كارامل">
     <div class="splash-logo-stage">
         <div class="splash-logo-ring">
-            <img src="./compressed_1795766509611.jpeg?v=v20261127-14" data-brand-logo="1" class="caramel-logo-mark" alt="لوجو متجر كارامل">
+            <img src="./compressed_1795766509611.jpeg?v=v20261128-01" data-brand-logo="1" class="caramel-logo-mark" alt="لوجو متجر كارامل">
         </div>
     </div>
     <div class="splash-brand-name">CARAMEL STORE</div>
@@ -99,7 +79,7 @@
         </div>
 
         <button type="button" class="logo-pill" onclick="resetHomeFresh()" aria-label="متجر كارامل - الرئيسية">
-            <img src="./compressed_1795766509611.jpeg?v=v20261127-14" data-brand-logo="1" alt="لوجو متجر كارامل" class="header-brand-img caramel-logo-mark">
+            <img src="./compressed_1795766509611.jpeg?v=v20261128-01" data-brand-logo="1" alt="لوجو متجر كارامل" class="header-brand-img caramel-logo-mark">
             <div class="logo-text-group">
                 <div class="logo">CARAMEL STORE</div>
                 <div class="logo-sub">كل قطعة وليها دور</div>
@@ -425,7 +405,7 @@
         <div class="preview-thumbs-row is-hidden" id="previewThumbsRow"></div>
         <div class="preview-body">
             <div class="preview-meta-chips">
-                <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+                <div class="preview-chips-left">
                     <span class="preview-chip" id="previewCategoryChip">متجر كارامل</span>
                     <button type="button" class="preview-merchant-btn is-hidden" id="previewMerchantChip"></button>
                 </div>
@@ -474,7 +454,7 @@
         </div>
 
         <div class="option-qty-row">
-            <span class="option-group-label" style="margin:0;">الكمية:</span>
+            <span class="option-group-label no-margin">الكمية:</span>
             <div class="option-qty-controls">
                 <button type="button" class="option-qty-btn" onclick="changeModalQty(1)">+</button>
                 <span class="option-qty-val" id="optionModalQtyVal">1</span>
@@ -539,6 +519,6 @@
 <!-- Toast -->
 <div class="caramel-toast" id="caramelToast" role="status" aria-live="polite"></div>
 
-<script src="./app.js?v=v20261127-14"></script>
+<script src="./app.js?v=v20261128-01"></script>
 </body>
 </html>
