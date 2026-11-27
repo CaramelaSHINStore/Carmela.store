@@ -1,13 +1,13 @@
 {
-  "name": "متجر كارامل | Caramel Store",
+  "name": "متجر كارامل - Caramel Store",
   "short_name": "كارامل ستور",
-  "description": "متجر كارامل - تسوق منتجات متنوعة وعروض مميزة بسهولة عبر واتساب في السويس وجميع المحافظات",
+  "description": "تسوق منتجات متنوعة وعروض مميزة بسهولة عبر واتساب من متجر كارامل — كل قطعة وليها دور",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#12100e",
   "theme_color": "#14110f",
-  "orientation": "portrait-primary",
   "dir": "rtl",
   "lang": "ar",
   "icons": [
@@ -21,7 +21,7 @@
       "src": "./compressed_1795766509611.jpeg",
       "sizes": "512x512",
       "type": "image/jpeg",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }
