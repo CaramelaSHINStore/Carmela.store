@@ -6,10 +6,19 @@
 <title>متجر كارامل - Caramel Store</title>
 <meta name="description" content="متجر كارامل - تسوق منتجات متنوعة وعروض مميزة بسهولة عبر واتساب">
 <meta name="theme-color" content="#14110f">
-<link rel="icon" type="image/jpeg" href="./compressed_1795766509611.jpeg">
-<link rel="shortcut icon" type="image/jpeg" href="./compressed_1795766509611.jpeg">
-<link rel="apple-touch-icon" href="./compressed_1795766509611.jpeg">
-<link rel="manifest" href="./manifest.json">
+<link rel="icon" type="image/jpeg" href="./compressed_1795766509611.jpeg?v=2">
+<link rel="shortcut icon" type="image/jpeg" href="./compressed_1795766509611.jpeg?v=2">
+<link rel="apple-touch-icon" href="./compressed_1795766509611.jpeg?v=2">
+<link rel="manifest" href="./manifest.json?v=2">
+<script>
+(function() {
+    var v = Date.now();
+    document.querySelectorAll('link[rel="icon"], link[rel="shortcut icon"], link[rel="apple-touch-icon"]').forEach(function(el) {
+        var base = el.getAttribute("href").split("?")[0];
+        el.setAttribute("href", base + "?v=" + v);
+    });
+})();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -35,7 +44,7 @@
 <div class="caramel-splash-screen" id="caramelSplashScreen" aria-label="جاري تحميل متجر كارامل">
     <div class="splash-logo-stage">
         <div class="splash-logo-ring">
-            <img src="./compressed_1795766509611.jpeg" data-brand-logo="1" alt="لوجو متجر كارامل">
+            <img src="./compressed_1795766509611.jpeg?v=2" data-brand-logo="1" alt="لوجو متجر كارامل">
         </div>
     </div>
     <div class="splash-brand-name">CARAMEL STORE</div>
@@ -60,7 +69,7 @@
         </div>
 
         <button type="button" class="logo-pill" onclick="resetHomeFresh()" aria-label="متجر كارامل - الرئيسية">
-            <img src="./compressed_1795766509611.jpeg" data-brand-logo="1" alt="لوجو متجر كارامل" class="header-brand-img">
+            <img src="./compressed_1795766509611.jpeg?v=2" data-brand-logo="1" alt="لوجو متجر كارامل" class="header-brand-img">
             <div class="logo-text-group">
                 <div class="logo">CARAMEL STORE</div>
                 <div class="logo-sub">كل قطعة وليها دور</div>
