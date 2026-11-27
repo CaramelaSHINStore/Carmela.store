@@ -1,10 +1,10 @@
-const CACHE_NAME = "caramel-store-v20261127-13";
+const CACHE_NAME = "caramel-store-v20261127-14";
 const CORE_ASSETS = [
   "./",
   "./index.html",
-  "./style.css",
-  "./app.js",
-  "./manifest.json",
+  "./style.css?v=v20261127-14",
+  "./app.js?v=v20261127-14",
+  "./manifest.json?v=v20261127-14",
   "./compressed_1795766509611.jpeg"
 ];
 
@@ -35,10 +35,10 @@ self.addEventListener("fetch", event => {
   const url = new URL(event.request.url);
   if (url.origin !== self.location.origin) return;
 
-  // Always prefer fresh JSON catalog data with offline cache fallback
+  // Always fetch fresh JSON catalog data with no-store, fallback to cache only offline
   if (url.pathname.endsWith(".json")) {
     event.respondWith(
-      fetch(event.request)
+      fetch(new Request(event.request, { cache: "no-store" }))
         .then(response => {
           if (response && response.status === 200) {
             const copy = response.clone();
@@ -68,17 +68,16 @@ self.addEventListener("fetch", event => {
     return;
   }
 
-  // Stale-While-Revalidate for HTML/CSS/JS/manifest
+  // Network-first with cache fallback for HTML/CSS/JS so updates appear smoothly
   event.respondWith(
-    caches.match(event.request).then(cached => {
-      const networkFetch = fetch(event.request).then(response => {
+    fetch(event.request)
+      .then(response => {
         if (response && response.status === 200) {
           const copy = response.clone();
           caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy)).catch(() => {});
         }
         return response;
-      }).catch(() => cached);
-      return cached || networkFetch;
-    })
+      })
+      .catch(() => caches.match(event.request))
   );
 });
