@@ -564,7 +564,7 @@ function escapeHtmlAttr(str) {
 
 function normalizeProductImageUrl(rawImg) {
     if (!rawImg || typeof rawImg !== "string") return "";
-    let cleaned = rawImg.trim().replace(/\/g, "/");
+    let cleaned = rawImg.trim().replace(/\\/g, "/");
     if (!cleaned) return "";
     if (/^https?:\/\//i.test(cleaned) || cleaned.startsWith("data:") || cleaned.startsWith("blob:")) {
         return cleaned;
@@ -596,10 +596,8 @@ function extractImagesFromRawProduct(rawItem) {
                 }
             });
         } else if (typeof val === "string") {
-            if (val.includes(",") || val.includes("
-") || val.includes("|")) {
-                val.split(/[
-,|]+/).forEach(part => candidates.push(part));
+            if (val.includes(",") || val.includes("\n") || val.includes("|")) {
+                val.split(/[\n,|]+/).forEach(part => candidates.push(part));
             } else {
                 candidates.push(val);
             }
@@ -1036,8 +1034,7 @@ window.addEventListener("appinstalled", () => {
 
 async function shareStoreApp() {
     const shareTitle = "متجر كارامل - Caramel Store";
-    const shareText = "حمّل متجر كارامل على موبايلك واطلب كل اللي تحتاجه بأرخص الأسعار:
-" + STORE_URL;
+    const shareText = "حمّل متجر كارامل على موبايلك واطلب كل اللي تحتاجه بأرخص الأسعار:\n" + STORE_URL;
     if (navigator.share) {
         try {
             await navigator.share({ title: shareTitle, text: shareText, url: STORE_URL });
@@ -1209,7 +1206,7 @@ function resolveMerchantNameFromFile(fileNameOrUrl) {
     if (!cleanBase) return "";
     return cleanBase
         .replace(/[-_]+/g, " ")
-        .replace(/ \w/g, ch => ch.toUpperCase());
+        .replace(/\b\w/g, ch => ch.toUpperCase());
 }
 
 function inferCategorySmartly(rawCat, title = "", desc = "") {
@@ -1459,7 +1456,7 @@ async function fetchJsonWithFallback(source, forceRefresh = false) {
             const resp = await fetch(url, { cache: forceRefresh ? "no-store" : "default" });
             if (resp && resp.ok) {
                 const text = await resp.text();
-                const cleanText = text.replace(/^﻿/, "").trim();
+                const cleanText = text.replace(/^\uFEFF/, "").trim();
                 if (cleanText) return JSON.parse(cleanText);
             }
         } catch (e) {}
@@ -1641,8 +1638,7 @@ function applyQuickSearch(term) {
 function shareCurrentMerchantPage() {
     if (!currentMerchant) return;
     const shareUrl = `${STORE_URL}?merchant=${encodeURIComponent(currentMerchant)}`;
-    const shareText = `تصفح تشكيلة منتجات "${currentMerchant}" في متجر كارامل:
-${shareUrl}`;
+    const shareText = `تصفح تشكيلة منتجات "${currentMerchant}" في متجر كارامل:\n${shareUrl}`;
     if (navigator.share) {
         navigator.share({ title: `${currentMerchant} - متجر كارامل`, text: shareText, url: shareUrl }).catch(() => {});
     } else if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -1688,7 +1684,7 @@ function handleProductImageError(imgEl, productId) {
 
     if (retryStep <= 1 && currentSrc && !/^https?:\/\//i.test(currentSrc)) {
         imgEl.setAttribute("data-retry-step", "2");
-        const cleanPath = currentSrc.replace(/^\.?\//, "");
+        const cleanPath = currentSrc.replace(/^\.\?\//, "");
         imgEl.src = `https://raw.githubusercontent.com/${GITHUB_MERCHANTS_CONFIG.owner}/${GITHUB_MERCHANTS_CONFIG.repo}/${GITHUB_MERCHANTS_CONFIG.branch}/${cleanPath}`;
         return;
     }
@@ -3220,24 +3216,12 @@ function sendOrderUpdateOnWhatsApp(orderId) {
     });
     const totalAmt = getOrderTotalAmount(order);
     const totalPcs = getOrderTotalPieces(order);
-    let msg = `متابعة / تحديث أوردر رقم *${order.orderId}* من *متجر كارامل*:
-
-`;
-    if (customerName) msg += `الاسم: ${customerName}
-`;
-    if (customerPhone) msg += `رقم التواصل: ${customerPhone}
-`;
-    if (customerAddress) msg += `العنوان: ${customerAddress}
-`;
-    if (locUrl) msg += `اللوكيشن: ${locUrl}
-`;
-    msg += `
-المنتجات:
-${lines.join("
-")}
-
-إجمالي القطع: ${totalPcs}
-الإجمالي الكلي: ${formatPriceNumber(totalAmt)} جنيه`;
+    let msg = `متابعة / تحديث أوردر رقم *${order.orderId}* من *متجر كارامل*:\n\n`;
+    if (customerName) msg += `الاسم: ${customerName}\n`;
+    if (customerPhone) msg += `رقم التواصل: ${customerPhone}\n`;
+    if (customerAddress) msg += `العنوان: ${customerAddress}\n`;
+    if (locUrl) msg += `اللوكيشن: ${locUrl}\n`;
+    msg += `\nالمنتجات:\n${lines.join("\n")}\n\nإجمالي القطع: ${totalPcs}\nالإجمالي الكلي: ${formatPriceNumber(totalAmt)} جنيه`;
     launchWhatsAppTarget(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`);
 }
 
@@ -4016,24 +4000,12 @@ function checkoutOnWhatsApp() {
         return `${idx + 1}. ${item.title} (الكمية: ${item.qty} × ${formatPriceNumber(item.price)} جنيه = ${formatPriceNumber((Number(item.price) || 0) * (Number(item.qty) || 1))} جنيه)${details ? ` [${details}]` : ""}${imgPart}`;
     });
 
-    let msg = `طلب جديد رقم *${orderId}* من *متجر كارامل*:
-
-`;
-    msg += `الاسم: ${customerName}
-`;
-    msg += `رقم التواصل: ${customerPhone}
-`;
-    if (customerAddress) msg += `العنوان: ${customerAddress}
-`;
-    if (locationUrl) msg += `اللوكيشن: ${locationUrl}
-`;
-    msg += `
-المنتجات:
-${lines.join("
-")}
-
-إجمالي القطع: ${totalPieces}
-الإجمالي الكلي: ${formatPriceNumber(totalAmount)} جنيه`;
+    let msg = `طلب جديد رقم *${orderId}* من *متجر كارامل*:\n\n`;
+    msg += `الاسم: ${customerName}\n`;
+    msg += `رقم التواصل: ${customerPhone}\n`;
+    if (customerAddress) msg += `العنوان: ${customerAddress}\n`;
+    if (locationUrl) msg += `اللوكيشن: ${locationUrl}\n`;
+    msg += `\nالمنتجات:\n${lines.join("\n")}\n\nإجمالي القطع: ${totalPieces}\nالإجمالي الكلي: ${formatPriceNumber(totalAmount)} جنيه`;
 
     cart = [];
     saveCart();
