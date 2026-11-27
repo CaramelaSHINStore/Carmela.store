@@ -1,504 +1,453 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>متجر كارامل - Caramel Store</title>
-<meta name="description" content="متجر كارامل - تسوق منتجات متنوعة وعروض مميزة بسهولة عبر واتساب">
-<meta name="theme-color" content="#14110f">
-<link rel="icon" type="image/jpeg" href="./compressed_1795766509611.jpeg?v=5">
-<link rel="shortcut icon" type="image/jpeg" href="./compressed_1795766509611.jpeg?v=5">
-<link rel="apple-touch-icon" href="./compressed_1795766509611.jpeg?v=5">
-<link rel="manifest" href="./manifest.json?v=5">
-<script>
-(function() {
-    var v = Date.now();
-    document.querySelectorAll('link[rel="icon"], link[rel="shortcut icon"], link[rel="apple-touch-icon"]').forEach(function(el) {
-        var base = el.getAttribute("href").split("?")[0];
-        el.setAttribute("href", base + "?v=" + v);
-    });
-})();
-</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<script>
-(function() {
-    try {
-        if (localStorage.getItem("caramel_store_theme_mode_v1") === "dark") {
-            document.documentElement.classList.add("boot-dark-root");
-            document.documentElement.style.backgroundColor = "#12100e";
-        }
-    } catch (e) {}
-})();
-</script>
-<link rel="stylesheet" href="./style.css?v=5">
-<style>
-.caramel-logo-mark {
-    object-fit: cover;
-    border-radius: 50%;
-    filter: contrast(1.04) saturate(1.06);
-}
-.splash-logo-ring .caramel-logo-mark {
-    width: 100%;
-    height: 100%;
-    display: block;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>متجر كارامل - Caramel Store</title>
+    <meta name="theme-color" content="#14110f">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="متجر كارامل">
+    <link rel="icon" type="image/jpeg" href="./compressed_1795766509611.jpeg?v=6">
+    <link rel="shortcut icon" type="image/jpeg" href="./compressed_1795766509611.jpeg?v=6">
+    <link rel="apple-touch-icon" href="./compressed_1795766509611.jpeg?v=6">
+    <link rel="manifest" href="./manifest.json?v=6">
+    <script>
+        (function() {
+            try {
+                if (localStorage.getItem("caramel_store_theme_mode_v1") === "dark") {
+                    document.documentElement.classList.add("boot-dark-root");
+                }
+            } catch (e) {}
+        })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css?v=20261127-9">
 </head>
 <body>
-
-<div class="scroll-progress-track" aria-hidden="true">
-    <div class="scroll-progress-fill" id="scrollProgressFill"></div>
-</div>
-
-<!-- Splash Screen -->
-<div class="caramel-splash-screen" id="caramelSplashScreen" aria-label="جاري تحميل متجر كارامل">
-    <div class="splash-logo-stage">
-        <div class="splash-logo-ring">
-            <img src="./compressed_1795766509611.jpeg?v=5" data-brand-logo="1" class="caramel-logo-mark" alt="لوجو متجر كارامل">
-        </div>
+    <div class="scroll-progress-track" aria-hidden="true">
+        <div class="scroll-progress-fill" id="scrollProgressFill"></div>
     </div>
-    <div class="splash-brand-name">CARAMEL STORE</div>
-    <div class="splash-slogan-slot">
-        <div class="splash-sub-rect" id="caramelSplashSubRect">
-            <span class="splash-typed-text" id="caramelSplashTypedText">كل قطعة وليها دور</span>
-        </div>
-    </div>
-</div>
 
-<!-- Header -->
-<header class="top-app-bar">
-    <div class="top-brand-row">
-        <div class="header-left-slot">
-            <button type="button" class="icon-circle-btn" id="headerSearchToggleBtn" onclick="toggleHeaderSearchBar()" aria-label="بحث في المتجر">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            </button>
-            <button type="button" class="icon-circle-btn fav-header-btn" id="headerFavFilterBtn" onclick="toggleFavoritesFilter()" aria-label="المفضلة">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-                <span class="fav-header-badge" id="headerFavCount">0</span>
-            </button>
-        </div>
-
-        <button type="button" class="logo-pill" onclick="resetHomeFresh()" aria-label="متجر كارامل - الرئيسية">
-            <img src="./compressed_1795766509611.jpeg?v=5" data-brand-logo="1" alt="لوجو متجر كارامل" class="header-brand-img caramel-logo-mark">
-            <div class="logo-text-group">
-                <div class="logo">CARAMEL STORE</div>
-                <div class="logo-sub">كل قطعة وليها دور</div>
+    <div class="caramel-splash-screen" id="caramelSplashScreen" aria-hidden="true">
+        <div class="splash-logo-stage">
+            <div class="splash-logo-ring">
+                <img data-brand-logo src="./compressed_1795766509611.jpeg?v=6" alt="لوجو متجر كارامل">
             </div>
+        </div>
+        <div class="splash-brand-name">CARAMEL</div>
+        <div class="splash-slogan-slot">
+            <div class="splash-sub-rect" id="caramelSplashSubRect">
+                <span class="splash-typed-text" id="caramelSplashTypedText"></span>
+            </div>
+        </div>
+    </div>
+
+    <header class="top-app-bar">
+        <div class="top-brand-row">
+            <div class="header-left-slot">
+                <button type="button" class="install-app-btn" id="headerInstallBtn" onclick="handleInstallOrUpdateAction()" aria-label="تثبيت التطبيق">تثبيت</button>
+            </div>
+
+            <button type="button" class="logo-pill" onclick="resetHomeFresh()" aria-label="الرئيسية - متجر كارامل">
+                <img class="header-brand-img" data-brand-logo src="./compressed_1795766509611.jpeg?v=6" alt="لوجو متجر كارامل">
+                <div class="logo-text-group">
+                    <div class="logo">CARAMEL</div>
+                    <div class="logo-sub">متجر كارامل</div>
+                </div>
+            </button>
+
+            <div class="header-actions">
+                <button type="button" class="icon-circle-btn" id="headerSearchToggleBtn" onclick="toggleHeaderSearchBar()" aria-label="بحث في المنتجات">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="11" cy="11" r="7"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </button>
+                <button type="button" class="icon-circle-btn fav-header-btn" id="headerFavFilterBtn" onclick="toggleFavoritesFilter()" aria-label="المفضلة">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                    <span class="fav-header-badge" id="headerFavCount">0</span>
+                </button>
+                <button type="button" class="icon-circle-btn" id="themeToggleBtn" onclick="toggleThemeMode()" aria-label="تبديل المظهر">
+                    <svg id="themeIconSvg" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="collapsible-search-wrap" id="collapsibleSearchWrap">
+            <div class="app-search-bar">
+                <input type="text" id="homeSearchInput" placeholder="ابحث بالاسم، الكود، الوصف، التاجر، أو القسم..." oninput="handleSearchInput()" onkeydown="handleSearchKeyDown(event)">
+                <button type="button" class="search-cancel-btn" id="searchCancelBtn" onclick="cancelSearchMode(event)">إلغاء</button>
+                <button type="button" class="app-search-submit-btn" onclick="performSearchRender()" aria-label="تنفيذ البحث">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="11" cy="11" r="7"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="smart-search-suggestions" id="smartSearchSuggestions"></div>
+        </div>
+    </header>
+
+    <nav class="quick-top-tabs" aria-label="الأقسام السريعة">
+        <button type="button" class="quick-tab-item active" data-quick="all" onclick="selectTopQuickTab('all', this)">الكل</button>
+        <button type="button" class="quick-tab-item" data-quick="appliances" onclick="selectTopQuickTab('appliances', this)">الأدوات الكهربائية</button>
+        <button type="button" class="quick-tab-item" data-quick="phones" onclick="selectTopQuickTab('phones', this)">الهواتف والإكسسوارات</button>
+        <button type="button" class="quick-tab-item" data-quick="jewelry" onclick="selectTopQuickTab('jewelry', this)">مجوهرات وإكسسوارات</button>
+        <button type="button" class="quick-tab-item" data-quick="school" onclick="selectTopQuickTab('school', this)">اللوازم المكتبية والمدرسة</button>
+        <button type="button" class="quick-tab-item" data-quick="home" onclick="selectTopQuickTab('home', this)">المنزل</button>
+        <button type="button" class="quick-tab-item" data-quick="kids" onclick="selectTopQuickTab('kids', this)">الأطفال</button>
+        <button type="button" class="quick-tab-item" data-quick="tafse" onclick="selectTopQuickTab('tafse', this)">هاند ميد</button>
+        <button type="button" class="quick-tab-item" data-quick="men" onclick="selectTopQuickTab('men', this)">الرجال</button>
+        <button type="button" class="quick-tab-item" data-quick="women" onclick="selectTopQuickTab('women', this)">النساء</button>
+        <button type="button" class="quick-tab-item" data-quick="perfume" onclick="selectTopQuickTab('perfume', this)">الجمال والصحة</button>
+        <button type="button" class="quick-tab-item" data-quick="gifts" onclick="selectTopQuickTab('gifts', this)">الهدايا</button>
+    </nav>
+
+    <div class="sticky-price-bar" aria-label="تصفية حسب السعر">
+        <span class="price-bar-label">السعر:</span>
+        <div class="price-chips-row" id="smartPriceChipsContainer"></div>
+    </div>
+
+    <div class="merchants-quick-strip is-hidden" id="merchantsQuickStrip" aria-label="تجار المتجر"></div>
+
+    <main class="container">
+        <section class="payment-service-strip" aria-label="طرق الدفع والخدمات">
+            <div class="service-pills-group">
+                <button type="button" class="service-action-btn" onclick="openServiceInfoModal('payment')">
+                    <span class="service-icon-badge" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                    </span>
+                    <span>طرق الدفع</span>
+                </button>
+                <button type="button" class="service-action-btn" onclick="openServiceInfoModal('delivery')">
+                    <span class="service-icon-badge" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                    </span>
+                    <span>التوصيل</span>
+                </button>
+                <button type="button" class="service-action-btn" onclick="openServiceInfoModal('return')">
+                    <span class="service-icon-badge" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+                    </span>
+                    <span>الاسترجاع</span>
+                </button>
+            </div>
+            <div class="promo-actions-pair">
+                <a href="https://wa.me/201055436305?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D9%85%D8%AA%D8%AC%D8%B1%20%D9%83%D8%A7%D8%B1%D8%A7%D9%85%D9%84%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%AA%D9%88%D8%A7%D8%B5%D9%84%20%D9%85%D8%B9%20%D8%AE%D8%AF%D9%85%D8%A9%20%D8%A7%D9%84%D8%B9%D9%85%D9%84%D8%A7%D8%A1." class="promo-cs-link" target="_blank" rel="noopener noreferrer" onclick="event.preventDefault(); launchWhatsAppTarget(this.href);">خدمة العملاء</a>
+                <a href="#productsSectionHeading" class="promo-special-link" onclick="event.preventDefault(); jumpToFeedMode('deals');">عروض مميزة</a>
+            </div>
+        </section>
+
+        <div class="append-mode-banner is-hidden" id="appendOrderBanner">
+            <span id="appendOrderBannerText"></span>
+            <div class="append-mode-actions">
+                <button type="button" class="append-open-cart-btn" onclick="openCart()">عرض الأوردر</button>
+                <button type="button" class="append-cancel-btn" onclick="cancelAppendToOrderMode()">إنهاء الإضافة</button>
+            </div>
+        </div>
+
+        <section class="merchant-storefront-banner" id="activeMerchantBanner" aria-label="صفحة التاجر">
+            <div class="merchant-banner-top">
+                <div class="merchant-banner-identity">
+                    <div class="merchant-avatar-badge" id="merchantAvatarInitial">ت</div>
+                    <div>
+                        <div class="merchant-banner-eyebrow">ركن التاجر في متجر كارامل</div>
+                        <div class="merchant-banner-name" id="merchantBannerName"></div>
+                        <div class="merchant-banner-meta" id="merchantBannerCount"></div>
+                    </div>
+                </div>
+                <div class="merchant-banner-actions">
+                    <button type="button" class="merchant-share-btn" onclick="shareCurrentMerchantPage()">مشاركة صفحة التاجر</button>
+                    <button type="button" class="merchant-back-btn" onclick="clearMerchantFilter(true)">كل التجار</button>
+                </div>
+            </div>
+            <div class="merchant-inner-cats-wrap is-hidden" id="merchantInnerCatsWrap" aria-label="أقسام التاجر"></div>
+        </section>
+
+        <section class="dual-spotlight-row" aria-label="مختارات مميزة">
+            <div class="spotlight-box" onmouseenter="setMotionPaused('trends', true)" onmouseleave="setMotionPaused('trends', false)" ontouchstart="setMotionPaused('trends', true)" ontouchend="setMotionPaused('trends', false)">
+                <div class="spotlight-box-header">
+                    <div class="spotlight-box-title"><span class="spotlight-title-dot"></span>الأكثر طلباً</div>
+                </div>
+                <div id="trendsSpotlightGrid"></div>
+            </div>
+
+            <div class="spotlight-box" onmouseenter="setMotionPaused('deals', true)" onmouseleave="setMotionPaused('deals', false)" ontouchstart="setMotionPaused('deals', true)" ontouchend="setMotionPaused('deals', false)">
+                <div class="spotlight-box-header">
+                    <div class="spotlight-box-title"><span class="spotlight-title-dot"></span>أسعار مميزة</div>
+                </div>
+                <div id="dealsSpotlightGrid"></div>
+            </div>
+        </section>
+
+        <div class="feed-controls-row">
+            <div class="feed-filter-pills" id="feedFilterPills">
+                <button type="button" class="feed-pill-btn active" data-mode="for-you" onclick="setFeedMode('for-you', this)">من أجلك</button>
+                <button type="button" class="feed-pill-btn" data-mode="deals" onclick="setFeedMode('deals', this)">أسعار اقتصادية</button>
+                <button type="button" class="feed-pill-btn" data-mode="new" onclick="setFeedMode('new', this)">مدخلات جديدة</button>
+            </div>
+            <select id="productsSortSelect" class="sort-select-control" onchange="setSortMode(this.value)" aria-label="ترتيب المنتجات">
+                <option value="smart">ترتيب: ذكي</option>
+                <option value="price-asc">السعر: من الأقل للأعلى</option>
+                <option value="price-desc">السعر: من الأعلى للأقل</option>
+            </select>
+        </div>
+
+        <div class="search-results-summary-bar" id="searchResultsSummaryBar">
+            <span id="searchResultsSummaryText"></span>
+            <button type="button" class="search-clear-inline-btn" onclick="cancelSearchMode()">مسح البحث</button>
+        </div>
+
+        <div class="section-heading" id="productsSectionHeading">
+            <h2 id="activeCategoryTitle">الكل — من أجلك</h2>
+            <span class="smart-tag" id="resultsCountBadge">0 منتج</span>
+        </div>
+
+        <div class="products-grid" id="productsGrid"></div>
+        <div class="feed-sentinel" id="feedSentinel"></div>
+        <div id="continuationAfterRecommendations"></div>
+    </main>
+
+    <button type="button" class="floating-push-btn" id="caramelPushBtn" onclick="enableCaramelPush()">
+        <span id="caramelPushIcon"></span>
+        <span id="caramelPushBtnText">فعّل إشعارات العروض</span>
+    </button>
+
+    <button type="button" class="back-to-top-fab" id="backToTopFab" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })" aria-label="العودة للأعلى">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="18 15 12 9 6 15"></polyline></svg>
+    </button>
+
+    <nav class="bottom-nav-bar" aria-label="التنقل السفلي">
+        <button type="button" class="bottom-nav-item active" id="navHomeBtn" onclick="pulseBottomNavButton('navHomeBtn'); resetHomeFresh();">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1V9.5z"></path></svg>
+            <span>الرئيسية</span>
         </button>
 
-        <div class="header-actions">
-            <button type="button" class="install-app-btn" id="headerInstallBtn" onclick="handleInstallOrUpdateAction()">تثبيت</button>
-            <button type="button" class="icon-circle-btn" onclick="shareStoreApp()" aria-label="مشاركة المتجر">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-            </button>
-            <button type="button" class="icon-circle-btn" id="themeToggleBtn" onclick="toggleThemeMode()" aria-label="تبديل المظهر">
-                <svg id="themeIconSvg" viewBox="0 0 24 24" aria-hidden="true"></svg>
-            </button>
-        </div>
-    </div>
+        <button type="button" class="bottom-nav-item" id="navCategoriesBtn" onclick="pulseBottomNavButton('navCategoriesBtn'); openCategoriesDrawer();">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg>
+            <span>الأقسام</span>
+        </button>
 
-    <div class="collapsible-search-wrap" id="collapsibleSearchWrap">
-        <div class="app-search-bar">
-            <input type="text" id="homeSearchInput" oninput="handleSearchInput()" onkeydown="handleSearchKeyDown(event)" placeholder="ابحث عن منتج، تاجر، عطر، هاند ميد..." autocomplete="off">
-            <button type="button" class="search-cancel-btn" id="searchCancelBtn" onclick="cancelSearchMode(event)">مسح</button>
-            <button type="button" class="app-search-submit-btn" onclick="performSearchRender(); scrollToProductsTop();" aria-label="تنفيذ البحث">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            </button>
-        </div>
-        <div class="smart-search-suggestions" id="smartSearchSuggestions"></div>
-    </div>
-</header>
+        <button type="button" class="bottom-nav-item" id="navCartBtn" onclick="pulseBottomNavButton('navCartBtn'); openCart();">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="21" r="1.5"></circle><circle cx="20" cy="21" r="1.5"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            <span>السلة</span>
+            <span class="bottom-cart-badge" id="bottomCartCount">0</span>
+        </button>
 
-<!-- Quick Top Tabs -->
-<nav class="quick-top-tabs" aria-label="الأقسام السريعة">
-    <button type="button" class="quick-tab-item active" data-quick="all" onclick="selectTopQuickTab('all', this)">الكل</button>
-    <button type="button" class="quick-tab-item" data-quick="home" onclick="selectTopQuickTab('home', this)">المنزل</button>
-    <button type="button" class="quick-tab-item" data-quick="appliances" onclick="selectTopQuickTab('appliances', this)">الأدوات الكهربائية</button>
-    <button type="button" class="quick-tab-item" data-quick="phones" onclick="selectTopQuickTab('phones', this)">الهواتف والإكسسوارات</button>
-    <button type="button" class="quick-tab-item" data-quick="jewelry" onclick="selectTopQuickTab('jewelry', this)">مجوهرات وإكسسوارات</button>
-    <button type="button" class="quick-tab-item" data-quick="perfume" onclick="selectTopQuickTab('perfume', this)">الجمال والصحة</button>
-    <button type="button" class="quick-tab-item" data-quick="school" onclick="selectTopQuickTab('school', this)">اللوازم المكتبية والمدرسة</button>
-    <button type="button" class="quick-tab-item" data-quick="gifts" onclick="selectTopQuickTab('gifts', this)">الهدايا</button>
-    <button type="button" class="quick-tab-item" data-quick="tafse" onclick="selectTopQuickTab('tafse', this)">هاند ميد</button>
-    <button type="button" class="quick-tab-item" data-quick="women" onclick="selectTopQuickTab('women', this)">النساء</button>
-    <button type="button" class="quick-tab-item" data-quick="men" onclick="selectTopQuickTab('men', this)">الرجال</button>
-    <button type="button" class="quick-tab-item" data-quick="kids" onclick="selectTopQuickTab('kids', this)">الأطفال</button>
-</nav>
+        <button type="button" class="bottom-nav-item" id="navShareBtn" onclick="pulseBottomNavButton('navShareBtn'); shareStoreApp();">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+            <span>مشاركة</span>
+        </button>
 
-<!-- Price Filter Strip -->
-<div class="sticky-price-bar" id="stickyPriceBar">
-    <span class="price-bar-label">السعر:</span>
-    <div class="price-chips-row" id="smartPriceChipsContainer"></div>
-</div>
+        <button type="button" class="bottom-nav-item" id="navWhatsAppBtn" onclick="pulseBottomNavButton('navWhatsAppBtn'); openWhatsAppChatDirect();">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+            <span>واتساب</span>
+        </button>
+    </nav>
 
-<!-- Merchants Quick Strip -->
-<div class="merchants-quick-strip" id="merchantsQuickStrip" aria-label="التجار في المتجر"></div>
-
-<!-- Main Container -->
-<main class="container">
-    <!-- Service & Support Strip -->
-    <section class="payment-service-strip" aria-label="معلومات الدفع والتوصيل">
-        <div class="service-pills-group">
-            <button type="button" class="service-action-btn" onclick="openServiceInfoModal('payment')">
-                <span class="service-icon-badge" aria-hidden="true">
-                    <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
-                </span>
-                <span>الدفع</span>
-            </button>
-            <button type="button" class="service-action-btn" onclick="openServiceInfoModal('delivery')">
-                <span class="service-icon-badge" aria-hidden="true">
-                    <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
-                </span>
-                <span>التوصيل</span>
-            </button>
-            <button type="button" class="service-action-btn" onclick="openServiceInfoModal('return')">
-                <span class="service-icon-badge" aria-hidden="true">
-                    <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
-                </span>
-                <span>الاسترجاع</span>
-            </button>
-        </div>
-
-        <div class="promo-actions-pair">
-            <a href="https://wa.me/201055436305?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D9%85%D8%AA%D8%AC%D8%B1%20%D9%83%D8%A7%D8%B1%D8%A7%D9%85%D9%84%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%A7%D9%86%D8%B6%D9%85%D8%A7%D9%85%20%D9%83%D8%AA%D8%A7%D8%AC%D8%B1%20%D9%81%D9%8A%20%D8%A7%D9%84%D9%85%D8%AA%D8%AC%D8%B1" class="promo-special-link" target="_blank" rel="noopener noreferrer" onclick="event.preventDefault(); launchWhatsAppTarget(this.href);">كن تاجر</a>
-            <a href="https://wa.me/201055436305?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D8%AF%D8%B9%D9%85%20%D9%85%D8%AA%D8%AC%D8%B1%20%D9%83%D8%A7%D8%B1%D8%A7%D9%85%D9%84" class="promo-cs-link" target="_blank" rel="noopener noreferrer" onclick="event.preventDefault(); launchWhatsAppTarget(this.href);">خدمة العملاء</a>
-        </div>
-    </section>
-
-    <!-- Append Mode Banner -->
-    <div class="append-mode-banner is-hidden" id="appendOrderBanner">
-        <span id="appendOrderBannerText"></span>
-        <div class="append-mode-actions">
-            <button type="button" class="append-open-cart-btn" onclick="openCart()">عرض الطلب</button>
-            <button type="button" class="append-cancel-btn" onclick="cancelAppendToOrderMode()">إنهاء</button>
-        </div>
-    </div>
-
-    <!-- Dual Spotlight Boxes -->
-    <section class="dual-spotlight-row" aria-label="مختارات وأسعار مميزة">
-        <div class="spotlight-box" onmouseenter="setMotionPaused('trends', true)" onmouseleave="setMotionPaused('trends', false)" ontouchstart="setMotionPaused('trends', true)">
-            <div class="spotlight-box-header">
-                <div class="spotlight-box-title">
-                    <span class="spotlight-title-dot"></span>
-                    <span>الأكثر طلباً</span>
-                </div>
+    <div class="drawer-backdrop" id="catsBackdrop" onclick="closeCategoriesDrawer()"></div>
+    <aside class="side-drawer categories-drawer" id="catsDrawer" aria-label="الأقسام">
+        <div class="drawer-header">
+            <div class="drawer-title-group">
+                <img class="drawer-brand-img" data-brand-logo src="./compressed_1795766509611.jpeg?v=6" alt="لوجو متجر كارامل">
+                <h3>أقسام متجر كارامل</h3>
             </div>
-            <div id="trendsSpotlightGrid"></div>
+            <button type="button" class="close-drawer-btn" onclick="closeCategoriesDrawer()" aria-label="إغلاق">✕</button>
         </div>
+        <div class="clean-categories-grid" id="sideCategoriesList"></div>
+    </aside>
 
-        <div class="spotlight-box" onmouseenter="setMotionPaused('deals', true)" onmouseleave="setMotionPaused('deals', false)" ontouchstart="setMotionPaused('deals', true)">
-            <div class="spotlight-box-header">
-                <div class="spotlight-box-title">
-                    <span class="spotlight-title-dot"></span>
-                    <span>أسعار اقتصادية</span>
-                </div>
+    <div class="drawer-backdrop" id="cartBackdrop" onclick="closeCart()"></div>
+    <aside class="side-drawer cart-drawer" id="cartDrawer" aria-label="سلة المشتريات">
+        <div class="drawer-header">
+            <div class="drawer-title-group">
+                <img class="drawer-brand-img" data-brand-logo src="./compressed_1795766509611.jpeg?v=6" alt="لوجو متجر كارامل">
+                <h3>سلة متجر كارامل</h3>
             </div>
-            <div id="dealsSpotlightGrid"></div>
-        </div>
-    </section>
-
-    <!-- Feed Controls -->
-    <div class="feed-controls-row">
-        <div class="feed-filter-pills" id="feedFilterPills">
-            <button type="button" class="feed-pill-btn active" data-mode="for-you" onclick="setFeedMode('for-you', this)">من أجلك</button>
-            <button type="button" class="feed-pill-btn" data-mode="new" onclick="setFeedMode('new', this)">مدخلات جديدة</button>
-            <button type="button" class="feed-pill-btn" data-mode="deals" onclick="setFeedMode('deals', this)">أسعار اقتصادية</button>
-        </div>
-        <select class="sort-select-control" id="productsSortSelect" onchange="setSortMode(this.value)" aria-label="ترتيب المنتجات">
-            <option value="smart">ترتيب ذكي</option>
-            <option value="price-asc">السعر: من الأقل للأعلى</option>
-            <option value="price-desc">السعر: من الأعلى للأقل</option>
-        </select>
-    </div>
-
-    <!-- Search Results Summary -->
-    <div class="search-results-summary-bar" id="searchResultsSummaryBar">
-        <span id="searchResultsSummaryText"></span>
-        <button type="button" class="search-clear-inline-btn" onclick="cancelSearchMode()">إلغاء البحث</button>
-    </div>
-
-    <!-- Featured Merchant Storefront Banner -->
-    <section class="merchant-storefront-banner" id="activeMerchantBanner" aria-live="polite">
-        <div class="merchant-banner-top">
-            <div class="merchant-banner-identity">
-                <div class="merchant-avatar-badge" id="merchantAvatarInitial" aria-hidden="true">ت</div>
-                <div>
-                    <div class="merchant-banner-eyebrow">صفحة التاجر الرسمية في كارامل</div>
-                    <h2 class="merchant-banner-name" id="merchantBannerName"></h2>
-                    <div class="merchant-banner-meta" id="merchantBannerCount"></div>
-                </div>
-            </div>
-            <div class="merchant-banner-actions">
-                <button type="button" class="merchant-share-btn" onclick="shareCurrentMerchantPage()">مشاركة صفحة التاجر</button>
-                <button type="button" class="merchant-back-btn" onclick="clearMerchantFilter(true)">← كل التجار</button>
-            </div>
-        </div>
-        <div class="merchant-inner-cats-wrap is-hidden" id="merchantInnerCatsWrap" aria-label="أقسام التاجر"></div>
-    </section>
-
-    <!-- Main Products Heading -->
-    <div class="section-heading" id="productsSectionHeading">
-        <h2 id="activeCategoryTitle">الكل — من أجلك</h2>
-        <span class="smart-tag" id="resultsCountBadge"></span>
-    </div>
-
-    <!-- Products Grid -->
-    <section class="products-grid" id="productsGrid"></section>
-
-    <!-- Continuation Section -->
-    <div id="continuationAfterRecommendations"></div>
-
-    <!-- Sentinel -->
-    <div class="feed-sentinel" id="feedSentinel"></div>
-</main>
-
-<!-- Push Button -->
-<button type="button" class="floating-notification-pill" id="caramelPushBtn" onclick="enableCaramelPush()">
-    <span class="push-pill-icon" id="caramelPushIcon"></span>
-    <span class="push-pill-label" id="caramelPushBtnText">فعّل إشعارات العروض</span>
-</button>
-
-<!-- Back To Top -->
-<button type="button" class="back-to-top-fab" id="backToTopFab" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })" aria-label="العودة للأعلى">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="18 15 12 9 6 15"></polyline></svg>
-</button>
-
-<!-- Bottom Navigation Bar -->
-<nav class="bottom-nav-bar" aria-label="التنقل السفلي">
-    <button type="button" class="bottom-nav-btn active" id="navHomeBtn" onclick="pulseBottomNavButton('navHomeBtn'); resetHomeFresh();">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-        <span>الرئيسية</span>
-    </button>
-    <button type="button" class="bottom-nav-btn" id="navCatsBtn" onclick="pulseBottomNavButton('navCatsBtn'); openCategoriesDrawer();">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-        <span>الأقسام</span>
-    </button>
-    <button type="button" class="bottom-nav-btn" id="navSearchBtn" onclick="pulseBottomNavButton('navSearchBtn'); openGlobalSearchBar();">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        <span>البحث</span>
-    </button>
-    <button type="button" class="bottom-nav-btn" id="navCartBtn" onclick="pulseBottomNavButton('navCartBtn'); openCart();">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-        <span>المشتريات</span>
-        <span class="bottom-cart-badge" id="bottomCartCount">0</span>
-    </button>
-</nav>
-
-<!-- Drawers Backdrops -->
-<div class="drawer-backdrop" id="cartBackdrop" onclick="closeCart()"></div>
-<div class="drawer-backdrop" id="catsBackdrop" onclick="closeCategoriesDrawer()"></div>
-
-<!-- Cart & Orders Drawer -->
-<aside class="cart-drawer" id="cartDrawer" aria-label="سلة المشتريات والطلبات">
-    <div class="drawer-header">
-        <h3>المشتريات والطلبات</h3>
-        <div class="drawer-header-actions">
-            <button type="button" class="my-data-top-btn" id="myDataTopBtn" onclick="toggleProfileEditorPanel()">بياناتي</button>
             <button type="button" class="close-drawer-btn" onclick="closeCart()" aria-label="إغلاق">✕</button>
         </div>
-    </div>
 
-    <div class="cart-tabs-bar">
-        <button type="button" class="cart-tab-btn active" id="tabBtnCurrentCart" onclick="switchCartOrdersTab('cart')">
-            <span>السلة</span>
-            <span class="cart-tab-badge" id="currentCartCountBadge">0</span>
-        </button>
-        <button type="button" class="cart-tab-btn" id="tabBtnPendingOrders" onclick="switchCartOrdersTab('pending')">
-            <span>قيد التنفيذ</span>
-            <span class="cart-tab-badge" id="activeOrdersCountBadge">0</span>
-        </button>
-        <button type="button" class="cart-tab-btn" id="tabBtnReceivedOrders" onclick="switchCartOrdersTab('received')">
-            <span>المستلمة</span>
-            <span class="cart-tab-badge" id="receivedOrdersCountBadge">0</span>
-        </button>
-    </div>
+        <div class="cart-drawer-top-strip">
+            <span>بيانات التواصل والتوصيل</span>
+            <button type="button" class="my-data-top-btn" id="myDataTopBtn" onclick="toggleProfileEditorPanel()">بياناتي</button>
+        </div>
 
-    <div class="cart-drawer-body" id="cartDrawerPagesContainer">
-        <!-- Customer Profile Panel -->
         <div class="my-data-editor-panel is-hidden" id="myDataEditorPanel">
-            <div class="my-data-panel-title">بيانات التوصيل والعميل</div>
-            <div class="checkout-customer-fields">
-                <input type="text" class="checkout-field-input" id="checkoutCustomerName" placeholder="الاسم بالكامل *" autocomplete="name">
-                <input type="tel" class="checkout-field-input" id="checkoutCustomerPhone" placeholder="رقم التواصل (واتساب / موبايل) *" autocomplete="tel">
-                <input type="text" class="checkout-field-input" id="checkoutCustomerAddress" placeholder="العنوان التفصيلي (اختياري)" autocomplete="street-address">
+            <div class="customer-info-box">
+                <input type="text" id="checkoutCustomerName" class="customer-info-input" placeholder="الاسم بالكامل">
+                <input type="tel" id="checkoutCustomerPhone" class="customer-info-input" placeholder="رقم التواصل (موبايل / واتساب)">
+                <input type="text" id="checkoutCustomerAddress" class="customer-info-input" placeholder="العنوان التفصيلي (المحافظة / المنطقة / الشارع)">
+                <div class="location-attach-row">
+                    <button type="button" class="location-attach-btn" id="cartLocationBtn" onclick="requestCustomerLocation()">
+                        <span id="cartLocationBtnText">تحديد موقعي الحالي (اللوكيشن)</span>
+                    </button>
+                    <button type="button" class="location-clear-btn" id="cartLocationClearBtn" onclick="clearCustomerLocation()" aria-label="إزالة اللوكيشن">✕</button>
+                </div>
+                <div class="location-preview-text is-hidden" id="cartLocationPreview"></div>
             </div>
-            <div class="checkout-location-box">
-                <button type="button" class="cart-location-btn" id="cartLocationBtn" onclick="requestCustomerLocation()">
-                    <span id="cartLocationBtnText">تحديد موقعي الحالي (اللوكيشن)</span>
-                </button>
-                <button type="button" class="cart-location-clear-btn" id="cartLocationClearBtn" onclick="clearCustomerLocation()" aria-label="إلغاء اللوكيشن">✕</button>
-            </div>
-            <div class="cart-location-preview is-hidden" id="cartLocationPreview"></div>
             <button type="button" class="save-profile-panel-btn" onclick="saveCustomerProfileFromPanel()">حفظ بياناتي</button>
         </div>
 
-        <!-- Current Cart Section -->
-        <div id="currentCartSection">
-            <div class="cart-page-header-row">
-                <span class="cart-page-title">منتجات السلة الجارية</span>
-                <span class="cart-page-chip" id="currentCartPageChip">0 قطعة</span>
-            </div>
-            <div id="cartItemsContainer"></div>
+        <div class="cart-orders-tabs" role="tablist">
+            <button type="button" class="cart-tab-btn active" id="tabBtnCurrentCart" onclick="switchCartOrdersTab('cart')">
+                <span>السلة</span>
+                <span class="tab-count-pill" id="currentCartCountBadge">0</span>
+            </button>
+            <button type="button" class="cart-tab-btn" id="tabBtnPendingOrders" onclick="switchCartOrdersTab('pending')">
+                <span>قيد التنفيذ</span>
+                <span class="tab-count-pill" id="activeOrdersCountBadge">0</span>
+            </button>
+            <button type="button" class="cart-tab-btn" id="tabBtnReceivedOrders" onclick="switchCartOrdersTab('received')">
+                <span>المستلمة</span>
+                <span class="tab-count-pill" id="receivedOrdersCountBadge">0</span>
+            </button>
         </div>
 
-        <!-- Active Pending Orders Section -->
-        <div class="is-hidden" id="activeOrdersSection">
-            <div class="cart-page-header-row">
-                <span class="cart-page-title">طلبات قيد التنفيذ</span>
-                <span class="cart-page-chip" id="pendingOrdersPageChip">0 طلب</span>
-            </div>
-            <div id="activeOrdersContainer"></div>
-        </div>
-
-        <!-- Received Orders Section -->
-        <div class="is-hidden" id="receivedOrdersSection">
-            <div class="cart-page-header-row">
-                <span class="cart-page-title">الأوردرات المستلمة</span>
-                <span class="cart-page-chip" id="receivedOrdersPageChip">0 طلب</span>
-            </div>
-            <div id="receivedOrdersContainer"></div>
-        </div>
-    </div>
-
-    <div class="cart-footer">
-        <div class="cart-summary-meta">
-            <span>عدد الأصناف: <strong id="cartDistinctCount">0</strong></span>
-            <span>إجمالي القطع: <strong id="cartTotalPieces">0</strong></span>
-        </div>
-
-        <div class="cart-total-row" id="currentCartTotalRow">
-            <span>الإجمالي:</span>
-            <span id="cartTotalAmount">0 جنيه</span>
-        </div>
-
-        <div class="cart-checkout-actions" id="currentCartCheckoutActions">
-            <button type="button" class="whatsapp-checkout-btn" onclick="checkoutOnWhatsApp()">إرسال وتأكيد الطلب عبر واتساب</button>
-            <div class="cart-secondary-actions">
-                <button type="button" class="clear-cart-btn" onclick="clearCart()">تفريغ السلة</button>
-                <button type="button" class="cart-direct-wa-btn" onclick="openWhatsAppChatDirect()">تواصل مباشر</button>
-            </div>
-        </div>
-
-        <div class="orders-tab-quick-actions is-hidden" id="ordersTabQuickActions">
-            <button type="button" class="orders-tab-action-btn primary" onclick="switchCartOrdersTab('cart')">العودة للسلة</button>
-            <button type="button" class="orders-tab-action-btn" onclick="openWhatsAppChatDirect()">تواصل واتساب</button>
-        </div>
-    </div>
-</aside>
-
-<!-- Categories Drawer -->
-<aside class="cats-drawer" id="catsDrawer" aria-label="أقسام المتجر">
-    <div class="drawer-header">
-        <h3>أقسام المتجر</h3>
-        <button type="button" class="close-drawer-btn" onclick="closeCategoriesDrawer()" aria-label="إغلاق">✕</button>
-    </div>
-    <div class="cats-drawer-body" id="sideCategoriesList"></div>
-</aside>
-
-<!-- Image & Product Preview Modal -->
-<div class="image-modal" id="imageModal" onclick="if(event.target===this) closeImageModal()">
-    <div class="product-preview-card" role="dialog" aria-modal="true">
-        <button type="button" class="close-modal-btn" onclick="closeImageModal()" aria-label="إغلاق">✕</button>
-        <div class="preview-top-media">
-            <button type="button" class="preview-nav-btn prev is-hidden" id="previewPrevBtn" onclick="stepPreviewImage(-1, event)" aria-label="الصورة السابقة">›</button>
-            <img id="modalImagePreview" src="" alt="معاينة المنتج" onerror="handleProductImageError(this, this.getAttribute('data-product-id'))">
-            <button type="button" class="preview-nav-btn next is-hidden" id="previewNextBtn" onclick="stepPreviewImage(1, event)" aria-label="الصورة التالية">‹</button>
-        </div>
-        <div class="preview-thumbs-row is-hidden" id="previewThumbsRow"></div>
-        <div class="preview-body">
-            <div class="preview-meta-chips">
-                <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
-                    <span class="preview-chip" id="previewCategoryChip">متجر كارامل</span>
-                    <button type="button" class="preview-merchant-btn is-hidden" id="previewMerchantChip"></button>
+        <div class="cart-drawer-pages" id="cartDrawerPagesContainer">
+            <section id="currentCartSection">
+                <div class="drawer-page-banner">
+                    <span>المنتجات الحالية في السلة</span>
+                    <span class="smart-tag" id="currentCartPageChip">0 قطعة</span>
                 </div>
-                <button type="button" class="preview-copy-link-btn" id="previewCopyLinkBtn">نسخ الرابط</button>
+                <div id="cartItemsContainer"></div>
+            </section>
+
+            <section id="activeOrdersSection" class="is-hidden">
+                <div class="drawer-page-banner">
+                    <span>الطلبات قيد التنفيذ</span>
+                    <span class="smart-tag" id="pendingOrdersPageChip">0 طلب</span>
+                </div>
+                <div id="activeOrdersContainer"></div>
+            </section>
+
+            <section id="receivedOrdersSection" class="is-hidden">
+                <div class="drawer-page-banner">
+                    <span>الأوردرات المستلمة</span>
+                    <span class="smart-tag" id="receivedOrdersPageChip">0 طلب</span>
+                </div>
+                <div id="receivedOrdersContainer"></div>
+            </section>
+        </div>
+
+        <div class="cart-footer">
+            <div class="cart-summary-stats">
+                <span>عدد الأصناف: <strong id="cartDistinctCount">0</strong></span>
+                <span>إجمالي القطع: <strong id="cartTotalPieces">0</strong></span>
             </div>
-            <div class="preview-title" id="previewProductTitle"></div>
-            <div class="preview-price-line">
-                <div class="preview-main-price" id="previewMainPrice"></div>
-                <div class="preview-sub-price is-hidden" id="previewSubPrice"></div>
+            <div class="cart-total-row" id="currentCartTotalRow">
+                <span>الإجمالي الكلي:</span>
+                <span class="cart-total-amount" id="cartTotalAmount">0 جنيه</span>
             </div>
-            <div class="preview-story-text" id="previewStoryText"></div>
-            <div class="preview-hook-note" id="previewHookNote"></div>
-            <div class="preview-related-section is-hidden" id="previewRelatedSection">
-                <div class="preview-related-title-heading">منتجات مشابهة أو لنفس التاجر</div>
-                <div class="preview-related-list" id="previewRelatedList"></div>
+            <div class="cart-checkout-actions" id="currentCartCheckoutActions">
+                <button type="button" class="whatsapp-checkout-btn" onclick="checkoutOnWhatsApp()">إتمام الطلب عبر واتساب</button>
+                <button type="button" class="clear-cart-btn" onclick="clearCart()">تفريغ</button>
             </div>
-            <div class="preview-actions-row">
-                <button type="button" class="preview-add-btn" id="previewAddToCartBtn">أضف للسلة الجارية</button>
-                <a href="#" class="preview-wa-btn" id="previewWhatsAppBtn" target="_blank" rel="noopener noreferrer">طلب واتساب</a>
+            <div class="cart-checkout-actions is-hidden" id="ordersTabQuickActions">
+                <button type="button" class="whatsapp-checkout-btn" onclick="closeCart()">+ إضافة منتجات جديدة</button>
+            </div>
+        </div>
+    </aside>
+
+    <div class="image-modal" id="imageModal" onclick="if(event.target===this)closeImageModal()">
+        <div class="preview-sheet" role="dialog" aria-modal="true" aria-label="معاينة المنتج">
+            <button type="button" class="preview-close-btn" onclick="closeImageModal()" aria-label="إغلاق المعاينة">✕</button>
+            <div class="preview-stage">
+                <button type="button" class="preview-nav-arrow prev is-hidden" id="previewPrevBtn" onclick="stepPreviewImage(-1, event)" aria-label="الصورة السابقة">›</button>
+                <img id="modalImagePreview" src="" alt="" onerror="handleProductImageError(this, this.getAttribute('data-product-id') || '')">
+                <button type="button" class="preview-nav-arrow next is-hidden" id="previewNextBtn" onclick="stepPreviewImage(1, event)" aria-label="الصورة التالية">‹</button>
+            </div>
+            <div class="preview-thumbs-row is-hidden" id="previewThumbsRow"></div>
+            <div class="preview-details-pane">
+                <div class="preview-meta-tags">
+                    <span class="preview-cat-chip" id="previewCategoryChip"></span>
+                    <button type="button" class="preview-merchant-chip is-hidden" id="previewMerchantChip"></button>
+                </div>
+                <div class="preview-title" id="previewProductTitle"></div>
+                <div class="preview-price-line">
+                    <div class="preview-main-price" id="previewMainPrice"></div>
+                    <div class="preview-sub-price is-hidden" id="previewSubPrice"></div>
+                </div>
+                <div class="preview-story" id="previewStoryText"></div>
+                <div class="preview-hook-note" id="previewHookNote"></div>
+                <div class="preview-actions-row">
+                    <button type="button" class="preview-add-btn" id="previewAddToCartBtn">+ أضف للسلة</button>
+                    <a href="https://wa.me/201055436305" class="preview-wa-btn" id="previewWhatsAppBtn" target="_blank" rel="noopener noreferrer" onclick="event.preventDefault(); launchWhatsAppTarget(this.href);">واتساب</a>
+                    <button type="button" class="preview-copy-btn" id="previewCopyLinkBtn">نسخ الرابط</button>
+                </div>
+                <div class="preview-related-section is-hidden" id="previewRelatedSection">
+                    <div class="preview-related-title-head">منتجات قد تعجبك أيضاً</div>
+                    <div class="preview-related-list" id="previewRelatedList"></div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Product Option Modal -->
-<div class="image-modal" id="productOptionModal" onclick="if(event.target===this) closeProductOptionModal()">
-    <div class="option-modal-card" role="dialog" aria-modal="true">
-        <button type="button" class="close-modal-btn" onclick="closeProductOptionModal()" aria-label="إغلاق">✕</button>
-        <div class="option-modal-header">
-            <img id="optionModalImg" src="" alt="" class="option-modal-img">
-            <div>
-                <div class="option-modal-title" id="optionModalTitle"></div>
-                <div class="option-modal-price" id="optionModalPrice"></div>
+    <div class="image-modal" id="productOptionModal" onclick="if(event.target===this)closeProductOptionModal()">
+        <div class="option-modal-box" role="dialog" aria-modal="true" aria-label="اختيار المواصفات">
+            <div class="option-modal-header">
+                <h3>اختر المقاس أو اللون</h3>
+                <button type="button" class="close-drawer-btn" onclick="closeProductOptionModal()" aria-label="إغلاق">✕</button>
+            </div>
+            <div class="option-modal-product-preview">
+                <img id="optionModalImg" src="" alt="" onerror="handleProductImageError(this, this.getAttribute('data-product-id') || '')">
+                <div>
+                    <div class="cart-item-title" id="optionModalTitle"></div>
+                    <div class="option-modal-price" id="optionModalPrice"></div>
+                    <div class="preview-thumbs-row is-hidden" id="optionModalThumbsRow"></div>
+                </div>
+            </div>
+            <div class="option-group is-hidden" id="optionModalSizeGroup">
+                <label class="option-group-label">المقاس / النوع:</label>
+                <div class="option-pills-row" id="optionModalSizePills"></div>
+            </div>
+            <div class="option-group is-hidden" id="optionModalColorGroup">
+                <label class="option-group-label">اللون:</label>
+                <div class="option-pills-row" id="optionModalColorPills"></div>
+            </div>
+            <div class="option-qty-row">
+                <label class="option-group-label">الكمية:</label>
+                <div class="option-qty-controls">
+                    <button type="button" class="qty-btn" onclick="changeModalQty(1)">+</button>
+                    <span class="qty-val" id="optionModalQtyVal">1</span>
+                    <button type="button" class="qty-btn" onclick="changeModalQty(-1)">-</button>
+                </div>
+            </div>
+            <input type="text" class="option-note-input" id="optionModalNoteInput" placeholder="ملاحظة إضافية (اختياري)...">
+            <button type="button" class="option-confirm-btn" onclick="confirmAddProductWithOptions()">تأكيد الإضافة للسلة</button>
+        </div>
+    </div>
+
+    <div class="image-modal" id="serviceInfoModal" onclick="if(event.target===this)closeServiceInfoModal()">
+        <div class="service-info-box" role="dialog" aria-modal="true" aria-label="معلومات الخدمة">
+            <div class="service-info-header">
+                <h3 id="serviceInfoModalTitle">معلومات الخدمة</h3>
+                <button type="button" class="close-drawer-btn" onclick="closeServiceInfoModal()" aria-label="إغلاق">✕</button>
+            </div>
+            <div id="serviceInfoModalBody"></div>
+            <button type="button" class="service-info-ok-btn" onclick="closeServiceInfoModal()">حسناً</button>
+        </div>
+    </div>
+
+    <div class="image-modal" id="confirmActionModal" onclick="if(event.target===this)closeConfirmModal(false, true)">
+        <div class="confirm-modal-box" role="dialog" aria-modal="true" aria-label="تأكيد العملية">
+            <h3 id="confirmModalTitle">تأكيد العملية</h3>
+            <p id="confirmModalMessage"></p>
+            <div class="confirm-modal-actions">
+                <button type="button" class="confirm-btn-cancel" onclick="closeConfirmModal(false, true)">إلغاء</button>
+                <button type="button" class="confirm-btn-ok" id="confirmModalOkBtn" onclick="executeConfirmedAction()">تأكيد</button>
             </div>
         </div>
-        <div class="preview-thumbs-row is-hidden" id="optionModalThumbsRow"></div>
-
-        <div class="option-group is-hidden" id="optionModalSizeGroup">
-            <span class="option-group-label">اختر المقاس / النوع:</span>
-            <div class="option-pills-row" id="optionModalSizePills"></div>
-        </div>
-
-        <div class="option-group is-hidden" id="optionModalColorGroup">
-            <span class="option-group-label">اختر اللون:</span>
-            <div class="option-pills-row" id="optionModalColorPills"></div>
-        </div>
-
-        <div class="option-qty-row">
-            <span class="option-group-label" style="margin:0;">الكمية:</span>
-            <div class="option-qty-controls">
-                <button type="button" class="option-qty-btn" onclick="changeModalQty(1)">+</button>
-                <span class="option-qty-val" id="optionModalQtyVal">1</span>
-                <button type="button" class="option-qty-btn" onclick="changeModalQty(-1)">-</button>
-            </div>
-        </div>
-
-        <div class="option-group">
-            <label for="optionModalNoteInput" class="option-group-label">ملاحظات إضافية (اختياري):</label>
-            <input type="text" id="optionModalNoteInput" class="option-note-input" placeholder="مثال: لون معين أو تغليف هدية...">
-        </div>
-
-        <button type="button" class="option-confirm-btn" id="optionModalConfirmBtn" onclick="confirmAddProductWithOptions()">تأكيد وإضافة للسلة</button>
     </div>
-</div>
 
-<!-- Service Info Modal -->
-<div class="image-modal" id="serviceInfoModal" onclick="if(event.target===this) closeServiceInfoModal()">
-    <div class="service-info-modal-card" role="dialog" aria-modal="true">
-        <button type="button" class="close-modal-btn" onclick="closeServiceInfoModal()" aria-label="إغلاق">✕</button>
-        <div class="service-info-modal-title" id="serviceInfoModalTitle"></div>
-        <div id="serviceInfoModalBody"></div>
-    </div>
-</div>
+    <div class="caramel-toast" id="caramelToast" role="status" aria-live="polite"></div>
 
-<!-- Confirm Modal -->
-<div class="image-modal" id="confirmActionModal" onclick="if(event.target===this) closeConfirmModal(false, true)">
-    <div class="confirm-modal-card" role="dialog" aria-modal="true">
-        <div class="confirm-modal-title" id="confirmModalTitle">تأكيد العملية</div>
-        <div class="confirm-modal-message" id="confirmModalMessage"></div>
-        <div class="confirm-modal-actions">
-            <button type="button" class="confirm-cancel-btn" onclick="closeConfirmModal(false, true)">إلغاء</button>
-            <button type="button" class="confirm-ok-btn" id="confirmModalOkBtn" onclick="executeConfirmedAction()">تأكيد</button>
-        </div>
-    </div>
-</div>
-
-<!-- Toast -->
-<div class="caramel-toast" id="caramelToast" role="status" aria-live="polite"></div>
-
-<script src="./app.js?v=5"></script>
+    <script src="./app.js?v=20261127-9"></script>
 </body>
 </html>
