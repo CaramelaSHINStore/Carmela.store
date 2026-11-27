@@ -1,4 +1,4 @@
-const CACHE_VERSION = "caramel-store-v20261127-3";
+const CACHE_VERSION = "caramel-store-v20261127-4";
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
@@ -7,8 +7,8 @@ const CORE_ASSETS = [
     "./index.html",
     "./style.css",
     "./app.js",
-    "./manifest.json",
-    "./compressed_1795766509611.jpeg"
+    "./manifest.json?v=2",
+    "./compressed_1795766509611.jpeg?v=2"
 ];
 
 self.addEventListener("install", event => {
@@ -38,6 +38,21 @@ self.addEventListener("fetch", event => {
     const url = new URL(event.request.url);
 
     if (url.pathname.endsWith(".json")) {
+        event.respondWith(
+            fetch(event.request)
+                .then(resp => {
+                    const copy = resp.clone();
+                    caches.open(RUNTIME_CACHE).then(c => c.put(event.request, copy)).catch(() => {});
+                    return resp;
+                })
+                .catch(() => caches.match(event.request))
+        );
+        return;
+    }
+
+    const isBrandAsset = url.pathname.endsWith(".jpeg") || url.pathname.endsWith(".jpg") || url.pathname.endsWith(".png") || url.pathname.endsWith(".webp") || url.pathname.endsWith("manifest.json");
+
+    if (isBrandAsset && url.origin === self.location.origin) {
         event.respondWith(
             fetch(event.request)
                 .then(resp => {
