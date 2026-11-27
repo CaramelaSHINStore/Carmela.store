@@ -1,1092 +1,1000 @@
-[
-  {
-    "id": "om-waleed-watches-collection-250",
-    "title": "ساعات معدنية موديلات متنوعة",
-    "merchant": "أم وليد",
-    "category": "jewelry",
-    "categories": [
-      "jewelry",
-      "gifts"
-    ],
-    "price": 250,
-    "img": "Omwaled/compressed_1795517021993.webp",
-    "images": [
-      "Omwaled/compressed_1795517021993.webp",
-      "Omwaled/compressed_1795517010110.webp",
-      "Omwaled/compressed_1795517024344.webp",
-      "Omwaled/compressed_1795517014913.webp"
-    ],
-    "desc": "ساعات معدنية أنيقة متوفرة بعدة أشكال وألوان للميناء (ذهبي، أزرق، وأرقام رومانية) بسعر 250 جنيه. يرجى تحديد اللون أو الموديل المطلوب عند الطلب.",
-    "sizeLabel": "اختر الموديل / اللون:",
-    "sizes": [
-      {
-        "label": "ميناء ذهبي (250 جنيه)",
-        "price": 250
-      },
-      {
-        "label": "ميناء أزرق (250 جنيه)",
-        "price": 250
-      },
-      {
-        "label": "أرقام رومانية (250 جنيه)",
-        "price": 250
-      }
-    ],
-    "soldOutImages": [
-      {
-        "img": "Omwaled/compressed_1795517024344.webp",
-        "status": "نفذت الكمية"
-      }
-    ],
-    "hasSoldOutImages": true,
-    "soldOutNotice": "بعض الصور المعروضة (نفذت الكمية) غير متاحة حالياً.",
-    "gallery": [
-      {
-        "index": 0,
-        "src": "Omwaled/compressed_1795517021993.webp",
-        "available": true,
-        "soldOut": false,
-        "badge": null,
-        "overlayText": null,
-        "statusLabel": "متوفر",
-        "disabled": false
-      },
-      {
-        "index": 1,
-        "src": "Omwaled/compressed_1795517010110.webp",
-        "available": true,
-        "soldOut": false,
-        "badge": null,
-        "overlayText": null,
-        "statusLabel": "متوفر",
-        "disabled": false
-      },
-      {
-        "index": 2,
-        "src": "Omwaled/compressed_1795517024344.webp",
-        "available": false,
-        "soldOut": true,
-        "badge": "نفذت الكمية",
-        "overlayText": "نفذت الكمية",
-        "statusLabel": "نفذت الكمية",
-        "disabled": true
-      },
-      {
-        "index": 3,
-        "src": "Omwaled/compressed_1795517014913.webp",
-        "available": true,
-        "soldOut": false,
-        "badge": null,
-        "overlayText": null,
-        "statusLabel": "متوفر",
-        "disabled": false
-      }
-    ]
-  },
-  {
-    "id": "om-waleed-watches-collection-200",
-    "title": "ساعات معدنية موديلات متنوعة",
-    "merchant": "أم وليد",
-    "category": "jewelry",
-    "categories": [
-      "jewelry",
-      "gifts"
-    ],
-    "price": 200,
-    "img": "Omwaled/compressed_1795517033781.webp",
-    "images": [
-      "Omwaled/compressed_1795517033781.webp",
-      "Omwaled/compressed_1795517031412.webp",
-      "Omwaled/compressed_1795517029070.webp",
-      "Omwaled/compressed_1795517026716.webp",
-      "Omwaled/compressed_1795517019607.webp"
-    ],
-    "desc": "ساعات معدنية أنيقة متوفرة بعدة أشكال وألوان للميناء (أسود، أزرق، ذهبي، وفضي) بسعر 200 جنيه. يرجى تحديد اللون أو الموديل المطلوب عند الطلب.",
-    "sizeLabel": "اختر اللون:",
-    "sizes": [
-      {
-        "label": "أسود (200 جنيه)",
-        "price": 200
-      },
-      {
-        "label": "أزرق (200 جنيه)",
-        "price": 200
-      },
-      {
-        "label": "ذهبي (200 جنيه)",
-        "price": 200
-      },
-      {
-        "label": "فضي (200 جنيه)",
-        "price": 200
-      }
-    ],
-    "soldOutImages": [
-      {
-        "img": "Omwaled/compressed_1795517033781.webp",
-        "status": "نفذت الكمية"
-      },
-      {
-        "img": "Omwaled/compressed_1795517029070.webp",
-        "status": "نفذت الكمية"
-      }
-    ],
-    "hasSoldOutImages": true,
-    "soldOutNotice": "بعض الصور المعروضة (نفذت الكمية) غير متاحة حالياً.",
-    "gallery": [
-      {
-        "index": 0,
-        "src": "Omwaled/compressed_1795517033781.webp",
-        "available": false,
-        "soldOut": true,
-        "badge": "نفذت الكمية",
-        "overlayText": "نفذت الكمية",
-        "statusLabel": "نفذت الكمية",
-        "disabled": true
-      },
-      {
-        "index": 1,
-        "src": "Omwaled/compressed_1795517031412.webp",
-        "available": true,
-        "soldOut": false,
-        "badge": null,
-        "overlayText": null,
-        "statusLabel": "متوفر",
-        "disabled": false
-      },
-      {
-        "index": 2,
-        "src": "Omwaled/compressed_1795517029070.webp",
-        "available": false,
-        "soldOut": true,
-        "badge": "نفذت الكمية",
-        "overlayText": "نفذت الكمية",
-        "statusLabel": "نفذت الكمية",
-        "disabled": true
-      },
-      {
-        "index": 3,
-        "src": "Omwaled/compressed_1795517026716.webp",
-        "available": true,
-        "soldOut": false,
-        "badge": null,
-        "overlayText": null,
-        "statusLabel": "متوفر",
-        "disabled": false
-      },
-      {
-        "index": 4,
-        "src": "Omwaled/compressed_1795517019607.webp",
-        "available": true,
-        "soldOut": false,
-        "badge": null,
-        "overlayText": null,
-        "statusLabel": "متوفر",
-        "disabled": false
-      }
-    ]
-  },
-  {
-    "id": "om-waleed-leather-watches-collection-150",
-    "title": "ساعات جلد موديلات متنوعة",
-    "merchant": "أم وليد",
-    "category": "jewelry",
-    "categories": [
-      "jewelry",
-      "men",
-      "gifts"
-    ],
-    "price": 150,
-    "img": "Omwaled/compressed_1795517007729.webp",
-    "images": [
-      "Omwaled/compressed_1795517007729.webp",
-      "Omwaled/compressed_1795517012472.webp"
-    ],
-    "desc": "ساعات بحزام جلد أنيق وميناء أسود بتفاصيل كرونوغراف وأرقام رومانية متوفرة بألوان (حزام أسود بإطار ذهبي وحزام بيج بإطار فضي) بسعر 150 جنيه. يرجى تحديد اللون أو الموديل المطلوب عند الطلب.",
-    "sizeLabel": "اختر اللون / الموديل:",
-    "sizes": [
-      {
-        "label": "حزام أسود بإطار ذهبي (150 جنيه)",
-        "price": 150
-      },
-      {
-        "label": "حزام بيج بإطار فضي (150 جنيه)",
-        "price": 150
-      }
-    ],
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-thermal-bag-medium-panda-200",
-    "title": "شنطة حراري وسط",
-    "merchant": "أم وليد",
-    "category": "home",
-    "categories": [
-      "home",
-      "kids"
-    ],
-    "price": 200,
-    "img": "Omwaled/compressed_1795608069571.webp",
-    "images": [
-      "Omwaled/compressed_1795608069571.webp"
-    ],
-    "desc": "حقيبة عازلة للحرارة مقاس وسط بطباعة Panda لحفظ الطعام أو المشروبات ساخنة أو باردة أثناء الخروج أو المدرسة أو العمل.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-acrylic-cake-stand-3tier-235",
-    "title": "شيالة كعك اكريليك 3 دور",
-    "merchant": "أم وليد",
-    "category": "home",
-    "categories": [
-      "home"
-    ],
-    "price": 235,
-    "img": "Omwaled/compressed_1795608069105.webp",
-    "images": [
-      "Omwaled/compressed_1795608069105.webp"
-    ],
-    "desc": "حامل تقديم من 3 أدوار بأطباق أكريليك بلون أزرق/فيروزي وحامل ذهبي أنيق لتقديم الكعك والحلويات والمخبوزات في المناسبات.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-thermal-bag-jumbo-safeer-270",
-    "title": "شنطة حراري جامبو",
-    "merchant": "أم وليد",
-    "category": "home",
-    "categories": [
-      "home"
-    ],
-    "price": 270,
-    "img": "Omwaled/compressed_1795608069296.webp",
-    "images": [
-      "Omwaled/compressed_1795608069296.webp"
-    ],
-    "desc": "حقيبة حفظ حراري كبيرة/جامبو ماركة Safeer ببطانة عازلة للحرارة بسعة واسعة لحفظ كميات كبيرة من الطعام أو المشروبات للرحلات والعزومات.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-kahk-stand-2tier-gold-500",
-    "title": "شيالة كحك 2 دور دهبي",
-    "merchant": "أم وليد",
-    "category": "home",
-    "categories": [
-      "home"
-    ],
-    "price": 500,
-    "img": "Omwaled/compressed_1795608068858.webp",
-    "images": [
-      "Omwaled/compressed_1795608068858.webp"
-    ],
-    "desc": "حامل تقديم من دورين بلون ذهبي مزخرف للكحك والبسكويت والحلويات الشرقية لإضافة لمسة فخامة على مائدة الضيافة.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-thermal-bag-large-safeer-230",
-    "title": "شنطة حفظ حراري ك",
-    "merchant": "أم وليد",
-    "category": "home",
-    "categories": [
-      "home"
-    ],
-    "price": 230,
-    "img": "Omwaled/compressed_1795608068234.webp",
-    "images": [
-      "Omwaled/compressed_1795608068234.webp"
-    ],
-    "desc": "حقيبة حفظ حراري ماركة Safeer ببطانة عازلة فضية تحافظ على درجة حرارة الأطعمة والمشروبات لفترات مناسبة.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-rotating-multi-organizer-200",
-    "title": "منظم متعدد دوار",
-    "merchant": "أم وليد",
-    "category": "home",
-    "categories": [
-      "home",
-      "women"
-    ],
-    "price": 200,
-    "img": "Omwaled/compressed_1795608068494.webp",
-    "images": [
-      "Omwaled/compressed_1795608068494.webp"
-    ],
-    "desc": "منظم دائري دوار مقسّم لعدة خانات لترتيب الإكسسوارات أو أدوات التجميل أو الأدوات الصغيرة وسهولة الوصول إليها.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-wall-hanger-gold-apple-75",
-    "title": "شماعة مدهب تفاحة",
-    "merchant": "أم وليد",
-    "category": "home",
-    "categories": [
-      "home"
-    ],
-    "price": 75,
-    "img": "Omwaled/compressed_1795608067909.webp",
-    "images": [
-      "Omwaled/compressed_1795608067909.webp"
-    ],
-    "desc": "علاقة حائط معدنية بلون ذهبي مزينة بأشكال تفاح لتعليق الملابس والقبعات والإكسسوارات بشكل أنيق ومرتب.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-kids-hanger-abuelkhair-6x1-35",
-    "title": "شماعة أبو الخير أطفال 6×1",
-    "merchant": "أم وليد",
-    "category": "kids",
-    "categories": [
-      "kids",
-      "home"
-    ],
-    "price": 35,
-    "img": "Omwaled/compressed_1795608067786.webp",
-    "images": [
-      "Omwaled/compressed_1795608067786.webp"
-    ],
-    "desc": "شماعات ملابس مخصصة للأطفال من أبو الخير (6 قطع) بحجم مناسب لملابس الأطفال وتنظيم خزانتهم.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-clothes-shoe-rack-5tier-310",
-    "title": "استاند ملابس وجزامة 5 دور",
-    "merchant": "أم وليد",
-    "category": "home",
-    "categories": [
-      "home"
-    ],
-    "price": 310,
-    "img": "Omwaled/compressed_1795608068064.webp",
-    "images": [
-      "Omwaled/compressed_1795608068064.webp"
-    ],
-    "desc": "استاند معدني عملي لتعليق الملابس مع أرفف أحذية من 5 أدوار لتنظيم المدخل أو الغرفة وتوفير المساحة.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-eyes-necklace-150",
-    "title": "سلسلة عيون",
-    "merchant": "أم وليد",
-    "category": "jewelry",
-    "categories": [
-      "jewelry",
-      "women",
-      "gifts"
-    ],
-    "price": 150,
-    "img": "Omwaled/compressed_1795608067629.webp",
-    "images": [
-      "Omwaled/compressed_1795608067629.webp"
-    ],
-    "desc": "قلادة بسلسلة معدنية وتعليقة مستطيلة بتصميم عيون أنيق ومناسب للإهداء أو الإطلالات اليومية.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-custom-case-print-100",
-    "title": "طباعة على جراب بصورتك (أنت اللي بتجيب الجراب)",
-    "merchant": "أم وليد",
-    "category": "gifts",
-    "categories": [
-      "gifts",
-      "phones"
-    ],
-    "price": 100,
-    "img": "Omwaled/compressed_1795608067078.webp",
-    "images": [
-      "Omwaled/compressed_1795608067078.webp"
-    ],
-    "desc": "خدمة طباعة صورة أو تصميم مخصص على جراب موبايل يوفّره العميل بنفسه لتقديم هدية أو لمسة شخصية مميزة.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-khair-home-rustproof-dryer-1200",
-    "title": "منشر فولاذ مقاوم للصدأ",
-    "merchant": "أم وليد",
-    "category": "home",
-    "categories": [
-      "home"
-    ],
-    "price": 1200,
-    "img": "Omwaled/compressed_1795608067293.webp",
-    "images": [
-      "Omwaled/compressed_1795608067293.webp"
-    ],
-    "desc": "منشر غسيل من خير هوم بخامة فولاذ مقاومة للصدأ وقابل للطي بسعة تجفيف مناسبة وسهولة في التخزين.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-jeans-pants-hanger-35",
-    "title": "شماعة بنطلون جينز",
-    "merchant": "أم وليد",
-    "category": "home",
-    "categories": [
-      "home"
-    ],
-    "price": 35,
-    "img": "Omwaled/compressed_1795608066934.webp",
-    "images": [
-      "Omwaled/compressed_1795608066934.webp"
-    ],
-    "desc": "شماعة معدنية متعددة الطبقات لتعليق أكثر من بنطلون أو جينز في شماعة واحدة لتوفير المساحة داخل الدولاب.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-shein-metal-shoe-rack-7tier-450",
-    "title": "جزامة شي إن معدن 7 دور",
-    "merchant": "أم وليد",
-    "category": "home",
-    "categories": [
-      "home"
-    ],
-    "price": 450,
-    "img": "Omwaled/compressed_1795608066545.webp",
-    "images": [
-      "Omwaled/compressed_1795608066545.webp"
-    ],
-    "desc": "وحدة تخزين وجزامة معدنية بـ 7 أدوار لتنظيم الأحذية والملحقات المنزلية بشكل مرتب وموفر للمساحة.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-hen-egg-basket-440",
-    "title": "سلة بيض فرخة",
-    "merchant": "أم وليد",
-    "category": "home",
-    "categories": [
-      "home"
-    ],
-    "price": 440,
-    "img": "Omwaled/compressed_1795608066733.webp",
-    "images": [
-      "Omwaled/compressed_1795608066733.webp"
-    ],
-    "desc": "سلة لحفظ البيض بتصميم مجسم على شكل دجاجة فوق قاعدة شبكية تضيف شكلاً مميزاً وعملياً للمطبخ.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-photo-frame-15x21-100",
-    "title": "برواز 15×21",
-    "merchant": "أم وليد",
-    "category": "gifts",
-    "categories": [
-      "gifts",
-      "home"
-    ],
-    "price": 100,
-    "img": "Omwaled/compressed_1795608066370.webp",
-    "images": [
-      "Omwaled/compressed_1795608066370.webp"
-    ],
-    "desc": "برواز أسود بتصميم صور وعبارات مخصصة بمقاس 15×21 سم مثالي للهدايا والذكريات الشخصية.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-custom-wallet-photo-name-200",
-    "title": "محفظة بصورتك / محفظة باسمك",
-    "merchant": "أم وليد",
-    "category": "gifts",
-    "categories": [
-      "gifts",
-      "men",
-      "jewelry"
-    ],
-    "price": 200,
-    "img": "Omwaled/compressed_1795608066061.webp",
-    "images": [
-      "Omwaled/compressed_1795608066061.webp",
-      "Omwaled/compressed_1795608064431.webp"
-    ],
-    "desc": "محفظة جلدية بنية بكبسونة متوفرة بتصميم مخصص بالصورة أو بالاسم بالخط العربي أو الإنجليزي. يرجى تحديد اختيارك (بالصورة أو بالاسم) وتوضيح التفاصيل عند الطلب.",
-    "sizeLabel": "اختر التصميم:",
-    "sizes": [
-      {
-        "label": "بالصورة (200 جنيه)",
-        "price": 200
-      },
-      {
-        "label": "بالاسم (200 جنيه)",
-        "price": 200
-      }
-    ],
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-magic-mirror-photo-300",
-    "title": "مرايا سحرية بصورتك",
-    "merchant": "أم وليد",
-    "category": "gifts",
-    "categories": [
-      "gifts",
-      "women"
-    ],
-    "price": 300,
-    "img": "Omwaled/compressed_1795608066226.webp",
-    "images": [
-      "Omwaled/compressed_1795608066226.webp"
-    ],
-    "desc": "مرآة دائرية بقاعدة وتعمل كصورة مضيئة عند التشغيل، هدية مميزة تجمع بين العملية والذكريات.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-katb-ketab-handkerchief-130",
-    "title": "منديل كتب كتاب",
-    "merchant": "أم وليد",
-    "category": "gifts",
-    "categories": [
-      "gifts"
-    ],
-    "price": 130,
-    "img": "Omwaled/compressed_1795608065889.webp",
-    "images": [
-      "Omwaled/compressed_1795608065889.webp"
-    ],
-    "desc": "منديل أبيض مطرّز/مطبوع بأسماء العروسين وتاريخ المناسبة وآية وعبارة تهنئة ليكون ذكرى مميزة ليوم كتب الكتاب.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-fruit-stand-2tier-gold-255",
-    "title": "شيالة فاكهة 2 دور دهبي",
-    "merchant": "أم وليد",
-    "category": "home",
-    "categories": [
-      "home"
-    ],
-    "price": 255,
-    "img": "Omwaled/compressed_1795608065555.webp",
-    "images": [
-      "Omwaled/compressed_1795608065555.webp"
-    ],
-    "desc": "حامل معدني ذهبي من دورين لتقديم الفاكهة بشكل مرتب وجذاب على الطاولة أو السفرة.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-juice-herbs-stainless-strainer-75",
-    "title": "صفاية عصير وأعشاب ستانلس",
-    "merchant": "أم وليد",
-    "category": "home",
-    "categories": [
-      "home"
-    ],
-    "price": 75,
-    "img": "Omwaled/compressed_1795608065738.webp",
-    "images": [
-      "Omwaled/compressed_1795608065738.webp"
-    ],
-    "desc": "مصفاة يدوية ستانلس ستيل لتصفية العصائر والأعشاب والمشروبات بسهولة وعملية في المطبخ.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-smile-hanger-9x1-35",
-    "title": "شماعة سمايل 9×1",
-    "merchant": "أم وليد",
-    "category": "home",
-    "categories": [
-      "home",
-      "kids"
-    ],
-    "price": 35,
-    "img": "Omwaled/compressed_1795608065399.webp",
-    "images": [
-      "Omwaled/compressed_1795608065399.webp"
-    ],
-    "desc": "طقم علاّقات/خطافات لاصقة للحائط على شكل وجوه ضاحكة صفراء (9 قطع في الطقم) لتعليق الأغراض الخفيفة والمفاتيح.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-lantern-keychain-photo-name-35",
-    "title": "ميداليا فانوس بصورتك أو اسم",
-    "merchant": "أم وليد",
-    "category": "gifts",
-    "categories": [
-      "gifts",
-      "jewelry"
-    ],
-    "price": 35,
-    "img": "Omwaled/compressed_1795608065125.webp",
-    "images": [
-      "Omwaled/compressed_1795608065125.webp"
-    ],
-    "desc": "ميداليا على شكل فانوس مطبوعة بصورة أو اسم لتكون هدية خفيفة ومخصصة للمفاتيح أو الحقائب.",
-    "sizeLabel": "اختر التصميم:",
-    "sizes": [
-      {
-        "label": "بصورتك (35 جنيه)",
-        "price": 35
-      },
-      {
-        "label": "باسم (35 جنيه)",
-        "price": 35
-      }
-    ],
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-wall-clock-30x40-280",
-    "title": "ساعة حائط بصورتك مقاس 30×40",
-    "merchant": "أم وليد",
-    "category": "gifts",
-    "categories": [
-      "gifts",
-      "home"
-    ],
-    "price": 280,
-    "img": "Omwaled/compressed_1795608065234.webp",
-    "images": [
-      "Omwaled/compressed_1795608065234.webp"
-    ],
-    "desc": "ساعة حائط مستطيلة مقاس 30×40 سم مطبوعة بصورة شخصية مع أرقام وعقارب واضحة لتزيين الغرف وتقديمها كهدية.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-wall-art-40x30-220",
-    "title": "تابلوه 40×30",
-    "merchant": "أم وليد",
-    "category": "gifts",
-    "categories": [
-      "gifts",
-      "home"
-    ],
-    "price": 220,
-    "img": "Omwaled/compressed_1795608064965.webp",
-    "images": [
-      "Omwaled/compressed_1795608064965.webp"
-    ],
-    "desc": "تابلوه متوسط مقاس 40×30 سم بتصميم مجمع للصور والعبارات المخصصة لإهداء الأحباب وتزيين الحائط.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-photo-keychain-30",
-    "title": "ميداليا بصورتك",
-    "merchant": "أم وليد",
-    "category": "gifts",
-    "categories": [
-      "gifts",
-      "jewelry"
-    ],
-    "price": 30,
-    "img": "Omwaled/compressed_1795608064656.webp",
-    "images": [
-      "Omwaled/compressed_1795608064656.webp"
-    ],
-    "desc": "ميداليا مستطيلة مطبوع عليها صورة شخصية مع سلسلة وحلقة معدنية مناسبة للمفاتيح أو الإهداء اليومي.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-coffee-cup-saucer-170",
-    "title": "فنجان قهوة بالطبق",
-    "merchant": "أم وليد",
-    "category": "gifts",
-    "categories": [
-      "gifts",
-      "home"
-    ],
-    "price": 170,
-    "img": "Omwaled/compressed_1795608064802.webp",
-    "images": [
-      "Omwaled/compressed_1795608064802.webp"
-    ],
-    "desc": "فنجان قهوة سيراميك أبيض مع طبقه مكتوب عليهما اسم وتاريخ أو عبارة مخصصة لهدية أنيقة لمحبي القهوة.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-potato-skimmer-variants",
-    "title": "شيالة بطاطس",
-    "merchant": "أم وليد",
-    "category": "home",
-    "categories": [
-      "home"
-    ],
-    "price": 65,
-    "img": "Omwaled/compressed_1795608064076.webp",
-    "images": [
-      "Omwaled/compressed_1795608064076.webp"
-    ],
-    "variants": [
-      {
-        "id": "small",
-        "name": "صغير",
-        "label": "صغير",
-        "price": 65
-      },
-      {
-        "id": "medium",
-        "name": "وسط",
-        "label": "وسط",
-        "price": 70
-      },
-      {
-        "id": "large",
-        "name": "كبير",
-        "label": "كبير",
-        "price": 75
-      }
-    ],
-    "options": [
-      {
-        "name": "المقاس",
-        "values": [
-          "صغير (65 ج)",
-          "وسط (70 ج)",
-          "كبير (75 ج)"
-        ],
-        "prices": {
-          "صغير (65 ج)": 65,
-          "وسط (70 ج)": 70,
-          "كبير (75 ج)": 75
+{
+  "soldOutImages": [
+    "compressed_1795517033781.webp",
+    "compressed_1795517029070.webp",
+    "compressed_1795517024344.webp"
+  ],
+  "stockGuardScript": "(function () {\n  const SOLD_OUT_IMAGES = new Set([\n    \"compressed_1795517033781.webp\",\n    \"compressed_1795517029070.webp\",\n    \"compressed_1795517024344.webp\"\n  ]);\n\n  function extractFileName(pathOrUrl = \"\") {\n    if (!pathOrUrl) return \"\";\n    const clean = String(pathOrUrl).split(\"?\")[0].split(\"#\")[0];\n    const parts = clean.split(\"/\");\n    return (parts[parts.length - 1] || \"\").toLowerCase();\n  }\n\n  function isImageOutOfStock(pathOrUrl = \"\") {\n    return SOLD_OUT_IMAGES.has(extractFileName(pathOrUrl));\n  }\n\n  function normalizeProductStock(product) {\n    const images = Array.isArray(product.images)\n      ? product.images\n      : product.img\n      ? [product.img]\n      : [];\n\n    const soldOutImages = images.filter((img) => isImageOutOfStock(img));\n    const mainImgSoldOut = isImageOutOfStock(product.img);\n    const allImagesSoldOut = images.length > 0 && soldOutImages.length === images.length;\n    const stockNum = typeof product.stock === \"number\" ? product.stock : undefined;\n\n    const outOfStock =\n      Boolean(product.outOfStock) ||\n      mainImgSoldOut ||\n      allImagesSoldOut ||\n      (stockNum !== undefined && stockNum <= 0);\n\n    return {\n      ...product,\n      stock: outOfStock ? 0 : stockNum ?? 1,\n      outOfStock,\n      soldOutImages\n    };\n  }\n\n  function canAddToCart(product, selectedVariantOrSize = null, qty = 1) {\n    const norm = normalizeProductStock(product);\n    if (norm.outOfStock || norm.stock <= 0) {\n      return {\n        allowed: false,\n        reason: `عذراً، المنتج \"${norm.title}\" نفذت كميته حالياً.`\n      };\n    }\n    if (selectedVariantOrSize && selectedVariantOrSize.outOfStock) {\n      return {\n        allowed: false,\n        reason: `عذراً، الخيار \"${selectedVariantOrSize.label || selectedVariantOrSize.name}\" نفذت كميته حالياً.`\n      };\n    }\n    if (selectedVariantOrSize && isImageOutOfStock(selectedVariantOrSize.img)) {\n      return {\n        allowed: false,\n        reason: `عذراً، الموديل المختار نفذت كميته حالياً.`\n      };\n    }\n    if (qty > norm.stock) {\n      return {\n        allowed: false,\n        reason: `الكمية المتاحة من \"${norm.title}\" هي ${norm.stock} فقط.`\n      };\n    }\n    return { allowed: true, reason: \"\" };\n  }\n\n  function sortProductsSoldOutLast(list = []) {\n    return [...list].map(normalizeProductStock).sort((a, b) => {\n      if (a.outOfStock === b.outOfStock) return 0;\n      return a.outOfStock ? 1 : -1;\n    });\n  }\n\n  function renderSoldOutBadge(product) {\n    const norm = normalizeProductStock(product);\n    if (!norm.outOfStock && norm.soldOutImages.length === 0) return \"\";\n    if (norm.outOfStock) {\n      return `<span class=\"badge-soldout\" data-soldout=\"true\">نفذت الكمية</span>`;\n    }\n    return `<span class=\"badge-partial-soldout\" data-partial-soldout=\"true\">بعض الموديلات نفذت</span>`;\n  }\n\n  window.CaramelStockGuard = {\n    isImageOutOfStock,\n    normalizeProductStock,\n    canAddToCart,\n    sortProductsSoldOutLast,\n    renderSoldOutBadge\n  };\n})();",
+  "products": [
+    {
+      "id": "om-waleed-watches-collection-250",
+      "title": "ساعات معدنية موديلات متنوعة",
+      "merchant": "أم وليد",
+      "category": "jewelry",
+      "categories": [
+        "jewelry",
+        "gifts"
+      ],
+      "price": 250,
+      "img": "Omwaled/compressed_1795517021993.webp",
+      "images": [
+        "Omwaled/compressed_1795517021993.webp",
+        "Omwaled/compressed_1795517010110.webp",
+        "Omwaled/compressed_1795517024344.webp",
+        "Omwaled/compressed_1795517014913.webp"
+      ],
+      "desc": "ساعات معدنية أنيقة متوفرة بعدة أشكال وألوان للميناء (ذهبي، أزرق، وأرقام رومانية) بسعر 250 جنيه. يرجى تحديد اللون أو الموديل المطلوب عند الطلب.",
+      "sizeLabel": "اختر الموديل / اللون:",
+      "sizes": [
+        {
+          "label": "ميناء ذهبي (250 جنيه)",
+          "price": 250
+        },
+        {
+          "label": "ميناء أزرق (250 جنيه)",
+          "price": 250
+        },
+        {
+          "label": "أرقام رومانية (250 جنيه)",
+          "price": 250,
+          "outOfStock": true
         }
-      }
-    ],
-    "sizeLabel": "اختر المقاس:",
-    "sizes": [
-      {
-        "label": "صغير (65 جنيه)",
-        "price": 65
-      },
-      {
-        "label": "وسط (70 جنيه)",
-        "price": 70
-      },
-      {
-        "label": "كبير (75 جنيه)",
-        "price": 75
-      }
-    ],
-    "desc": "مصفاة/شيالة لقلي ونشل البطاطس متوفرة بـ 3 مقاسات وأسعار (صغير 65 جنيه، وسط 70 جنيه، كبير 75 جنيه). يرجى اختيار المقاس المطلوب عند الشراء في السلة.",
-    "priceOptions": [
-      {
-        "label": "صغير",
-        "price": 65
-      },
-      {
-        "label": "وسط",
-        "price": 70
-      },
-      {
-        "label": "كبير",
-        "price": 75
-      }
-    ],
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-pyrex-engraved-mug-150",
-    "title": "مج بايركس محفور عليه",
-    "merchant": "أم وليد",
-    "category": "gifts",
-    "categories": [
-      "gifts",
-      "home"
-    ],
-    "price": 150,
-    "img": "Omwaled/compressed_1795608064243.webp",
-    "images": [
-      "Omwaled/compressed_1795608064243.webp"
-    ],
-    "desc": "كوب بايركس زجاجي شفاف مزوّد بغطاء وماصة وجراب جلدي محفور عليه اسم وعبارة مخصصة.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-magic-mug-photo-220",
-    "title": "مج سحري بصورتك",
-    "merchant": "أم وليد",
-    "category": "gifts",
-    "categories": [
-      "gifts",
-      "home"
-    ],
-    "price": 220,
-    "img": "Omwaled/compressed_1795608063941.webp",
-    "images": [
-      "Omwaled/compressed_1795608063941.webp"
-    ],
-    "desc": "مج حراري يتغير لونه عند صب السوائل الساخنة ليُظهر الصورة المطبوعة عليه بشكل مفاجئ ومميز.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-lux-stand-3tier-900",
-    "title": "شيالة 3 دور لوكس",
-    "merchant": "أم وليد",
-    "category": "home",
-    "categories": [
-      "home"
-    ],
-    "price": 900,
-    "img": "Omwaled/compressed_1795608063558.webp",
-    "images": [
-      "Omwaled/compressed_1795608063558.webp"
-    ],
-    "desc": "حامل تقديم فاخر من 3 أدوار بتصميم ذهبي مزخرف لتقديم الحلويات والضيافة بأسلوب راقٍ.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-bathroom-corner-shelf-4tier-330",
-    "title": "ركنة حمام 4 دور",
-    "merchant": "أم وليد",
-    "category": "home",
-    "categories": [
-      "home"
-    ],
-    "price": 330,
-    "img": "Omwaled/compressed_1795608063778.webp",
-    "images": [
-      "Omwaled/compressed_1795608063778.webp"
-    ],
-    "desc": "منظم أرفف زاوية عمودي بعدة أدوار لترتيب مستلزمات الحمام أو المطبخ واستغلال المساحات الرأسية.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-stainless-wall-hanger-25",
-    "title": "شماعة استالس",
-    "merchant": "أم وليد",
-    "category": "home",
-    "categories": [
-      "home"
-    ],
-    "price": 25,
-    "img": "Omwaled/compressed_1795608063399.webp",
-    "images": [
-      "Omwaled/compressed_1795608063399.webp"
-    ],
-    "desc": "علاقة حائط معدنية/ستانلس متعددة الخطافات لتعليق الملابس والحقائب والاحتياجات اليومية.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-lux-hanger-3x1-40",
-    "title": "شماعة لوكس 3×1",
-    "merchant": "أم وليد",
-    "category": "home",
-    "categories": [
-      "home"
-    ],
-    "price": 40,
-    "img": "Omwaled/compressed_1795608062889.webp",
-    "images": [
-      "Omwaled/compressed_1795608062889.webp"
-    ],
-    "desc": "شماعة ملابس بلاستيكية بتصميم لوكس (عبوة 3 قطع) لتعليق الملابس اليومية بشكل منظم.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-dahab-dryer-365",
-    "title": "منشر دهب",
-    "merchant": "أم وليد",
-    "category": "home",
-    "categories": [
-      "home"
-    ],
-    "price": 365,
-    "img": "Omwaled/compressed_1795608063092.webp",
-    "images": [
-      "Omwaled/compressed_1795608063092.webp"
-    ],
-    "desc": "منشر غسيل قابل للطي موديل دهب عملي وسهل الفتح والطي والتخزين داخل المنزل.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-stainless-retractable-wall-dryer-530",
-    "title": "منشر حائط حبل استانلس",
-    "merchant": "أم وليد",
-    "category": "home",
-    "categories": [
-      "home"
-    ],
-    "price": 530,
-    "img": "Omwaled/compressed_1795608062326.webp",
-    "images": [
-      "Omwaled/compressed_1795608062326.webp"
-    ],
-    "desc": "منشر غسيل يُثبّت على الحائط بخطوط/حبال استانلس قابلة للسحب لتوفير المساحة عند عدم الاستخدام.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-white-mug-photo-160",
-    "title": "مج أبيض بصورتك",
-    "merchant": "أم وليد",
-    "category": "gifts",
-    "categories": [
-      "gifts",
-      "home"
-    ],
-    "price": 160,
-    "img": "Omwaled/compressed_1795608062750.webp",
-    "images": [
-      "Omwaled/compressed_1795608062750.webp"
-    ],
-    "desc": "مج سيراميك أبيض مطبوع عليه صورة شخصية بتصميم واضح ومناسب للإهداء أو الاستخدام اليومي.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-wall-art-90x60-500",
-    "title": "تابلوه 90×60",
-    "merchant": "أم وليد",
-    "category": "gifts",
-    "categories": [
-      "gifts",
-      "home"
-    ],
-    "price": 500,
-    "img": "Omwaled/compressed_1795608062614.webp",
-    "images": [
-      "Omwaled/compressed_1795608062614.webp"
-    ],
-    "desc": "تابلوه كبير مقاس 90×60 سم يجمع عدة صور وعبارات إهداء ليكون قطعة ديكور وذكرى بارزة على الحائط.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-khair-home-dryer-folding-1200",
-    "title": "منشر خير هوم مقاوم للصدأ",
-    "merchant": "أم وليد",
-    "category": "home",
-    "categories": [
-      "home"
-    ],
-    "price": 1200,
-    "img": "Omwaled/compressed_1795608061745.webp",
-    "images": [
-      "Omwaled/compressed_1795608061745.webp"
-    ],
-    "desc": "منشر غسيل من خير هوم بخامة مقاومة للصدأ وقابل للطي بتصميم متين وسعة مناسبة للملابس.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-medo-hanger-6x1-35",
-    "title": "شماعة ميدو 6×1",
-    "merchant": "أم وليد",
-    "category": "home",
-    "categories": [
-      "home"
-    ],
-    "price": 35,
-    "img": "Omwaled/compressed_1795608061600.webp",
-    "images": [
-      "Omwaled/compressed_1795608061600.webp"
-    ],
-    "desc": "شماعة ملابس بلاستيكية ماركة ميدو (6 قطع في العبوة) لتعليق وترتيب الملابس اليومية.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-microwave-metal-rack-285",
-    "title": "استاند ميكروويف / تنظيم معدني",
-    "merchant": "أم وليد",
-    "category": "home",
-    "categories": [
-      "home"
-    ],
-    "price": 285,
-    "img": "Omwaled/compressed_1795608062102.webp",
-    "images": [
-      "Omwaled/compressed_1795608062102.webp"
-    ],
-    "desc": "استاند معدني لتنظيم الميكروويف وأدوات المطبخ أو الأغراض المنزلية وتوفير مساحة إضافية.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-strainers-set-3pcs-stainless-50",
-    "title": "طقم مصافى 3 قطع ستانلس",
-    "merchant": "أم وليد",
-    "category": "home",
-    "categories": [
-      "home"
-    ],
-    "price": 50,
-    "img": "Omwaled/compressed_1795608061480.webp",
-    "images": [
-      "Omwaled/compressed_1795608061480.webp"
-    ],
-    "desc": "طقم مصافى يدوية ستانلس بثلاثة أحجام مختلفة لتصفية المكونات والمشروبات والأطعمة في المطبخ.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-style-wall-hanger-65",
-    "title": "شماعة استايل",
-    "merchant": "أم وليد",
-    "category": "home",
-    "categories": [
-      "home"
-    ],
-    "price": 65,
-    "img": "Omwaled/compressed_1795608061341.webp",
-    "images": [
-      "Omwaled/compressed_1795608061341.webp"
-    ],
-    "desc": "علاقة حائط متعددة الخطافات لتعليق الجواكت والمفاتيح والملابس بشكل أنيق ومنظم.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-juice-tomato-strainer-70",
-    "title": "صفاية عصير وطماطم",
-    "merchant": "أم وليد",
-    "category": "home",
-    "categories": [
-      "home"
-    ],
-    "price": 70,
-    "img": "Omwaled/compressed_1795608061193.webp",
-    "images": [
-      "Omwaled/compressed_1795608061193.webp"
-    ],
-    "desc": "مصفاة مطبخ عملية لتصفية الطماطم والعصائر والصلصات وتحضير الأكلات بسهولة.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  },
-  {
-    "id": "om-waleed-strainers-set-3pcs-colored-40",
-    "title": "طقم مصافى 3 قطع ملون",
-    "merchant": "أم وليد",
-    "category": "home",
-    "categories": [
-      "home"
-    ],
-    "price": 40,
-    "img": "Omwaled/compressed_1795608060998.webp",
-    "images": [
-      "Omwaled/compressed_1795608060998.webp"
-    ],
-    "desc": "طقم مصافى صغيرة بثلاث قطع بألوان مختلفة للاستخدام السريع في المطبخ وتحضير المشروبات والوصفات.",
-    "soldOutImages": [],
-    "hasSoldOutImages": false
-  }
-]
+      ],
+      "outOfStock": false,
+      "stock": 1,
+      "soldOutImages": [
+        "Omwaled/compressed_1795517024344.webp"
+      ]
+    },
+    {
+      "id": "om-waleed-watches-collection-200",
+      "title": "ساعات معدنية موديلات متنوعة",
+      "merchant": "أم وليد",
+      "category": "jewelry",
+      "categories": [
+        "jewelry",
+        "gifts"
+      ],
+      "price": 200,
+      "img": "Omwaled/compressed_1795517033781.webp",
+      "images": [
+        "Omwaled/compressed_1795517033781.webp",
+        "Omwaled/compressed_1795517031412.webp",
+        "Omwaled/compressed_1795517029070.webp",
+        "Omwaled/compressed_1795517026716.webp",
+        "Omwaled/compressed_1795517019607.webp"
+      ],
+      "desc": "ساعات معدنية أنيقة متوفرة بعدة أشكال وألوان للميناء (أسود، أزرق، ذهبي، وفضي) بسعر 200 جنيه. يرجى تحديد اللون أو الموديل المطلوب عند الطلب.",
+      "sizeLabel": "اختر اللون:",
+      "sizes": [
+        {
+          "label": "أسود (200 جنيه)",
+          "price": 200,
+          "outOfStock": true
+        },
+        {
+          "label": "أزرق (200 جنيه)",
+          "price": 200,
+          "outOfStock": true
+        },
+        {
+          "label": "ذهبي (200 جنيه)",
+          "price": 200
+        },
+        {
+          "label": "فضي (200 جنيه)",
+          "price": 200
+        }
+      ],
+      "outOfStock": true,
+      "stock": 0,
+      "soldOutImages": [
+        "Omwaled/compressed_1795517033781.webp",
+        "Omwaled/compressed_1795517029070.webp"
+      ]
+    },
+    {
+      "id": "om-waleed-leather-watches-collection-150",
+      "title": "ساعات جلد موديلات متنوعة",
+      "merchant": "أم وليد",
+      "category": "jewelry",
+      "categories": [
+        "jewelry",
+        "men",
+        "gifts"
+      ],
+      "price": 150,
+      "img": "Omwaled/compressed_1795517007729.webp",
+      "images": [
+        "Omwaled/compressed_1795517007729.webp",
+        "Omwaled/compressed_1795517012472.webp"
+      ],
+      "desc": "ساعات بحزام جلد أنيق وميناء أسود بتفاصيل كرونوغراف وأرقام رومانية متوفرة بألوان (حزام أسود بإطار ذهبي وحزام بيج بإطار فضي) بسعر 150 جنيه. يرجى تحديد اللون أو الموديل المطلوب عند الطلب.",
+      "sizeLabel": "اختر اللون / الموديل:",
+      "sizes": [
+        {
+          "label": "حزام أسود بإطار ذهبي (150 جنيه)",
+          "price": 150
+        },
+        {
+          "label": "حزام بيج بإطار فضي (150 جنيه)",
+          "price": 150
+        }
+      ],
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-thermal-bag-medium-panda-200",
+      "title": "شنطة حراري وسط",
+      "merchant": "أم وليد",
+      "category": "home",
+      "categories": [
+        "home",
+        "kids"
+      ],
+      "price": 200,
+      "img": "Omwaled/compressed_1795608069571.webp",
+      "images": [
+        "Omwaled/compressed_1795608069571.webp"
+      ],
+      "desc": "حقيبة عازلة للحرارة مقاس وسط بطباعة Panda لحفظ الطعام أو المشروبات ساخنة أو باردة أثناء الخروج أو المدرسة أو العمل.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-acrylic-cake-stand-3tier-235",
+      "title": "شيالة كعك اكريليك 3 دور",
+      "merchant": "أم وليد",
+      "category": "home",
+      "categories": [
+        "home"
+      ],
+      "price": 235,
+      "img": "Omwaled/compressed_1795608069105.webp",
+      "images": [
+        "Omwaled/compressed_1795608069105.webp"
+      ],
+      "desc": "حامل تقديم من 3 أدوار بأطباق أكريليك بلون أزرق/فيروزي وحامل ذهبي أنيق لتقديم الكعك والحلويات والمخبوزات في المناسبات.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-thermal-bag-jumbo-safeer-270",
+      "title": "شنطة حراري جامبو",
+      "merchant": "أم وليد",
+      "category": "home",
+      "categories": [
+        "home"
+      ],
+      "price": 270,
+      "img": "Omwaled/compressed_1795608069296.webp",
+      "images": [
+        "Omwaled/compressed_1795608069296.webp"
+      ],
+      "desc": "حقيبة حفظ حراري كبيرة/جامبو ماركة Safeer ببطانة عازلة للحرارة بسعة واسعة لحفظ كميات كبيرة من الطعام أو المشروبات للرحلات والعزومات.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-kahk-stand-2tier-gold-500",
+      "title": "شيالة كحك 2 دور دهبي",
+      "merchant": "أم وليد",
+      "category": "home",
+      "categories": [
+        "home"
+      ],
+      "price": 500,
+      "img": "Omwaled/compressed_1795608068858.webp",
+      "images": [
+        "Omwaled/compressed_1795608068858.webp"
+      ],
+      "desc": "حامل تقديم من دورين بلون ذهبي مزخرف للكحك والبسكويت والحلويات الشرقية لإضافة لمسة فخامة على مائدة الضيافة.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-thermal-bag-large-safeer-230",
+      "title": "شنطة حفظ حراري ك",
+      "merchant": "أم وليد",
+      "category": "home",
+      "categories": [
+        "home"
+      ],
+      "price": 230,
+      "img": "Omwaled/compressed_1795608068234.webp",
+      "images": [
+        "Omwaled/compressed_1795608068234.webp"
+      ],
+      "desc": "حقيبة حفظ حراري ماركة Safeer ببطانة عازلة فضية تحافظ على درجة حرارة الأطعمة والمشروبات لفترات مناسبة.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-rotating-multi-organizer-200",
+      "title": "منظم متعدد دوار",
+      "merchant": "أم وليد",
+      "category": "home",
+      "categories": [
+        "home",
+        "women"
+      ],
+      "price": 200,
+      "img": "Omwaled/compressed_1795608068494.webp",
+      "images": [
+        "Omwaled/compressed_1795608068494.webp"
+      ],
+      "desc": "منظم دائري دوار مقسّم لعدة خانات لترتيب الإكسسوارات أو أدوات التجميل أو الأدوات الصغيرة وسهولة الوصول إليها.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-wall-hanger-gold-apple-75",
+      "title": "شماعة مدهب تفاحة",
+      "merchant": "أم وليد",
+      "category": "home",
+      "categories": [
+        "home"
+      ],
+      "price": 75,
+      "img": "Omwaled/compressed_1795608067909.webp",
+      "images": [
+        "Omwaled/compressed_1795608067909.webp"
+      ],
+      "desc": "علاقة حائط معدنية بلون ذهبي مزينة بأشكال تفاح لتعليق الملابس والقبعات والإكسسوارات بشكل أنيق ومرتب.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-kids-hanger-abuelkhair-6x1-35",
+      "title": "شماعة أبو الخير أطفال 6×1",
+      "merchant": "أم وليد",
+      "category": "kids",
+      "categories": [
+        "kids",
+        "home"
+      ],
+      "price": 35,
+      "img": "Omwaled/compressed_1795608067786.webp",
+      "images": [
+        "Omwaled/compressed_1795608067786.webp"
+      ],
+      "desc": "شماعات ملابس مخصصة للأطفال من أبو الخير (6 قطع) بحجم مناسب لملابس الأطفال وتنظيم خزانتهم.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-clothes-shoe-rack-5tier-310",
+      "title": "استاند ملابس وجزامة 5 دور",
+      "merchant": "أم وليد",
+      "category": "home",
+      "categories": [
+        "home"
+      ],
+      "price": 310,
+      "img": "Omwaled/compressed_1795608068064.webp",
+      "images": [
+        "Omwaled/compressed_1795608068064.webp"
+      ],
+      "desc": "استاند معدني عملي لتعليق الملابس مع أرفف أحذية من 5 أدوار لتنظيم المدخل أو الغرفة وتوفير المساحة.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-eyes-necklace-150",
+      "title": "سلسلة عيون",
+      "merchant": "أم وليد",
+      "category": "jewelry",
+      "categories": [
+        "jewelry",
+        "women",
+        "gifts"
+      ],
+      "price": 150,
+      "img": "Omwaled/compressed_1795608067629.webp",
+      "images": [
+        "Omwaled/compressed_1795608067629.webp"
+      ],
+      "desc": "قلادة بسلسلة معدنية وتعليقة مستطيلة بتصميم عيون أنيق ومناسب للإهداء أو الإطلالات اليومية.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-custom-case-print-100",
+      "title": "طباعة على جراب بصورتك (أنت اللي بتجيب الجراب)",
+      "merchant": "أم وليد",
+      "category": "gifts",
+      "categories": [
+        "gifts",
+        "phones"
+      ],
+      "price": 100,
+      "img": "Omwaled/compressed_1795608067078.webp",
+      "images": [
+        "Omwaled/compressed_1795608067078.webp"
+      ],
+      "desc": "خدمة طباعة صورة أو تصميم مخصص على جراب موبايل يوفّره العميل بنفسه لتقديم هدية أو لمسة شخصية مميزة.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-khair-home-rustproof-dryer-1200",
+      "title": "منشر فولاذ مقاوم للصدأ",
+      "merchant": "أم وليد",
+      "category": "home",
+      "categories": [
+        "home"
+      ],
+      "price": 1200,
+      "img": "Omwaled/compressed_1795608067293.webp",
+      "images": [
+        "Omwaled/compressed_1795608067293.webp"
+      ],
+      "desc": "منشر غسيل من خير هوم بخامة فولاذ مقاومة للصدأ وقابل للطي بسعة تجفيف مناسبة وسهولة في التخزين.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-jeans-pants-hanger-35",
+      "title": "شماعة بنطلون جينز",
+      "merchant": "أم وليد",
+      "category": "home",
+      "categories": [
+        "home"
+      ],
+      "price": 35,
+      "img": "Omwaled/compressed_1795608066934.webp",
+      "images": [
+        "Omwaled/compressed_1795608066934.webp"
+      ],
+      "desc": "شماعة معدنية متعددة الطبقات لتعليق أكثر من بنطلون أو جينز في شماعة واحدة لتوفير المساحة داخل الدولاب.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-shein-metal-shoe-rack-7tier-450",
+      "title": "جزامة شي إن معدن 7 دور",
+      "merchant": "أم وليد",
+      "category": "home",
+      "categories": [
+        "home"
+      ],
+      "price": 450,
+      "img": "Omwaled/compressed_1795608066545.webp",
+      "images": [
+        "Omwaled/compressed_1795608066545.webp"
+      ],
+      "desc": "وحدة تخزين وجزامة معدنية بـ 7 أدوار لتنظيم الأحذية والملحقات المنزلية بشكل مرتب وموفر للمساحة.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-hen-egg-basket-440",
+      "title": "سلة بيض فرخة",
+      "merchant": "أم وليد",
+      "category": "home",
+      "categories": [
+        "home"
+      ],
+      "price": 440,
+      "img": "Omwaled/compressed_1795608066733.webp",
+      "images": [
+        "Omwaled/compressed_1795608066733.webp"
+      ],
+      "desc": "سلة لحفظ البيض بتصميم مجسم على شكل دجاجة فوق قاعدة شبكية تضيف شكلاً مميزاً وعملياً للمطبخ.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-photo-frame-15x21-100",
+      "title": "برواز 15×21",
+      "merchant": "أم وليد",
+      "category": "gifts",
+      "categories": [
+        "gifts",
+        "home"
+      ],
+      "price": 100,
+      "img": "Omwaled/compressed_1795608066370.webp",
+      "images": [
+        "Omwaled/compressed_1795608066370.webp"
+      ],
+      "desc": "برواز أسود بتصميم صور وعبارات مخصصة بمقاس 15×21 سم مثالي للهدايا والذكريات الشخصية.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-custom-wallet-photo-name-200",
+      "title": "محفظة بصورتك / محفظة باسمك",
+      "merchant": "أم وليد",
+      "category": "gifts",
+      "categories": [
+        "gifts",
+        "men",
+        "jewelry"
+      ],
+      "price": 200,
+      "img": "Omwaled/compressed_1795608066061.webp",
+      "images": [
+        "Omwaled/compressed_1795608066061.webp",
+        "Omwaled/compressed_1795608064431.webp"
+      ],
+      "desc": "محفظة جلدية بنية بكبسونة متوفرة بتصميم مخصص بالصورة أو بالاسم بالخط العربي أو الإنجليزي. يرجى تحديد اختيارك (بالصورة أو بالاسم) وتوضيح التفاصيل عند الطلب.",
+      "sizeLabel": "اختر التصميم:",
+      "sizes": [
+        {
+          "label": "بالصورة (200 جنيه)",
+          "price": 200
+        },
+        {
+          "label": "بالاسم (200 جنيه)",
+          "price": 200
+        }
+      ],
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-magic-mirror-photo-300",
+      "title": "مرايا سحرية بصورتك",
+      "merchant": "أم وليد",
+      "category": "gifts",
+      "categories": [
+        "gifts",
+        "women"
+      ],
+      "price": 300,
+      "img": "Omwaled/compressed_1795608066226.webp",
+      "images": [
+        "Omwaled/compressed_1795608066226.webp"
+      ],
+      "desc": "مرآة دائرية بقاعدة وتعمل كصورة مضيئة عند التشغيل، هدية مميزة تجمع بين العملية والذكريات.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-katb-ketab-handkerchief-130",
+      "title": "منديل كتب كتاب",
+      "merchant": "أم وليد",
+      "category": "gifts",
+      "categories": [
+        "gifts"
+      ],
+      "price": 130,
+      "img": "Omwaled/compressed_1795608065889.webp",
+      "images": [
+        "Omwaled/compressed_1795608065889.webp"
+      ],
+      "desc": "منديل أبيض مطرّز/مطبوع بأسماء العروسين وتاريخ المناسبة وآية وعبارة تهنئة ليكون ذكرى مميزة ليوم كتب الكتاب.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-fruit-stand-2tier-gold-255",
+      "title": "شيالة فاكهة 2 دور دهبي",
+      "merchant": "أم وليد",
+      "category": "home",
+      "categories": [
+        "home"
+      ],
+      "price": 255,
+      "img": "Omwaled/compressed_1795608065555.webp",
+      "images": [
+        "Omwaled/compressed_1795608065555.webp"
+      ],
+      "desc": "حامل معدني ذهبي من دورين لتقديم الفاكهة بشكل مرتب وجذاب على الطاولة أو السفرة.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-juice-herbs-stainless-strainer-75",
+      "title": "صفاية عصير وأعشاب ستانلس",
+      "merchant": "أم وليد",
+      "category": "home",
+      "categories": [
+        "home"
+      ],
+      "price": 75,
+      "img": "Omwaled/compressed_1795608065738.webp",
+      "images": [
+        "Omwaled/compressed_1795608065738.webp"
+      ],
+      "desc": "مصفاة يدوية ستانلس ستيل لتصفية العصائر والأعشاب والمشروبات بسهولة وعملية في المطبخ.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-smile-hanger-9x1-35",
+      "title": "شماعة سمايل 9×1",
+      "merchant": "أم وليد",
+      "category": "home",
+      "categories": [
+        "home",
+        "kids"
+      ],
+      "price": 35,
+      "img": "Omwaled/compressed_1795608065399.webp",
+      "images": [
+        "Omwaled/compressed_1795608065399.webp"
+      ],
+      "desc": "طقم علاّقات/خطافات لاصقة للحائط على شكل وجوه ضاحكة صفراء (9 قطع في الطقم) لتعليق الأغراض الخفيفة والمفاتيح.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-lantern-keychain-photo-name-35",
+      "title": "ميداليا فانوس بصورتك أو اسم",
+      "merchant": "أم وليد",
+      "category": "gifts",
+      "categories": [
+        "gifts",
+        "jewelry"
+      ],
+      "price": 35,
+      "img": "Omwaled/compressed_1795608065125.webp",
+      "images": [
+        "Omwaled/compressed_1795608065125.webp"
+      ],
+      "desc": "ميداليا على شكل فانوس مطبوعة بصورة أو اسم لتكون هدية خفيفة ومخصصة للمفاتيح أو الحقائب.",
+      "sizeLabel": "اختر التصميم:",
+      "sizes": [
+        {
+          "label": "بصورتك (35 جنيه)",
+          "price": 35
+        },
+        {
+          "label": "باسم (35 جنيه)",
+          "price": 35
+        }
+      ],
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-wall-clock-30x40-280",
+      "title": "ساعة حائط بصورتك مقاس 30×40",
+      "merchant": "أم وليد",
+      "category": "gifts",
+      "categories": [
+        "gifts",
+        "home"
+      ],
+      "price": 280,
+      "img": "Omwaled/compressed_1795608065234.webp",
+      "images": [
+        "Omwaled/compressed_1795608065234.webp"
+      ],
+      "desc": "ساعة حائط مستطيلة مقاس 30×40 سم مطبوعة بصورة شخصية مع أرقام وعقارب واضحة لتزيين الغرف وتقديمها كهدية.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-wall-art-40x30-220",
+      "title": "تابلوه 40×30",
+      "merchant": "أم وليد",
+      "category": "gifts",
+      "categories": [
+        "gifts",
+        "home"
+      ],
+      "price": 220,
+      "img": "Omwaled/compressed_1795608064965.webp",
+      "images": [
+        "Omwaled/compressed_1795608064965.webp"
+      ],
+      "desc": "تابلوه متوسط مقاس 40×30 سم بتصميم مجمع للصور والعبارات المخصصة لإهداء الأحباب وتزيين الحائط.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-photo-keychain-30",
+      "title": "ميداليا بصورتك",
+      "merchant": "أم وليد",
+      "category": "gifts",
+      "categories": [
+        "gifts",
+        "jewelry"
+      ],
+      "price": 30,
+      "img": "Omwaled/compressed_1795608064656.webp",
+      "images": [
+        "Omwaled/compressed_1795608064656.webp"
+      ],
+      "desc": "ميداليا مستطيلة مطبوع عليها صورة شخصية مع سلسلة وحلقة معدنية مناسبة للمفاتيح أو الإهداء اليومي.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-coffee-cup-saucer-170",
+      "title": "فنجان قهوة بالطبق",
+      "merchant": "أم وليد",
+      "category": "gifts",
+      "categories": [
+        "gifts",
+        "home"
+      ],
+      "price": 170,
+      "img": "Omwaled/compressed_1795608064802.webp",
+      "images": [
+        "Omwaled/compressed_1795608064802.webp"
+      ],
+      "desc": "فنجان قهوة سيراميك أبيض مع طبقه مكتوب عليهما اسم وتاريخ أو عبارة مخصصة لهدية أنيقة لمحبي القهوة.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-potato-skimmer-variants",
+      "title": "شيالة بطاطس",
+      "merchant": "أم وليد",
+      "category": "home",
+      "categories": [
+        "home"
+      ],
+      "price": 65,
+      "img": "Omwaled/compressed_1795608064076.webp",
+      "images": [
+        "Omwaled/compressed_1795608064076.webp"
+      ],
+      "variants": [
+        {
+          "id": "small",
+          "name": "صغير",
+          "label": "صغير",
+          "price": 65
+        },
+        {
+          "id": "medium",
+          "name": "وسط",
+          "label": "وسط",
+          "price": 70
+        },
+        {
+          "id": "large",
+          "name": "كبير",
+          "label": "كبير",
+          "price": 75
+        }
+      ],
+      "options": [
+        {
+          "name": "المقاس",
+          "values": [
+            "صغير (65 ج)",
+            "وسط (70 ج)",
+            "كبير (75 ج)"
+          ],
+          "prices": {
+            "صغير (65 ج)": 65,
+            "وسط (70 ج)": 70,
+            "كبير (75 ج)": 75
+          }
+        }
+      ],
+      "sizeLabel": "اختر المقاس:",
+      "sizes": [
+        {
+          "label": "صغير (65 جنيه)",
+          "price": 65
+        },
+        {
+          "label": "وسط (70 جنيه)",
+          "price": 70
+        },
+        {
+          "label": "كبير (75 جنيه)",
+          "price": 75
+        }
+      ],
+      "desc": "مصفاة/شيالة لقلي ونشل البطاطس متوفرة بـ 3 مقاسات وأسعار (صغير 65 جنيه، وسط 70 جنيه، كبير 75 جنيه). يرجى اختيار المقاس المطلوب عند الشراء في السلة.",
+      "priceOptions": [
+        {
+          "label": "صغير",
+          "price": 65
+        },
+        {
+          "label": "وسط",
+          "price": 70
+        },
+        {
+          "label": "كبير",
+          "price": 75
+        }
+      ],
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-pyrex-engraved-mug-150",
+      "title": "مج بايركس محفور عليه",
+      "merchant": "أم وليد",
+      "category": "gifts",
+      "categories": [
+        "gifts",
+        "home"
+      ],
+      "price": 150,
+      "img": "Omwaled/compressed_1795608064243.webp",
+      "images": [
+        "Omwaled/compressed_1795608064243.webp"
+      ],
+      "desc": "كوب بايركس زجاجي شفاف مزوّد بغطاء وماصة وجراب جلدي محفور عليه اسم وعبارة مخصصة.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-magic-mug-photo-220",
+      "title": "مج سحري بصورتك",
+      "merchant": "أم وليد",
+      "category": "gifts",
+      "categories": [
+        "gifts",
+        "home"
+      ],
+      "price": 220,
+      "img": "Omwaled/compressed_1795608063941.webp",
+      "images": [
+        "Omwaled/compressed_1795608063941.webp"
+      ],
+      "desc": "مج حراري يتغير لونه عند صب السوائل الساخنة ليُظهر الصورة المطبوعة عليه بشكل مفاجئ ومميز.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-lux-stand-3tier-900",
+      "title": "شيالة 3 دور لوكس",
+      "merchant": "أم وليد",
+      "category": "home",
+      "categories": [
+        "home"
+      ],
+      "price": 900,
+      "img": "Omwaled/compressed_1795608063558.webp",
+      "images": [
+        "Omwaled/compressed_1795608063558.webp"
+      ],
+      "desc": "حامل تقديم فاخر من 3 أدوار بتصميم ذهبي مزخرف لتقديم الحلويات والضيافة بأسلوب راقٍ.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-bathroom-corner-shelf-4tier-330",
+      "title": "ركنة حمام 4 دور",
+      "merchant": "أم وليد",
+      "category": "home",
+      "categories": [
+        "home"
+      ],
+      "price": 330,
+      "img": "Omwaled/compressed_1795608063778.webp",
+      "images": [
+        "Omwaled/compressed_1795608063778.webp"
+      ],
+      "desc": "منظم أرفف زاوية عمودي بعدة أدوار لترتيب مستلزمات الحمام أو المطبخ واستغلال المساحات الرأسية.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-stainless-wall-hanger-25",
+      "title": "شماعة استالس",
+      "merchant": "أم وليد",
+      "category": "home",
+      "categories": [
+        "home"
+      ],
+      "price": 25,
+      "img": "Omwaled/compressed_1795608063399.webp",
+      "images": [
+        "Omwaled/compressed_1795608063399.webp"
+      ],
+      "desc": "علاقة حائط معدنية/ستانلس متعددة الخطافات لتعليق الملابس والحقائب والاحتياجات اليومية.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-lux-hanger-3x1-40",
+      "title": "شماعة لوكس 3×1",
+      "merchant": "أم وليد",
+      "category": "home",
+      "categories": [
+        "home"
+      ],
+      "price": 40,
+      "img": "Omwaled/compressed_1795608062889.webp",
+      "images": [
+        "Omwaled/compressed_1795608062889.webp"
+      ],
+      "desc": "شماعة ملابس بلاستيكية بتصميم لوكس (عبوة 3 قطع) لتعليق الملابس اليومية بشكل منظم.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-dahab-dryer-365",
+      "title": "منشر دهب",
+      "merchant": "أم وليد",
+      "category": "home",
+      "categories": [
+        "home"
+      ],
+      "price": 365,
+      "img": "Omwaled/compressed_1795608063092.webp",
+      "images": [
+        "Omwaled/compressed_1795608063092.webp"
+      ],
+      "desc": "منشر غسيل قابل للطي موديل دهب عملي وسهل الفتح والطي والتخزين داخل المنزل.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-stainless-retractable-wall-dryer-530",
+      "title": "منشر حائط حبل استانلس",
+      "merchant": "أم وليد",
+      "category": "home",
+      "categories": [
+        "home"
+      ],
+      "price": 530,
+      "img": "Omwaled/compressed_1795608062326.webp",
+      "images": [
+        "Omwaled/compressed_1795608062326.webp"
+      ],
+      "desc": "منشر غسيل يُثبّت على الحائط بخطوط/حبال استانلس قابلة للسحب لتوفير المساحة عند عدم الاستخدام.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-white-mug-photo-160",
+      "title": "مج أبيض بصورتك",
+      "merchant": "أم وليد",
+      "category": "gifts",
+      "categories": [
+        "gifts",
+        "home"
+      ],
+      "price": 160,
+      "img": "Omwaled/compressed_1795608062750.webp",
+      "images": [
+        "Omwaled/compressed_1795608062750.webp"
+      ],
+      "desc": "مج سيراميك أبيض مطبوع عليه صورة شخصية بتصميم واضح ومناسب للإهداء أو الاستخدام اليومي.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-wall-art-90x60-500",
+      "title": "تابلوه 90×60",
+      "merchant": "أم وليد",
+      "category": "gifts",
+      "categories": [
+        "gifts",
+        "home"
+      ],
+      "price": 500,
+      "img": "Omwaled/compressed_1795608062614.webp",
+      "images": [
+        "Omwaled/compressed_1795608062614.webp"
+      ],
+      "desc": "تابلوه كبير مقاس 90×60 سم يجمع عدة صور وعبارات إهداء ليكون قطعة ديكور وذكرى بارزة على الحائط.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-khair-home-dryer-1200",
+      "title": "منشر خير هوم مقاوم للصدأ",
+      "merchant": "أم وليد",
+      "category": "home",
+      "categories": [
+        "home"
+      ],
+      "price": 1200,
+      "img": "Omwaled/compressed_1795608061745.webp",
+      "images": [
+        "Omwaled/compressed_1795608061745.webp"
+      ],
+      "desc": "منشر غسيل من خير هوم بخامة مقاومة للصدأ وقابل للطي بتصميم متين وسعة مناسبة للملابس.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-medo-hanger-6x1-35",
+      "title": "شماعة ميدو 6×1",
+      "merchant": "أم وليد",
+      "category": "home",
+      "categories": [
+        "home"
+      ],
+      "price": 35,
+      "img": "Omwaled/compressed_1795608061600.webp",
+      "images": [
+        "Omwaled/compressed_1795608061600.webp"
+      ],
+      "desc": "شماعة ملابس بلاستيكية ماركة ميدو (6 قطع في العبوة) لتعليق وترتيب الملابس اليومية.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-microwave-metal-rack-285",
+      "title": "استاند ميكروويف / تنظيم معدني",
+      "merchant": "أم وليد",
+      "category": "home",
+      "categories": [
+        "home"
+      ],
+      "price": 285,
+      "img": "Omwaled/compressed_1795608062102.webp",
+      "images": [
+        "Omwaled/compressed_1795608062102.webp"
+      ],
+      "desc": "استاند معدني لتنظيم الميكروويف وأدوات المطبخ أو الأغراض المنزلية وتوفير مساحة إضافية.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-strainers-set-3pcs-stainless-50",
+      "title": "طقم مصافى 3 قطع",
+      "merchant": "أم وليد",
+      "category": "home",
+      "categories": [
+        "home"
+      ],
+      "price": 50,
+      "img": "Omwaled/compressed_1795608061480.webp",
+      "images": [
+        "Omwaled/compressed_1795608061480.webp"
+      ],
+      "desc": "طقم مصافى يدوية ستانلس بثلاثة أحجام مختلفة لتصفية المكونات والمشروبات والأطعمة في المطبخ.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-style-wall-hanger-65",
+      "title": "شماعة استايل",
+      "merchant": "أم وليد",
+      "category": "home",
+      "categories": [
+        "home"
+      ],
+      "price": 65,
+      "img": "Omwaled/compressed_1795608061341.webp",
+      "images": [
+        "Omwaled/compressed_1795608061341.webp"
+      ],
+      "desc": "علاقة حائط متعددة الخطافات لتعليق الجواكت والمفاتيح والملابس بشكل أنيق ومنظم.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-juice-tomato-strainer-70",
+      "title": "صفاية عصير وطماطم",
+      "merchant": "أم وليد",
+      "category": "home",
+      "categories": [
+        "home"
+      ],
+      "price": 70,
+      "img": "Omwaled/compressed_1795608061193.webp",
+      "images": [
+        "Omwaled/compressed_1795608061193.webp"
+      ],
+      "desc": "مصفاة مطبخ عملية لتصفية الطماطم والعصائر والصلصات وتحضير الأكلات بسهولة.",
+      "outOfStock": false,
+      "stock": 1
+    },
+    {
+      "id": "om-waleed-strainers-set-3pcs-colored-40",
+      "title": "طقم مصافى 3 قطع",
+      "merchant": "أم وليد",
+      "category": "home",
+      "categories": [
+        "home"
+      ],
+      "price": 40,
+      "img": "Omwaled/compressed_1795608060998.webp",
+      "images": [
+        "Omwaled/compressed_1795608060998.webp"
+      ],
+      "desc": "طقم مصافى صغيرة بثلاث قطع بألوان مختلفة للاستخدام السريع في المطبخ وتحضير المشروبات والوصفات.",
+      "outOfStock": false,
+      "stock": 1
+    }
+  ]
+}
