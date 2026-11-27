@@ -1,5 +1,5 @@
 const WHATSAPP_NUMBER = "201055436305";
-const BRAND_LOGO_URL = "./compressed_1795766509611.jpeg";
+const BRAND_LOGO_URL = "./compressed_1795766509611.jpeg?v=3";
 
 function buildWhatsAppDeepLink(url) {
     try {
@@ -211,7 +211,10 @@ function syncThemeIcon() {
 function syncBrandLogos() {
     document.querySelectorAll("[data-brand-logo]").forEach(img => {
         if (img.tagName === "IMG") {
-            img.src = BRAND_LOGO_URL;
+            img.classList.add("caramel-logo-mark");
+            if (!img.getAttribute("src")) {
+                img.src = BRAND_LOGO_URL;
+            }
             img.alt = "لوجو متجر كارامل - Caramel Store";
         }
     });
@@ -221,7 +224,9 @@ function syncBrandLogos() {
     });
 
     document.querySelectorAll('link[rel="icon"], link[rel="shortcut icon"], link[rel="apple-touch-icon"]').forEach(linkEl => {
-        linkEl.href = BRAND_LOGO_URL;
+        if (!linkEl.getAttribute("href")) {
+            linkEl.href = BRAND_LOGO_URL;
+        }
     });
 }
 
@@ -823,7 +828,7 @@ function showCaramelToast(message) {
     toastTimer = setTimeout(() => { toastEl.classList.remove("show"); }, 3200);
 }
 
-const APP_BUILD_VERSION = "v20261127-5";
+const APP_BUILD_VERSION = "v20261127-6";
 const APPLIED_BUILD_KEY = "caramel_applied_build_version_v1";
 let pendingUpdateAvailable = false;
 
