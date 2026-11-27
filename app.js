@@ -823,15 +823,80 @@ function showCaramelToast(message) {
     toastTimer = setTimeout(() => { toastEl.classList.remove("show"); }, 3200);
 }
 
+const APP_BUILD_VERSION = "v20261127-5";
+const APPLIED_BUILD_KEY = "caramel_applied_build_version_v1";
+let pendingUpdateAvailable = false;
+
+function isAppRunningStandalone() {
+    if (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) return true;
+    if (window.navigator && window.navigator.standalone === true) return true;
+    return false;
+}
+
+function getSavedAppliedBuildVersion() {
+    try {
+        return localStorage.getItem(APPLIED_BUILD_KEY) || "";
+    } catch (e) {
+        return "";
+    }
+}
+
+function setSavedAppliedBuildVersion(ver) {
+    try {
+        localStorage.setItem(APPLIED_BUILD_KEY, String(ver || ""));
+    } catch (e) {}
+}
+
 function setInstallButtonsVisible(show) {
     const headerBtn = document.getElementById("headerInstallBtn");
-    if (headerBtn) headerBtn.classList.toggle("visible", Boolean(show));
+    if (!headerBtn) return;
+    if (!show) {
+        headerBtn.classList.remove("visible");
+    } else {
+        headerBtn.classList.add("visible");
+    }
+}
+
+function syncHeaderInstallOrUpdateButton() {
+    const headerBtn = document.getElementById("headerInstallBtn");
+    if (!headerBtn) return;
+
+    const standalone = isAppRunningStandalone();
+    const savedBuild = getSavedAppliedBuildVersion();
+    const hasNewBuild = standalone && savedBuild !== APP_BUILD_VERSION;
+    const needsUpdate = Boolean(pendingUpdateAvailable || hasNewBuild);
+
+    if (needsUpdate) {
+        headerBtn.textContent = "تحديث";
+        headerBtn.classList.add("visible");
+        headerBtn.style.display = "inline-flex";
+        headerBtn.setAttribute("aria-label", "تحديث التطبيق");
+        return;
+    }
+
+    if (standalone) {
+        headerBtn.textContent = "تثبيت";
+        headerBtn.classList.remove("visible");
+        headerBtn.style.display = "none";
+        return;
+    }
+
+    if (deferredInstallPrompt) {
+        headerBtn.textContent = "تثبيت";
+        headerBtn.classList.add("visible");
+        headerBtn.style.display = "inline-flex";
+        headerBtn.setAttribute("aria-label", "تثبيت التطبيق");
+    } else {
+        headerBtn.textContent = "تثبيت";
+        headerBtn.classList.remove("visible");
+        headerBtn.style.display = "none";
+    }
 }
 
 window.addEventListener("beforeinstallprompt", e => {
     e.preventDefault();
     deferredInstallPrompt = e;
-    setInstallButtonsVisible(true);
+    syncHeaderInstallOrUpdateButton();
 });
 
 async function triggerInstallApp() {
@@ -839,12 +904,57 @@ async function triggerInstallApp() {
     deferredInstallPrompt.prompt();
     try { await deferredInstallPrompt.userChoice; } catch (e) {}
     deferredInstallPrompt = null;
-    setInstallButtonsVisible(false);
+    syncHeaderInstallOrUpdateButton();
+}
+
+async function applyStoreUpdateAndHideButton() {
+    const headerBtn = document.getElementById("headerInstallBtn");
+    if (headerBtn) {
+        headerBtn.disabled = true;
+        headerBtn.textContent = "جاري التحديث...";
+    }
+
+    try {
+        if ("serviceWorker" in navigator) {
+            const regs = await navigator.serviceWorker.getRegistrations();
+            for (const reg of regs) {
+                await reg.update().catch(() => {});
+                if (reg.waiting) {
+                    reg.waiting.postMessage({ type: "SKIP_WAITING" });
+                }
+            }
+        }
+        if ("caches" in window) {
+            const keys = await caches.keys();
+            await Promise.all(keys.map(k => caches.delete(k)));
+        }
+    } catch (e) {}
+
+    setSavedAppliedBuildVersion(APP_BUILD_VERSION);
+    pendingUpdateAvailable = false;
+
+    const cleanUrl = window.location.pathname + window.location.search + window.location.hash;
+    const sep = cleanUrl.includes("?") ? "&" : "?";
+    window.location.replace(`${cleanUrl}${sep}sw_refresh=${Date.now()}`);
+}
+
+function handleInstallOrUpdateAction() {
+    const standalone = isAppRunningStandalone();
+    const savedBuild = getSavedAppliedBuildVersion();
+    const needsUpdate = Boolean(pendingUpdateAvailable || (standalone && savedBuild !== APP_BUILD_VERSION));
+
+    if (needsUpdate) {
+        applyStoreUpdateAndHideButton();
+        return;
+    }
+    triggerInstallApp();
 }
 
 window.addEventListener("appinstalled", () => {
     deferredInstallPrompt = null;
-    setInstallButtonsVisible(false);
+    setSavedAppliedBuildVersion(APP_BUILD_VERSION);
+    pendingUpdateAvailable = false;
+    syncHeaderInstallOrUpdateButton();
     showCaramelToast("تم تثبيت تطبيق متجر كارامل بنجاح!");
 });
 
@@ -870,18 +980,27 @@ async function shareStoreApp() {
 }
 
 (function initServiceWorkerQuietly() {
+    if (isAppRunningStandalone() && !getSavedAppliedBuildVersion()) {
+        setSavedAppliedBuildVersion("legacy-installed");
+    }
+    syncHeaderInstallOrUpdateButton();
+
     if (!("serviceWorker" in navigator)) return;
     window.addEventListener("load", async () => {
         try {
             const reg = await navigator.serviceWorker.register("./sw.js", { scope: "./", updateViaCache: "none" });
-            if (reg.waiting) reg.waiting.postMessage({ type: "SKIP_WAITING" });
+            if (reg.waiting && navigator.serviceWorker.controller) {
+                pendingUpdateAvailable = true;
+                syncHeaderInstallOrUpdateButton();
+            }
             reg.update().catch(() => {});
             reg.addEventListener("updatefound", () => {
                 const newWorker = reg.installing;
                 if (!newWorker) return;
                 newWorker.addEventListener("statechange", () => {
                     if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
-                        newWorker.postMessage({ type: "SKIP_WAITING" });
+                        pendingUpdateAvailable = true;
+                        syncHeaderInstallOrUpdateButton();
                     }
                 });
             });
