@@ -38,6 +38,8 @@
         "status": "نفذت الكمية"
       }
     ],
+    "hasSoldOutImages": true,
+    "soldOutNotice": "بعض الصور المعروضة (نفذت الكمية) غير متاحة حالياً.",
     "gallery": [
       {
         "index": 0,
@@ -79,9 +81,7 @@
         "statusLabel": "متوفر",
         "disabled": false
       }
-    ],
-    "hasSoldOutImages": true,
-    "soldOutNotice": "بعض الصور المعروضة (نفذت الكمية) غير متاحة حالياً."
+    ]
   },
   {
     "id": "om-waleed-watches-collection-200",
@@ -93,12 +93,12 @@
       "gifts"
     ],
     "price": 200,
-    "img": "Omwaled/compressed_1795517031412.webp",
+    "img": "Omwaled/compressed_1795517033781.webp",
     "images": [
       "Omwaled/compressed_1795517033781.webp",
       "Omwaled/compressed_1795517031412.webp",
-      "Omwaled/compressed_1795517026716.webp",
       "Omwaled/compressed_1795517029070.webp",
+      "Omwaled/compressed_1795517026716.webp",
       "Omwaled/compressed_1795517019607.webp"
     ],
     "desc": "ساعات معدنية أنيقة متوفرة بعدة أشكال وألوان للميناء (أسود، أزرق، ذهبي، وفضي) بسعر 200 جنيه. يرجى تحديد اللون أو الموديل المطلوب عند الطلب.",
@@ -131,6 +131,8 @@
         "status": "نفذت الكمية"
       }
     ],
+    "hasSoldOutImages": true,
+    "soldOutNotice": "بعض الصور المعروضة (نفذت الكمية) غير متاحة حالياً.",
     "gallery": [
       {
         "index": 0,
@@ -154,16 +156,6 @@
       },
       {
         "index": 2,
-        "src": "Omwaled/compressed_1795517026716.webp",
-        "available": true,
-        "soldOut": false,
-        "badge": null,
-        "overlayText": null,
-        "statusLabel": "متوفر",
-        "disabled": false
-      },
-      {
-        "index": 3,
         "src": "Omwaled/compressed_1795517029070.webp",
         "available": false,
         "soldOut": true,
@@ -171,6 +163,16 @@
         "overlayText": "نفذت الكمية",
         "statusLabel": "نفذت الكمية",
         "disabled": true
+      },
+      {
+        "index": 3,
+        "src": "Omwaled/compressed_1795517026716.webp",
+        "available": true,
+        "soldOut": false,
+        "badge": null,
+        "overlayText": null,
+        "statusLabel": "متوفر",
+        "disabled": false
       },
       {
         "index": 4,
@@ -182,9 +184,7 @@
         "statusLabel": "متوفر",
         "disabled": false
       }
-    ],
-    "hasSoldOutImages": true,
-    "soldOutNotice": "بعض الصور المعروضة (نفذت الكمية) غير متاحة حالياً."
+    ]
   },
   {
     "id": "om-waleed-leather-watches-collection-150",
@@ -213,7 +213,9 @@
         "label": "حزام بيج بإطار فضي (150 جنيه)",
         "price": 150
       }
-    ]
+    ],
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-thermal-bag-medium-panda-200",
@@ -229,7 +231,9 @@
     "images": [
       "Omwaled/compressed_1795608069571.webp"
     ],
-    "desc": "حقيبة عازلة للحرارة مقاس وسط بطباعة Panda لحفظ الطعام أو المشروبات ساخنة أو باردة أثناء الخروج أو المدرسة أو العمل."
+    "desc": "حقيبة عازلة للحرارة مقاس وسط بطباعة Panda لحفظ الطعام أو المشروبات ساخنة أو باردة أثناء الخروج أو المدرسة أو العمل.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-acrylic-cake-stand-3tier-235",
@@ -244,7 +248,9 @@
     "images": [
       "Omwaled/compressed_1795608069105.webp"
     ],
-    "desc": "حامل تقديم من 3 أدوار بأطباق أكريليك بلون أزرق/فيروزي وحامل ذهبي أنيق لتقديم الكعك والحلويات والمخبوزات في المناسبات."
+    "desc": "حامل تقديم من 3 أدوار بأطباق أكريليك بلون أزرق/فيروزي وحامل ذهبي أنيق لتقديم الكعك والحلويات والمخبوزات في المناسبات.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-thermal-bag-jumbo-safeer-270",
@@ -259,7 +265,9 @@
     "images": [
       "Omwaled/compressed_1795608069296.webp"
     ],
-    "desc": "حقيبة حفظ حراري كبيرة/جامبو ماركة Safeer ببطانة عازلة للحرارة بسعة واسعة لحفظ كميات كبيرة من الطعام أو المشروبات للرحلات والعزومات."
+    "desc": "حقيبة حفظ حراري كبيرة/جامبو ماركة Safeer ببطانة عازلة للحرارة بسعة واسعة لحفظ كميات كبيرة من الطعام أو المشروبات للرحلات والعزومات.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-kahk-stand-2tier-gold-500",
@@ -274,7 +282,9 @@
     "images": [
       "Omwaled/compressed_1795608068858.webp"
     ],
-    "desc": "حامل تقديم من دورين بلون ذهبي مزخرف للكحك والبسكويت والحلويات الشرقية لإضافة لمسة فخامة على مائدة الضيافة."
+    "desc": "حامل تقديم من دورين بلون ذهبي مزخرف للكحك والبسكويت والحلويات الشرقية لإضافة لمسة فخامة على مائدة الضيافة.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-thermal-bag-large-safeer-230",
@@ -289,7 +299,9 @@
     "images": [
       "Omwaled/compressed_1795608068234.webp"
     ],
-    "desc": "حقيبة حفظ حراري ماركة Safeer ببطانة عازلة فضية تحافظ على درجة حرارة الأطعمة والمشروبات لفترات مناسبة."
+    "desc": "حقيبة حفظ حراري ماركة Safeer ببطانة عازلة فضية تحافظ على درجة حرارة الأطعمة والمشروبات لفترات مناسبة.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-rotating-multi-organizer-200",
@@ -305,7 +317,9 @@
     "images": [
       "Omwaled/compressed_1795608068494.webp"
     ],
-    "desc": "منظم دائري دوار مقسّم لعدة خانات لترتيب الإكسسوارات أو أدوات التجميل أو الأدوات الصغيرة وسهولة الوصول إليها."
+    "desc": "منظم دائري دوار مقسّم لعدة خانات لترتيب الإكسسوارات أو أدوات التجميل أو الأدوات الصغيرة وسهولة الوصول إليها.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-wall-hanger-gold-apple-75",
@@ -320,7 +334,9 @@
     "images": [
       "Omwaled/compressed_1795608067909.webp"
     ],
-    "desc": "علاقة حائط معدنية بلون ذهبي مزينة بأشكال تفاح لتعليق الملابس والقبعات والإكسسوارات بشكل أنيق ومرتب."
+    "desc": "علاقة حائط معدنية بلون ذهبي مزينة بأشكال تفاح لتعليق الملابس والقبعات والإكسسوارات بشكل أنيق ومرتب.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-kids-hanger-abuelkhair-6x1-35",
@@ -336,7 +352,9 @@
     "images": [
       "Omwaled/compressed_1795608067786.webp"
     ],
-    "desc": "شماعات ملابس مخصصة للأطفال من أبو الخير (6 قطع) بحجم مناسب لملابس الأطفال وتنظيم خزانتهم."
+    "desc": "شماعات ملابس مخصصة للأطفال من أبو الخير (6 قطع) بحجم مناسب لملابس الأطفال وتنظيم خزانتهم.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-clothes-shoe-rack-5tier-310",
@@ -351,7 +369,9 @@
     "images": [
       "Omwaled/compressed_1795608068064.webp"
     ],
-    "desc": "استاند معدني عملي لتعليق الملابس مع أرفف أحذية من 5 أدوار لتنظيم المدخل أو الغرفة وتوفير المساحة."
+    "desc": "استاند معدني عملي لتعليق الملابس مع أرفف أحذية من 5 أدوار لتنظيم المدخل أو الغرفة وتوفير المساحة.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-eyes-necklace-150",
@@ -368,7 +388,9 @@
     "images": [
       "Omwaled/compressed_1795608067629.webp"
     ],
-    "desc": "قلادة بسلسلة معدنية وتعليقة مستطيلة بتصميم عيون أنيق ومناسب للإهداء أو الإطلالات اليومية."
+    "desc": "قلادة بسلسلة معدنية وتعليقة مستطيلة بتصميم عيون أنيق ومناسب للإهداء أو الإطلالات اليومية.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-custom-case-print-100",
@@ -384,7 +406,9 @@
     "images": [
       "Omwaled/compressed_1795608067078.webp"
     ],
-    "desc": "خدمة طباعة صورة أو تصميم مخصص على جراب موبايل يوفّره العميل بنفسه لتقديم هدية أو لمسة شخصية مميزة."
+    "desc": "خدمة طباعة صورة أو تصميم مخصص على جراب موبايل يوفّره العميل بنفسه لتقديم هدية أو لمسة شخصية مميزة.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-khair-home-rustproof-dryer-1200",
@@ -399,7 +423,9 @@
     "images": [
       "Omwaled/compressed_1795608067293.webp"
     ],
-    "desc": "منشر غسيل من خير هوم بخامة فولاذ مقاومة للصدأ وقابل للطي بسعة تجفيف مناسبة وسهولة في التخزين."
+    "desc": "منشر غسيل من خير هوم بخامة فولاذ مقاومة للصدأ وقابل للطي بسعة تجفيف مناسبة وسهولة في التخزين.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-jeans-pants-hanger-35",
@@ -414,7 +440,9 @@
     "images": [
       "Omwaled/compressed_1795608066934.webp"
     ],
-    "desc": "شماعة معدنية متعددة الطبقات لتعليق أكثر من بنطلون أو جينز في شماعة واحدة لتوفير المساحة داخل الدولاب."
+    "desc": "شماعة معدنية متعددة الطبقات لتعليق أكثر من بنطلون أو جينز في شماعة واحدة لتوفير المساحة داخل الدولاب.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-shein-metal-shoe-rack-7tier-450",
@@ -429,7 +457,9 @@
     "images": [
       "Omwaled/compressed_1795608066545.webp"
     ],
-    "desc": "وحدة تخزين وجزامة معدنية بـ 7 أدوار لتنظيم الأحذية والملحقات المنزلية بشكل مرتب وموفر للمساحة."
+    "desc": "وحدة تخزين وجزامة معدنية بـ 7 أدوار لتنظيم الأحذية والملحقات المنزلية بشكل مرتب وموفر للمساحة.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-hen-egg-basket-440",
@@ -444,7 +474,9 @@
     "images": [
       "Omwaled/compressed_1795608066733.webp"
     ],
-    "desc": "سلة لحفظ البيض بتصميم مجسم على شكل دجاجة فوق قاعدة شبكية تضيف شكلاً مميزاً وعملياً للمطبخ."
+    "desc": "سلة لحفظ البيض بتصميم مجسم على شكل دجاجة فوق قاعدة شبكية تضيف شكلاً مميزاً وعملياً للمطبخ.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-photo-frame-15x21-100",
@@ -460,7 +492,9 @@
     "images": [
       "Omwaled/compressed_1795608066370.webp"
     ],
-    "desc": "برواز أسود بتصميم صور وعبارات مخصصة بمقاس 15×21 سم مثالي للهدايا والذكريات الشخصية."
+    "desc": "برواز أسود بتصميم صور وعبارات مخصصة بمقاس 15×21 سم مثالي للهدايا والذكريات الشخصية.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-custom-wallet-photo-name-200",
@@ -489,7 +523,9 @@
         "label": "بالاسم (200 جنيه)",
         "price": 200
       }
-    ]
+    ],
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-magic-mirror-photo-300",
@@ -505,7 +541,9 @@
     "images": [
       "Omwaled/compressed_1795608066226.webp"
     ],
-    "desc": "مرآة دائرية بقاعدة وتعمل كصورة مضيئة عند التشغيل، هدية مميزة تجمع بين العملية والذكريات."
+    "desc": "مرآة دائرية بقاعدة وتعمل كصورة مضيئة عند التشغيل، هدية مميزة تجمع بين العملية والذكريات.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-katb-ketab-handkerchief-130",
@@ -520,7 +558,9 @@
     "images": [
       "Omwaled/compressed_1795608065889.webp"
     ],
-    "desc": "منديل أبيض مطرّز/مطبوع بأسماء العروسين وتاريخ المناسبة وآية وعبارة تهنئة ليكون ذكرى مميزة ليوم كتب الكتاب."
+    "desc": "منديل أبيض مطرّز/مطبوع بأسماء العروسين وتاريخ المناسبة وآية وعبارة تهنئة ليكون ذكرى مميزة ليوم كتب الكتاب.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-fruit-stand-2tier-gold-255",
@@ -535,7 +575,9 @@
     "images": [
       "Omwaled/compressed_1795608065555.webp"
     ],
-    "desc": "حامل معدني ذهبي من دورين لتقديم الفاكهة بشكل مرتب وجذاب على الطاولة أو السفرة."
+    "desc": "حامل معدني ذهبي من دورين لتقديم الفاكهة بشكل مرتب وجذاب على الطاولة أو السفرة.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-juice-herbs-stainless-strainer-75",
@@ -550,7 +592,9 @@
     "images": [
       "Omwaled/compressed_1795608065738.webp"
     ],
-    "desc": "مصفاة يدوية ستانلس ستيل لتصفية العصائر والأعشاب والمشروبات بسهولة وعملية في المطبخ."
+    "desc": "مصفاة يدوية ستانلس ستيل لتصفية العصائر والأعشاب والمشروبات بسهولة وعملية في المطبخ.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-smile-hanger-9x1-35",
@@ -566,7 +610,9 @@
     "images": [
       "Omwaled/compressed_1795608065399.webp"
     ],
-    "desc": "طقم علاّقات/خطافات لاصقة للحائط على شكل وجوه ضاحكة صفراء (9 قطع في الطقم) لتعليق الأغراض الخفيفة والمفاتيح."
+    "desc": "طقم علاّقات/خطافات لاصقة للحائط على شكل وجوه ضاحكة صفراء (9 قطع في الطقم) لتعليق الأغراض الخفيفة والمفاتيح.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-lantern-keychain-photo-name-35",
@@ -593,7 +639,9 @@
         "label": "باسم (35 جنيه)",
         "price": 35
       }
-    ]
+    ],
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-wall-clock-30x40-280",
@@ -609,7 +657,9 @@
     "images": [
       "Omwaled/compressed_1795608065234.webp"
     ],
-    "desc": "ساعة حائط مستطيلة مقاس 30×40 سم مطبوعة بصورة شخصية مع أرقام وعقارب واضحة لتزيين الغرف وتقديمها كهدية."
+    "desc": "ساعة حائط مستطيلة مقاس 30×40 سم مطبوعة بصورة شخصية مع أرقام وعقارب واضحة لتزيين الغرف وتقديمها كهدية.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-wall-art-40x30-220",
@@ -625,7 +675,9 @@
     "images": [
       "Omwaled/compressed_1795608064965.webp"
     ],
-    "desc": "تابلوه متوسط مقاس 40×30 سم بتصميم مجمع للصور والعبارات المخصصة لإهداء الأحباب وتزيين الحائط."
+    "desc": "تابلوه متوسط مقاس 40×30 سم بتصميم مجمع للصور والعبارات المخصصة لإهداء الأحباب وتزيين الحائط.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-photo-keychain-30",
@@ -641,7 +693,9 @@
     "images": [
       "Omwaled/compressed_1795608064656.webp"
     ],
-    "desc": "ميداليا مستطيلة مطبوع عليها صورة شخصية مع سلسلة وحلقة معدنية مناسبة للمفاتيح أو الإهداء اليومي."
+    "desc": "ميداليا مستطيلة مطبوع عليها صورة شخصية مع سلسلة وحلقة معدنية مناسبة للمفاتيح أو الإهداء اليومي.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-coffee-cup-saucer-170",
@@ -657,7 +711,9 @@
     "images": [
       "Omwaled/compressed_1795608064802.webp"
     ],
-    "desc": "فنجان قهوة سيراميك أبيض مع طبقه مكتوب عليهما اسم وتاريخ أو عبارة مخصصة لهدية أنيقة لمحبي القهوة."
+    "desc": "فنجان قهوة سيراميك أبيض مع طبقه مكتوب عليهما اسم وتاريخ أو عبارة مخصصة لهدية أنيقة لمحبي القهوة.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-potato-skimmer-variants",
@@ -736,7 +792,9 @@
         "label": "كبير",
         "price": 75
       }
-    ]
+    ],
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-pyrex-engraved-mug-150",
@@ -752,7 +810,9 @@
     "images": [
       "Omwaled/compressed_1795608064243.webp"
     ],
-    "desc": "كوب بايركس زجاجي شفاف مزوّد بغطاء وماصة وجراب جلدي محفور عليه اسم وعبارة مخصصة."
+    "desc": "كوب بايركس زجاجي شفاف مزوّد بغطاء وماصة وجراب جلدي محفور عليه اسم وعبارة مخصصة.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-magic-mug-photo-220",
@@ -768,7 +828,9 @@
     "images": [
       "Omwaled/compressed_1795608063941.webp"
     ],
-    "desc": "مج حراري يتغير لونه عند صب السوائل الساخنة ليُظهر الصورة المطبوعة عليه بشكل مفاجئ ومميز."
+    "desc": "مج حراري يتغير لونه عند صب السوائل الساخنة ليُظهر الصورة المطبوعة عليه بشكل مفاجئ ومميز.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-lux-stand-3tier-900",
@@ -783,7 +845,9 @@
     "images": [
       "Omwaled/compressed_1795608063558.webp"
     ],
-    "desc": "حامل تقديم فاخر من 3 أدوار بتصميم ذهبي مزخرف لتقديم الحلويات والضيافة بأسلوب راقٍ."
+    "desc": "حامل تقديم فاخر من 3 أدوار بتصميم ذهبي مزخرف لتقديم الحلويات والضيافة بأسلوب راقٍ.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-bathroom-corner-shelf-4tier-330",
@@ -798,7 +862,9 @@
     "images": [
       "Omwaled/compressed_1795608063778.webp"
     ],
-    "desc": "منظم أرفف زاوية عمودي بعدة أدوار لترتيب مستلزمات الحمام أو المطبخ واستغلال المساحات الرأسية."
+    "desc": "منظم أرفف زاوية عمودي بعدة أدوار لترتيب مستلزمات الحمام أو المطبخ واستغلال المساحات الرأسية.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-stainless-wall-hanger-25",
@@ -813,7 +879,9 @@
     "images": [
       "Omwaled/compressed_1795608063399.webp"
     ],
-    "desc": "علاقة حائط معدنية/ستانلس متعددة الخطافات لتعليق الملابس والحقائب والاحتياجات اليومية."
+    "desc": "علاقة حائط معدنية/ستانلس متعددة الخطافات لتعليق الملابس والحقائب والاحتياجات اليومية.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-lux-hanger-3x1-40",
@@ -828,7 +896,9 @@
     "images": [
       "Omwaled/compressed_1795608062889.webp"
     ],
-    "desc": "شماعة ملابس بلاستيكية بتصميم لوكس (عبوة 3 قطع) لتعليق الملابس اليومية بشكل منظم."
+    "desc": "شماعة ملابس بلاستيكية بتصميم لوكس (عبوة 3 قطع) لتعليق الملابس اليومية بشكل منظم.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-dahab-dryer-365",
@@ -843,7 +913,9 @@
     "images": [
       "Omwaled/compressed_1795608063092.webp"
     ],
-    "desc": "منشر غسيل قابل للطي موديل دهب عملي وسهل الفتح والطي والتخزين داخل المنزل."
+    "desc": "منشر غسيل قابل للطي موديل دهب عملي وسهل الفتح والطي والتخزين داخل المنزل.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-stainless-retractable-wall-dryer-530",
@@ -858,7 +930,9 @@
     "images": [
       "Omwaled/compressed_1795608062326.webp"
     ],
-    "desc": "منشر غسيل يُثبّت على الحائط بخطوط/حبال استانلس قابلة للسحب لتوفير المساحة عند عدم الاستخدام."
+    "desc": "منشر غسيل يُثبّت على الحائط بخطوط/حبال استانلس قابلة للسحب لتوفير المساحة عند عدم الاستخدام.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-white-mug-photo-160",
@@ -874,7 +948,9 @@
     "images": [
       "Omwaled/compressed_1795608062750.webp"
     ],
-    "desc": "مج سيراميك أبيض مطبوع عليه صورة شخصية بتصميم واضح ومناسب للإهداء أو الاستخدام اليومي."
+    "desc": "مج سيراميك أبيض مطبوع عليه صورة شخصية بتصميم واضح ومناسب للإهداء أو الاستخدام اليومي.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-wall-art-90x60-500",
@@ -890,7 +966,9 @@
     "images": [
       "Omwaled/compressed_1795608062614.webp"
     ],
-    "desc": "تابلوه كبير مقاس 90×60 سم يجمع عدة صور وعبارات إهداء ليكون قطعة ديكور وذكرى بارزة على الحائط."
+    "desc": "تابلوه كبير مقاس 90×60 سم يجمع عدة صور وعبارات إهداء ليكون قطعة ديكور وذكرى بارزة على الحائط.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-khair-home-dryer-folding-1200",
@@ -905,7 +983,9 @@
     "images": [
       "Omwaled/compressed_1795608061745.webp"
     ],
-    "desc": "منشر غسيل من خير هوم بخامة مقاومة للصدأ وقابل للطي بتصميم متين وسعة مناسبة للملابس."
+    "desc": "منشر غسيل من خير هوم بخامة مقاومة للصدأ وقابل للطي بتصميم متين وسعة مناسبة للملابس.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-medo-hanger-6x1-35",
@@ -920,7 +1000,9 @@
     "images": [
       "Omwaled/compressed_1795608061600.webp"
     ],
-    "desc": "شماعة ملابس بلاستيكية ماركة ميدو (6 قطع في العبوة) لتعليق وترتيب الملابس اليومية."
+    "desc": "شماعة ملابس بلاستيكية ماركة ميدو (6 قطع في العبوة) لتعليق وترتيب الملابس اليومية.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-microwave-metal-rack-285",
@@ -935,7 +1017,9 @@
     "images": [
       "Omwaled/compressed_1795608062102.webp"
     ],
-    "desc": "استاند معدني لتنظيم الميكروويف وأدوات المطبخ أو الأغراض المنزلية وتوفير مساحة إضافية."
+    "desc": "استاند معدني لتنظيم الميكروويف وأدوات المطبخ أو الأغراض المنزلية وتوفير مساحة إضافية.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-strainers-set-3pcs-stainless-50",
@@ -950,7 +1034,9 @@
     "images": [
       "Omwaled/compressed_1795608061480.webp"
     ],
-    "desc": "طقم مصافى يدوية ستانلس بثلاثة أحجام مختلفة لتصفية المكونات والمشروبات والأطعمة في المطبخ."
+    "desc": "طقم مصافى يدوية ستانلس بثلاثة أحجام مختلفة لتصفية المكونات والمشروبات والأطعمة في المطبخ.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-style-wall-hanger-65",
@@ -965,7 +1051,9 @@
     "images": [
       "Omwaled/compressed_1795608061341.webp"
     ],
-    "desc": "علاقة حائط متعددة الخطافات لتعليق الجواكت والمفاتيح والملابس بشكل أنيق ومنظم."
+    "desc": "علاقة حائط متعددة الخطافات لتعليق الجواكت والمفاتيح والملابس بشكل أنيق ومنظم.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-juice-tomato-strainer-70",
@@ -980,7 +1068,9 @@
     "images": [
       "Omwaled/compressed_1795608061193.webp"
     ],
-    "desc": "مصفاة مطبخ عملية لتصفية الطماطم والعصائر والصلصات وتحضير الأكلات بسهولة."
+    "desc": "مصفاة مطبخ عملية لتصفية الطماطم والعصائر والصلصات وتحضير الأكلات بسهولة.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   },
   {
     "id": "om-waleed-strainers-set-3pcs-colored-40",
@@ -995,6 +1085,8 @@
     "images": [
       "Omwaled/compressed_1795608060998.webp"
     ],
-    "desc": "طقم مصافى صغيرة بثلاث قطع بألوان مختلفة للاستخدام السريع في المطبخ وتحضير المشروبات والوصفات."
+    "desc": "طقم مصافى صغيرة بثلاث قطع بألوان مختلفة للاستخدام السريع في المطبخ وتحضير المشروبات والوصفات.",
+    "soldOutImages": [],
+    "hasSoldOutImages": false
   }
 ]
