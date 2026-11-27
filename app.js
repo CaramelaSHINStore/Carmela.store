@@ -1,11 +1,12 @@
-const APP_BUILD_VERSION = "v20261128-01";
+const APP_BUILD_VERSION = "v20261128-02";
 const APPLIED_BUILD_KEY = "caramel_applied_build_version_v1";
-const LIVE_CATALOG_POLL_MS = 20000;
-const LIVE_CATALOG_MIN_GAP_MS = 3500;
+const LIVE_CATALOG_POLL_MS = 60000;
+const LIVE_CATALOG_MIN_GAP_MS = 8000;
+const FETCH_TIMEOUT_MS = 6500;
 
 let WHATSAPP_NUMBER = "201055436305";
 let STORE_URL = "https://caramelstoresuez.github.io/Carmelastore/";
-let BRAND_LOGO_URL = "./compressed_1795766509611.jpeg?v=v20261128-01";
+let BRAND_LOGO_URL = "./compressed_1795766509611.jpeg?v=v20261128-02";
 
 function isSafeMediaOrUrl(rawUrl) {
     const val = String(rawUrl || "").trim();
@@ -111,6 +112,19 @@ function launchWhatsAppTarget(url) {
     }, 1300);
 }
 
+async function fetchWithTimeout(url, init = {}, timeoutMs = FETCH_TIMEOUT_MS) {
+    if (typeof AbortController === "undefined") {
+        return fetch(url, init);
+    }
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+        return await fetch(url, { ...init, signal: controller.signal });
+    } finally {
+        clearTimeout(timer);
+    }
+}
+
 const CART_STORAGE_KEY = "caramel_store_cart_v1";
 const WISHLIST_STORAGE_KEY = "caramel_wishlist_v1";
 const ACTIVE_ORDERS_STORAGE_KEY = "caramel_active_orders_v1";
@@ -187,42 +201,64 @@ let storeConfigCheckedOnce = false;
 
 async function loadStoreConfigFromJson(forceRefresh = false) {
     if (storeConfigCheckedOnce && !resolvedStoreConfigUrl && !forceRefresh) return null;
-    const qSuffix = `?ts=${Date.now()}&r=${Math.random().toString(36).slice(2, 7)}`;
+    const cacheMode = forceRefresh ? "reload" : "default";
+    const qSuffix = forceRefresh ? `?v=${APP_BUILD_VERSION}&ts=${Date.now()}` : `?v=${APP_BUILD_VERSION}`;
     const candidates = resolvedStoreConfigUrl
         ? [resolvedStoreConfigUrl]
         : STORE_CONFIG_JSON_CANDIDATES;
 
     for (const basePath of candidates) {
         const cleanBase = basePath.split("?")[0];
-        const rawFallback = /^https?:\/\//i.test(cleanBase)
-            ? cleanBase
-            : `https://raw.githubusercontent.com/${GITHUB_MERCHANTS_CONFIG.owner}/${GITHUB_MERCHANTS_CONFIG.repo}/${GITHUB_MERCHANTS_CONFIG.branch}/${cleanBase.replace(/^\.\//, "")}`;
         const urls = resolvedStoreConfigUrl
             ? [`${cleanBase}${qSuffix}`]
-            : [`${cleanBase}${qSuffix}`, `${rawFallback}${qSuffix}`];
+            : [`${cleanBase}${qSuffix}`];
 
         for (const url of urls) {
             try {
-                const resp = await fetch(url, { cache: "no-store" });
+                const resp = await fetchWithTimeout(url, { cache: cacheMode });
                 if (resp && resp.ok) {
                     const text = (await resp.text()).replace(/^\uFEFF/, "").trim();
                     if (!text) continue;
                     const parsed = JSON.parse(text);
-                    resolvedStoreConfigUrl = url.split("?")[0];
+                    resolvedStoreConfigUrl = cleanBase;
                     storeConfigCheckedOnce = true;
                     const targetObj = (parsed && typeof parsed === "object" && parsed.storeConfig && typeof parsed.storeConfig === "object")
                         ? parsed.storeConfig
                         : ((parsed && typeof parsed === "object" && parsed.config && typeof parsed.config === "object")
                             ? parsed.config
                             : parsed);
-                    if (applyStoreConfigFromPayload(targetObj)) {
-                        return targetObj;
-                    }
+                    applyStoreConfigFromPayload(targetObj);
                     return targetObj;
                 }
             } catch (e) {}
         }
     }
+
+    if (forceRefresh && !resolvedStoreConfigUrl) {
+        for (const basePath of STORE_CONFIG_JSON_CANDIDATES) {
+            const cleanBase = basePath.split("?")[0];
+            if (/^https?:\/\//i.test(cleanBase)) continue;
+            const rawFallback = `https://raw.githubusercontent.com/${GITHUB_MERCHANTS_CONFIG.owner}/${GITHUB_MERCHANTS_CONFIG.repo}/${GITHUB_MERCHANTS_CONFIG.branch}/${cleanBase.replace(/^\.\//, "")}${qSuffix}`;
+            try {
+                const resp = await fetchWithTimeout(rawFallback, { cache: "no-store" });
+                if (resp && resp.ok) {
+                    const text = (await resp.text()).replace(/^\uFEFF/, "").trim();
+                    if (!text) continue;
+                    const parsed = JSON.parse(text);
+                    resolvedStoreConfigUrl = cleanBase;
+                    storeConfigCheckedOnce = true;
+                    const targetObj = (parsed && typeof parsed === "object" && parsed.storeConfig && typeof parsed.storeConfig === "object")
+                        ? parsed.storeConfig
+                        : ((parsed && typeof parsed === "object" && parsed.config && typeof parsed.config === "object")
+                            ? parsed.config
+                            : parsed);
+                    applyStoreConfigFromPayload(targetObj);
+                    return targetObj;
+                }
+            } catch (e) {}
+        }
+    }
+
     storeConfigCheckedOnce = true;
     return null;
 }
@@ -293,7 +329,7 @@ function createDebounced(fn, delay = 180) {
 }
 
 function formatPriceNumber(priceOrLabel) {
-    if (typeof priceOrLabel === "string" && /[a-zA-Z؀-ۿ]/.test(priceOrLabel)) {
+    if (typeof priceOrLabel === "string" && /[a-zA-Z\u0600-\u06FF]/.test(priceOrLabel)) {
         return priceOrLabel.trim();
     }
     const num = Number(priceOrLabel) || 0;
@@ -1455,6 +1491,7 @@ function extractRawItemsFromJsonPayload(payload, fileMerchantName = "") {
 
         const collected = [];
         Object.entries(payload).forEach(([key, val]) => {
+            if (key === "stockGuardScript" || key === "soldOutImages") return;
             if (Array.isArray(val)) {
                 val.forEach(entry => {
                     if (entry && typeof entry === "object") {
@@ -1474,7 +1511,7 @@ function extractRawItemsFromJsonPayload(payload, fileMerchantName = "") {
 }
 
 function collectExtraSearchableTextFromRaw(rawItem) {
-    const skipKeys = new Set(["id", "code", "sku", "img", "image", "photo", "imgUrl", "imageUrl", "thumbnail", "thumb", "picture", "pic", "images", "photos", "imgs", "gallery", "url", "link", "download_url", "merchant", "seller", "vendor", "store", "owner"]);
+    const skipKeys = new Set(["id", "code", "sku", "img", "image", "photo", "imgUrl", "imageUrl", "thumbnail", "thumb", "picture", "pic", "images", "photos", "imgs", "gallery", "url", "link", "download_url", "merchant", "seller", "vendor", "store", "owner", "stockGuardScript", "soldOutImages"]);
     const parts = [];
     const walk = (v, depth = 0) => {
         if (depth > 3 || v === null || v === undefined) return;
@@ -1506,7 +1543,7 @@ function normalizeRawJsonProduct(rawItem, index, slugPrefix, fileMerchant, fileS
     const extractedImgs = extractImagesFromRawProduct(rawItem);
     const rawPriceVal = rawItem.price ?? rawItem.cost ?? rawItem.amount ?? rawItem.salePrice ?? 0;
     const numericPrice = parseNumericPrice(rawPriceVal);
-    const priceLabel = rawItem.priceLabel || (typeof rawPriceVal === "string" && /[a-zA-Z؀-ۿ]/.test(rawPriceVal) ? rawPriceVal.trim() : "");
+    const priceLabel = rawItem.priceLabel || (typeof rawPriceVal === "string" && /[a-zA-Z\u0600-\u06FF]/.test(rawPriceVal) ? rawPriceVal.trim() : "");
     const rawCategory = rawItem.category || rawItem.section || rawItem.department || rawItem.type || "";
     const resolvedCategory = inferCategorySmartly(rawCategory, itemTitle, itemDesc);
     const extraSearchText = collectExtraSearchableTextFromRaw(rawItem);
@@ -1554,9 +1591,12 @@ function computeCatalogSignature(productsList) {
     ].join("|")).join("||");
 }
 
+let cachedMerchantManifestList = null;
+
 async function discoverMerchantJsonSources(forceRefresh = false) {
     const sourcesMap = new Map();
-    const qSuffix = `?ts=${Date.now()}&r=${Math.random().toString(36).slice(2, 7)}`;
+    const cacheMode = forceRefresh ? "reload" : "default";
+    const qSuffix = forceRefresh ? `?v=${APP_BUILD_VERSION}&ts=${Date.now()}` : `?v=${APP_BUILD_VERSION}`;
 
     const registerJsonPath = (relPath, customDownloadUrl = "") => {
         const normalizedPath = String(relPath || "").replace(/^\.?\/+/, "").trim();
@@ -1575,54 +1615,68 @@ async function discoverMerchantJsonSources(forceRefresh = false) {
         }
     };
 
-    let loadedManifest = false;
-    try {
-        const indexJsonResp = await fetch(`./merchants/index.json${qSuffix}`, { cache: "no-store" });
-        if (indexJsonResp && indexJsonResp.ok) {
-            const idxData = await indexJsonResp.json();
-            const fileEntries = Array.isArray(idxData) ? idxData : (Array.isArray(idxData?.files) ? idxData.files : []);
-            fileEntries.forEach(entry => {
-                if (typeof entry === "string") {
-                    registerJsonPath(entry.includes("/") ? entry : `${GITHUB_MERCHANTS_CONFIG.folder}/${entry}`);
-                } else if (entry && typeof entry === "object") {
-                    const p = entry.path || entry.file || entry.name || "";
-                    if (p) registerJsonPath(p.includes("/") ? p : `${GITHUB_MERCHANTS_CONFIG.folder}/${p}`, entry.url || "");
-                }
-            });
-            loadedManifest = fileEntries.length > 0;
-        }
-    } catch (e) {}
+    FALLBACK_MERCHANT_FILES.forEach(path => registerJsonPath(path));
 
-    if (!loadedManifest) {
+    if (!cachedMerchantManifestList || forceRefresh) {
+        let loadedManifest = false;
         try {
-            const apiUrl = `https://api.github.com/repos/${GITHUB_MERCHANTS_CONFIG.owner}/${GITHUB_MERCHANTS_CONFIG.repo}/contents/${GITHUB_MERCHANTS_CONFIG.folder}?ref=${GITHUB_MERCHANTS_CONFIG.branch}&ts=${Date.now()}`;
-            const apiResp = await fetch(apiUrl, { cache: "no-store" });
-            if (apiResp && apiResp.ok) {
-                const filesList = await apiResp.json();
-                if (Array.isArray(filesList)) {
-                    filesList.forEach(f => {
-                        if (f && f.type === "file" && /\.json$/i.test(f.name) && f.name.toLowerCase() !== "index.json") {
-                            registerJsonPath(`${GITHUB_MERCHANTS_CONFIG.folder}/${f.name}`, f.download_url || "");
-                        }
-                    });
+            const indexJsonResp = await fetchWithTimeout(`./merchants/index.json${qSuffix}`, { cache: cacheMode });
+            if (indexJsonResp && indexJsonResp.ok) {
+                const idxData = await indexJsonResp.json();
+                const fileEntries = Array.isArray(idxData) ? idxData : (Array.isArray(idxData?.files) ? idxData.files : []);
+                if (fileEntries.length > 0) {
+                    cachedMerchantManifestList = fileEntries;
+                    loadedManifest = true;
                 }
             }
         } catch (e) {}
+
+        if (!loadedManifest && forceRefresh) {
+            try {
+                const apiUrl = `https://api.github.com/repos/${GITHUB_MERCHANTS_CONFIG.owner}/${GITHUB_MERCHANTS_CONFIG.repo}/contents/${GITHUB_MERCHANTS_CONFIG.folder}?ref=${GITHUB_MERCHANTS_CONFIG.branch}`;
+                const apiResp = await fetchWithTimeout(apiUrl, { cache: "default" }, 4500);
+                if (apiResp && apiResp.ok) {
+                    const filesList = await apiResp.json();
+                    if (Array.isArray(filesList)) {
+                        cachedMerchantManifestList = filesList
+                            .filter(f => f && f.type === "file" && /\.json$/i.test(f.name) && f.name.toLowerCase() !== "index.json")
+                            .map(f => ({ path: `${GITHUB_MERCHANTS_CONFIG.folder}/${f.name}`, url: f.download_url || "" }));
+                    }
+                }
+            } catch (e) {}
+        }
     }
 
-    FALLBACK_MERCHANT_FILES.forEach(path => registerJsonPath(path));
+    if (Array.isArray(cachedMerchantManifestList)) {
+        cachedMerchantManifestList.forEach(entry => {
+            if (typeof entry === "string") {
+                registerJsonPath(entry.includes("/") ? entry : `${GITHUB_MERCHANTS_CONFIG.folder}/${entry}`);
+            } else if (entry && typeof entry === "object") {
+                const p = entry.path || entry.file || entry.name || "";
+                if (p) registerJsonPath(p.includes("/") ? p : `${GITHUB_MERCHANTS_CONFIG.folder}/${p}`, entry.url || "");
+            }
+        });
+    }
+
     return Array.from(sourcesMap.values());
 }
 
 async function fetchJsonWithFallback(source, forceRefresh = false) {
-    const qSuffix = `?ts=${Date.now()}&r=${Math.random().toString(36).slice(2, 7)}`;
-    const urlsToTry = [
-        `${source.localUrl}${qSuffix}`,
-        `${source.rawUrl}${qSuffix}`
-    ];
-    for (const url of urlsToTry) {
+    const cacheMode = forceRefresh ? "reload" : "default";
+    const qSuffix = forceRefresh ? `?v=${APP_BUILD_VERSION}&ts=${Date.now()}` : `?v=${APP_BUILD_VERSION}`;
+
+    try {
+        const resp = await fetchWithTimeout(`${source.localUrl}${qSuffix}`, { cache: cacheMode });
+        if (resp && resp.ok) {
+            const text = await resp.text();
+            const cleanText = text.replace(/^\uFEFF/, "").trim();
+            if (cleanText) return JSON.parse(cleanText);
+        }
+    } catch (e) {}
+
+    if (forceRefresh && source.rawUrl && /^https?:\/\//i.test(source.rawUrl)) {
         try {
-            const resp = await fetch(url, { cache: "no-store" });
+            const resp = await fetchWithTimeout(`${source.rawUrl}${qSuffix}`, { cache: "no-store" });
             if (resp && resp.ok) {
                 const text = await resp.text();
                 const cleanText = text.replace(/^\uFEFF/, "").trim();
@@ -1630,6 +1684,7 @@ async function fetchJsonWithFallback(source, forceRefresh = false) {
             }
         } catch (e) {}
     }
+
     return null;
 }
 
@@ -1645,22 +1700,22 @@ async function loadMerchantProductsFromJson(forceRefresh = false, options = {}) 
     }
 
     try {
-        await loadStoreConfigFromJson(!hadProductsBefore);
+        await loadStoreConfigFromJson(forceRefresh || !hadProductsBefore);
 
-        const merchantSources = await discoverMerchantJsonSources(true);
+        const merchantSources = await discoverMerchantJsonSources(forceRefresh || !hadProductsBefore);
         const jsonProductsById = new Map();
 
         const fetchedPayloads = await Promise.all(
             merchantSources.map(async source => ({
                 source,
-                payload: await fetchJsonWithFallback(source, true)
+                payload: await fetchJsonWithFallback(source, forceRefresh || !hadProductsBefore)
             }))
         );
 
         fetchedPayloads.forEach(({ source, payload }) => {
             if (!payload) return;
             const { items, fileMerchant, fileStyle } = extractRawItemsFromJsonPayload(payload, source.defaultMerchant);
-            const slugPrefix = source.slug.replace(/[^a-z0-9؀-ۿ]/gi, "-");
+            const slugPrefix = source.slug.replace(/[^a-z0-9\u0600-\u06FF]/gi, "-");
 
             items.forEach((rawItem, idx) => {
                 const normalized = normalizeRawJsonProduct(rawItem, idx, slugPrefix, fileMerchant, fileStyle);
@@ -1708,7 +1763,7 @@ async function syncLiveCatalogNow({ force = false, silentIfUnchanged = true, sho
     const now = Date.now();
     if (!force && now - lastCatalogSyncAt < LIVE_CATALOG_MIN_GAP_MS) return false;
     try {
-        return await loadMerchantProductsFromJson(true, { silentIfUnchanged, showToastOnChange });
+        return await loadMerchantProductsFromJson(force, { silentIfUnchanged, showToastOnChange });
     } catch (e) {
         return false;
     }
@@ -1719,22 +1774,18 @@ function startLiveCatalogAutoSync() {
 
     liveCatalogPollTimer = setInterval(() => {
         if (document.visibilityState === "visible") {
-            syncLiveCatalogNow({ force: false, silentIfUnchanged: false, showToastOnChange: true });
+            syncLiveCatalogNow({ force: true, silentIfUnchanged: true, showToastOnChange: true });
         }
     }, LIVE_CATALOG_POLL_MS);
 
     document.addEventListener("visibilitychange", () => {
         if (document.visibilityState === "visible") {
-            syncLiveCatalogNow({ force: true, silentIfUnchanged: false, showToastOnChange: true });
+            syncLiveCatalogNow({ force: true, silentIfUnchanged: true, showToastOnChange: true });
         }
     });
 
-    window.addEventListener("focus", () => {
-        syncLiveCatalogNow({ force: false, silentIfUnchanged: false, showToastOnChange: true });
-    }, { passive: true });
-
     window.addEventListener("online", () => {
-        syncLiveCatalogNow({ force: true, silentIfUnchanged: false, showToastOnChange: true });
+        syncLiveCatalogNow({ force: true, silentIfUnchanged: true, showToastOnChange: true });
     }, { passive: true });
 }
 
@@ -1908,8 +1959,9 @@ function handleProductImageError(imgEl, productId) {
 
     if (retryStep === 0 && currentSrc && !/^https?:\/\//i.test(currentSrc)) {
         imgEl.setAttribute("data-retry-step", "1");
-        const altSrc = currentSrc.startsWith("./") ? currentSrc.slice(2) : `./${currentSrc}`;
-        if (altSrc !== currentSrc) {
+        const cleanCurrent = currentSrc.split("?")[0];
+        const altSrc = cleanCurrent.startsWith("./") ? cleanCurrent.slice(2) : `./${cleanCurrent}`;
+        if (altSrc !== cleanCurrent) {
             imgEl.src = altSrc;
             return;
         }
@@ -1917,7 +1969,7 @@ function handleProductImageError(imgEl, productId) {
 
     if (retryStep <= 1 && currentSrc && !/^https?:\/\//i.test(currentSrc)) {
         imgEl.setAttribute("data-retry-step", "2");
-        const cleanPath = currentSrc.replace(/^\.\//, "").replace(/^\/+/, "");
+        const cleanPath = currentSrc.split("?")[0].replace(/^\.\//, "").replace(/^\/+/, "");
         imgEl.src = `https://raw.githubusercontent.com/${GITHUB_MERCHANTS_CONFIG.owner}/${GITHUB_MERCHANTS_CONFIG.repo}/${GITHUB_MERCHANTS_CONFIG.branch}/${cleanPath}`;
         return;
     }
@@ -2508,7 +2560,7 @@ function createProductCardHTML(product, badgeText = "", isContinuation = false) 
             </button>
             <div class="product-img-box" onclick="openCardProductPreview(this, '${safeId}')">
                 <div class="media-soldout-wrap ${isFirstImgSoldOut ? "is-soldout" : ""}">
-                    <img src="${escapeHtmlAttr(primaryImg)}" alt="${safeTitle}" data-img-idx="0" data-retry-step="0" loading="${isContinuation ? "eager" : "lazy"}" decoding="async" onerror="handleProductImageError(this, '${safeId}')">
+                    <img src="${escapeHtmlAttr(primaryImg)}" alt="${safeTitle}" data-img-idx="0" data-retry-step="0" loading="eager" decoding="async" onerror="handleProductImageError(this, '${safeId}')">
                     <span class="soldout-badge-overlay ${isFirstImgSoldOut ? "" : "is-hidden"}">نفدت الكمية</span>
                 </div>
                 ${hasMultipleImgs ? `
@@ -4582,7 +4634,7 @@ async function enableCaramelPush() {
     }
 
     if (Notification.permission === "granted") {
-        syncLiveCatalogNow({ force: true, silentIfUnchanged: false, showToastOnChange: true });
+        syncLiveCatalogNow({ force: true, silentIfUnchanged: true, showToastOnChange: true });
         syncPushButtonState();
         return;
     }
