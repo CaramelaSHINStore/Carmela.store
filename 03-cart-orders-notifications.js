@@ -1174,13 +1174,18 @@ function renderProducts(category = "all") {
         });
     }
 
+    const hasSpecificCategory = Boolean(category && category !== "all");
+
     if (currentFeedMode === "deals") {
         filtered = [...filtered].sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
     } else if (currentFeedMode === "new") {
-        filtered = interleaveMerchantsSmartly([...filtered].reverse());
+        filtered = [...filtered].reverse();
+        if (!hasSpecificCategory && !currentMerchant && !hasSearch) {
+            filtered = interleaveMerchantsSmartly(filtered);
+        }
     } else {
         filtered = [...filtered].sort((a, b) => scoreProductForUser(b, 1) - scoreProductForUser(a, 1));
-        if (!currentMerchant && (!category || category === "all") && !hasSearch) {
+        if (!hasSpecificCategory && !currentMerchant && (!category || category === "all") && !hasSearch) {
             filtered = interleaveMerchantsSmartly(filtered);
         }
     }
