@@ -1,4 +1,4 @@
-طfunction buildWhatsAppDeepLink(url) {
+function buildWhatsAppDeepLink(url) {
     try {
         const parsed = new URL(url);
         const pathPhone = parsed.pathname.replace(/^\/+/, "").trim();
@@ -261,23 +261,6 @@ function formatPriceNumber(priceOrLabel) {
     return num.toLocaleString("ar-EG");
 }
 
-function getPriceDisplayParts(product) {
-    const rawLabel = typeof product?.priceLabel === "string" ? product.priceLabel.trim() : "";
-    if (rawLabel && /[a-zA-Z؀-ۿ]/.test(rawLabel)) {
-        const hasCurrencySuffix = /(?:جنيه|ج\.?\s*م?|egp)\s*$/i.test(rawLabel);
-        const cleanText = rawLabel.replace(/\s*(?:جنيه|ج\.?\s*م?|egp)\s*$/i, "").trim();
-        return {
-            valueText: cleanText || rawLabel,
-            suffixText: hasCurrencySuffix ? "جنيه" : "جنيه"
-        };
-    }
-    const num = Number(rawLabel || product?.price) || 0;
-    return {
-        valueText: num.toLocaleString("ar-EG"),
-        suffixText: "جنيه"
-    };
-}
-
 function syncHeaderStickyOffsets() {
     const header = document.querySelector(".top-app-bar");
     if (!header) return;
@@ -514,7 +497,7 @@ function renderMerchantInnerCategories(merchantName) {
     catCounts.forEach((cnt, catKey) => {
         const label = CATEGORY_NAMES[catKey] || catKey;
         const activeCls = currentCategory === catKey ? "active" : "";
-        html += `<button type="button" class="merchant-inner-cat-btn ${activeCls}" onclick="selectMerchantInnerCategory('${escapeHtmlAttr(catKey)}')">${escapeHtml(label)} <span class="merchant-inner-cat-count">${cnt}</span></button>`;
+        html += `<button type="button" class="merchant-inner-cat-btn ${activeCls}" onclick="selectMerchantInnerCategory('${escapeHtmlAttr(catKey)}')">${escapeHtmlAttr(label)} <span class="merchant-inner-cat-count">${cnt}</span></button>`;
     });
 
     wrap.innerHTML = html;
@@ -668,13 +651,16 @@ function escapeHtmlAttr(str) {
 
 function normalizeProductImageUrl(rawImg) {
     if (!rawImg || typeof rawImg !== "string") return "";
-    const cleaned = rawImg.trim().replace(/\\/g, "/");
+    let cleaned = rawImg.trim().replace(/\\/g, "/");
     if (!cleaned) return "";
     if (/^https?:\/\//i.test(cleaned) || cleaned.startsWith("data:") || cleaned.startsWith("blob:")) {
         return cleaned;
     }
-    const relPath = cleaned.replace(/^\.\//, "").replace(/^\/+/, "");
-    return encodeURI(relPath);
+    cleaned = cleaned.replace(/^\.\//, "").replace(/^\/+/, "");
+    try {
+        cleaned = decodeURI(cleaned);
+    } catch (e) {}
+    return encodeURI(cleaned);
 }
 
 function extractImagesFromRawProduct(rawItem) {
@@ -743,8 +729,7 @@ function getActiveCardImageSrc(cardEl, product) {
 
 function buildProductWhatsAppUrl(product, activeImgSrc = "") {
     if (!product) return `https://wa.me/${WHATSAPP_NUMBER}`;
-    const priceParts = getPriceDisplayParts(product);
-    const displayPrice = `${priceParts.valueText} ${priceParts.suffixText}`.trim();
+    const displayPrice = product.priceLabel || product.price;
     const merchantName = product.merchant || "متجر كارامل";
     const imgs = getProductImagesList(product);
     const chosenImg = normalizeProductImageUrl(activeImgSrc) || (imgs[0] || "");
@@ -752,7 +737,7 @@ function buildProductWhatsAppUrl(product, activeImgSrc = "") {
     const imgLabel = chosenImg
         ? ` — الصورة المختارة${imgIndex >= 0 && imgs.length > 1 ? ` (${imgIndex + 1}/${imgs.length})` : ""}: ${chosenImg}`
         : "";
-    const waText = encodeURIComponent(`أريد طلب ${product.title} بسعر ${displayPrice} (التاجر: ${merchantName})${imgLabel} من متجر كارامل`);
+    const waText = encodeURIComponent(`أريد طلب ${product.title} بسعر ${displayPrice} جنيه (التاجر: ${merchantName})${imgLabel} من متجر كارامل`);
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${waText}`;
 }
 
@@ -1784,7 +1769,7 @@ function renderSmartSearchSuggestions() {
     ];
 
     container.innerHTML = chips.map(item =>
-        `<button type="button" class="search-suggest-chip" onclick="applyQuickSearch('${escapeHtmlAttr(item.term)}')">${escapeHtml(item.label)}</button>`
+        `<button type="button" class="search-suggest-chip" onclick="applyQuickSearch('${escapeHtmlAttr(item.term)}')">${escapeHtmlAttr(item.label)}</button>`
     ).join("");
 }
 
@@ -2436,7 +2421,7 @@ function paintSpotlightSlide(kind) {
     }
 
     const p = list[idx];
-    const priceParts = getPriceDisplayParts(p);
+    const displayPrice = formatPriceNumber(p.priceLabel || p.price);
     const imgSrc = normalizeProductImageUrl(p.img);
 
     const dotsHTML = list.map((_, i) =>
@@ -2447,7 +2432,7 @@ function paintSpotlightSlide(kind) {
         <div class="visual-motion-card" onclick="openImageModal('${escapeHtmlAttr(imgSrc)}', '${escapeHtmlAttr(p.id)}')">
             <img key="${escapeHtmlAttr(p.id)}-${idx}" src="${escapeHtmlAttr(imgSrc)}" alt="${escapeHtmlAttr(p.title)}" onerror="handleProductImageError(this, '${escapeHtmlAttr(p.id)}')">
             <div class="visual-price-overlay">
-                <div class="visual-price-pill">${escapeHtml(priceParts.valueText)}<span>${escapeHtml(priceParts.suffixText)}</span></div>
+                <div class="visual-price-pill">${displayPrice}<span>جنيه</span></div>
                 <div class="showcase-dots-row" onclick="event.stopPropagation()">${dotsHTML}</div>
             </div>
         </div>
@@ -2553,9 +2538,9 @@ function renderSideCategoriesList() {
                 onclick="selectCategoryFromDrawer('${catKey}')">
                 <span class="clean-cat-top-row">
                     <span class="clean-cat-icon-badge" style="background:${theme.bg};" aria-hidden="true">${iconSvg}</span>
-                    <span class="clean-cat-label">${escapeHtml(CATEGORY_NAMES[catKey])}</span>
+                    <span class="clean-cat-label">${escapeHtmlAttr(CATEGORY_NAMES[catKey])}</span>
                 </span>
-                ${descText ? `<span class="clean-cat-desc">${escapeHtml(descText)}</span>` : ""}
+                ${descText ? `<span class="clean-cat-desc">${escapeHtmlAttr(descText)}</span>` : ""}
             </button>
         `;
     }).join("");
@@ -2653,28 +2638,16 @@ function showSkeletonGrid(count = 8) {
     grid.innerHTML = Array.from({ length: count }, () => buildSkeletonCardHTML()).join("");
 }
 
-function isProductCompletelySoldOut(product, imgs = []) {
-    if (!product) return false;
-    if (product.soldOut === true || product.outOfStock === true || Number(product.stock) === 0) return true;
-    const list = imgs.length ? imgs : getProductImagesList(product);
-    if (list.length > 0 && Array.isArray(product.soldOutImages) && product.soldOutImages.length > 0) {
-        const soldSet = new Set(product.soldOutImages.map(u => normalizeProductImageUrl(u)).filter(Boolean));
-        return list.every(u => soldSet.has(u));
-    }
-    return false;
-}
-
 function buildProductCardHTML(product, isContinuation = false) {
     const imgs = getProductImagesList(product);
     const primaryImg = imgs[0] || "";
     const hasMultipleImgs = imgs.length > 1;
-    const priceParts = getPriceDisplayParts(product);
+    const displayPrice = formatPriceNumber(product.priceLabel || product.price);
     const hookText = product.desc || buildEngagingHookForProduct(product);
     const merchantName = product.merchant || "متجر كارامل";
     const cardId = isContinuation ? `cont-${product.id}-${feedCycle}` : `prod-${product.id}`;
     const btnId = isContinuation ? `cont-btn-${product.id}-${feedCycle}` : `btn-${product.id}`;
     const styleCls = product.cardStyle === "gold" ? " card-style-gold" : "";
-    const isSoldOutProduct = isProductCompletelySoldOut(product, imgs);
     const isFav = wishlistIds.includes(String(product.id));
     const badgeLabel = product.badge || (currentMerchant ? merchantName : (CATEGORY_NAMES[product.category] || ""));
 
@@ -2697,17 +2670,13 @@ function buildProductCardHTML(product, isContinuation = false) {
 
     const merchantBadgeRow = `
         <div class="product-merchant-row">
-            <button type="button" class="product-merchant-link" onclick="event.stopPropagation(); filterByMerchant('${escapeHtmlAttr(merchantName)}', true)" title="عرض منتجات ${escapeHtmlAttr(merchantName)}">${escapeHtml(merchantName)}</button>
+            <button type="button" class="product-merchant-link" onclick="event.stopPropagation(); filterByMerchant('${escapeHtmlAttr(merchantName)}', true)" title="عرض منتجات ${escapeHtmlAttr(merchantName)}">${escapeHtmlAttr(merchantName)}</button>
         </div>
     `;
 
-    const addBtnHtml = isSoldOutProduct
-        ? `<button type="button" class="add-cart-btn is-disabled" id="${escapeHtmlAttr(btnId)}" disabled aria-disabled="true">نفدت الكمية</button>`
-        : `<button type="button" class="add-cart-btn" id="${escapeHtmlAttr(btnId)}" onclick="handleAddOrSelectOptions('${escapeHtmlAttr(product.id)}', '${escapeHtmlAttr(btnId)}', this)">+ أضف للسلة</button>`;
-
     return `
-        <div class="product-card${styleCls}${isSoldOutProduct ? " is-product-soldout" : ""}" id="${escapeHtmlAttr(cardId)}" data-product-id="${escapeHtmlAttr(product.id)}" onmouseenter="startCardAutoSlide(this, '${escapeHtmlAttr(product.id)}')" onmouseleave="stopCardAutoSlide()">
-            ${badgeLabel ? `<span class="card-json-badge">${escapeHtml(badgeLabel)}</span>` : ""}
+        <div class="product-card${styleCls}" id="${escapeHtmlAttr(cardId)}" data-product-id="${escapeHtmlAttr(product.id)}" onmouseenter="startCardAutoSlide(this, '${escapeHtmlAttr(product.id)}')" onmouseleave="stopCardAutoSlide()">
+            ${badgeLabel ? `<span class="card-json-badge">${escapeHtmlAttr(badgeLabel)}</span>` : ""}
             <button type="button" class="fav-toggle-btn ${isFav ? "active" : ""}" data-fav-id="${escapeHtmlAttr(product.id)}" aria-pressed="${isFav}" aria-label="إضافة للمفضلة" onclick="toggleProductFavorite('${escapeHtmlAttr(product.id)}', this, event)">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
             </button>
@@ -2718,15 +2687,15 @@ function buildProductCardHTML(product, isContinuation = false) {
             <div class="product-details">
                 <div>
                     ${merchantBadgeRow}
-                    <div class="product-title">${escapeHtml(product.title)}</div>
+                    <div class="product-title">${escapeHtmlAttr(product.title)}</div>
                     <div class="product-price-row">
-                        <div class="product-price">${escapeHtml(priceParts.valueText)}<span>${escapeHtml(priceParts.suffixText)}</span></div>
-                        ${product.subPrice ? `<span class="product-sub">${escapeHtml(product.subPrice)}</span>` : ""}
+                        <div class="product-price">${displayPrice}<span>جنيه</span></div>
+                        ${product.subPrice ? `<span class="product-sub">${escapeHtmlAttr(product.subPrice)}</span>` : ""}
                     </div>
-                    <div class="product-desc">${escapeHtml(hookText)}</div>
+                    <div class="product-desc">${escapeHtmlAttr(hookText)}</div>
                 </div>
                 <div class="card-btns">
-                    ${addBtnHtml}
+                    <button type="button" class="add-cart-btn" id="${escapeHtmlAttr(btnId)}" onclick="handleAddOrSelectOptions('${escapeHtmlAttr(product.id)}', '${escapeHtmlAttr(btnId)}', this)">+ أضف للسلة</button>
                     <a href="${escapeHtmlAttr(buildProductWhatsAppUrl(product, primaryImg))}" class="direct-wa-link" target="_blank" rel="noopener noreferrer" onclick="event.preventDefault(); launchWhatsAppTarget(this.href);">واتساب</a>
                 </div>
             </div>
@@ -2995,9 +2964,9 @@ function renderProducts(category = "all") {
         if (hasSearch) {
             const suggestion = filtered.length === 0 ? getSmartQuerySuggestion(searchQuery) : "";
             const hintHtml = suggestion
-                ? ` — هل تقصد: <button type="button" class="search-clear-inline-btn" onclick="applyQuickSearch('${escapeHtmlAttr(suggestion)}')">${escapeHtml(suggestion)}</button>`
+                ? ` — هل تقصد: <button type="button" class="search-clear-inline-btn" onclick="applyQuickSearch('${escapeHtmlAttr(suggestion)}')">${escapeHtmlAttr(suggestion)}</button>`
                 : "";
-            summaryText.innerHTML = `نتائج البحث عن "<strong>${escapeHtml(searchQuery)}</strong>": <strong>${filtered.length}</strong> منتج${hintHtml}`;
+            summaryText.innerHTML = `نتائج البحث عن "<strong>${escapeHtmlAttr(searchQuery)}</strong>": <strong>${filtered.length}</strong> منتج${hintHtml}`;
             summaryBar.classList.add("visible");
         } else {
             summaryBar.classList.remove("visible");
@@ -3007,7 +2976,7 @@ function renderProducts(category = "all") {
     if (filtered.length === 0) {
         const suggestion = hasSearch ? getSmartQuerySuggestion(searchQuery) : "";
         const suggestionBtnHtml = suggestion
-            ? `<button type="button" class="continuation-load-more-btn" onclick="applyQuickSearch('${escapeHtmlAttr(suggestion)}')">بحث عن "${escapeHtml(suggestion)}"</button>`
+            ? `<button type="button" class="continuation-load-more-btn" onclick="applyQuickSearch('${escapeHtmlAttr(suggestion)}')">بحث عن "${escapeHtmlAttr(suggestion)}"</button>`
             : "";
         grid.innerHTML = `
             <div class="empty-state-box">
@@ -3178,9 +3147,9 @@ function renderActiveOrdersSection() {
                 <div class="active-order-item-row">
                     ${safeItemImg ? `<img src="${escapeHtmlAttr(safeItemImg)}" alt="${escapeHtmlAttr(item.title)}" onerror="handleProductImageError(this, '${escapeHtmlAttr(item.id)}')">` : ""}
                     <div class="active-order-item-meta">
-                        <div class="cart-item-title">${escapeHtml(item.title)}</div>
-                        ${optsText ? `<div class="cart-item-sub">${escapeHtml(optsText)}</div>` : ""}
-                        ${item.note ? `<div class="cart-item-note">ملاحظة: ${escapeHtml(item.note)}</div>` : ""}
+                        <div class="cart-item-title">${escapeHtmlAttr(item.title)}</div>
+                        ${optsText ? `<div class="cart-item-sub">${escapeHtmlAttr(optsText)}</div>` : ""}
+                        ${item.note ? `<div class="cart-item-note">ملاحظة: ${escapeHtmlAttr(item.note)}</div>` : ""}
                         <div class="cart-item-sub">الكمية: ${item.qty} × ${formatPriceNumber(item.price)} جنيه</div>
                     </div>
                     <div class="cart-item-price">${formatPriceNumber((Number(item.price) || 0) * (Number(item.qty) || 1))} جنيه</div>
@@ -3194,10 +3163,10 @@ function renderActiveOrdersSection() {
                     <div>
                         <div class="order-id-row">
                             <span class="order-id-badge-label">رقم الأوردر</span>
-                            <span class="order-id-code">${escapeHtml(order.orderId)}</span>
+                            <span class="order-id-code">${escapeHtmlAttr(order.orderId)}</span>
                             <span class="order-id-hint">${isExpanded ? "إخفاء التفاصيل" : "اضغط لعرض التفاصيل"}</span>
                         </div>
-                        <div class="order-trigger-sub">${totalPcs} قطعة • ${escapeHtml(order.createdAtText || "")}</div>
+                        <div class="order-trigger-sub">${totalPcs} قطعة • ${escapeHtmlAttr(order.createdAtText || "")}</div>
                     </div>
                     <div class="order-trigger-right">
                         <span class="active-order-status-pill">${isAppendingHere ? "جاري الإضافة" : "قيد التنفيذ"}</span>
@@ -3211,7 +3180,7 @@ function renderActiveOrdersSection() {
                         <span class="order-stage-step"><span class="order-stage-dot"></span>تم الاستلام</span>
                     </div>
                     <div class="active-order-head">
-                        <span class="active-order-date">تفاصيل الأوردر ${escapeHtml(order.orderId)}</span>
+                        <span class="active-order-date">تفاصيل الأوردر ${escapeHtmlAttr(order.orderId)}</span>
                         <button type="button" class="order-copy-id-btn" onclick="copyOrderIdToClipboard('${escapeHtmlAttr(order.orderId)}')">نسخ الرقم</button>
                     </div>
                     <div class="active-order-items">${itemsHtml}</div>
@@ -3254,8 +3223,8 @@ function renderReceivedOrdersSection() {
             return `
                 <div class="received-order-item-row">
                     <div>
-                        <div class="received-order-item-title">${escapeHtml(item.title)}</div>
-                        ${optsText ? `<div class="received-order-item-sub">${escapeHtml(optsText)}</div>` : ""}
+                        <div class="received-order-item-title">${escapeHtmlAttr(item.title)}</div>
+                        ${optsText ? `<div class="received-order-item-sub">${escapeHtmlAttr(optsText)}</div>` : ""}
                         <div class="received-order-item-sub">الكمية: ${item.qty} × ${formatPriceNumber(item.price)} جنيه</div>
                     </div>
                     <button type="button" class="received-reorder-btn" onclick="reorderItemToCart('${escapeHtmlAttr(order.orderId)}', '${escapeHtmlAttr(item.cartKey || "")}')">+ إعادة طلب</button>
@@ -3269,10 +3238,10 @@ function renderReceivedOrdersSection() {
                     <div>
                         <div class="order-id-row">
                             <span class="order-id-badge-label">رقم الأوردر</span>
-                            <span class="order-id-code">${escapeHtml(order.orderId)}</span>
+                            <span class="order-id-code">${escapeHtmlAttr(order.orderId)}</span>
                             <span class="order-id-hint">${isExpanded ? "إخفاء التفاصيل" : "اضغط لعرض التفاصيل"}</span>
                         </div>
-                        <div class="order-trigger-sub">${totalPcs} قطعة • استُلم ${escapeHtml(order.receivedAtText || order.createdAtText || "")}</div>
+                        <div class="order-trigger-sub">${totalPcs} قطعة • استُلم ${escapeHtmlAttr(order.receivedAtText || order.createdAtText || "")}</div>
                     </div>
                     <div class="order-trigger-right">
                         <span class="received-order-status-pill">تم الاستلام</span>
@@ -3286,7 +3255,7 @@ function renderReceivedOrdersSection() {
                         <span class="order-stage-step done"><span class="order-stage-dot"></span>تم الاستلام</span>
                     </div>
                     <div class="active-order-head">
-                        <span class="active-order-date">أوردر مستلم ${escapeHtml(order.orderId)}</span>
+                        <span class="active-order-date">أوردر مستلم ${escapeHtmlAttr(order.orderId)}</span>
                         <button type="button" class="order-copy-id-btn" onclick="copyOrderIdToClipboard('${escapeHtmlAttr(order.orderId)}')">نسخ الرقم</button>
                     </div>
                     <div class="active-order-items">${itemsHtml}</div>
@@ -3340,7 +3309,7 @@ function updateAppendModeBanner() {
         banner.classList.add("is-hidden");
         return;
     }
-    textEl.innerHTML = `<strong>وضع الإضافة على الأوردر ${escapeHtml(target.orderId)}:</strong> أي منتج تضيفه الآن يُضاف مباشرة على هذا الأوردر.`;
+    textEl.innerHTML = `<strong>وضع الإضافة على الأوردر ${escapeHtmlAttr(target.orderId)}:</strong> أي منتج تضيفه الآن يُضاف مباشرة على هذا الأوردر.`;
     banner.classList.remove("is-hidden");
 }
 
@@ -3542,11 +3511,9 @@ function removeOverlayState(name) {
     const hadOverlay = overlayStack.includes(name);
     overlayStack = overlayStack.filter(n => n !== name);
     if (hadOverlay && !suppressHistoryStep && history.state && history.state.caramelOverlay === name) {
-        suppressHistoryStep = true;
         try {
             history.back();
         } catch (e) {}
-        setTimeout(() => { suppressHistoryStep = false; }, 120);
     }
 }
 
@@ -3748,9 +3715,8 @@ function openImageModal(src, productId = "") {
 
     if (product) {
         trackProductInterest(product, 1.5, true);
-        const priceParts = getPriceDisplayParts(product);
         if (titleEl) titleEl.textContent = product.title;
-        if (mainPriceEl) mainPriceEl.innerHTML = `${escapeHtml(priceParts.valueText)} <span>${escapeHtml(priceParts.suffixText)}</span>`;
+        if (mainPriceEl) mainPriceEl.innerHTML = `${formatPriceNumber(product.priceLabel || product.price)} <span>جنيه</span>`;
         if (subPriceEl) {
             if (product.subPrice) { subPriceEl.textContent = product.subPrice; subPriceEl.classList.remove("is-hidden"); }
             else subPriceEl.classList.add("is-hidden");
@@ -3771,12 +3737,7 @@ function openImageModal(src, productId = "") {
             copyLinkBtn.onclick = ev => copyProductShareLink(product.id, ev);
         }
         if (addBtn) {
-            const isSoldOutProd = isProductCompletelySoldOut(product, imgs);
-            addBtn.disabled = isSoldOutProd;
-            addBtn.classList.toggle("is-disabled", isSoldOutProd);
-            addBtn.textContent = isSoldOutProd ? "نفدت الكمية" : "+ أضف للسلة";
             addBtn.onclick = () => {
-                if (isSoldOutProd) return;
                 const chosenPreviewImg = previewModalState.imgs[previewModalState.idx] || product.img || "";
                 closeImageModal();
                 handleAddOrSelectOptions(product.id, `btn-${product.id}`, null, chosenPreviewImg);
@@ -3794,7 +3755,7 @@ function openImageModal(src, productId = "") {
                     <button type="button" class="preview-related-chip" onclick="openImageModal('${escapeHtmlAttr(rp.img)}', '${escapeHtmlAttr(rp.id)}')">
                         <img src="${escapeHtmlAttr(rp.img)}" alt="${escapeHtmlAttr(rp.title)}" onerror="handleProductImageError(this, '${escapeHtmlAttr(rp.id)}')">
                         <span class="preview-related-meta">
-                            <span class="preview-related-title">${escapeHtml(rp.title)}</span>
+                            <span class="preview-related-title">${escapeHtmlAttr(rp.title)}</span>
                             <span class="preview-related-price">${formatPriceNumber(rp.priceLabel || rp.price)} جنيه</span>
                         </span>
                     </button>
@@ -3811,12 +3772,7 @@ function openImageModal(src, productId = "") {
         if (catChipEl) catChipEl.textContent = "متجر كارامل";
         if (merchantChipEl) merchantChipEl.classList.add("is-hidden");
         if (relatedSection) relatedSection.classList.add("is-hidden");
-        if (addBtn) {
-            addBtn.disabled = false;
-            addBtn.classList.remove("is-disabled");
-            addBtn.textContent = "+ أضف للسلة";
-            addBtn.onclick = () => closeImageModal();
-        }
+        if (addBtn) addBtn.onclick = () => closeImageModal();
         if (waBtn) waBtn.href = `https://wa.me/${WHATSAPP_NUMBER}`;
     }
 
@@ -3913,7 +3869,7 @@ function selectOptionModalThumb(idx) {
 
 function handleAddOrSelectOptions(productId, clickedBtnId, sourceBtnEl = null, preferredImg = "") {
     const product = PRODUCTS.find(p => p.id === productId);
-    if (!product || isProductCompletelySoldOut(product)) return;
+    if (!product) return;
     trackProductInterest(product, 2.5, true);
 
     const cardEl = sourceBtnEl ? sourceBtnEl.closest(".product-card") : document.getElementById(`prod-${productId}`);
@@ -3965,7 +3921,7 @@ function handleAddOrSelectOptions(productId, clickedBtnId, sourceBtnEl = null, p
         sizeGroup.classList.remove("is-hidden");
         sizePills.innerHTML = variantCfg.sizes.map((sz, idx) => {
             const label = resolveSizeOptionLabel(sz);
-            return `<button type="button" class="option-pill-btn ${idx === 0 ? "selected" : ""}" onclick="selectOptionPill('size', '${escapeHtmlAttr(label)}', this)">${escapeHtml(label)}</button>`;
+            return `<button type="button" class="option-pill-btn ${idx === 0 ? "selected" : ""}" onclick="selectOptionPill('size', '${escapeHtmlAttr(label)}', this)">${escapeHtmlAttr(label)}</button>`;
         }).join("");
     } else sizeGroup.classList.add("is-hidden");
 
@@ -3973,7 +3929,7 @@ function handleAddOrSelectOptions(productId, clickedBtnId, sourceBtnEl = null, p
     if (variantCfg.colors && variantCfg.colors.length) {
         if (colorLabelEl) colorLabelEl.textContent = variantCfg.colorHeading || resolveProductColorHeading(product);
         colorGroup.classList.remove("is-hidden");
-        colorPills.innerHTML = variantCfg.colors.map((col, idx) => `<button type="button" class="option-pill-btn ${idx === 0 ? "selected" : ""}" onclick="selectOptionPill('color', '${escapeHtmlAttr(col)}', this)">${escapeHtml(col)}</button>`).join("");
+        colorPills.innerHTML = variantCfg.colors.map((col, idx) => `<button type="button" class="option-pill-btn ${idx === 0 ? "selected" : ""}" onclick="selectOptionPill('color', '${escapeHtmlAttr(col)}', this)">${escapeHtmlAttr(col)}</button>`).join("");
     } else colorGroup.classList.add("is-hidden");
 
     modal.classList.add("open");
@@ -4020,7 +3976,7 @@ function closeProductOptionModal(fromPopState = false) {
 }
 
 function addToCart(product, clickedBtnId = null, sourceBtnEl = null, qtyToAdd = 1, selectedSize = "", selectedColor = "", note = "", customImg = "") {
-    if (!product || isProductCompletelySoldOut(product)) return;
+    if (!product) return;
     trackProductInterest(product, 3, true);
     const addQty = Math.max(1, Number(qtyToAdd) || 1);
     const chosenImg = normalizeProductImageUrl(customImg || product.img);
@@ -4110,14 +4066,14 @@ function updateCartUI() {
                     const shortTag = variantCfg.shortTag || resolveCartOptionShortTag(product);
                     const opts = variantCfg.sizes.map(sz => {
                         const lbl = resolveSizeOptionLabel(sz);
-                        return `<option value="${escapeHtmlAttr(lbl)}" ${item.selectedSize === lbl ? "selected" : ""}>${escapeHtml(lbl)}</option>`;
+                        return `<option value="${escapeHtmlAttr(lbl)}" ${item.selectedSize === lbl ? "selected" : ""}>${escapeHtmlAttr(lbl)}</option>`;
                     }).join("");
-                    sizeSelectHtml = `<select class="cart-option-select" onchange="updateCartItemOption(${index}, 'size', this.value)" aria-label="${escapeHtmlAttr(shortTag)}"><option value="">${escapeHtml(shortTag)}</option>${opts}</select>`;
+                    sizeSelectHtml = `<select class="cart-option-select" onchange="updateCartItemOption(${index}, 'size', this.value)" aria-label="${escapeHtmlAttr(shortTag)}"><option value="">${escapeHtmlAttr(shortTag)}</option>${opts}</select>`;
                 }
 
                 let colorSelectHtml = "";
                 if (variantCfg?.colors?.length) {
-                    const opts = variantCfg.colors.map(col => `<option value="${escapeHtmlAttr(col)}" ${item.selectedColor === col ? "selected" : ""}>${escapeHtml(col)}</option>`).join("");
+                    const opts = variantCfg.colors.map(col => `<option value="${escapeHtmlAttr(col)}" ${item.selectedColor === col ? "selected" : ""}>${escapeHtmlAttr(col)}</option>`).join("");
                     colorSelectHtml = `<select class="cart-option-select" onchange="updateCartItemOption(${index}, 'color', this.value)" aria-label="اللون"><option value="">اللون</option>${opts}</select>`;
                 }
 
@@ -4129,7 +4085,7 @@ function updateCartUI() {
                         <div class="cart-item-top">
                             ${safeImg ? `<img src="${escapeHtmlAttr(safeImg)}" alt="${escapeHtmlAttr(item.title)}" onerror="handleProductImageError(this, '${escapeHtmlAttr(item.id)}')">` : ""}
                             <div class="cart-item-info">
-                                <div class="cart-item-title">${escapeHtml(item.title)}</div>
+                                <div class="cart-item-title">${escapeHtmlAttr(item.title)}</div>
                                 <div class="cart-item-price">${formatPriceNumber(itemTotal)} جنيه</div>
                                 <div class="cart-item-sub">${item.qty} × ${formatPriceNumber(item.price)} جنيه</div>
                             </div>
@@ -4511,11 +4467,11 @@ function renderMerchantPolicyContent(catKey = "appliances") {
     if (!box) return;
     const data = MERCHANT_POLICY_DATA[catKey] || MERCHANT_POLICY_DATA.appliances;
     box.innerHTML = `
-        <div class="merchant-policy-heading">${escapeHtml(data.title)}</div>
+        <div class="merchant-policy-heading">${data.title}</div>
         <ul class="merchant-policy-list">
             ${data.items.map(it => `<li>${it}</li>`).join("")}
         </ul>
-        <div class="merchant-policy-note">${escapeHtml(data.note)}</div>
+        <div class="merchant-policy-note">${data.note}</div>
     `;
 }
 
@@ -4686,6 +4642,7 @@ function initApp() {
     syncHeaderInstallOrUpdateButton();
     syncSupportWhatsAppLinks();
     setupInfiniteScrollObserver();
+    loadStoreConfigFromJson(false);
     loadMerchantProductsFromJson(false);
 }
 
