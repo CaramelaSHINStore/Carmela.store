@@ -151,6 +151,8 @@
     <div class="price-chips-row" id="smartPriceChipsContainer"></div>
 </div>
 
+<!-- Merchants Quick Strip -->
+
 <!-- Main Container -->
 <main class="container">
     <!-- Service & Support Strip -->
@@ -425,7 +427,7 @@
         <div class="preview-thumbs-row is-hidden" id="previewThumbsRow"></div>
         <div class="preview-body">
             <div class="preview-meta-chips">
-                <div class="preview-chips-left">
+                <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
                     <span class="preview-chip" id="previewCategoryChip">متجر كارامل</span>
                     <button type="button" class="preview-merchant-btn is-hidden" id="previewMerchantChip"></button>
                 </div>
@@ -474,7 +476,7 @@
         </div>
 
         <div class="option-qty-row">
-            <span class="option-group-label no-margin">الكمية:</span>
+            <span class="option-group-label" style="margin:0;">الكمية:</span>
             <div class="option-qty-controls">
                 <button type="button" class="option-qty-btn" onclick="changeModalQty(1)">+</button>
                 <span class="option-qty-val" id="optionModalQtyVal">1</span>
@@ -579,7 +581,7 @@
 
                 <div class="merchant-calc-actions">
                     <button type="button" class="merchant-preset-btn" onclick="applySampleProfitExample()">تجربة المثال العملي (500 ج)</button>
-                    <button type="button" class="merchant-preset-btn secondary" onclick="switchMerchantHubTab('join', document.querySelector('.merchant-hub-tab[data-m-tab=join]'))">ابدأ بإضافة منتجاتك ←</button>
+                    <button type="button" class="merchant-preset-btn secondary" onclick="switchMerchantHubTab('join', document.querySelector('.merchant-hub-tab[data-m-tab="join"]'))">ابدأ بإضافة منتجاتك ←</button>
                 </div>
             </div>
 
