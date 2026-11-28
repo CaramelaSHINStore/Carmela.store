@@ -1325,12 +1325,30 @@ function resetHomeFresh() {
 }
 
 function scrollToProductsTop() {
-    const heading = document.getElementById("productsSectionHeading");
-    if (!heading) return;
+    const anchorEl = document.getElementById("productsSectionHeading") || document.getElementById("productsGrid");
+    if (!anchorEl) {
+        window.scrollTo({ top: 0, behavior: "instant" });
+        return;
+    }
     const headerHeight = document.querySelector(".top-app-bar")?.getBoundingClientRect().height || 50;
-    const quickTabsHeight = document.querySelector(".quick-top-tabs")?.getBoundingClientRect().height || 42;
-    const topPos = heading.getBoundingClientRect().top + window.scrollY - (headerHeight + quickTabsHeight + 10);
-    window.scrollTo({ top: Math.max(0, topPos), behavior: "smooth" });
+    const quickTabs = document.querySelector(".quick-top-tabs");
+    const quickTabsHeight = (quickTabs && quickTabs.offsetParent !== null)
+        ? quickTabs.getBoundingClientRect().height
+        : 0;
+    const rect = anchorEl.getBoundingClientRect();
+    const rawTarget = rect.top + window.scrollY - (headerHeight + quickTabsHeight + 12);
+    const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    const clampedTarget = Math.max(0, Math.min(maxScroll, rawTarget));
+
+    requestAnimationFrame(() => {
+        try {
+            window.scrollTo({ top: clampedTarget, behavior: "instant" });
+        } catch (e) {
+            window.scrollTo(0, clampedTarget);
+        }
+        document.documentElement.scrollTop = clampedTarget;
+        document.body.scrollTop = clampedTarget;
+    });
 }
 
 function getCartTotals() {
