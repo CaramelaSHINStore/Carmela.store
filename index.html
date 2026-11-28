@@ -516,25 +516,112 @@
 
 <!-- Become a Merchant Modal -->
 <div class="image-modal" id="becomeMerchantModal" onclick="if(event.target===this) closeBecomeMerchantModal()">
-    <div class="service-info-modal-card merchant-signup-card" role="dialog" aria-modal="true" aria-labelledby="becomeMerchantTitle">
+    <div class="service-info-modal-card merchant-signup-card merchant-hub-card" role="dialog" aria-modal="true" aria-labelledby="becomeMerchantTitle">
         <button type="button" class="close-modal-btn" onclick="closeBecomeMerchantModal()" aria-label="إغلاق">✕</button>
-        <div class="service-info-modal-title" id="becomeMerchantTitle">انضم كتاجر في متجر كارامل</div>
-        <p class="merchant-signup-subtitle">سجّل بياناتك وسيتم تجهيز رسالتك وإرسالها مباشرة على واتساب المتجر.</p>
-        <form id="becomeMerchantForm" class="merchant-signup-form" onsubmit="submitBecomeMerchantForm(event)">
-            <div class="option-group">
-                <label for="merchantRegName" class="option-group-label">الاسم *</label>
-                <input type="text" id="merchantRegName" class="option-note-input" placeholder="اكتب اسمك الكامل" required autocomplete="name">
+        <div class="merchant-hub-header">
+            <div class="service-info-modal-title no-margin" id="becomeMerchantTitle">بوابة التجار — متجر كارامل</div>
+            <p class="merchant-signup-subtitle">العمولات والرسوم التشغيلية (بالجنيه المصري)، حاسبة الأرباح، وخطوات الانضمام.</p>
+        </div>
+
+        <div class="merchant-hub-tabs" role="tablist" aria-label="أقسام بوابة التجار">
+            <button type="button" class="merchant-hub-tab active" data-m-tab="policies" onclick="switchMerchantHubTab('policies', this)">العمولات والرسوم</button>
+            <button type="button" class="merchant-hub-tab" data-m-tab="calculator" onclick="switchMerchantHubTab('calculator', this)">حاسبة الربح</button>
+            <button type="button" class="merchant-hub-tab" data-m-tab="join" onclick="switchMerchantHubTab('join', this)">البيانات والانضمام</button>
+        </div>
+
+        <div class="merchant-hub-body">
+            <!-- Tab 1: Policies -->
+            <div class="merchant-hub-panel" id="merchantTabPolicies">
+                <div class="merchant-cat-filter-row" id="merchantCategoryPills">
+                    <button type="button" class="merchant-cat-pill active" data-mcat="appliances" onclick="selectMerchantPolicyCategory('appliances', this)">1. الأجهزة والإلكترونيات</button>
+                    <button type="button" class="merchant-cat-pill" data-mcat="home_tools" onclick="selectMerchantPolicyCategory('home_tools', this)">2. الأدوات المنزلية والمطبخ</button>
+                    <button type="button" class="merchant-cat-pill" data-mcat="beauty" onclick="selectMerchantPolicyCategory('beauty', this)">3. الجمال والمكياج والعناية</button>
+                    <button type="button" class="merchant-cat-pill" data-mcat="fashion" onclick="selectMerchantPolicyCategory('fashion', this)">4. الملابس والأزياء والإكسسوارات</button>
+                    <button type="button" class="merchant-cat-pill" data-mcat="stationery" onclick="selectMerchantPolicyCategory('stationery', this)">5. اللوازم المكتبية والقرطاسية</button>
+                    <button type="button" class="merchant-cat-pill" data-mcat="gifts_mobile" onclick="selectMerchantPolicyCategory('gifts_mobile', this)">6. الهدايا والهاند ميد وإكسسوارات الموبايل</button>
+                </div>
+                <div class="merchant-policy-box" id="merchantPolicyContent"></div>
             </div>
-            <div class="option-group">
-                <label for="merchantRegActivity" class="option-group-label">اسم النشاط *</label>
-                <input type="text" id="merchantRegActivity" class="option-note-input" placeholder="مثال: هاند ميد، إكسسوارات، عطور، منزل..." required>
+
+            <!-- Tab 2: Profit Calculator -->
+            <div class="merchant-hub-panel is-hidden" id="merchantTabCalculator">
+                <div class="merchant-calc-grid">
+                    <div class="option-group no-margin">
+                        <label for="calcSalePrice" class="option-group-label">سعر بيع المنتج للعميل (جنيه)</label>
+                        <input type="number" id="calcSalePrice" class="option-note-input" value="500" min="1" step="1" oninput="recalculateMerchantProfit()">
+                    </div>
+                    <div class="option-group no-margin">
+                        <label for="calcCostPrice" class="option-group-label">تكلفة المنتج على التاجر (جنيه)</label>
+                        <input type="number" id="calcCostPrice" class="option-note-input" value="260" min="0" step="1" oninput="recalculateMerchantProfit()">
+                    </div>
+                    <div class="option-group no-margin">
+                        <label for="calcCommissionRate" class="option-group-label">نسبة العمولة (%)</label>
+                        <input type="number" id="calcCommissionRate" class="option-note-input" value="15" min="0" max="100" step="0.5" oninput="recalculateMerchantProfit()">
+                    </div>
+                    <div class="option-group no-margin">
+                        <label for="calcHandlingFee" class="option-group-label">رسوم التشغيل والمناولة للقطعة (جنيه)</label>
+                        <input type="number" id="calcHandlingFee" class="option-note-input" value="20" min="0" step="1" oninput="recalculateMerchantProfit()">
+                    </div>
+                </div>
+
+                <div class="merchant-calc-summary" id="merchantCalcSummary">
+                    <div class="merchant-calc-row">
+                        <span>قيمة العمولة:</span>
+                        <strong id="calcCommissionVal">75 جنيه</strong>
+                    </div>
+                    <div class="merchant-calc-row">
+                        <span>إجمالي الخصومات والتكاليف:</span>
+                        <strong id="calcTotalDeductionsVal">355 جنيه</strong>
+                    </div>
+                    <div class="merchant-calc-row net-profit-row">
+                        <span>صافي ربح التاجر من القطعة:</span>
+                        <strong id="calcNetProfitVal">145 جنيه</strong>
+                    </div>
+                </div>
+
+                <div class="merchant-calc-actions">
+                    <button type="button" class="merchant-preset-btn" onclick="applySampleProfitExample()">تجربة المثال العملي (500 ج)</button>
+                    <button type="button" class="merchant-preset-btn secondary" onclick="switchMerchantHubTab('join', document.querySelector('.merchant-hub-tab[data-m-tab="join"]'))">ابدأ بإضافة منتجاتك ←</button>
+                </div>
             </div>
-            <div class="option-group">
-                <label for="merchantRegPhone" class="option-group-label">رقم التواصل *</label>
-                <input type="tel" id="merchantRegPhone" class="option-note-input" placeholder="مثال: 010xxxxxxxx" required autocomplete="tel">
+
+            <!-- Tab 3: Required Data & Join Form -->
+            <div class="merchant-hub-panel is-hidden" id="merchantTabJoin">
+                <div class="merchant-steps-card">
+                    <div class="merchant-steps-title">البيانات المطلوبة للبدء وعرض منتجاتك:</div>
+                    <ul class="merchant-steps-list">
+                        <li><strong>اسم المكان / البراند:</strong> الاسم التجاري الذي يظهر للعملاء.</li>
+                        <li><strong>رقم التواصل:</strong> رقم الهاتف أو الواتساب الفعال للتنسيق السريع.</li>
+                        <li><strong>صور المنتجات:</strong> صور واضحة وعالية الجودة لكل منتج.</li>
+                        <li><strong>الأسعار:</strong> سعر البيع المعتمد لكل منتج بالجنيه المصري.</li>
+                        <li><strong>شرح وتفاصيل المنتجات:</strong> الخامة، المقاسات، السعة أو الأبعاد، والمواصفات.</li>
+                    </ul>
+                    <div class="merchant-contact-note">
+                        للتواصل والاستفسار المباشر: <strong>01055436305</strong>
+                    </div>
+                </div>
+
+                <form id="becomeMerchantForm" class="merchant-signup-form" onsubmit="submitBecomeMerchantForm(event)">
+                    <div class="option-group">
+                        <label for="merchantRegName" class="option-group-label">اسم المكان / البراند *</label>
+                        <input type="text" id="merchantRegName" class="option-note-input" placeholder="مثال: براند كارامل أو اسم التاجر" required autocomplete="name">
+                    </div>
+                    <div class="option-group">
+                        <label for="merchantRegActivity" class="option-group-label">الفئة / النشاط والمنتجات *</label>
+                        <input type="text" id="merchantRegActivity" class="option-note-input" placeholder="مثال: أدوات منزلية، هاند ميد، إكسسوارات..." required>
+                    </div>
+                    <div class="option-group">
+                        <label for="merchantRegPhone" class="option-group-label">رقم التواصل (واتساب / هاتف) *</label>
+                        <input type="tel" id="merchantRegPhone" class="option-note-input" placeholder="مثال: 010xxxxxxxx" required autocomplete="tel">
+                    </div>
+                    <div class="option-group">
+                        <label for="merchantRegDetails" class="option-group-label">نبذة عن الأسعار والتفاصيل (اختياري)</label>
+                        <input type="text" id="merchantRegDetails" class="option-note-input" placeholder="مثال: أسعار المنتجات، الخامات، أو جاهزية الصور...">
+                    </div>
+                    <button type="submit" class="option-confirm-btn merchant-wa-submit-btn">إرسال طلب الانضمام عبر واتساب</button>
+                </form>
             </div>
-            <button type="submit" class="option-confirm-btn merchant-wa-submit-btn">إرسال الطلب عبر واتساب</button>
-        </form>
+        </div>
     </div>
 </div>
 
