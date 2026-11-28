@@ -2692,3 +2692,241 @@ async function enableCaramelPush() {
         showCaramelToast("تعذر طلب إذن الإشعارات حالياً");
     }
 }
+// ============================================================================
+// NON-INTRUSIVE AUTO-REFRESH FOR NEW PRODUCTS & CATALOG UPDATES
+// ============================================================================
+
+const AUTO_REFRESH_INTERVAL_MS = 90000;
+let pendingCatalogRefreshPayload = null;
+let lastCatalogSnapshotSignature = "";
+let autoRefreshTimerId = null;
+let autoRefreshInFlight = false;
+
+function computeCatalogSignature(list) {
+    if (!Array.isArray(list) || !list.length) return "empty";
+    return list
+        .map(p => {
+            const imgs = Array.isArray(p.imgs) ? p.imgs.join(",") : (p.img || "");
+            const sold = Array.isArray(p.soldOutImgs) ? p.soldOutImgs.join(",") : "";
+            return `${p.id}|${p.title}|${p.price}|${p.category}|${p.merchant}|${imgs}|${sold}`;
+        })
+        .join("||");
+}
+
+function isUserActivelyEngagedWithFeed() {
+    if (isAnyOverlayOpen()) return true;
+    const activeEl = document.activeElement;
+    if (activeEl && (activeEl.tagName === "INPUT" || activeEl.tagName === "TEXTAREA" || activeEl.tagName === "SELECT")) {
+        return true;
+    }
+    const searchVal = document.getElementById("homeSearchInput")?.value.trim() || "";
+    if (searchVal.length > 0) return true;
+    return false;
+}
+
+function applyCatalogUpdatePayload(nextProducts, nextCategoryNames = null) {
+    if (!Array.isArray(nextProducts) || !nextProducts.length) return false;
+
+    const newSig = computeCatalogSignature(nextProducts);
+    if (lastCatalogSnapshotSignature && newSig === lastCatalogSnapshotSignature) {
+        return false;
+    }
+
+    const hadProductsBefore = PRODUCTS.length > 0;
+    const prevIds = new Set(PRODUCTS.map(p => String(p.id)));
+    const addedCount = hadProductsBefore
+        ? nextProducts.filter(p => !prevIds.has(String(p.id))).length
+        : 0;
+
+    PRODUCTS.length = 0;
+    nextProducts.forEach(p => PRODUCTS.push(p));
+
+    if (nextCategoryNames && typeof CATEGORY_NAMES === "object") {
+        Object.keys(nextCategoryNames).forEach(k => {
+            CATEGORY_NAMES[k] = nextCategoryNames[k];
+        });
+    }
+
+    lastCatalogSnapshotSignature = newSig;
+    pendingCatalogRefreshPayload = null;
+
+    if (typeof rebuildSearchIndex === "function") rebuildSearchIndex();
+    bumpCatalogStateVersion();
+
+    if (typeof renderMerchantsQuickStrip === "function") renderMerchantsQuickStrip();
+    if (typeof renderSpotlightBoxes === "function") renderSpotlightBoxes();
+    if (typeof updateWishlistUI === "function") updateWishlistUI();
+    if (typeof updateCartUI === "function") updateCartUI();
+
+    renderProducts(currentCategory);
+
+    if (hadProductsBefore) {
+        if (addedCount > 0) {
+            showCaramelToast(`تمت إضافة ${addedCount} ${addedCount === 1 ? "منتج جديد" : "منتجات جديدة"} تلقائياً`);
+        } else {
+            showCaramelToast("تم تحديث قائمة المنتجات تلقائياً");
+        }
+    }
+    return true;
+}
+
+function flushDeferredCatalogRefreshIfSafe() {
+    if (!pendingCatalogRefreshPayload) return;
+    if (isUserActivelyEngagedWithFeed()) return;
+    const { products, categoryNames } = pendingCatalogRefreshPayload;
+    applyCatalogUpdatePayload(products, categoryNames);
+}
+
+async function fetchJsonNoCache(url) {
+    const sep = url.includes("?") ? "&" : "?";
+    const bustUrl = `${url}${sep}_t=${Date.now()}`;
+    const res = await fetch(bustUrl, { cache: "no-store" });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+}
+
+async function checkForNewCatalogUpdates() {
+    if (autoRefreshInFlight) return;
+    if (typeof GITHUB_MERCHANTS_CONFIG === "undefined" || !GITHUB_MERCHANTS_CONFIG) return;
+
+    autoRefreshInFlight = true;
+    try {
+        const { owner, repo, branch, merchantsIndexPath } = GITHUB_MERCHANTS_CONFIG;
+        const baseRaw = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}`;
+        const indexUrl = merchantsIndexPath.startsWith("http")
+            ? merchantsIndexPath
+            : `${baseRaw}/${merchantsIndexPath.replace(/^\.?\//, "")}`;
+
+        const indexData = await fetchJsonNoCache(indexUrl);
+        const merchantEntries = Array.isArray(indexData)
+            ? indexData
+            : (Array.isArray(indexData?.merchants) ? indexData.merchants : []);
+
+        if (!merchantEntries.length) return;
+
+        const collectedProducts = [];
+        const mergedCategoryNames = {};
+
+        for (const entry of merchantEntries) {
+            const rawFile = typeof entry === "string"
+                ? entry
+                : (entry?.file || entry?.path || entry?.url || "");
+            if (!rawFile) continue;
+
+            const fileUrl = rawFile.startsWith("http")
+                ? rawFile
+                : `${baseRaw}/${rawFile.replace(/^\.?\//, "")}`;
+
+            try {
+                const payload = await fetchJsonNoCache(fileUrl);
+                const merchantName = (typeof entry === "object" && (entry.merchant || entry.name))
+                    || payload?.merchant
+                    || payload?.name
+                    || "متجر كارامل";
+
+                if (payload && typeof payload.categories === "object" && payload.categories !== null) {
+                    Object.assign(mergedCategoryNames, payload.categories);
+                }
+
+                const rawItems = Array.isArray(payload)
+                    ? payload
+                    : (Array.isArray(payload?.products) ? payload.products : []);
+
+                rawItems.forEach((item, idx) => {
+                    if (!item || typeof item !== "object") return;
+                    const normalizedItem = {
+                        ...item,
+                        id: String(item.id || `${merchantName}-${idx}`),
+                        title: String(item.title || item.name || "").trim(),
+                        merchant: String(item.merchant || merchantName).trim(),
+                        price: typeof parseNumericPrice === "function"
+                            ? parseNumericPrice(item.price ?? item.priceLabel)
+                            : (Number(item.price) || 0)
+                    };
+                    if (normalizedItem.title) collectedProducts.push(normalizedItem);
+                });
+            } catch (err) {
+                // Skip unreachable merchant file without interrupting others
+            }
+        }
+
+        if (!collectedProducts.length) return;
+
+        const nextSig = computeCatalogSignature(collectedProducts);
+        if (!lastCatalogSnapshotSignature) {
+            lastCatalogSnapshotSignature = nextSig;
+            return;
+        }
+        if (nextSig === lastCatalogSnapshotSignature) return;
+
+        if (isUserActivelyEngagedWithFeed()) {
+            pendingCatalogRefreshPayload = {
+                products: collectedProducts,
+                categoryNames: mergedCategoryNames
+            };
+        } else {
+            applyCatalogUpdatePayload(collectedProducts, mergedCategoryNames);
+        }
+    } catch (e) {
+        // Silent failure during background polling
+    } finally {
+        autoRefreshInFlight = false;
+    }
+}
+
+function startNonIntrusiveAutoRefresh() {
+    if (!lastCatalogSnapshotSignature && Array.isArray(PRODUCTS) && PRODUCTS.length > 0) {
+        lastCatalogSnapshotSignature = computeCatalogSignature(PRODUCTS);
+    }
+
+    if (autoRefreshTimerId) clearInterval(autoRefreshTimerId);
+    autoRefreshTimerId = setInterval(() => {
+        if (document.visibilityState === "visible") {
+            checkForNewCatalogUpdates();
+        }
+    }, AUTO_REFRESH_INTERVAL_MS);
+
+    document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") {
+            checkForNewCatalogUpdates();
+            flushDeferredCatalogRefreshIfSafe();
+        }
+    });
+
+    window.addEventListener("focus", () => {
+        checkForNewCatalogUpdates();
+        flushDeferredCatalogRefreshIfSafe();
+    });
+}
+
+const _origCloseImageModalForAutoRefresh = typeof closeImageModal === "function" ? closeImageModal : null;
+if (_origCloseImageModalForAutoRefresh) {
+    closeImageModal = function(fromPopState = false) {
+        const res = _origCloseImageModalForAutoRefresh(fromPopState);
+        setTimeout(flushDeferredCatalogRefreshIfSafe, 120);
+        return res;
+    };
+}
+
+const _origFilterByCategoryForAutoRefresh = typeof filterByCategory === "function" ? filterByCategory : null;
+if (_origFilterByCategoryForAutoRefresh) {
+    filterByCategory = function(category, tabElement, shouldScroll = false) {
+        const res = _origFilterByCategoryForAutoRefresh(category, tabElement, shouldScroll);
+        setTimeout(flushDeferredCatalogRefreshIfSafe, 120);
+        return res;
+    };
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+        setTimeout(() => {
+            startNonIntrusiveAutoRefresh();
+            checkForNewCatalogUpdates();
+        }, 1200);
+    }, { once: true });
+} else {
+    setTimeout(() => {
+        startNonIntrusiveAutoRefresh();
+        checkForNewCatalogUpdates();
+    }, 1200);
+}
