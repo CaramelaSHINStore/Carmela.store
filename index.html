@@ -628,6 +628,52 @@
 <!-- Toast -->
 <div class="caramel-toast" id="caramelToast" role="status" aria-live="polite"></div>
 
-<script src="./app.js?v=v20261127-12"></script>
+<script>
+const WHATSAPP_NUMBER = "201055436305";
+const STORE_URL = "https://caramelstoresuez.github.io/Carmelastore/";
+const BRAND_LOGO_URL = "./compressed_1795766509611.jpeg";
+const GITHUB_MERCHANTS_CONFIG = {
+    owner: "Caramelstoresuez",
+    repo: "Carmelastore",
+    branch: "main",
+    folder: "merchants"
+};
+
+const CART_STORAGE_KEY = "caramel_store_cart_v1";
+const ACTIVE_ORDERS_STORAGE_KEY = "caramel_active_orders_v1";
+const RECEIVED_ORDERS_STORAGE_KEY = "caramel_received_orders_v1";
+const INTEREST_STORAGE_KEY = "caramel_user_interest_v1";
+const CUSTOMER_PROFILE_KEY = "caramel_customer_profile_v1";
+const THEME_STORAGE_KEY = "caramel_store_theme_mode_v1";
+const WISHLIST_STORAGE_KEY = "caramel_wishlist_v1";
+const SEARCH_HISTORY_KEY = "caramel_search_history_v1";
+
+const BATCH_SIZE = 12;
+const CONTINUATION_STEP = 12;
+const FULL_MODE_INITIAL_BATCH = 24;
+
+async function loadStoreConfigFromJson(forceRefresh = false) {
+    try {
+        const qSuffix = forceRefresh ? `?ts=${Date.now()}` : "";
+        const resp = await fetch(`./merchants/store-config.json${qSuffix}`, { cache: forceRefresh ? "no-store" : "default" });
+        if (!resp || !resp.ok) return null;
+        return await resp.json();
+    } catch (e) {
+        return null;
+    }
+}
+
+function syncSupportWhatsAppLinks() {
+    document.querySelectorAll("a.promo-cs-link").forEach(a => {
+        if (!a.getAttribute("href")) {
+            a.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("مرحباً دعم متجر كارامل")}`;
+        }
+    });
+}
+</script>
+<script src="./01-config-theme-whatsapp.js?v=v20261127-12"></script>
+<script src="./02-catalog-search-ranking.js?v=v20261127-12"></script>
+<script src="./03-cart-orders-notifications.js?v=v20261127-12"></script>
+<script src="./04-modals-merchant-init.js?v=v20261127-12"></script>
 </body>
 </html>
