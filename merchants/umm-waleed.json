@@ -6,6 +6,7 @@
     "category": "jewelry",
     "categories": [
       "jewelry",
+      "women",
       "gifts"
     ],
     "price": 250,
@@ -46,6 +47,7 @@
     "category": "jewelry",
     "categories": [
       "jewelry",
+      "women",
       "gifts"
     ],
     "price": 200,
@@ -94,6 +96,7 @@
     "categories": [
       "jewelry",
       "men",
+      "women",
       "gifts"
     ],
     "price": 150,
@@ -404,6 +407,7 @@
     "categories": [
       "gifts",
       "men",
+      "women",
       "jewelry"
     ],
     "price": 200,
@@ -434,7 +438,8 @@
     "category": "gifts",
     "categories": [
       "gifts",
-      "women"
+      "women",
+      "home"
     ],
     "price": 300,
     "img": "Omwaled/compressed_1795608066226.webp",
@@ -451,7 +456,9 @@
     "merchant": "أم وليد",
     "category": "gifts",
     "categories": [
-      "gifts"
+      "gifts",
+      "handmade",
+      "women"
     ],
     "price": 130,
     "img": "Omwaled/compressed_1795608065889.webp",
@@ -521,7 +528,9 @@
     "category": "gifts",
     "categories": [
       "gifts",
-      "jewelry"
+      "jewelry",
+      "men",
+      "kids"
     ],
     "price": 35,
     "img": "Omwaled/compressed_1795608065125.webp",
@@ -586,7 +595,9 @@
     "category": "gifts",
     "categories": [
       "gifts",
-      "jewelry"
+      "jewelry",
+      "men",
+      "women"
     ],
     "price": 30,
     "img": "Omwaled/compressed_1795608064656.webp",
@@ -755,7 +766,8 @@
     "merchant": "أم وليد",
     "category": "home",
     "categories": [
-      "home"
+      "home",
+      "beauty"
     ],
     "price": 330,
     "img": "Omwaled/compressed_1795608063778.webp",
@@ -1167,7 +1179,8 @@
     "merchant": "أم وليد",
     "category": "home",
     "categories": [
-      "home"
+      "home",
+      "beauty"
     ],
     "price": 35,
     "img": "Omwaled/compressed_1795856040075.webp",
@@ -1459,7 +1472,8 @@
     "category": "home",
     "categories": [
       "home",
-      "women"
+      "women",
+      "beauty"
     ],
     "price": 125,
     "img": "Omwaled/compressed_1795856037676.webp",
@@ -1511,7 +1525,9 @@
     "merchant": "أم وليد",
     "category": "home",
     "categories": [
-      "home"
+      "home",
+      "school",
+      "women"
     ],
     "price": 135,
     "img": "Omwaled/compressed_1795856044783.webp",
@@ -1546,7 +1562,8 @@
     "merchant": "أم وليد",
     "category": "home",
     "categories": [
-      "home"
+      "home",
+      "appliances"
     ],
     "price": 160,
     "img": "Omwaled/compressed_1795856044160.webp",
@@ -1614,7 +1631,8 @@
     "merchant": "أم وليد",
     "category": "home",
     "categories": [
-      "home"
+      "home",
+      "school"
     ],
     "price": 220,
     "img": "Omwaled/compressed_1795856044450.webp",
@@ -1648,7 +1666,8 @@
     "merchant": "أم وليد",
     "category": "home",
     "categories": [
-      "home"
+      "home",
+      "appliances"
     ],
     "price": 250,
     "img": "Omwaled/compressed_1795856045482.webp",
