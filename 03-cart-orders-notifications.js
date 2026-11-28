@@ -1289,7 +1289,14 @@ function filterByCategory(category, tabElement, shouldScroll = false) {
         if (matchedTab) matchedTab.classList.add("active");
     }
     renderProducts(category);
-    if (shouldScroll) scrollToProductsTop();
+    if (shouldScroll) {
+        scrollToProductsTop();
+        setTimeout(() => {
+            if (typeof isAnyOverlayOpen === "function" && !isAnyOverlayOpen()) {
+                scrollToProductsTop();
+            }
+        }, 60);
+    }
 }
 
 function resetHomeFresh() {
@@ -1325,29 +1332,45 @@ function resetHomeFresh() {
 }
 
 function scrollToProductsTop() {
-    const anchorEl = document.getElementById("productsSectionHeading") || document.getElementById("productsGrid");
-    if (!anchorEl) {
-        window.scrollTo({ top: 0, behavior: "instant" });
-        return;
-    }
-    const headerHeight = document.querySelector(".top-app-bar")?.getBoundingClientRect().height || 50;
-    const quickTabs = document.querySelector(".quick-top-tabs");
-    const quickTabsHeight = (quickTabs && quickTabs.offsetParent !== null)
-        ? quickTabs.getBoundingClientRect().height
-        : 0;
-    const rect = anchorEl.getBoundingClientRect();
-    const rawTarget = rect.top + window.scrollY - (headerHeight + quickTabsHeight + 12);
-    const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-    const clampedTarget = Math.max(0, Math.min(maxScroll, rawTarget));
+    const anchorEl =
+        document.getElementById("productsSectionHeading") ||
+        document.getElementById("activeCategoryTitle") ||
+        document.getElementById("productsGrid");
+
+    const applyScrollTop = (targetY) => {
+        const safeY = Math.max(0, Math.round(targetY));
+        try {
+            window.scrollTo({ top: safeY, left: 0, behavior: "auto" });
+        } catch (e) {
+            window.scrollTo(0, safeY);
+        }
+        const docEl = document.scrollingElement || document.documentElement;
+        if (docEl) docEl.scrollTop = safeY;
+        document.documentElement.scrollTop = safeY;
+        document.body.scrollTop = safeY;
+    };
+
+    const computeAnchorTarget = () => {
+        if (!anchorEl) return 0;
+        const headerHeight = document.querySelector(".top-app-bar")?.getBoundingClientRect().height || 50;
+        const quickTabs = document.querySelector(".quick-top-tabs");
+        const quickTabsHeight = (quickTabs && quickTabs.offsetParent !== null)
+            ? quickTabs.getBoundingClientRect().height
+            : 0;
+        const currentScroll = window.scrollY || (document.scrollingElement || document.documentElement).scrollTop || 0;
+        const rect = anchorEl.getBoundingClientRect();
+        const rawTarget = rect.top + currentScroll - (headerHeight + quickTabsHeight + 14);
+        const scrollRoot = document.scrollingElement || document.documentElement;
+        const maxScroll = Math.max(0, scrollRoot.scrollHeight - window.innerHeight);
+        return Math.max(0, Math.min(maxScroll, rawTarget));
+    };
+
+    const initialTarget = computeAnchorTarget();
+    applyScrollTop(initialTarget);
 
     requestAnimationFrame(() => {
-        try {
-            window.scrollTo({ top: clampedTarget, behavior: "instant" });
-        } catch (e) {
-            window.scrollTo(0, clampedTarget);
-        }
-        document.documentElement.scrollTop = clampedTarget;
-        document.body.scrollTop = clampedTarget;
+        const refinedTarget = computeAnchorTarget();
+        applyScrollTop(refinedTarget);
     });
 }
 
