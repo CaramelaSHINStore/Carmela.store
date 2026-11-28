@@ -588,13 +588,16 @@ function escapeHtml(str) {
 }
 
 window.addEventListener("popstate", () => {
-    if (overlayStack.length > 0) {
-        closeTopOverlay(true);
-        return;
-    }
+    if (pushedHistoryDepth > 0) pushedHistoryDepth -= 1;
     suppressHistoryStep = true;
     try {
-        if (document.getElementById("imageModal")?.classList.contains("open")) {
+        if (overlayStack.length > 0) {
+            closeTopOverlay(true);
+            return;
+        }
+        if (document.getElementById("confirmActionModal")?.classList.contains("open")) {
+            closeConfirmModal(true, true);
+        } else if (document.getElementById("imageModal")?.classList.contains("open")) {
             closeImageModal(true);
         } else if (document.getElementById("productOptionModal")?.classList.contains("open")) {
             closeProductOptionModal(true);
@@ -3141,16 +3144,21 @@ function renderActiveOrdersSection() {
         const isConfirmedStage = stage === "confirmed";
 
         const itemsHtml = (order.items || []).map(item => {
-            const optsText = [item.selectedSize ? `${resolveCartOptionShortTag(PRODUCTS.find(p => p.id === item.id))}: ${item.selectedSize}` : "", item.selectedColor ? `لون: ${item.selectedColor}` : ""].filter(Boolean).join(" | ");
+            const optionTag = resolveCartOptionShortTag(PRODUCTS.find(p => p.id === item.id));
+            const optsText = [
+                item.selectedSize ? `${optionTag}: ${item.selectedSize}` : "",
+                item.selectedColor ? `لون: ${item.selectedColor}` : ""
+            ].filter(Boolean).join(" | ");
             const safeItemImg = normalizeProductImageUrl(item.img);
+            const safeQty = Math.max(1, Number(item.qty) || 1);
             return `
                 <div class="active-order-item-row">
                     ${safeItemImg ? `<img src="${escapeHtmlAttr(safeItemImg)}" alt="${escapeHtmlAttr(item.title)}" onerror="handleProductImageError(this, '${escapeHtmlAttr(item.id)}')">` : ""}
                     <div class="active-order-item-meta">
-                        <div class="cart-item-title">${escapeHtmlAttr(item.title)}</div>
-                        ${optsText ? `<div class="cart-item-sub">${escapeHtmlAttr(optsText)}</div>` : ""}
-                        ${item.note ? `<div class="cart-item-note">ملاحظة: ${escapeHtmlAttr(item.note)}</div>` : ""}
-                        <div class="cart-item-sub">الكمية: ${item.qty} × ${formatPriceNumber(item.price)} جنيه</div>
+                        <div class="cart-item-title">${escapeHtml(item.title)}</div>
+                        ${optsText ? `<div class="cart-item-sub">${escapeHtml(optsText)}</div>` : ""}
+                        ${item.note ? `<div class="cart-item-note">ملاحظة: ${escapeHtml(item.note)}</div>` : ""}
+                        <div class="cart-item-sub">الكمية: ${safeQty} × ${escapeHtml(formatPriceNumber(item.price))} جنيه</div>
                     </div>
                     <div class="cart-item-price">${formatPriceNumber((Number(item.price) || 0) * (Number(item.qty) || 1))} جنيه</div>
                 </div>
@@ -3219,13 +3227,18 @@ function renderReceivedOrdersSection() {
         const totalPcs = getOrderTotalPieces(order);
         const isExpanded = expandedOrderIds.has(order.orderId);
         const itemsHtml = (order.items || []).map(item => {
-            const optsText = [item.selectedSize ? `${resolveCartOptionShortTag(PRODUCTS.find(p => p.id === item.id))}: ${item.selectedSize}` : "", item.selectedColor ? `لون: ${item.selectedColor}` : ""].filter(Boolean).join(" | ");
+            const optionTag = resolveCartOptionShortTag(PRODUCTS.find(p => p.id === item.id));
+            const optsText = [
+                item.selectedSize ? `${optionTag}: ${item.selectedSize}` : "",
+                item.selectedColor ? `لون: ${item.selectedColor}` : ""
+            ].filter(Boolean).join(" | ");
+            const safeQty = Math.max(1, Number(item.qty) || 1);
             return `
                 <div class="received-order-item-row">
                     <div>
-                        <div class="received-order-item-title">${escapeHtmlAttr(item.title)}</div>
-                        ${optsText ? `<div class="received-order-item-sub">${escapeHtmlAttr(optsText)}</div>` : ""}
-                        <div class="received-order-item-sub">الكمية: ${item.qty} × ${formatPriceNumber(item.price)} جنيه</div>
+                        <div class="received-order-item-title">${escapeHtml(item.title)}</div>
+                        ${optsText ? `<div class="received-order-item-sub">${escapeHtml(optsText)}</div>` : ""}
+                        <div class="received-order-item-sub">الكمية: ${safeQty} × ${escapeHtml(formatPriceNumber(item.price))} جنيه</div>
                     </div>
                     <button type="button" class="received-reorder-btn" onclick="reorderItemToCart('${escapeHtmlAttr(order.orderId)}', '${escapeHtmlAttr(item.cartKey || "")}')">+ إعادة طلب</button>
                 </div>
@@ -3496,6 +3509,7 @@ function pulseBottomNavButton(btnId) {
 }
 
 let suppressHistoryStep = false;
+let pushedHistoryDepth = 0;
 
 function pushOverlayState(name) {
     overlayStack = overlayStack.filter(n => n !== name);
@@ -3503,6 +3517,7 @@ function pushOverlayState(name) {
     if (!suppressHistoryStep) {
         try {
             history.pushState({ caramelOverlay: name, ts: Date.now() }, "");
+            pushedHistoryDepth += 1;
         } catch (e) {}
     }
 }
@@ -3510,10 +3525,15 @@ function pushOverlayState(name) {
 function removeOverlayState(name) {
     const hadOverlay = overlayStack.includes(name);
     overlayStack = overlayStack.filter(n => n !== name);
-    if (hadOverlay && !suppressHistoryStep && history.state && history.state.caramelOverlay === name) {
+    if (hadOverlay && !suppressHistoryStep && pushedHistoryDepth > 0 && history.state && history.state.caramelOverlay === name) {
+        pushedHistoryDepth = Math.max(0, pushedHistoryDepth - 1);
+        suppressHistoryStep = true;
         try {
             history.back();
-        } catch (e) {}
+        } catch (e) {
+            suppressHistoryStep = false;
+        }
+        setTimeout(() => { suppressHistoryStep = false; }, 60);
     }
 }
 
